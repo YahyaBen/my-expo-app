@@ -59,7 +59,7 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#E6F4FE' }}>
+    <View style={{ flex: 1, backgroundColor: '#081224' }}>
       <RootLayoutNav />
       {showBrandScreen && (
         <LaunchScreen exiting={brandScreenExiting} onExitComplete={finishBrandScreen} />

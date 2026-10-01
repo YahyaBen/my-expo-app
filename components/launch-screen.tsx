@@ -6,6 +6,7 @@ import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, w
 import { scheduleOnRN } from 'react-native-worklets';
 
 import bluePepe from '@/assets/animations/blue-pepe.lottie';
+import { AuroraBackground } from '@/components/aurora-background';
 
 const WAVE_HEIGHT = 144;
 const EXIT_DURATION_MS = 3000;
@@ -67,9 +68,12 @@ export function LaunchScreen({
           height,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#E6F4FE',
+          backgroundColor: '#081224',
         }}
       >
+        <AuroraBackground
+          style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
+        />
         <LottieView
           source={bluePepeSource}
           autoPlay={!reducedMotion}
@@ -77,18 +81,18 @@ export function LaunchScreen({
           style={{ width: 260, height: 260 }}
           webStyle={{ width: 260, height: 260 }}
         />
-        <Text style={{ color: '#173C65', fontFamily: 'Inter-Black', fontSize: 28, marginTop: 16 }}>
+        <Text style={{ color: '#DBEDF4', fontFamily: 'Inter-Black', fontSize: 28, marginTop: 16 }}>
           Likan
         </Text>
       </View>
       <Canvas style={{ width, height: WAVE_HEIGHT }}>
         <Path
           path={`M 0 0 H ${width} V 34 Q ${width / 2} 178 0 34 Z`}
-          color="#5AB9E8"
+          color="#0E5B67"
         />
         <Path
           path={`M 0 0 H ${width} V 20 Q ${width / 2} 150 0 20 Z`}
-          color="#E6F4FE"
+          color="#081224"
         />
       </Canvas>
     </Animated.View>
