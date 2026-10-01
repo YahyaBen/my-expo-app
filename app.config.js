@@ -9,9 +9,5 @@ module.exports = ({ config }) => {
         ? [['react-native-maps', { androidGoogleMapsApiKey: androidMapsApiKey }]]
         : []),
     ],
-    extra: {
-      ...config.extra,
-      androidMapsConfigured: Boolean(androidMapsApiKey),
-    },
   };
 };

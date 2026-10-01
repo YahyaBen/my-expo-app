@@ -1,53 +1,96 @@
-import { Image } from 'expo-image';
+import { Canvas, Path } from '@shopify/react-native-skia';
+import { useEffect } from 'react';
 import LottieView from 'lottie-react-native';
-import { Text, View } from 'react-native';
-import { useReducedMotion } from 'react-native-reanimated';
+import { Text, View, useWindowDimensions } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
-export function LaunchScreen() {
+import bluePepe from '@/assets/animations/blue-pepe.lottie';
+
+const WAVE_HEIGHT = 144;
+const EXIT_DURATION_MS = 3000;
+// LottieView accepts Metro's numeric asset ID on native, though its source type omits it.
+const bluePepeSource = bluePepe as unknown as string;
+
+export function LaunchScreen({
+  exiting,
+  onExitComplete,
+}: {
+  exiting: boolean;
+  onExitComplete: () => void;
+}) {
   const reducedMotion = useReducedMotion();
+  const { width, height } = useWindowDimensions();
+  const offsetY = useSharedValue(0);
+
+  useEffect(() => {
+    if (!exiting) return;
+
+    if (reducedMotion) {
+      onExitComplete();
+      return;
+    }
+
+    offsetY.set(
+      withTiming(
+        -(height + WAVE_HEIGHT),
+        { duration: EXIT_DURATION_MS, easing: Easing.bezier(0.23, 1, 0.32, 1) },
+        (finished) => {
+          if (finished) scheduleOnRN(onExitComplete);
+        }
+      )
+    );
+  }, [exiting, height, offsetY, onExitComplete, reducedMotion]);
+
+  const exitStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: offsetY.get() }],
+  }));
 
   return (
-    <View
+    <Animated.View
       accessible
       accessibilityLabel="Likan is loading"
-      style={{
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#E6F4FE',
-      }}
+      pointerEvents={exiting ? 'none' : 'auto'}
+      style={[
+        {
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          left: 0,
+          height: height + WAVE_HEIGHT,
+        },
+        exitStyle,
+      ]}
     >
-      <View style={{ width: 240, height: 240, alignItems: 'center', justifyContent: 'center' }}>
-        {!reducedMotion && (
-          <LottieView
-            source={require('../assets/animations/brand-ripple.json')}
-            autoPlay
-            loop
-            style={{ position: 'absolute', width: 240, height: 240 }}
-          />
-        )}
-        <Image
-          source={require('../assets/images/icon.png')}
-          contentFit="contain"
-          style={{ width: 190, height: 190 }}
-          accessible={false}
-        />
-      </View>
-      <Text style={{ color: '#173C65', fontFamily: 'Inter-Black', fontSize: 28, marginTop: 16 }}>
-        Likan
-      </Text>
-      {!reducedMotion && (
+      <View
+        style={{
+          height,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#E6F4FE',
+        }}
+      >
         <LottieView
-          source={require('../assets/animations/loading-dots.json')}
-          autoPlay
-          loop
-          style={{ width: 84, height: 24, marginTop: 20 }}
+          source={bluePepeSource}
+          autoPlay={!reducedMotion}
+          loop={!reducedMotion}
+          style={{ width: 260, height: 260 }}
+          webStyle={{ width: 260, height: 260 }}
         />
-      )}
-    </View>
+        <Text style={{ color: '#173C65', fontFamily: 'Inter-Black', fontSize: 28, marginTop: 16 }}>
+          Likan
+        </Text>
+      </View>
+      <Canvas style={{ width, height: WAVE_HEIGHT }}>
+        <Path
+          path={`M 0 0 H ${width} V 34 Q ${width / 2} 178 0 34 Z`}
+          color="#5AB9E8"
+        />
+        <Path
+          path={`M 0 0 H ${width} V 20 Q ${width / 2} 150 0 20 Z`}
+          color="#E6F4FE"
+        />
+      </Canvas>
+    </Animated.View>
   );
 }

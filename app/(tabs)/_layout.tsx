@@ -9,6 +9,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      detachInactiveScreens={false}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#FFFFFF",
@@ -40,6 +41,35 @@ export default function TabLayout() {
                 android: "auto_awesome",
                 web: "auto_awesome",
               }}
+              tintColor={color}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="maps"
+        options={{
+          title: "Maps",
+          tabBarActiveTintColor: "#173C35",
+          tabBarInactiveTintColor: "#53736B",
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{ ios: "map", android: "map", web: "map" }}
+              tintColor={color}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="storybook"
+        options={{
+          title: "Storybook",
+          href: __DEV__ ? undefined : null,
+          tabBarIcon: ({ color }) => (
+            <SymbolView
+              name={{ ios: "book.closed", android: "menu_book", web: "menu_book" }}
               tintColor={color}
               size={28}
             />

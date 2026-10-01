@@ -1,7 +1,7 @@
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { View } from 'react-native';
 
@@ -28,6 +28,7 @@ SplashScreen.setOptions({ duration: 300, fade: true });
 
 export default function RootLayout() {
   const [showBrandScreen, setShowBrandScreen] = useState(true);
+  const [brandScreenExiting, setBrandScreenExiting] = useState(false);
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     'Inter-Black': require('../assets/fonts/Inter-Black.otf'),
@@ -43,11 +44,15 @@ export default function RootLayout() {
 
     void SplashScreen.hideAsync();
     const timeout = setTimeout(() => {
-      setShowBrandScreen(false);
+      setBrandScreenExiting(true);
     }, BRAND_SCREEN_DURATION_MS);
 
     return () => clearTimeout(timeout);
   }, [loaded]);
+
+  const finishBrandScreen = useCallback(() => {
+    setShowBrandScreen(false);
+  }, []);
 
   if (!loaded) {
     return null;
@@ -56,7 +61,9 @@ export default function RootLayout() {
   return (
     <View style={{ flex: 1, backgroundColor: '#E6F4FE' }}>
       <RootLayoutNav />
-      {showBrandScreen && <LaunchScreen />}
+      {showBrandScreen && (
+        <LaunchScreen exiting={brandScreenExiting} onExitComplete={finishBrandScreen} />
+      )}
     </View>
   );
 }
