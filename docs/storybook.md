@@ -94,6 +94,13 @@ Launch Screen has Ready, Waiting and ReducedMotion fixtures. Floating Action has
 Interactive, Disabled and RepeatedActions fixtures. Typechecking includes stories,
 but fixture registration does not prove native behavior.
 
+The Table page at `/ui-component/table` and retained `Components/Table` fixtures
+exercise local filters, row action menus and empty results. Use the
+[Table contract](../.agents/skills/foodiya-ui-table/SKILL.md) for Host ownership
+and selector derivations. Verify horizontal scrolling, large text, live RTL,
+spoken row action names, dismissal and disabled action suppression on both
+platforms; fixture registration alone does not establish these native behaviors.
+
 Launch Screen also retains MinimalReady and MinimalWaiting, with an explicit
 mode Control; the existing stories remain branded. Page Header adds PlainHeader
 and ChangeHeaderStyle. In the latter, type a draft and press Back to alternate

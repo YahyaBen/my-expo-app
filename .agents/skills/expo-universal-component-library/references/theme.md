@@ -16,7 +16,7 @@ application styling and compatibility, but standard controls no longer map them.
 
 - `src/constants/themes/`: palette registry and semantic tokens; `colors.ts` retains only compatibility defaults.
 - `src/context/theme.context.tsx`: configured root palette, opt-in saved appearance and isolated preview preferences.
-- `src/hooks/use-theme.ts`: shared theme colors; compose with `useHostColorScheme` for controls inside a native Host.
+- `src/hooks/use-theme.ts`: shared theme colors and `design` type/shape tokens; compose with `useHostColorScheme` for controls inside a native Host.
 - `src/components/ui/host/types.ts`: shared `colorScheme`, `seedColor`, and `testID` props.
 - `src/components/ui/host/universal-host.tsx`: native Host wrapper, scheme selection, and sizing defaults.
 
@@ -32,7 +32,12 @@ Preserve `primary`/`onPrimary` and explicit text override precedence. Use the
 
 Host `colorScheme` selects appearance. Host `seedColor` derives Android Material colors and sets iOS native tint; it does not promise the exact same color for every native control. See [SDK 57 Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/). Use the installed API's real color hooks/props when mapping tokens; do not invent universal `containerColor` props or treat `UniversalStyle` as full RN styling.
 
-Buttons preserve native colors, shape, padding, clickable bounds, disabled treatment and feedback unless a caller supplies an override. Do not paint a larger outer background around a smaller native clickable control. Legacy size/rounded props have been removed.
+Buttons use shared semantic colors and the active theme's optional button radius,
+preserving native padding, clickable bounds, disabled treatment and feedback.
+Caller colors/geometry retain priority. UX/Instagram keep native button shapes;
+Altarea supplies a 24-point radius. Text presets and field radii also resolve
+through `design`. Do not paint a larger outer background around a smaller native
+clickable control. Legacy size/rounded props have been removed.
 
 Every `UniversalButton` or `UniversalButtonContent` call requires `variant`. Use [the button skill](../../foodiya-ui-button/SKILL.md) for the current nine variants, native style mapping and supported geometry. Native disabled colors/opacity and press feedback remain platform-owned. Specialized icon and navigation buttons keep their explicitly selected native style.
 

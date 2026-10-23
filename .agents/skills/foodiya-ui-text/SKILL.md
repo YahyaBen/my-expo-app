@@ -26,11 +26,13 @@ contract, not an RN rich-text tree or an arbitrary React subtree.
 
 Supported `variant` values are `heading`, `title`, `subtitle`, `body`,
 `label` and `caption`. Omit variant/font overrides to keep native typography.
-Presets set size/weight only; no line height is calculated.
+Presets set size/weight from the active theme's `design.typography` in
+`src/constants/themes/`; no line height is calculated. UX/Instagram retain their
+original ramp. Altarea uses a larger mobile ramp, including an 18-point body.
 
 Brand typography is selected by the existing asset helper for auth and launch
 headings. Preserve native typography elsewhere. Unsupported languages, including
-Arabic for the bundled Inter font, use native fallback. Keep asset and family
+Arabic for the bundled Latin heading fonts, use native fallback. Keep asset and family
 registration with the [configuration owner](../foodiya-implementation/references/configuration.md).
 
 `tone` selects foreground independently: `default`, `muted`, `primary`,

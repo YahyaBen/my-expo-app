@@ -6,21 +6,21 @@ The canonical contract is
 
 ## Public props
 
-| Prop             | Both public buttons                         | Meaning                                                             |
-| ---------------- | ------------------------------------------- | ------------------------------------------------------------------- |
-| `variant`        | Required `UniversalButtonVariant`           | Explicit intent; see the skill's nine-variant table                 |
-| `label`          | Optional string                             | Native text fallback when `children` is nullish                     |
-| `children`       | Optional ReactNode                          | Replaces `label`; use compatible native elements for custom content |
-| `onPress`        | Optional `() => void`                       | Consumer callback; the adapters suppress it when disabled           |
-| `disabled`       | Optional boolean                            | Native disabled state; omitted means enabled                        |
-| `fullWidth`      | Optional boolean                            | Expand the button within its parent's available width               |
-| `testID`         | Optional string                             | Stable selector on the native action                                |
-| `color`          | Optional string                             | Native accent; not always a background color                        |
-| `contentColor`   | Optional string                             | Native label/content foreground override                            |
-| `borderRadius`   | Optional number                             | Uniform native corner radius; `0` means square                      |
-| `contentPadding` | Optional number                             | All-side native label padding; `0` is valid                         |
-| `colorScheme`    | **Standalone only**, `'light'` or `'dark'`  | Configures `UniversalButton`'s Host and theme resolution            |
-| `cornerRadii`    | **Standalone only**, physical corner object | Clips the existing Host; overrides `borderRadius`                   |
+| Prop             | Both public buttons                         | Meaning                                                              |
+| ---------------- | ------------------------------------------- | -------------------------------------------------------------------- |
+| `variant`        | Required `UniversalButtonVariant`           | Explicit intent; see the skill's nine-variant table                  |
+| `label`          | Optional string                             | Native text fallback when `children` is nullish                      |
+| `children`       | Optional ReactNode                          | Replaces `label`; use compatible native elements for custom content  |
+| `onPress`        | Optional `() => void`                       | Consumer callback; the adapters suppress it when disabled            |
+| `disabled`       | Optional boolean                            | Native disabled state; omitted means enabled                         |
+| `fullWidth`      | Optional boolean                            | Expand the button within its parent's available width                |
+| `testID`         | Optional string                             | Stable selector on the native action                                 |
+| `color`          | Optional string                             | Native accent; not always a background color                         |
+| `contentColor`   | Optional string                             | Native label/content foreground override                             |
+| `borderRadius`   | Optional number                             | Uniform corner radius; overrides theme/native default; `0` is square |
+| `contentPadding` | Optional number                             | All-side native label padding; `0` is valid                          |
+| `colorScheme`    | **Standalone only**, `'light'` or `'dark'`  | Configures `UniversalButton`'s Host and theme resolution             |
+| `cornerRadii`    | **Standalone only**, physical corner object | Clips the existing Host; overrides `borderRadius`                    |
 
 `cornerRadii` accepts `topLeft`, `topRight`, `bottomLeft`, and `bottomRight`.
 Omitted corners become square, not the native default. These are physical corners
@@ -28,9 +28,12 @@ and do not swap with RTL. Inside an existing Host, use uniform `borderRadius`;
 do not add a nested Host just to get asymmetric corners.
 
 Both `borderRadius` and `contentPadding` can be overridden independently. Omit
-them to retain native defaults; do not replace valid zero values with truthy
-fallbacks. A card may deliberately use `contentPadding={0}`; an ordinary button
-should keep native touch geometry unless a requested design needs a change.
+`borderRadius` to use `design.shape.buttonRadius` from the active theme; when
+that token is undefined, the native shape remains unchanged. Altarea configures
+24 points/dp. Omitted `contentPadding` retains native padding. Do not replace
+valid zero values with truthy fallbacks. A card may deliberately use
+`contentPadding={0}`; an ordinary button should keep native touch geometry unless
+a requested design needs a change.
 
 The project buttons do not expose `style`, `modifiers`, `size`, `rounded`, `icon`,
 `leftIcon`, `rightIcon`, `loading`, `pending`, `href`, `accessibilityLabel`,
@@ -41,11 +44,13 @@ spread arbitrary upstream Button or RN Pressable props into these wrappers.
 ## Colors and native differences
 
 The [shared button implementation](../../../../src/components/ui/button/universal-button.tsx)
-owns the semantic mapping and private `useButtonColors` resolver. Every theme
+owns the semantic mapping and private `useButtonTheme` resolver. Every theme
 maps primary to primary/onPrimary, secondary to
 secondary, tertiary to muted, link to tint, success/warning/info to their paired
 status tokens, destructive to error/onError, and glass to surfaceVariant/text.
 These pairs apply automatically unless a caller supplies color overrides.
+The same resolver applies the theme's default button radius independently of
+color overrides, for both standalone and hosted content buttons.
 
 Supplying either `color` or `contentColor` skips automatic semantic pairs entirely.
 Supply a coherent pair from existing semantic tokens when a specific foreground

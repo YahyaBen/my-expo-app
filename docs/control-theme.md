@@ -5,7 +5,11 @@ Primary, secondary, tertiary, link and status variants resolve their respective
 theme tokens rather than all inheriting the Host's primary accent. Explicit
 caller colors retain their existing override behavior. The native button stories
 use these same defaults and provide light/dark comparisons of all nine variants.
-Native geometry, disabled suppression and feedback remain platform-owned.
+Buttons also use a configured theme radius; explicit geometry overrides remain
+available. Altarea's 24-point/dp radius adapts its pill buttons through the
+existing native shape APIs. Native sizing, disabled suppression and feedback
+remain platform-owned. See the
+[button skill](../.agents/skills/foodiya-ui-button/SKILL.md) for shape precedence.
 
 Text's primary tone uses `tint`, preserving readable UX dark foregrounds while
 the primary button fill stays black. The configured app palette stays fixed;
@@ -34,7 +38,7 @@ the same iPhone: upper/lower button-edge presses advanced the count to 1 then 2,
 the disabled press kept 2, and reset returned it to 0. Both showed a black primary
 surface and white label. These are manual checks; Maestro was not installed.
 
-All universal Expo UI controls compose within the existing UniversalHost. It selects the shared light/dark scheme and uses the active theme’s tint as the native seed. Explicit seedColor overrides remain available. Native controls own their shape, padding, typography, disabled colors and interaction feedback rather than receiving a second painted surface.
+All universal Expo UI controls compose within the existing UniversalHost. It selects the shared light/dark scheme and uses the active theme’s tint as the native seed. Explicit seedColor overrides remain available. Native controls own their padding, typography, disabled colors and interaction feedback; button shape uses the theme radius when configured. Controls do not receive a second painted surface.
 
 | Component                                                     | Project behavior                                                                                  | Appearance / glass                                                                                                                                          |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -1,5 +1,6 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Platform } from 'react-native';
 import {
   Column,
   Icon,
@@ -260,7 +261,7 @@ function InputAvailabilityDemo() {
         label={t('showcase.inputGallery.disable')}
         value={disabled}
         onValueChange={setDisabled}
-        modifiers={nativeFillWidth}
+        modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
         testID="demo-input-disable-toggle"
       />
       <TextInput

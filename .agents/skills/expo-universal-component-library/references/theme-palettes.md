@@ -1,11 +1,19 @@
 # Brand themes
 
-`index.ts` exports UX Template (`ux`) and Instagram (`instagram`). The configured
-brand selects one through `presentation.palette`; both current manifests use
-`ux`. App Settings does not select palettes. UX/Instagram switches are local
+`index.ts` exports UX Template (`ux`), Instagram (`instagram`) and Altarea
+(`altarea`). The configured brand selects one through `presentation.palette`;
+Likan uses `altarea`, the template uses `ux`. App Settings does not select palettes. Palette switches are local
 component-preview controls and never change the root brand. See the
 [appearance contract](../../foodiya-ui-appearance/SKILL.md) for persistence.
 `brand-palettes.json` contains only Instagram light/dark colors, resolved through `createBrandTheme`.
+
+`altarea.ts` defines the observed purple/magenta/warm-neutral website foundations
+and an explicit mobile dark adaptation. Its `design` sets a mobile type ramp,
+24-point button corners and 6-point field corners. `design.ts` retains the
+original presets and native button shape for UX/Instagram. `useAppTheme` exposes
+these tokens to the existing text, button and input owners. Explicit caller
+geometry/typography keeps priority. Source values and adaptation decisions live
+in the [Altarea design extraction](../../../../docs/altarea-theme.md).
 
 `ux.ts` defines **UX Template** using the stable `ux` ID. Its primary fill is
 `#000000` with `#FFFFFF` labels in both appearances. Foundations, navigation and

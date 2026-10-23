@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   BottomSheet,
@@ -174,14 +174,14 @@ export default function BottomSheetScreen() {
               label={t('showcase.vegetarian')}
               value={draft.vegetarian}
               onValueChange={(vegetarian) => setDraft((current) => ({ ...current, vegetarian }))}
-              modifiers={nativeFillWidth}
+              modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
               testID="demo-sheet-vegetarian"
             />
             <Switch
               label={t('showcase.quickMeals')}
               value={draft.quickMeals}
               onValueChange={(quickMeals) => setDraft((current) => ({ ...current, quickMeals }))}
-              modifiers={nativeFillWidth}
+              modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
               testID="demo-sheet-quick-meals"
             />
             <UniversalButtonContent

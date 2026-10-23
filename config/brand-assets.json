@@ -11,6 +11,12 @@
       "runtimeName": "Inter-Black",
       "nativeFamily": { "ios": "Inter-Black", "android": "Inter-Black" },
       "languages": ["en", "fr"]
+    },
+    "urbanistBold": {
+      "file": "./assets/fonts/Urbanist-Bold.ttf",
+      "runtimeName": "Urbanist-Bold",
+      "nativeFamily": { "ios": "Urbanist-Bold", "android": "Urbanist-Bold" },
+      "languages": ["en", "fr"]
     }
   },
   "launchArtworks": {

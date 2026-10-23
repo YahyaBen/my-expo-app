@@ -2,7 +2,7 @@ import { spacing } from '@/constants/layout';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
-import { Platform, View } from 'react-native';
+import { Platform, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomSheet,
@@ -73,6 +73,8 @@ export function SettingsPage({
   const colors = useThemeColors();
   const { setReducedMotion, headerMotionReady } = useThemeSettings();
   const reducedMotion = useAppReducedMotion();
+  const { height: windowHeight } = useWindowDimensions();
+  const languageListHeight = Math.min(320, windowHeight * 0.45);
   const [languageOpen, setLanguageOpen] = useState(false);
   const back = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   const chevron = (
@@ -124,7 +126,7 @@ export function SettingsPage({
                 value={reducedMotion}
                 onValueChange={setReducedMotion}
                 disabled={!headerMotionReady}
-                modifiers={nativeFillWidth}
+                modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
                 testID="app-settings-reduce-motion"
               />
               <SettingsRow
@@ -172,31 +174,41 @@ export function SettingsPage({
               <Text variant="title" testID="app-settings-language-title">
                 {t('common.language')}
               </Text>
-              {SUPPORTED_LANGUAGES.map((value) => (
-                <SettingsRow
-                  key={value}
-                  label={languageLabel(value)}
-                  testID={`app-settings-language-${value}`}
-                  disabled={!languageReady || !onLanguageChange}
-                  onPress={() => {
-                    if (!languageReady || !onLanguageChange) return;
-                    onLanguageChange(value);
-                    setLanguageOpen(false);
-                  }}
-                  trailing={
-                    language === value ? (
-                      <Icon
-                        name={Icon.select({
-                          ios: 'checkmark',
-                          android: require('@expo/material-symbols/check.xml'),
-                        })}
-                        size={20}
-                        color={colors.tint}
+              <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
+                <FieldGroup
+                  modifiers={pageFormModifiers}
+                  style={{ backgroundColor: 'transparent' }}
+                  testID="app-settings-language-options"
+                >
+                  <FieldGroup.Section>
+                    {SUPPORTED_LANGUAGES.map((value) => (
+                      <SettingsRow
+                        key={value}
+                        label={languageLabel(value)}
+                        testID={`app-settings-language-${value}`}
+                        disabled={!languageReady || !onLanguageChange}
+                        onPress={() => {
+                          if (!languageReady || !onLanguageChange) return;
+                          onLanguageChange(value);
+                          setLanguageOpen(false);
+                        }}
+                        trailing={
+                          language === value ? (
+                            <Icon
+                              name={Icon.select({
+                                ios: 'checkmark',
+                                android: require('@expo/material-symbols/check.xml'),
+                              })}
+                              size={20}
+                              color={colors.tint}
+                            />
+                          ) : undefined
+                        }
                       />
-                    ) : undefined
-                  }
-                />
-              ))}
+                    ))}
+                  </FieldGroup.Section>
+                </FieldGroup>
+              </Column>
               <UniversalButtonContent
                 variant="link"
                 label={t('common.close')}

@@ -63,7 +63,8 @@ as the full-page reference. Reuse its
 [SettingsRow](../../../src/features/settings/settings-row.tsx) for label/detail
 columns, leading icons, trailing controls and native action rows. Keep a row
 containing a trailing picker/switch passive; do not wrap that independent control
-in another clickable row. A row with `onPress` already owns its native button.
+in another clickable row. A row with `onPress` uses the
+[ListItemAction](../foodiya-ui-list-item/SKILL.md) native row boundary.
 
 Use `PageFrame scrollsBehindHeader`, a clipped bounded viewport with the page's
 safe areas, and one fill Host. Put `usePageHeaderInset()` padding on a Column

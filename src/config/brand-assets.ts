@@ -8,6 +8,7 @@ import { getAppBrand, type AppBrand, type HeadingFontId, type LaunchArtworkId } 
 const fontSources: Record<HeadingFontId, FontSource | undefined> = {
   system: undefined,
   interBlack: require('@assets/fonts/Inter-Black.otf'),
+  urbanistBold: require('@assets/fonts/Urbanist-Bold.ttf'),
 };
 const artworkSources: Record<LaunchArtworkId, number> = {
   bluePepe,

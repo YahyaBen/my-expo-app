@@ -25,6 +25,7 @@ skills; [documentation ownership](documentation.md) explains where to update eac
 ## Appearance and native presentation
 
 - [App Settings and appearance themes](appearance-themes.md)
+- [Altarea design extraction and Likan theme](altarea-theme.md)
 - [Native control themes](control-theme.md)
 - [Shared Skia page motion](shared-skia-motion.md)
 

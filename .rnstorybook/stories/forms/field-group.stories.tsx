@@ -1,11 +1,18 @@
 import {
+  BottomSheet,
   Checkbox,
   Column,
   FieldGroup,
+  nativeFillWidth,
+  PageSection,
+  pageFormModifiers,
   Slider,
   Switch,
+  UniversalButtonContent,
+  UniversalHost,
   UniversalTextContent as Text,
 } from '@components/ui';
+import { SettingsRow } from '@/features/settings/settings-row';
 import {
   UniversalFieldGroup,
   type UniversalFieldGroupProps,
@@ -181,3 +188,106 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Preferences: Story = {};
+
+function SettingsRowFeedbackDemo({ colorScheme, seedColor }: DemoProps) {
+  const [isPresented, setIsPresented] = useState(false);
+  const [language, setLanguage] = useState('English');
+  const [openCount, setOpenCount] = useState(0);
+  const [disabledCount, setDisabledCount] = useState(0);
+  const [notifications, setNotifications] = useState(false);
+  const [switchCount, setSwitchCount] = useState(0);
+
+  return (
+    <>
+      <UniversalHost colorScheme={colorScheme} seedColor={seedColor} viewportHeight={360}>
+        <FieldGroup testID="settings-row-feedback-form" modifiers={pageFormModifiers}>
+          <FieldGroup.Section title="Settings row feedback">
+            <SettingsRow
+              label="Language"
+              detail={language}
+              testID="settings-row-feedback-open"
+              onPress={() => {
+                setOpenCount((count) => count + 1);
+                setIsPresented(true);
+              }}
+            />
+            <SettingsRow
+              label="Unavailable action"
+              disabled
+              testID="settings-row-feedback-disabled"
+              onPress={() => setDisabledCount((count) => count + 1)}
+            />
+            <SettingsRow
+              label="Notifications"
+              testID="settings-row-feedback-passive"
+              trailing={
+                <Switch
+                  label="Enable notifications"
+                  value={notifications}
+                  testID="settings-row-feedback-switch"
+                  onValueChange={(value) => {
+                    setNotifications(value);
+                    setSwitchCount((count) => count + 1);
+                  }}
+                />
+              }
+            />
+            <FieldGroup.SectionFooter>
+              <Text testID="settings-row-feedback-status">
+                {`Opened: ${openCount} · Disabled activations: ${disabledCount} · Switch changes: ${switchCount} · Notifications: ${notifications ? 'On' : 'Off'}`}
+              </Text>
+            </FieldGroup.SectionFooter>
+          </FieldGroup.Section>
+        </FieldGroup>
+      </UniversalHost>
+      <UniversalHost
+        colorScheme={colorScheme}
+        seedColor={seedColor}
+        style={{ position: 'absolute' }}
+        pointerEvents="box-none"
+      >
+        <BottomSheet
+          isPresented={isPresented}
+          onDismiss={() => setIsPresented(false)}
+          testID="settings-row-feedback-sheet"
+        >
+          <PageSection>
+            <Text variant="title">Language</Text>
+            <Column modifiers={nativeFillWidth} style={{ height: 240 }}>
+              <FieldGroup testID="settings-row-feedback-choices" modifiers={pageFormModifiers}>
+                <FieldGroup.Section>
+                  {['English', 'French', 'Arabic'].map((value) => (
+                    <SettingsRow
+                      key={value}
+                      label={value}
+                      testID={`settings-row-feedback-language-${value.toLowerCase()}`}
+                      trailing={language === value ? <Text>Selected</Text> : undefined}
+                      onPress={() => {
+                        setLanguage(value);
+                        setIsPresented(false);
+                      }}
+                    />
+                  ))}
+                </FieldGroup.Section>
+              </FieldGroup>
+            </Column>
+            <UniversalButtonContent
+              variant="link"
+              label="Close"
+              testID="settings-row-feedback-close"
+              onPress={() => setIsPresented(false)}
+            />
+          </PageSection>
+        </BottomSheet>
+      </UniversalHost>
+    </>
+  );
+}
+
+export const SettingsRowFeedback: Story = {
+  render: (args) => (
+    <NativeStoryFrame {...args}>
+      <SettingsRowFeedbackDemo {...args} />
+    </NativeStoryFrame>
+  ),
+};

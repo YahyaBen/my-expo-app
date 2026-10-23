@@ -23,7 +23,7 @@ export type UniversalButtonContentProps = {
   disabled?: boolean;
   testID?: string;
   fullWidth?: boolean;
-  /** Corner radius in iOS points / Android dp. Omit for native defaults; 0 is square. */
+  /** Corner radius in iOS points / Android dp. Omit for theme/native defaults; 0 is square. */
   borderRadius?: number;
   /** Override label padding, for example 0 for a whole recipe card. */
   contentPadding?: number;
@@ -44,41 +44,49 @@ export type UniversalButtonProps = UniversalButtonContentProps & {
   };
 };
 
-/** Resolve shared semantic colors once; explicit caller colors keep native fallback behavior. */
-function useButtonColors({ variant, color, contentColor, colorScheme }: UniversalButtonProps) {
-  const { colors } = useAppTheme(useHostColorScheme(colorScheme));
-  if (color !== undefined || contentColor !== undefined) return { color, contentColor };
+/** Resolve theme colors and shape once; explicit caller values retain precedence. */
+function useButtonTheme({
+  variant,
+  color,
+  contentColor,
+  borderRadius: radiusOverride,
+  colorScheme,
+}: UniversalButtonProps) {
+  const { colors, design } = useAppTheme(useHostColorScheme(colorScheme));
+  const borderRadius = radiusOverride ?? design.shape.buttonRadius;
+  if (color !== undefined || contentColor !== undefined)
+    return { color, contentColor, borderRadius };
   switch (variant) {
     case 'primary':
-      return { color: colors.primary, contentColor: colors.onPrimary };
+      return { color: colors.primary, contentColor: colors.onPrimary, borderRadius };
     case 'secondary':
-      return { color: colors.secondary, contentColor: colors.secondary };
+      return { color: colors.secondary, contentColor: colors.secondary, borderRadius };
     case 'tertiary':
-      return { color: colors.muted, contentColor: colors.muted };
+      return { color: colors.muted, contentColor: colors.muted, borderRadius };
     case 'link':
-      return { color: colors.tint, contentColor: colors.tint };
+      return { color: colors.tint, contentColor: colors.tint, borderRadius };
     case 'success':
-      return { color: colors.success, contentColor: colors.onSuccess };
+      return { color: colors.success, contentColor: colors.onSuccess, borderRadius };
     case 'warning':
-      return { color: colors.warning, contentColor: colors.onWarning };
+      return { color: colors.warning, contentColor: colors.onWarning, borderRadius };
     case 'info':
-      return { color: colors.info, contentColor: colors.onInfo };
+      return { color: colors.info, contentColor: colors.onInfo, borderRadius };
     case 'destructive':
-      return { color: colors.error, contentColor: colors.onError };
+      return { color: colors.error, contentColor: colors.onError, borderRadius };
     case 'glass':
-      return { color: colors.surfaceVariant, contentColor: colors.text };
+      return { color: colors.surfaceVariant, contentColor: colors.text, borderRadius };
   }
 }
 
 /** Native content. Compose inside an existing Host. */
 export function UniversalButtonContent(props: UniversalButtonContentProps) {
-  const colors = useButtonColors(props);
-  return <NativeButtonContent {...props} {...colors} />;
+  const theme = useButtonTheme(props);
+  return <NativeButtonContent {...props} {...theme} />;
 }
 
 /** Standalone control. Inside an existing Host, use UniversalButtonContent. */
 export function UniversalButton({ colorScheme, cornerRadii, ...props }: UniversalButtonProps) {
-  const colors = useButtonColors({ ...props, colorScheme });
+  const theme = useButtonTheme({ ...props, colorScheme });
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}
@@ -100,8 +108,8 @@ export function UniversalButton({ colorScheme, cornerRadii, ...props }: Universa
     >
       <NativeButtonContent
         {...props}
-        {...colors}
-        borderRadius={cornerRadii ? 0 : props.borderRadius}
+        {...theme}
+        borderRadius={cornerRadii ? 0 : theme.borderRadius}
       />
     </UniversalHost>
   );

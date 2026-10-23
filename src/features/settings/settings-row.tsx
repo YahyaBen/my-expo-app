@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { Platform } from 'react-native';
 import {
   Column,
+  ListItemAction,
   Row,
-  UniversalButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
   nativeRowWeight,
@@ -55,18 +55,9 @@ export function SettingsRow({
   );
   if (onPress) {
     return (
-      <UniversalButtonContent
-        variant="link"
-        fullWidth
-        contentPadding={spacing.none}
-        onPress={() => {
-          if (!disabled) onPress();
-        }}
-        disabled={disabled}
-        testID={testID}
-      >
+      <ListItemAction onPress={onPress} disabled={disabled} testID={testID}>
         {content}
-      </UniversalButtonContent>
+      </ListItemAction>
     );
   }
   return (

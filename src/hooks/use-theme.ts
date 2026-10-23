@@ -6,7 +6,8 @@ export function useAppTheme(preferredScheme?: 'light' | 'dark') {
   const preferences = useThemePreferences();
   const scheme = useColorScheme(preferredScheme);
   const themeId = preferences?.themeId ?? 'ux';
-  return { themeId, scheme, colors: themes[themeId].colors[scheme] };
+  const theme = themes[themeId];
+  return { themeId, scheme, colors: theme.colors[scheme], design: theme.design };
 }
 
 export function useThemeColors(preferredScheme?: 'light' | 'dark') {

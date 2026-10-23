@@ -30,7 +30,7 @@ contract and does not replace the project's semantic variants and geometry.
 The button family has four source files:
 
 - `universal-button.tsx` owns both public components, their exported prop types
-  and the private semantic color resolver.
+  and the private semantic color and theme-shape resolver.
 - `universal-button-content.ios.tsx` owns SwiftUI rendering.
 - `universal-button-content.android.tsx` owns Compose rendering.
 - `universal-button-content.d.ts` supplies the native renderer's TypeScript
@@ -91,6 +91,11 @@ can share a hue when the active theme deliberately assigns the same token. Read
 geometry. A `link` variant supplies appearance only: invoke Expo Router from the
 consumer's `onPress` for navigation. A destructive variant does not perform
 confirmation or deletion by itself.
+
+Omitted `borderRadius` uses the theme's button radius when configured. Altarea
+uses 24 points/dp, adapted from its pill buttons; other themes keep native shape
+defaults. Explicit radii, including zero, override the theme. Standalone physical
+`cornerRadii` retain precedence over both.
 
 ## Apply width, interaction state, and content deliberately
 

@@ -14,8 +14,9 @@ and login own their language sheets; the language provider updates layout direct
 Settings uses the native FieldGroup and a separate language-sheet Host so closed
 presentation does not cover form controls.
 
-The brand manifest's `presentation.palette` selects UX Template (`ux`) or
-Instagram (`instagram`), both with light/dark tokens. The root supplies this as
+The brand manifest's `presentation.palette` selects UX Template (`ux`),
+Instagram (`instagram`) or Altarea (`altarea`), each with light/dark tokens.
+Likan selects Altarea; the template retains UX. The root supplies this as
 `initialTheme`; its palette cannot be changed through `setThemeId`. Do not add a
 palette/brand picker to ordinary Settings. `allowThemeSelection` is an explicit
 provider opt-in for isolated component previews. Palette choices are not saved.
@@ -38,7 +39,8 @@ and Arabic changes live RTL without remounting forms.
 
 HeaderMotionPicker offers Default, Dunes, Ribbon and Rain. Default uses the
 rectangular native header; the other choices retain their animated artwork and
-iOS SVG mask. Both manifests select Dunes initially through `presentation.header`.
+iOS SVG mask. Likan selects Default initially; the template selects Dunes through
+`presentation.header`. Existing saved header choices take precedence.
 The root provider's
 `persistHeaderMotion` also opts into saving the Reduce Motion boolean. Header
 motion uses `appHeaderMotion`; reduction uses `appReducedMotion`. Restoration
@@ -65,7 +67,7 @@ The FieldGroup component showcase may still demonstrate local draft controls.
 Native `Components/Page Header` Settings compositions cover both appearances;
 `Components/Launch Screen` covers reduced motion. Floating actions are static
 native circles and do not depend on the motion preference.
-`Components/Text/ThemeComparison` and `/ui-component/text` compare both palettes
+`Components/Text/ThemeComparison` and `/ui-component/text` compare the registered palettes
 locally. The latter's `demo-text-theme-picker` and `demo-text-color-scheme` change
 only that preview and preserve its action count. They never change the root
 brand or saved appearance. Native restart, failed-storage recovery, live System

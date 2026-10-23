@@ -1,11 +1,23 @@
 # App Settings and appearance
 
-The selected brand's `presentation.palette` chooses UX Template (`ux`) or
-Instagram (`instagram`), each in light and dark appearance. Both current brand
-manifests select `ux`. Palette colors and semantic tokens stay in
+The selected brand's `presentation.palette` chooses UX Template (`ux`),
+Instagram (`instagram`) or Altarea (`altarea`), each in light and dark appearance.
+Likan selects Altarea; the template retains UX. Palette colors and semantic tokens stay in
 `src/constants/themes/`; Instagram's palette is bundled static JSON. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
+
+Altarea adds purple/magenta accents, warm neutral surfaces, a larger opt-in
+text ramp, 24-point button corners and 6-point field corners. The existing
+`useAppTheme` also exposes `design` for those component owners; UX/Instagram
+retain their previous typography and geometry. Native lists, toggles, pickers,
+padding and interaction feedback remain platform-owned. See the
+[website extraction and mobile mapping](altarea-theme.md) for exact source
+values, typography, spacing, shapes and adaptation limits.
+
+The native Tokens page (`/ui-component/tokens`) displays the active palette,
+type ramp, shapes, shared spacing, working button states and an editable field.
+`Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
 
 Settings offers system/light/dark appearance, header effect, Reduce Motion,
 language, Account/sign-in navigation, the component catalog and app version.
@@ -49,7 +61,7 @@ Explicit component and Host scheme overrides retain their existing priority.
 Language uses its existing saved provider. Header effect and the explicit motion
 choice still restore before launch completion. Header choices include Default,
 Dunes, Ribbon and Rain; unsupported saved values retain the manifest's initial
-style (currently Dunes). Default avoids mounting the wave/canvas/mask while
+style (Default for Likan, Dunes for the template). Default avoids mounting the wave/canvas/mask while
 retaining the rectangular native header. Existing animated choices and saved
 values are preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.
@@ -74,6 +86,7 @@ The 2026-10-23 palette audit calculated contrast for all eight text tones agains
 | ----------- | ------ | ------ |
 | UX Template | 4.93:1 | 6.83:1 |
 | Instagram   | 4.56:1 | 4.76:1 |
+| Altarea     | 4.93:1 | 7.39:1 |
 
 The UX dark primary-text/background pair changes from 1.11:1 to 18.88:1; its
 primary button pair remains 21:1. These calculations use the explicit opaque
@@ -82,7 +95,7 @@ They do not establish rendered contrast on native glass, arbitrary caller colors
 feedback containers or artwork. No palette colors were changed for this repair.
 
 The Text page and retained `Components/Text/ThemeComparison` composition show all
-three surfaces, both palettes/appearances, explicit overrides and a counted
+three surfaces, all registered palettes/appearances, explicit overrides and a counted
 primary button. Existing text selectors remain; new preview controls and samples
 have stable selectors. No automated suite was added.
 

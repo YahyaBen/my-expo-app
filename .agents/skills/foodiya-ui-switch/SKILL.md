@@ -50,6 +50,13 @@ inside another clickable row. Host/platform colors and native feedback remain
 the defaults, including supported iOS treatments. Do not add imitation glass
 or replace the native control to match screenshots across platforms.
 
+On Android, Expo's `modifiers` apply to the inner switch, not the label Row.
+Keep labeled switches at their intrinsic control width: `nativeFillWidth` on the
+switch consumes the label's space and can wrap it one letter per line. Constrain
+the enclosing native layout instead. If iOS needs a full-width Toggle, pass that
+modifier only on iOS, as in App Settings. The Android label already has native
+row weight and can wrap naturally within the remaining width.
+
 ## Showcase
 
 [UI showcase → Switch](../../../src/features/ui-showcase/switch-screen.tsx),

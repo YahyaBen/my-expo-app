@@ -1,9 +1,10 @@
 import { Text } from '@expo/ui';
 import type { TextProps, UniversalFontWeight } from '@expo/ui';
-import { useThemeColors } from '@/hooks/use-theme';
+import type { ThemeTextVariant } from '@/constants/themes/design';
+import { useAppTheme } from '@/hooks/use-theme';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 
-export type UniversalTextVariant = 'heading' | 'title' | 'subtitle' | 'body' | 'label' | 'caption';
+export type UniversalTextVariant = ThemeTextVariant;
 export type UniversalTextTone =
   'default' | 'muted' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
 export type UniversalTextColorScheme = 'light' | 'dark';
@@ -18,18 +19,6 @@ export interface UniversalTextProps extends TextProps {
   darkColor?: string;
   colorScheme?: UniversalTextColorScheme;
 }
-
-const variants: Record<
-  UniversalTextVariant,
-  { fontSize: number; fontWeight: UniversalFontWeight }
-> = {
-  heading: { fontSize: 36, fontWeight: '700' },
-  title: { fontSize: 26, fontWeight: '600' },
-  subtitle: { fontSize: 20, fontWeight: '500' },
-  body: { fontSize: 16, fontWeight: '400' },
-  label: { fontSize: 14, fontWeight: '600' },
-  caption: { fontSize: 13, fontWeight: '400' },
-};
 
 export function UniversalText({ colorScheme, ...props }: UniversalTextProps) {
   return (
@@ -55,8 +44,8 @@ export function UniversalTextContent({
   ...textProps
 }: UniversalTextProps) {
   const activeColorScheme = useHostColorScheme(colorScheme);
-  const colors = useThemeColors(activeColorScheme);
-  const preset = variant === undefined ? undefined : variants[variant];
+  const { colors, design } = useAppTheme(activeColorScheme);
+  const preset = variant === undefined ? undefined : design.typography[variant];
   const size = fontSize ?? preset?.fontSize;
   const weight = fontWeight ?? preset?.fontWeight;
 

@@ -5,10 +5,10 @@
   "scheme": "myappexpo",
   "icon": "./assets/foodiya.png",
   "presentation": {
-    "palette": "ux",
-    "header": "dunes",
+    "palette": "altarea",
+    "header": "default",
     "launch": "branded",
-    "headingFont": "interBlack",
+    "headingFont": "urbanistBold",
     "launchArtwork": "bluePepe"
   },
   "ios": {
@@ -18,7 +18,7 @@
     "package": "com.hyrkul.likan",
     "googleServicesFile": "./google-services.json",
     "adaptiveIcon": {
-      "backgroundColor": "#D9FDD3",
+      "backgroundColor": "#F6F5F3",
       "foregroundImage": "./assets/foodiya.png",
       "backgroundImage": "./assets/foodiya.png",
       "monochromeImage": "./assets/foodiya.png"
@@ -27,7 +27,7 @@
   "splash": {
     "image": "./assets/images/splash-icon.png",
     "backgroundColor": "#FFFFFF",
-    "darkBackgroundColor": "#0B141A"
+    "darkBackgroundColor": "#17121F"
   },
   "eas": {
     "owner": "ybenabdallah",

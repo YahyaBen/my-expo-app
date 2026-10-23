@@ -38,9 +38,9 @@ transition appearance remain manual checks.
 `PageMotionOverlay` wraps root navigation with `PageWaveContext`. The header uses
 original cubic vector artwork with independently moving control points. The leading
 40% stays level beneath the title/back button; only the trailing surface deforms.
-Dunes, Ribbon and Rain remain the animated effects; both manifests still select
-Dunes initially. Settings also offers Default, the ordinary rectangular native
-header with no decorative motion. Rain adds twelve staggered falling drops and impact ripples.
+Dunes, Ribbon and Rain remain the animated effects. Likan selects Default
+initially; the template selects Dunes. Default is the ordinary rectangular native
+header with no decorative motion. Settings offers all four choices. Rain adds twelve staggered falling drops and impact ripples.
 The shared active-time clock drives all paths on the UI thread. Skia uses numeric
 `usePathValue` builders without SVG parsing; the iOS native material mask receives
 animated SVG `d` values from the same control points. SVG serialization lives only
@@ -51,7 +51,7 @@ artwork. The header stays within its measured bounds and adds no content spacing
 Settings → Appearance → Header motion uses a native menu picker to select an effect.
 The change is immediate throughout the app and is saved in AsyncStorage. Restoration
 finishes beneath the launch screen; invalid/unavailable storage retains the
-configured initial style (currently Dunes).
+configured initial style (Default for Likan, Dunes for the template).
 Storybook's local preference provider never reads or writes this saved preference.
 Static SVG counterparts are in `assets/images/header-motion/`; production animates
 those vector contours and details through the shared geometry helpers.

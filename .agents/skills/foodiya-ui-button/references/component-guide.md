@@ -18,7 +18,7 @@ renderer.
 | `onPress`, `disabled`, `testID`  | Native action, disabled state and test selector; disabled actions are suppressed.                                                      |
 | `fullWidth`                      | Fills the native surface and content together.                                                                                         |
 | `color`, `contentColor`          | Direct native accent and label overrides.                                                                                              |
-| `borderRadius`, `contentPadding` | Independent geometry overrides; omitted values retain native defaults, and zero is supported.                                          |
+| `borderRadius`, `contentPadding` | Independent geometry overrides; omitted radius uses theme/native shape, omitted padding stays native, and zero is supported.           |
 | `colorScheme`                    | Standalone Host appearance. Hosted content inherits its owning Host.                                                                   |
 | `cornerRadii`                    | Standalone physical corners: `topLeft`, `topRight`, `bottomLeft`, `bottomRight`. Overrides `borderRadius`; omitted corners are square. |
 
@@ -38,8 +38,13 @@ its black/white primary in both appearances. Supplying either color prop skips
 those defaults. Hosted content follows `useHostColorScheme`;
 standalone controls use their explicit or inherited scheme, also provided to
 custom descendants by their shared Host. Both public controls and their
-types live in `universal-button.tsx`, alongside their private color resolver.
+types live in `universal-button.tsx`, alongside their private theme resolver.
 Native controls own feedback and disabled styling.
+
+The theme's `design.shape.buttonRadius` supplies the default radius for both
+public buttons. Altarea uses 24 points/dp; themes with an undefined token keep
+native rounding. Explicit `borderRadius`, including zero, overrides the theme.
+Standalone `cornerRadii` continue to override the uniform radius.
 
 Platform adapters are needed because the installed universal Expo Button lacks
 native color, content-padding, shape and destructive-role props. iOS uses native

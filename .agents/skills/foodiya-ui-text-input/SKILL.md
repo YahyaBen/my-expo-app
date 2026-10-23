@@ -135,6 +135,10 @@ tokens. Focus changes the border; semantic error/success/warning colors take
 priority. Disabled text/icons dim while the surface remains intact. Read-only
 content keeps its ordinary appearance and independent icon action.
 
+The active theme's `design.shape.inputRadius` supplies the field corner radius:
+12 for UX/Instagram and 6 for Altarea. Explicit `style.borderRadius`, including
+0, overrides it. Appearance/language changes retain the same field and draft.
+
 The wrapper's `style` applies to the outer field **Row**, with `width` also
 constraining its enclosing label/field/helper Column. `textStyle` styles the
 editable text; `modifiers` reach the inner native input. They do not style the

@@ -15,6 +15,7 @@ import NativeScreen from './native-screen';
 import TextScreen from './text-screen';
 import SkeletonScreen from './skeleton-screen';
 import ListScreen from './list-screen';
+import TableScreen from './table-screen';
 import TokensScreen from './tokens-screen';
 import LoadingScreen from './loading-screen';
 
@@ -34,6 +35,7 @@ const screens = {
   text: TextScreen,
   skeleton: SkeletonScreen,
   list: ListScreen,
+  table: TableScreen,
   tokens: TokensScreen,
   loading: LoadingScreen,
 };

@@ -9,10 +9,10 @@ owns literal Metro imports and the small selection helpers used by the root,
 auth headings and launch screen. Native modules never import the Node resolver
 or full brand manifests.
 
-| Brand      | Heading font                           | Registered launch artwork            | Launch mode |
-| ---------- | -------------------------------------- | ------------------------------------ | ----------- |
-| `likan`    | Bundled Inter Black for French/English | `assets/animations/blue-pepe.lottie` | Branded     |
-| `template` | Native system typography               | `assets/images/icon.png`             | Minimal     |
+| Brand      | Heading font                             | Registered launch artwork            | Launch mode |
+| ---------- | ---------------------------------------- | ------------------------------------ | ----------- |
+| `likan`    | Bundled Urbanist Bold for French/English | `assets/animations/blue-pepe.lottie` | Branded     |
+| `template` | Native system typography                 | `assets/images/icon.png`             | Minimal     |
 
 The template image is an existing Expo placeholder. Replace it with client artwork
 before distribution. Native app/adaptive icons and the native splash are separate
@@ -32,12 +32,23 @@ launch does not mount the registered artwork, though its literal asset remains
 bundled for branded previews. See the [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md).
 
 Android derives its embedded family from the filename. iOS uses the font's
-embedded name, which can differ. The supplied file's PostScript name is
-`Inter-Black`; the earlier iOS alias `InterBlack` does not occur in its name table.
-Both platform entries currently use `Inter-Black`, but remain explicit so a new
-font can provide different native names. Inspect a replacement file's metadata
-and verify it on both platforms. Config validation and JavaScript exports cannot
+embedded name, which can differ. Likan's `Urbanist-Bold.ttf` is a static 700-weight
+TrueType font with family `Urbanist`, subfamily `Bold`, and PostScript name
+`Urbanist-Bold`. Both platform entries use `Urbanist-Bold`. The retained Inter
+Black asset uses `Inter-Black`; the alias `InterBlack` does not occur in its name
+table. Keep platform entries explicit, inspect replacement files' metadata and
+verify them on both platforms. Config validation and JavaScript exports cannot
 establish actual font rendering.
+
+Urbanist Bold comes from the official
+[Expo Google Fonts static Urbanist package](https://github.com/expo/google-fonts/tree/master/font-packages/urbanist/700Bold).
+Its SHA-256 is
+`c06728d590de58ab0ccf39c4ea80428b2976355239f2b9e025095bc065d297e9`.
+The Urbanist Project Authors' SIL Open Font License 1.1 is retained in
+[`assets/fonts/Urbanist-OFL.txt`](../assets/fonts/Urbanist-OFL.txt), sourced from
+[Google Fonts](https://github.com/google/fonts/blob/main/ofl/urbanist/OFL.txt).
+The static file supports this checkout's Expo SDK 57; do not substitute a variable
+font without checking the installed SDK's font support.
 
 The bundled heading font is enabled only for `en` and `fr`. Arabic headings use
 native fallback; do not force a Latin font on Arabic or all body text. Adding a

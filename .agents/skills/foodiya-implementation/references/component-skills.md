@@ -1,7 +1,7 @@
 # Component skills
 
 Use this index to select only the component families involved in the change.
-The 32 skills below cover 26 shared UI families and six native primitives.
+The 33 skills below cover 27 shared UI families and six native primitives.
 Each family skill owns its current component contract. Short guidance stays in
 SKILL.md; the longer page and button guides use linked references. Read only
 the relevant family and shared rules. Source folders contain code, not duplicate
@@ -29,6 +29,7 @@ READMEs. The text skill covers native Text and the project text wrappers.
 | Icon                | [foodiya-ui-icon](../../foodiya-ui-icon/SKILL.md)               | [Public native export](../../../../src/components/ui/index.ts) |
 | List                | [foodiya-ui-list](../../foodiya-ui-list/SKILL.md)               | [list/](../../../../src/components/ui/list/)                   |
 | List item           | [foodiya-ui-list-item](../../foodiya-ui-list-item/SKILL.md)     | [list-item/](../../../../src/components/ui/list-item/)         |
+| Table               | [foodiya-ui-table](../../foodiya-ui-table/SKILL.md)             | [table/](../../../../src/components/ui/table/)                 |
 | Collapsible         | [foodiya-ui-collapsible](../../foodiya-ui-collapsible/SKILL.md) | [collapsible/](../../../../src/components/ui/collapsible/)     |
 
 ## Controls and forms

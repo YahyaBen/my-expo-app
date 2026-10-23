@@ -1,5 +1,5 @@
-import { radii, spacing } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme';
+import { spacing } from '@/constants/layout';
+import { useAppTheme } from '@/hooks/use-theme';
 import {
   Column,
   Icon,
@@ -80,7 +80,7 @@ export function TextInput({
   const scheme = useHostColorScheme(colorScheme);
   const focusedRef = useRef(false);
   const [focused, setFocused] = useState(false);
-  const themeColors = useThemeColors(scheme);
+  const { colors: themeColors, design } = useAppTheme(scheme);
   const colors = palette ?? themeColors;
   const semanticColor = status === 'default' ? undefined : colors[status];
   const contentStyle = { opacity: disabled ? 0.5 : 1 };
@@ -88,7 +88,7 @@ export function TextInput({
   const fieldAppearance = inputFieldAppearance({
     paddingHorizontal: style?.paddingHorizontal ?? style?.padding ?? spacing.lg,
     backgroundColor: colors.surface,
-    borderRadius: radii.control,
+    borderRadius: design.shape.inputRadius,
     borderWidth: 1,
     borderColor: semanticColor ?? (focused && !disabled ? colors.tint : colors.border),
     ...style,
