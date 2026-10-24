@@ -230,6 +230,8 @@
     "legalInformation": "Legal information",
     "legalDescription": "End user license agreement",
     "headerMotion": "Header motion",
+    "headerBlur": "Header blur",
+    "headerBlurValue": "{{value}}%",
     "headerShapes": {
       "default": "Default",
       "dunes": "Dunes",
@@ -520,7 +522,7 @@
     "collapsible": "Collapsible",
     "list": "List rows",
     "table": "Table",
-    "tableDescription": "Search sample orders, filter by status and use the row actions. Changes stay in this demo.",
+    "tableDescription": "Search sample orders, filter by status and explore charts that follow your filters. Use the row actions to update this demo.",
     "tableGallery": {
       "title": "Recent orders",
       "order": "Order",
@@ -545,7 +547,18 @@
       "readyFeedback": "Order #{{id}} is ready.",
       "detailsTitle": "Order #{{id}}",
       "detailsSummary": "Items: {{items}} · {{total}} · {{status}}",
-      "closeDetails": "Close details"
+      "closeDetails": "Close details",
+      "charts": {
+        "title": "Order overview",
+        "hint": "Charts follow the search and status filters.",
+        "valueTitle": "Value by order",
+        "totalValue": "Visible order value: {{total}}",
+        "statusTitle": "Orders by status",
+        "statusCount": "{{status}}: {{total}} ({{percent}})",
+        "orderValue": "Order #{{id}}: {{total}}",
+        "scale": "Scale: {{min}}–{{max}}",
+        "empty": "No chart data for these filters."
+      }
     },
     "tokens": "Theme tokens",
     "unavailable": "Component unavailable",

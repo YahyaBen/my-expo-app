@@ -230,6 +230,8 @@
     "legalInformation": "المعلومات القانونية",
     "legalDescription": "اتفاقية ترخيص المستخدم النهائي",
     "headerMotion": "حركة الترويسة",
+    "headerBlur": "تمويه الترويسة",
+    "headerBlurValue": "{{value}}٪",
     "headerShapes": {
       "default": "افتراضي",
       "dunes": "كثبان",
@@ -520,7 +522,7 @@
     "collapsible": "قسم قابل للطي",
     "list": "صفوف القائمة",
     "table": "جدول",
-    "tableDescription": "ابحث في الطلبات التجريبية وصفّها حسب الحالة واستخدم إجراءات الصفوف. تبقى التغييرات في هذا المثال.",
+    "tableDescription": "ابحث في الطلبات التجريبية وصفِّها حسب الحالة واستكشف الرسوم البيانية التي تتبع عوامل التصفية. استخدم إجراءات الصفوف لتعديل هذا المثال.",
     "tableGallery": {
       "title": "الطلبات الأخيرة",
       "order": "الطلب",
@@ -545,7 +547,18 @@
       "readyFeedback": "الطلب رقم {{id}} جاهز.",
       "detailsTitle": "الطلب رقم {{id}}",
       "detailsSummary": "عدد العناصر: {{items}} · {{total}} · {{status}}",
-      "closeDetails": "إغلاق التفاصيل"
+      "closeDetails": "إغلاق التفاصيل",
+      "charts": {
+        "title": "نظرة عامة على الطلبات",
+        "hint": "تتبع الرسوم البيانية عوامل التصفية حسب البحث والحالة.",
+        "valueTitle": "قيمة كل طلب",
+        "totalValue": "قيمة الطلبات المعروضة: {{total}}",
+        "statusTitle": "الطلبات حسب الحالة",
+        "statusCount": "{{status}}: {{total}} ({{percent}})",
+        "orderValue": "الطلب رقم {{id}}: {{total}}",
+        "scale": "المقياس: {{min}}–{{max}}",
+        "empty": "لا توجد بيانات للرسم البياني مع عوامل التصفية هذه."
+      }
     },
     "tokens": "قيم السمة",
     "unavailable": "المكوّن غير متاح",

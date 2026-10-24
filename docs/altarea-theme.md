@@ -117,7 +117,9 @@ Opt-in native text variants use heading 36/700, title 30/700, subtitle 22/600,
 body 18/400, label 16/600 and caption 13/400 (size/weight). Native text scaling
 and wrapping remain intact. Text with no variant keeps native typography;
 explicit caller text styles still take priority. Likan's page/auth/launch headings
-use a bundled static Urbanist Bold. Body text and native control labels keep
+use a bundled static Urbanist Bold. Settings section and language-sheet headings
+use the same font and primary foreground: purple `#502882` in light appearance,
+with the existing lighter purple adaptation in dark appearance. Body text and native control labels keep
 platform fonts; Arabic headings use native fallback. See the
 [font registration and license](assets.md#fonts).
 

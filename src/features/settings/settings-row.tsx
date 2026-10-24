@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Platform } from 'react-native';
+import { spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme';
 import {
   Column,
   ListItemAction,
@@ -9,8 +9,8 @@ import {
   nativeRowWeight,
   useHostColorScheme,
 } from '@components/ui';
-import { spacing } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme';
+import type { ReactNode } from 'react';
+import { Platform } from 'react-native';
 
 /** Shared settings-row geometry for App Settings and its FieldGroup showcase. */
 export function SettingsRow({
@@ -32,12 +32,7 @@ export function SettingsRow({
 }) {
   const colors = useThemeColors(useHostColorScheme());
   const content = (
-    <Row
-      alignment="center"
-      spacing={spacing.lg}
-      modifiers={nativeFillWidth}
-      style={{ paddingVertical: spacing.lg }}
-    >
+    <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
       {leading}
       <Column
         spacing={spacing.xs}

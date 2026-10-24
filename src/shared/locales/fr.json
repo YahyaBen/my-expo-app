@@ -230,6 +230,8 @@
     "legalInformation": "Informations légales",
     "legalDescription": "Accord de licence d’utilisateur final",
     "headerMotion": "Animation de l’en-tête",
+    "headerBlur": "Flou de l’en-tête",
+    "headerBlurValue": "{{value}} %",
     "headerShapes": {
       "default": "Par défaut",
       "dunes": "Dunes",
@@ -520,7 +522,7 @@
     "collapsible": "Section repliable",
     "list": "Lignes de liste",
     "table": "Tableau",
-    "tableDescription": "Recherchez les commandes de démonstration, filtrez par statut et utilisez les actions des lignes. Les modifications restent dans cet exemple.",
+    "tableDescription": "Recherchez les commandes de démonstration, filtrez par statut et explorez les graphiques qui suivent vos filtres. Utilisez les actions des lignes pour modifier cet exemple.",
     "tableGallery": {
       "title": "Commandes récentes",
       "order": "Commande",
@@ -545,7 +547,18 @@
       "readyFeedback": "La commande n° {{id}} est prête.",
       "detailsTitle": "Commande n° {{id}}",
       "detailsSummary": "Articles : {{items}} · {{total}} · {{status}}",
-      "closeDetails": "Fermer les détails"
+      "closeDetails": "Fermer les détails",
+      "charts": {
+        "title": "Aperçu des commandes",
+        "hint": "Les graphiques suivent les filtres de recherche et de statut.",
+        "valueTitle": "Montant par commande",
+        "totalValue": "Montant des commandes affichées : {{total}}",
+        "statusTitle": "Commandes par statut",
+        "statusCount": "{{status}} : {{total}} ({{percent}})",
+        "orderValue": "Commande n° {{id}} : {{total}}",
+        "scale": "Échelle : {{min}}–{{max}}",
+        "empty": "Aucune donnée à afficher avec ces filtres."
+      }
     },
     "tokens": "Valeurs du thème",
     "unavailable": "Composant indisponible",

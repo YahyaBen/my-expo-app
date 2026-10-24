@@ -15,6 +15,7 @@ import {
 } from '@components/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TableOrderCharts } from './table-order-charts';
 
 type OrderStatus = 'preparing' | 'ready';
 type StatusFilter = 'all' | OrderStatus;
@@ -36,6 +37,7 @@ const sampleOrders: readonly DemoOrder[] = [
 
 export type TableDemoProps = {
   initialSearch?: string;
+  initialStatus?: StatusFilter;
   readOnly?: boolean;
   testID?: string;
 };
@@ -43,13 +45,14 @@ export type TableDemoProps = {
 /** Interactive native content; the screen or story supplies its Host. */
 export function TableDemo({
   initialSearch = '',
+  initialStatus = 'all',
   readOnly = false,
   testID = 'demo-table',
 }: TableDemoProps) {
   const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState(sampleOrders);
   const [search, setSearch] = useState(initialSearch);
-  const [status, setStatus] = useState<StatusFilter>('all');
+  const [status, setStatus] = useState<StatusFilter>(initialStatus);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [readyId, setReadyId] = useState<string | null>(null);
   const query = search.trim().toLocaleLowerCase();
@@ -159,6 +162,7 @@ export function TableDemo({
                 total: orders.length,
               })}
             </Text>
+            <TableOrderCharts orders={filteredOrders} currency={currency} testID={testID} />
           </Column>
         }
         emptyState={

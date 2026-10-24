@@ -55,6 +55,9 @@ Use `pageFormModifiers` for the app's transparent form canvas; on iOS, clearing
 the view background alone does not hide Form's system canvas. Reuse page/auth
 safe-area and keyboard infrastructure. Do not duplicate header clearance or
 section gutters, or add a Host around every row.
+Settings supplies custom section headings in the primary foreground with its
+configured heading font and language fallback. Only the first heading owns the
+scrolling title clearance; later headings do not repeat that inset.
 
 ## Match the App Settings page
 

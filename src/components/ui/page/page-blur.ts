@@ -1,6 +1,7 @@
 import { requireOptionalNativeModule } from 'expo';
 import type { BlurViewProps } from 'expo-blur';
 import { Platform } from 'react-native';
+import { DEFAULT_HEADER_BLUR, isHeaderBlur } from '@/constants/header-blur';
 
 const supportsTransparentTint =
   Platform.OS === 'android' &&
@@ -10,15 +11,17 @@ const supportsTransparentTint =
 /** Keep native blur strength separate from the Android color overlay. */
 export function pageBlurProps(
   colorScheme: 'light' | 'dark',
+  level = DEFAULT_HEADER_BLUR,
 ): Pick<BlurViewProps, 'tint' | 'intensity' | 'blurReductionFactor' | 'blurMethod'> {
+  const strength = isHeaderBlur(level) ? level : DEFAULT_HEADER_BLUR;
   if (Platform.OS === 'android') {
     return {
       // The pinned native patch implements this tint. Never send it to an older binary.
       tint: supportsTransparentTint ? ('transparent' as BlurViewProps['tint']) : 'default',
-      // Existing builds retain radius 10 (1 / 0.1) with the minimum supported tint.
-      // Rebuilt binaries retain radius 10 (40 / 4) with an exactly transparent overlay.
-      intensity: supportsTransparentTint ? 40 : 1,
-      blurReductionFactor: supportsTransparentTint ? 4 : 0.1,
+      // Both paths produce radius strength / 4. Existing binaries keep their tint
+      // at 1 / 255 while blur strength changes independently through the divisor.
+      intensity: supportsTransparentTint ? strength : 1,
+      blurReductionFactor: supportsTransparentTint ? 4 : 4 / strength,
       blurMethod: 'dimezisBlurViewSdk31Plus',
     };
   }
@@ -26,6 +29,6 @@ export function pageBlurProps(
   // UIKit supplies the most translucent public system material; no private tint APIs.
   return {
     tint: colorScheme === 'dark' ? 'systemUltraThinMaterialDark' : 'systemUltraThinMaterialLight',
-    intensity: 40,
+    intensity: strength,
   };
 }

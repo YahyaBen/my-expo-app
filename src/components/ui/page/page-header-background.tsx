@@ -6,6 +6,8 @@ import { useHostColorScheme } from '../host/universal-host';
 import { PageWaveContext } from './page-wave-context';
 import { PageWaveSurface } from './page-wave-surface';
 import { pageBlurProps } from './page-blur';
+import { useThemePreferences } from '@/context/theme.context';
+import { DEFAULT_HEADER_BLUR } from '@/constants/header-blur';
 
 /** Native backdrop only; the title and back control remain above the blur. */
 export function PageHeaderBackground({
@@ -20,6 +22,7 @@ export function PageHeaderBackground({
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const wave = useContext(PageWaveContext);
+  const intensity = useThemePreferences()?.headerBlur ?? DEFAULT_HEADER_BLUR;
   const [reduceTransparency, setReduceTransparency] = useState(false);
 
   useEffect(() => {
@@ -55,7 +58,7 @@ export function PageHeaderBackground({
       />
     ) : (
       <BlurView
-        {...pageBlurProps(scheme)}
+        {...pageBlurProps(scheme, intensity)}
         testID="page-header-blur"
         pointerEvents="none"
         accessible={false}
@@ -74,6 +77,7 @@ export function PageHeaderBackground({
       colorScheme={scheme}
       backgroundColor={colors.background}
       reduceTransparency={reduceTransparency}
+      intensity={intensity}
     />
   );
 }

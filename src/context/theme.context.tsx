@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from 'react';
@@ -15,8 +16,10 @@ import {
   isHeaderStyle,
   type PageHeaderStyle,
 } from '@/constants/header-motion';
+import { DEFAULT_HEADER_BLUR, isHeaderBlur } from '@/constants/header-blur';
 
 const HEADER_STORAGE_KEY = 'appHeaderMotion';
+const HEADER_BLUR_STORAGE_KEY = 'appHeaderBlur';
 const REDUCED_MOTION_STORAGE_KEY = 'appReducedMotion';
 const APPEARANCE_STORAGE_KEY = 'appColorScheme';
 let preferencePersistence = Promise.resolve();
@@ -35,6 +38,8 @@ interface ThemeSettings {
   appearanceReady: boolean;
   headerShape: PageHeaderStyle;
   setHeaderShape: (shape: PageHeaderStyle) => void;
+  headerBlur: number;
+  setHeaderBlur: (blur: number) => void;
   headerMotionReady: boolean;
   reducedMotion: boolean | null;
   setReducedMotion: (reduced: boolean) => void;
@@ -48,6 +53,7 @@ export function ThemePreferencesProvider({
   initialTheme = 'ux',
   initialColorScheme = 'system',
   initialHeaderShape = DEFAULT_HEADER_SHAPE,
+  initialHeaderBlur = DEFAULT_HEADER_BLUR,
   initialReducedMotion = null,
   persistHeaderMotion = false,
   persistAppearance = false,
@@ -56,6 +62,7 @@ export function ThemePreferencesProvider({
   initialTheme?: ThemeId;
   initialColorScheme?: ColorSchemePreference;
   initialHeaderShape?: PageHeaderStyle;
+  initialHeaderBlur?: number;
   initialReducedMotion?: boolean | null;
   persistHeaderMotion?: boolean;
   /** Only the app root persists appearance; isolated previews stay in memory. */
@@ -67,8 +74,27 @@ export function ThemePreferencesProvider({
   const [colorScheme, updateColorScheme] = useState(initialColorScheme);
   const [appearanceReady, setAppearanceReady] = useState(!persistAppearance);
   const [headerShape, updateHeaderShape] = useState(initialHeaderShape);
+  const [headerBlur, updateHeaderBlur] = useState(() =>
+    isHeaderBlur(initialHeaderBlur) ? initialHeaderBlur : DEFAULT_HEADER_BLUR,
+  );
   const [reducedMotion, updateReducedMotion] = useState(initialReducedMotion);
   const [headerMotionReady, setHeaderMotionReady] = useState(!persistHeaderMotion);
+  const pendingHeaderBlur = useRef<number | undefined>(undefined);
+  const headerBlurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const flushHeaderBlur = useCallback(() => {
+    if (headerBlurTimer.current !== undefined) clearTimeout(headerBlurTimer.current);
+    headerBlurTimer.current = undefined;
+    const blur = pendingHeaderBlur.current;
+    pendingHeaderBlur.current = undefined;
+    if (blur === undefined) return;
+    preferencePersistence = preferencePersistence
+      .then(() => AsyncStorage.setItem(HEADER_BLUR_STORAGE_KEY, String(blur)))
+      .catch(() => {
+        /* Retain the live blur selection when local storage is unavailable. */
+      });
+  }, []);
+  // Queue the latest selection before a replacement root starts reading preferences.
+  useEffect(() => () => flushHeaderBlur(), [flushHeaderBlur]);
   useEffect(() => {
     if (!persistAppearance) return;
     let active = true;
@@ -96,12 +122,15 @@ export function ThemePreferencesProvider({
         Promise.all([
           AsyncStorage.getItem(HEADER_STORAGE_KEY),
           AsyncStorage.getItem(REDUCED_MOTION_STORAGE_KEY),
+          AsyncStorage.getItem(HEADER_BLUR_STORAGE_KEY),
         ]),
       )
-      .then(([stored, reduced]) => {
+      .then(([stored, reduced, blur]) => {
         if (!active) return;
         if (isHeaderStyle(stored)) updateHeaderShape(stored);
         if (reduced === 'true' || reduced === 'false') updateReducedMotion(reduced === 'true');
+        const restoredBlur = Number(blur);
+        if (isHeaderBlur(restoredBlur)) updateHeaderBlur(restoredBlur);
       })
       .catch(() => {
         /* Retain the default when local storage is unavailable. */
@@ -147,6 +176,17 @@ export function ThemePreferencesProvider({
     },
     [headerMotionReady, persistHeaderMotion],
   );
+  const setHeaderBlur = useCallback(
+    (blur: number) => {
+      if (!headerMotionReady || !isHeaderBlur(blur)) return;
+      updateHeaderBlur(blur);
+      if (!persistHeaderMotion) return;
+      pendingHeaderBlur.current = blur;
+      if (headerBlurTimer.current !== undefined) clearTimeout(headerBlurTimer.current);
+      headerBlurTimer.current = setTimeout(flushHeaderBlur, 300);
+    },
+    [flushHeaderBlur, headerMotionReady, persistHeaderMotion],
+  );
   const setReducedMotion = useCallback(
     (reduced: boolean) => {
       if (!headerMotionReady) return;
@@ -170,6 +210,8 @@ export function ThemePreferencesProvider({
       appearanceReady,
       headerShape,
       setHeaderShape,
+      headerBlur,
+      setHeaderBlur,
       headerMotionReady,
       reducedMotion,
       setReducedMotion,
@@ -182,6 +224,8 @@ export function ThemePreferencesProvider({
       appearanceReady,
       headerShape,
       setHeaderShape,
+      headerBlur,
+      setHeaderBlur,
       headerMotionReady,
       reducedMotion,
       setReducedMotion,

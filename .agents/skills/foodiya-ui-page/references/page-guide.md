@@ -28,6 +28,15 @@ Android records the target's descendants into its blur RenderNode; the target's
 own background and ancestor backgrounds are not included. Keep an actual
 absolute, full-frame themed background View inside that target, before its
 content, so empty areas capture the page color instead of the native window fill.
+Android native stacks retain React state while detaching and restoring native
+screens. `use-page-blur-key.ts` refreshes only the backdrop after a previously
+unfocused route returns, then refreshes its binding after the incoming native
+transition completes. Frame scheduling coalesces same-frame events and cancels
+pending work on blur/unmount. The page, capture target, title, form and scroll
+content retain their identity; ordinary rerenders and header resizing do not
+refresh the backdrop. This JavaScript lifecycle workaround works in existing
+builds and does not change tint policy or disable screen freezing. Native
+verification of the reported gray header on Back remains required.
 Scrolling, safe areas, measured title clearance and touch shielding remain when
 a caller explicitly disables blur. Only that explicit opt-out skips the blur
 target and backdrop; its title and Back remain above the scroll content.
@@ -104,11 +113,21 @@ Android retains Expo UI's `MaskedView` with a Skia mask and `expo-blur`.
 Both rectangular and masked headers share
 [`page-blur.ts`](../../../../src/components/ui/page/page-blur.ts). A guarded
 `ExpoBlur.supportsTransparentTint` check enables the patched Android transparent
-tint: intensity 40 / reduction factor 4 keeps native radius 10 with overlay alpha 0. Older binaries use `default` tint, intensity 1 / reduction factor 0.1, keeping
-radius 10 with a minimal, nonzero overlay alpha of 1/255. The former
+tint. The selected strength divided by 4 sets its native radius with overlay
+alpha 0. Older binaries use `default` tint at intensity 1 and reduction factor
+`4 / strength`, producing the same radius with a fixed, minimal overlay alpha
+of 1/255. The default strength of 40 retains radius 10 on both paths. The former
 `extraLight`/`dark` at intensity 40 added a color overlay; those settings were
 not colorless. The existing `dimezisBlurViewSdk31Plus` policy remains: Android
 12+ uses native blur, while older versions use the translucent fallback.
+
+Android Settings exposes Header blur from 5% to 100% in five-point steps,
+defaulting to 40%. Both rectangular and wave-masked Android backdrops update
+live without remounting content or increasing the tint. The minimum keeps blur
+enabled. The [appearance owner](../../foodiya-ui-appearance/SKILL.md) documents
+restoration and debounced saving; isolated previews remain in memory. iOS
+Settings omits this numeric control because the SwiftUI wave uses a system-owned
+material strength; its existing material behavior remains intact.
 
 [`config/patch-expo-blur.cjs`](../../../../config/patch-expo-blur.cjs) applies the
 Android capability/tint patch during postinstall and validates the exact
@@ -138,6 +157,14 @@ retains the same Reduce Transparency fallback.
 
 `Components/Page Header` previews default, dark, scrolling, full-height overlay
 and no-wave headers with deterministic cards and a counted back action.
+`AdjustBlurLevel` and `AdjustBlurLevelDark` expose the live slider over colored
+cards. Check low/default/high strength, retained drafts and counts, then return
+through `NativeBackReturn` to check the selected level and scrolling together.
+`NativeBackReturn` and `NativeBackReturnDark` push the real `/settings` route
+from the retained Storybook screen. Use Settings Back or Android system Back,
+then check the draft, content count, scroll position and colored cards beneath
+the blur over repeated round trips. `NavigationContinuity` replaces a local
+frame to check geometry; it does not exercise native screen retention.
 `AppSettings` and `DarkAppSettings` render the actual grouped settings form,
 with a counted back action outside the form for checking scrolling and header interaction.
 Automated suites have been removed; existing test IDs remain for future tests.

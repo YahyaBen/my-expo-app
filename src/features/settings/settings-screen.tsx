@@ -1,4 +1,5 @@
 import { spacing } from '@/constants/layout';
+import { HEADER_BLUR_STEP, MAX_HEADER_BLUR, MIN_HEADER_BLUR } from '@/constants/header-blur';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
@@ -15,6 +16,7 @@ import {
   PageSection,
   pageFormModifiers,
   Row,
+  Slider,
   Switch,
   UniversalButtonContent,
   UniversalHost,
@@ -26,13 +28,14 @@ import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useThemeSettings } from '@/context/theme.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAuthGuards } from '@/guards/auth-guards';
-import { useAppTheme, useThemeColors } from '@/hooks/use-theme';
+import { useAppTheme } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import { version as appVersion } from '../../../package.json';
 import { HeaderMotionPicker } from './header-motion-picker';
 import { SettingsRow } from './settings-row';
 import { developerScreensEnabled } from '@/config/developer-tools';
+import { getBrandHeadingFont } from '@/config/brand-assets';
 
 const languageKeys: Record<Language, string> = {
   fr: 'common.french',
@@ -71,7 +74,7 @@ export function SettingsPage({
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors, design } = useAppTheme();
-  const { setReducedMotion, headerMotionReady } = useThemeSettings();
+  const { setReducedMotion, headerMotionReady, headerBlur, setHeaderBlur } = useThemeSettings();
   const reducedMotion = useAppReducedMotion();
   const { height: windowHeight } = useWindowDimensions();
   const languageListHeight = Math.min(320, windowHeight * 0.45);
@@ -105,7 +108,7 @@ export function SettingsPage({
           >
             <FieldGroup.Section title={t('common.account')} titleUppercase>
               <FieldGroup.SectionHeader>
-                <SettingsAccountHeader />
+                <SettingsSectionHeading label={t('common.account')} language={language} first />
               </FieldGroup.SectionHeader>
               <SettingsRow
                 label={t(authenticated ? 'common.account' : 'auth.signIn')}
@@ -119,7 +122,32 @@ export function SettingsPage({
               titleUppercase
               testID="app-settings-appearance"
             >
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('settings.appearance')} language={language} />
+              </FieldGroup.SectionHeader>
               <SettingsRow label={t('common.colorScheme')} trailing={<ColorSchemeControl />} />
+              {Platform.OS === 'android' ? (
+                <Column
+                  spacing={spacing.sm}
+                  modifiers={nativeFillWidth}
+                  style={{ paddingVertical: spacing.lg }}
+                >
+                  <Text>{t('settings.headerBlur')}</Text>
+                  <Text tone="muted" testID="app-settings-header-blur-value">
+                    {t('settings.headerBlurValue', { value: headerBlur })}
+                  </Text>
+                  <Slider
+                    value={headerBlur}
+                    onValueChange={setHeaderBlur}
+                    min={MIN_HEADER_BLUR}
+                    max={MAX_HEADER_BLUR}
+                    step={HEADER_BLUR_STEP}
+                    disabled={!headerMotionReady}
+                    modifiers={nativeFillWidth}
+                    testID="app-settings-header-blur"
+                  />
+                </Column>
+              ) : null}
               {design.header.artwork ? (
                 <SettingsRow label={t('settings.headerMotion')} trailing={<HeaderMotionPicker />} />
               ) : null}
@@ -148,6 +176,9 @@ export function SettingsPage({
             </FieldGroup.Section>
             {developerScreensEnabled && (
               <FieldGroup.Section title={t('settings.components')} titleUppercase>
+                <FieldGroup.SectionHeader>
+                  <SettingsSectionHeading label={t('settings.components')} language={language} />
+                </FieldGroup.SectionHeader>
                 <SettingsRow
                   label={t('settings.componentList')}
                   testID="app-settings-component-list"
@@ -157,6 +188,9 @@ export function SettingsPage({
               </FieldGroup.Section>
             )}
             <FieldGroup.Section title={t('settings.about')} titleUppercase>
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('settings.about')} language={language} />
+              </FieldGroup.SectionHeader>
               <SettingsRow label={t('settings.appVersion')} detail={appVersion} />
             </FieldGroup.Section>
           </FieldGroup>
@@ -173,7 +207,12 @@ export function SettingsPage({
             testID="app-settings-language-sheet"
           >
             <PageSection>
-              <Text variant="title" testID="app-settings-language-title">
+              <Text
+                variant="title"
+                tone="primary"
+                textStyle={{ fontFamily: getBrandHeadingFont(language) }}
+                testID="app-settings-language-title"
+              >
                 {t('common.language')}
               </Text>
               <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
@@ -225,19 +264,30 @@ export function SettingsPage({
   );
 }
 
-/** Keep the initial header clearance inside the form so rows can scroll beneath the blur. */
-function SettingsAccountHeader() {
-  const { t } = useTranslation();
-  const colors = useThemeColors();
+/** Only the first section reserves clearance; all headings share the brand foreground. */
+function SettingsSectionHeading({
+  label,
+  language,
+  first = false,
+}: {
+  label: string;
+  language: Language;
+  first?: boolean;
+}) {
   const headerInset = usePageHeaderInset();
   return (
     <Column
       modifiers={nativeFillWidth}
-      style={{ paddingTop: headerInset }}
-      testID="app-settings-scroll-inset"
+      style={{ paddingTop: first ? headerInset : 0 }}
+      testID={first ? 'app-settings-scroll-inset' : undefined}
     >
-      <Text variant="caption" textStyle={{ color: colors.muted }}>
-        {t('common.account').toLocaleUpperCase()}
+      <Text
+        variant="caption"
+        tone="primary"
+        fontWeight="700"
+        textStyle={{ fontFamily: getBrandHeadingFont(language) }}
+      >
+        {label.toLocaleUpperCase(language)}
       </Text>
     </Column>
   );

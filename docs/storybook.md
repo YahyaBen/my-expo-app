@@ -110,8 +110,19 @@ platforms; fixture registration alone does not establish these native behaviors.
 Launch Screen also retains MinimalReady and MinimalWaiting, with an explicit
 mode Control; the existing stories remain branded. Page Header adds PlainHeader
 and ChangeHeaderStyle. In the latter, type a draft and press Back to alternate
-Dunes/Default: draft, content count and scroll position should survive. The
-normal Settings header picker exposes all four styles in the running app.
+Dunes/Default: draft, content count and scroll position should survive.
+Settings offers all four header styles when the theme enables header artwork.
+Page Header's NativeBackReturn and NativeBackReturnDark open the real Settings
+route. Use its header Back or Android system Back to return, then check retained
+drafts/counts/scroll and the colored cards beneath the header for a gray wash.
+Repeat with header scrolling and rapid round trips. The fixture's own Back only
+counts presses; NavigationContinuity is a local geometry example, not a native
+pop. See the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md)
+for Android backdrop refresh ownership. AdjustBlurLevel and AdjustBlurLevelDark
+add a live 5–100 blur slider over the colored cards. Compare 5, 40 and 100, then
+confirm that strength changes retain drafts/counts/scroll and do not add a gray
+tint. NativeBackReturn also retains the selected level. These providers never
+save production preferences. Device execution remains pending.
 Verify branded hold/exit, background/resume, live Reduce Motion, actual login
 and recovery readiness on matching native builds. These observations remain
 pending; source/fixture registration is not a startup or frame-rate measurement.

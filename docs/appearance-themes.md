@@ -35,8 +35,9 @@ The native Tokens page (`/ui-component/tokens`) displays the active palette,
 type ramp, shapes, shared spacing, working button states and an editable field.
 `Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
 
-Settings offers system/light/dark appearance, supported header effects, Reduce Motion,
-language, Account/sign-in navigation, the component catalog and app version.
+Settings offers system/light/dark appearance, supported header effects, an
+Android header-blur slider, Reduce Motion, language, Account/sign-in navigation,
+the component catalog and app version.
 Placeholder account, notification, support and legal controls have been removed.
 
 Settings owns its [header-effect picker](../src/features/settings/header-motion-picker.tsx). The
@@ -83,6 +84,17 @@ uses that rectangular blur regardless of a saved decorative effect because its
 header artwork is disabled. Existing animated choices and saved values are
 preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.
+
+Android's header-blur slider runs from 5 to 100 in steps of 5, starting at 40.
+Changes apply live. The root's existing `persistHeaderMotion` opt-in restores
+`appHeaderBlur` alongside header/motion preferences before `headerMotionReady`
+allows edits or launch completion. Missing/invalid storage and read failures
+retain the valid initial level; invalid programmatic initial values use 40.
+Saving debounces slider changes for 300ms, then writes the latest value through
+the shared serialized preference queue. Unmount flushes any pending selection
+so a replacement root reads after it. Isolated previews remain in memory and
+never save these changes. iOS Settings omits the numeric control because its
+wave material remains system-owned.
 
 The [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) defines
 minimal/branded presentation, optional-font fallback, foreground timing and the

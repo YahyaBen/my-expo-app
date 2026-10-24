@@ -27,6 +27,7 @@ const meta = {
   argTypes: {
     colorScheme: { control: 'radio', options: ['light', 'dark'] },
     initialSearch: { control: false },
+    initialStatus: { control: false },
     readOnly: { control: 'boolean' },
     testID: { control: false },
   },
@@ -49,4 +50,18 @@ export const ReadOnly: Story = {
 
 export const Dark: Story = {
   args: { colorScheme: 'dark', testID: 'story-table-dark' },
+};
+
+/** A single bar and full status ring follow the same filter as the table. */
+export const SingleOrder: Story = {
+  args: { initialSearch: 'Sofia', testID: 'story-table-single-order' },
+};
+
+/** Marking a filtered preparing order ready removes it from the table and charts. */
+export const PreparingOrders: Story = {
+  args: { initialStatus: 'preparing', testID: 'story-table-preparing-orders' },
+};
+
+export const ReadyOrders: Story = {
+  args: { initialStatus: 'ready', testID: 'story-table-ready-orders' },
 };
