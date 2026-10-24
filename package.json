@@ -103,7 +103,7 @@
     "storybook:generate": "sb-rn-get-stories",
     "lint": "expo lint . --max-warnings=0",
     "lint:staged": "lint-staged",
-    "postinstall": "node config/patch-expo-blur.cjs",
+    "postinstall": "node config/patch-expo-blur.cjs && node config/patch-expo-ui.cjs",
     "prepare": "node .husky/install.mjs",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write src config docs .agents .github .husky .rnstorybook \"*.{js,cjs,mjs,json,md,yaml,yml}\"",

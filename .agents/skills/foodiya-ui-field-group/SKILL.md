@@ -12,8 +12,12 @@ Follow [Foodiya implementation](../foodiya-implementation/SKILL.md) and
 ## Contract and slots
 
 The [local export](../../../src/components/ui/field-group/field-group.tsx) directly
-re-exports `FieldGroup` and `FieldGroupProps`. Read the
-[installed contract](../../../node_modules/@expo/ui/src/universal/FieldGroup/types.ts).
+re-exports Expo UI. The pinned
+[compatibility patch](../../../config/patch-expo-ui.cjs) lets Android sections
+render an existing native ListItem without adding a second Material cell. It
+preserves native grouping, colors, corners and slot markers; ordinary controls
+keep Expo's existing row wrapper. Read the
+[installed props](../../../node_modules/@expo/ui/src/universal/FieldGroup/types.ts).
 
 | Element                    | Use                                                                     |
 | -------------------------- | ----------------------------------------------------------------------- |
@@ -62,12 +66,18 @@ scrolling title clearance; later headings do not repeat that inset.
 ## Match the App Settings page
 
 Use the [App Settings screen](../../../src/features/settings/settings-screen.tsx)
-as the full-page reference. Reuse its
-[SettingsRow](../../../src/features/settings/settings-row.tsx) for label/detail
-columns, leading icons, trailing controls and native action rows. Keep a row
-containing a trailing picker/switch passive; do not wrap that independent control
-in another clickable row. A row with `onPress` uses the
-[ListItemAction](../foodiya-ui-list-item/SKILL.md) native row boundary.
+as the full-page reference. Put the existing `ListItem` directly in
+`FieldGroup.Section` for navigation, language choices and text/details rows. Use
+its children as headline, `supportingText` for details and native accessory slots;
+follow the [list item contract](../foodiya-ui-list-item/SKILL.md).
+
+Keep picker/switch rows in passive Row/Column composition or use the native
+labelled control directly. Never put an independently interactive control inside
+an iOS ListItem Button. Android's compatibility patch recognizes original
+ListItem slot-marker identities, clips the complete native cell to its grouped
+corners and preserves caller colors/modifiers. Opaque custom wrappers that do
+not retain those markers are not recognized. No extra Settings/ListRow component
+or copied form implementation is required.
 
 Use `PageFrame scrollsBehindHeader`, a clipped bounded viewport with the page's
 safe areas, and one fill Host. Put `usePageHeaderInset()` padding on a Column

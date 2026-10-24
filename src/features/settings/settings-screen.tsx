@@ -11,7 +11,9 @@ import {
   Column,
   FieldGroup,
   Icon,
+  ListItem,
   nativeFillWidth,
+  nativeRowWeight,
   PageFrame,
   PageSection,
   pageFormModifiers,
@@ -33,7 +35,6 @@ import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import { version as appVersion } from '../../../package.json';
 import { HeaderMotionPicker } from './header-motion-picker';
-import { SettingsRow } from './settings-row';
 import { developerScreensEnabled } from '@/config/developer-tools';
 import { getBrandHeadingFont } from '@/config/brand-assets';
 
@@ -110,12 +111,13 @@ export function SettingsPage({
               <FieldGroup.SectionHeader>
                 <SettingsSectionHeading label={t('common.account')} language={language} first />
               </FieldGroup.SectionHeader>
-              <SettingsRow
-                label={t(authenticated ? 'common.account' : 'auth.signIn')}
+              <ListItem
                 testID="app-settings-account"
                 onPress={() => router.push(authenticated ? '/account' : '/login')}
                 trailing={chevron}
-              />
+              >
+                <Text>{t(authenticated ? 'common.account' : 'auth.signIn')}</Text>
+              </ListItem>
             </FieldGroup.Section>
             <FieldGroup.Section
               title={t('settings.appearance')}
@@ -125,7 +127,12 @@ export function SettingsPage({
               <FieldGroup.SectionHeader>
                 <SettingsSectionHeading label={t('settings.appearance')} language={language} />
               </FieldGroup.SectionHeader>
-              <SettingsRow label={t('common.colorScheme')} trailing={<ColorSchemeControl />} />
+              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
+                  <Text>{t('common.colorScheme')}</Text>
+                </Column>
+                <ColorSchemeControl />
+              </Row>
               {Platform.OS === 'android' ? (
                 <Column
                   spacing={spacing.sm}
@@ -149,7 +156,12 @@ export function SettingsPage({
                 </Column>
               ) : null}
               {design.header.artwork ? (
-                <SettingsRow label={t('settings.headerMotion')} trailing={<HeaderMotionPicker />} />
+                <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                  <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
+                    <Text>{t('settings.headerMotion')}</Text>
+                  </Column>
+                  <HeaderMotionPicker />
+                </Row>
               ) : null}
               <Switch
                 label={t('settings.reduceMotion')}
@@ -159,8 +171,7 @@ export function SettingsPage({
                 modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
                 testID="app-settings-reduce-motion"
               />
-              <SettingsRow
-                label={t('common.language')}
+              <ListItem
                 testID="app-settings-language"
                 disabled={!languageReady || !onLanguageChange}
                 onPress={() => {
@@ -172,26 +183,37 @@ export function SettingsPage({
                     {chevron}
                   </Row>
                 }
-              />
+              >
+                <Text>{t('common.language')}</Text>
+              </ListItem>
             </FieldGroup.Section>
             {developerScreensEnabled && (
               <FieldGroup.Section title={t('settings.components')} titleUppercase>
                 <FieldGroup.SectionHeader>
                   <SettingsSectionHeading label={t('settings.components')} language={language} />
                 </FieldGroup.SectionHeader>
-                <SettingsRow
-                  label={t('settings.componentList')}
+                <ListItem
                   testID="app-settings-component-list"
                   onPress={() => router.push('/ui')}
                   trailing={chevron}
-                />
+                >
+                  <Text>{t('settings.componentList')}</Text>
+                </ListItem>
               </FieldGroup.Section>
             )}
             <FieldGroup.Section title={t('settings.about')} titleUppercase>
               <FieldGroup.SectionHeader>
                 <SettingsSectionHeading label={t('settings.about')} language={language} />
               </FieldGroup.SectionHeader>
-              <SettingsRow label={t('settings.appVersion')} detail={appVersion} />
+              <ListItem
+                supportingText={
+                  <Text fontSize={14} tone="muted">
+                    {appVersion}
+                  </Text>
+                }
+              >
+                <Text>{t('settings.appVersion')}</Text>
+              </ListItem>
             </FieldGroup.Section>
           </FieldGroup>
         </UniversalHost>
@@ -223,9 +245,8 @@ export function SettingsPage({
                 >
                   <FieldGroup.Section>
                     {SUPPORTED_LANGUAGES.map((value) => (
-                      <SettingsRow
+                      <ListItem
                         key={value}
-                        label={languageLabel(value)}
                         testID={`app-settings-language-${value}`}
                         disabled={!languageReady || !onLanguageChange}
                         onPress={() => {
@@ -245,7 +266,9 @@ export function SettingsPage({
                             />
                           ) : undefined
                         }
-                      />
+                      >
+                        <Text>{languageLabel(value)}</Text>
+                      </ListItem>
                     ))}
                   </FieldGroup.Section>
                 </FieldGroup>

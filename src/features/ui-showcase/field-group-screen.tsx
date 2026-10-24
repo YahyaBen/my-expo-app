@@ -7,6 +7,7 @@ import {
   FieldGroup,
   Column,
   Icon,
+  ListItem,
   PageFrame,
   Picker,
   Switch,
@@ -16,6 +17,8 @@ import {
   UniversalTextContent as Text,
   pageFormModifiers,
   nativeFillWidth,
+  nativeRowWeight,
+  Row,
   usePageHeaderInset,
 } from '@components/ui';
 import { screenInsets } from '@/lib/screen-insets';
@@ -23,7 +26,6 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { radii, spacing } from '@/constants/layout';
-import { SettingsRow } from '@/features/settings/settings-row';
 import { version as appVersion } from '../../../package.json';
 
 type AppearanceMode = 'inherit' | 'light' | 'dark';
@@ -93,9 +95,12 @@ function FieldGroupContent({
                   </Text>
                 </Column>
               </FieldGroup.SectionHeader>
-              <SettingsRow
-                label={name}
-                detail={t('showcase.fieldGroupGallery.demoAccount')}
+              <ListItem
+                supportingText={
+                  <Text fontSize={14} tone="muted">
+                    {t('showcase.fieldGroupGallery.demoAccount')}
+                  </Text>
+                }
                 leading={
                   <Column
                     alignment="center"
@@ -116,7 +121,9 @@ function FieldGroupContent({
                   </Column>
                 }
                 testID="demo-field-group-account"
-              />
+              >
+                <Text>{name}</Text>
+              </ListItem>
               <FieldGroup.SectionFooter>
                 <Text variant="caption" tone="muted">
                   {t('showcase.fieldGroupGallery.description')}
@@ -124,23 +131,20 @@ function FieldGroupContent({
               </FieldGroup.SectionFooter>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('settings.appearance')} titleUppercase>
-              <SettingsRow
-                label={t('common.colorScheme')}
-                trailing={
-                  <Picker
-                    selectedValue={mode}
-                    onValueChange={onModeChange}
-                    testID="demo-field-group-appearance"
-                  >
-                    <Picker.Item
-                      value="inherit"
-                      label={t('showcase.fieldGroupGallery.followApp')}
-                    />
-                    <Picker.Item value="light" label={t('common.lightMode')} />
-                    <Picker.Item value="dark" label={t('common.darkMode')} />
-                  </Picker>
-                }
-              />
+              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
+                  <Text>{t('common.colorScheme')}</Text>
+                </Column>
+                <Picker
+                  selectedValue={mode}
+                  onValueChange={onModeChange}
+                  testID="demo-field-group-appearance"
+                >
+                  <Picker.Item value="inherit" label={t('showcase.fieldGroupGallery.followApp')} />
+                  <Picker.Item value="light" label={t('common.lightMode')} />
+                  <Picker.Item value="dark" label={t('common.darkMode')} />
+                </Picker>
+              </Row>
               <FieldGroup.SectionFooter>
                 <Text variant="caption" tone="muted">
                   {t('showcase.fieldGroupGallery.appearanceHint')}
@@ -148,24 +152,34 @@ function FieldGroupContent({
               </FieldGroup.SectionFooter>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('settings.socialNotifications')} titleUppercase>
-              <SettingsRow
-                label={t('settings.chat')}
-                detail={t('settings.chatDescription')}
-                trailing={
-                  <Switch value={chat} onValueChange={setChat} testID="demo-field-group-chat" />
-                }
-              />
-              <SettingsRow
-                label={t('settings.invitations')}
-                detail={t('settings.invitationsDescription')}
-                trailing={
-                  <Switch
-                    value={invitations}
-                    onValueChange={setInvitations}
-                    testID="demo-field-group-invitations"
-                  />
-                }
-              />
+              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                <Column
+                  spacing={spacing.xs}
+                  modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}
+                >
+                  <Text>{t('settings.chat')}</Text>
+                  <Text fontSize={14} tone="muted">
+                    {t('settings.chatDescription')}
+                  </Text>
+                </Column>
+                <Switch value={chat} onValueChange={setChat} testID="demo-field-group-chat" />
+              </Row>
+              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                <Column
+                  spacing={spacing.xs}
+                  modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}
+                >
+                  <Text>{t('settings.invitations')}</Text>
+                  <Text fontSize={14} tone="muted">
+                    {t('settings.invitationsDescription')}
+                  </Text>
+                </Column>
+                <Switch
+                  value={invitations}
+                  onValueChange={setInvitations}
+                  testID="demo-field-group-invitations"
+                />
+              </Row>
               <FieldGroup.SectionFooter>
                 <Text variant="caption" tone="muted">
                   {t('showcase.gallery.localOnly')}
@@ -187,10 +201,21 @@ function FieldGroupContent({
               </FieldGroup.SectionFooter>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('settings.about')} titleUppercase>
-              <SettingsRow label={t('settings.appVersion')} detail={appVersion} />
-              <SettingsRow
-                label={t('settings.title')}
-                detail={t('showcase.fieldGroupGallery.openSettings')}
+              <ListItem
+                supportingText={
+                  <Text fontSize={14} tone="muted">
+                    {appVersion}
+                  </Text>
+                }
+              >
+                <Text>{t('settings.appVersion')}</Text>
+              </ListItem>
+              <ListItem
+                supportingText={
+                  <Text fontSize={14} tone="muted">
+                    {t('showcase.fieldGroupGallery.openSettings')}
+                  </Text>
+                }
                 onPress={() => router.push('/settings')}
                 trailing={
                   <Icon
@@ -203,7 +228,9 @@ function FieldGroupContent({
                   />
                 }
                 testID="demo-field-group-open-settings"
-              />
+              >
+                <Text>{t('settings.title')}</Text>
+              </ListItem>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('showcase.gallery.interaction')}>
               <UniversalButtonContent

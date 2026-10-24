@@ -3,6 +3,7 @@ import {
   Checkbox,
   Column,
   FieldGroup,
+  ListItem,
   nativeFillWidth,
   PageSection,
   pageFormModifiers,
@@ -12,7 +13,6 @@ import {
   UniversalHost,
   UniversalTextContent as Text,
 } from '@components/ui';
-import { SettingsRow } from '@/features/settings/settings-row';
 import {
   UniversalFieldGroup,
   type UniversalFieldGroupProps,
@@ -202,40 +202,50 @@ function SettingsRowFeedbackDemo({ colorScheme, seedColor }: DemoProps) {
       <UniversalHost colorScheme={colorScheme} seedColor={seedColor} viewportHeight={360}>
         <FieldGroup testID="settings-row-feedback-form" modifiers={pageFormModifiers}>
           <FieldGroup.Section title="Settings row feedback">
-            <SettingsRow
-              label="Language"
-              detail={language}
+            <ListItem
+              supportingText={
+                <Text fontSize={14} tone="muted">
+                  {language}
+                </Text>
+              }
+              leading={<Text>Aa</Text>}
               testID="settings-row-feedback-open"
               onPress={() => {
                 setOpenCount((count) => count + 1);
                 setIsPresented(true);
               }}
-            />
-            <SettingsRow
-              label="Unavailable action"
+            >
+              <Text>Language</Text>
+            </ListItem>
+            <ListItem
               disabled
               testID="settings-row-feedback-disabled"
               onPress={() => setDisabledCount((count) => count + 1)}
-            />
-            <SettingsRow
-              label="Notifications"
-              testID="settings-row-feedback-passive"
-              trailing={
-                <Switch
-                  label="Enable notifications"
-                  value={notifications}
-                  testID="settings-row-feedback-switch"
-                  onValueChange={(value) => {
-                    setNotifications(value);
-                    setSwitchCount((count) => count + 1);
-                  }}
-                />
-              }
-            />
+            >
+              <Text>Unavailable action</Text>
+            </ListItem>
+            <Column testID="settings-row-feedback-passive" modifiers={nativeFillWidth}>
+              <Text>Notifications</Text>
+              <Switch
+                label="Enable notifications"
+                value={notifications}
+                testID="settings-row-feedback-switch"
+                onValueChange={(value) => {
+                  setNotifications(value);
+                  setSwitchCount((count) => count + 1);
+                }}
+              />
+            </Column>
             <FieldGroup.SectionFooter>
-              <Text testID="settings-row-feedback-status">
-                {`Opened: ${openCount} · Disabled activations: ${disabledCount} · Switch changes: ${switchCount} · Notifications: ${notifications ? 'On' : 'Off'}`}
-              </Text>
+              <Column spacing={8} modifiers={nativeFillWidth}>
+                <Text testID="settings-row-feedback-status">
+                  {`Opened: ${openCount} · Disabled activations: ${disabledCount} · Switch changes: ${switchCount} · Notifications: ${notifications ? 'On' : 'Off'}`}
+                </Text>
+                <Text tone="muted">
+                  Tap the Language cell at its top, bottom and side padding. Each press should open
+                  once and highlight the full rounded cell. Disabled activations must stay at zero.
+                </Text>
+              </Column>
             </FieldGroup.SectionFooter>
           </FieldGroup.Section>
         </FieldGroup>
@@ -257,16 +267,17 @@ function SettingsRowFeedbackDemo({ colorScheme, seedColor }: DemoProps) {
               <FieldGroup testID="settings-row-feedback-choices" modifiers={pageFormModifiers}>
                 <FieldGroup.Section>
                   {['English', 'French', 'Arabic'].map((value) => (
-                    <SettingsRow
+                    <ListItem
                       key={value}
-                      label={value}
                       testID={`settings-row-feedback-language-${value.toLowerCase()}`}
                       trailing={language === value ? <Text>Selected</Text> : undefined}
                       onPress={() => {
                         setLanguage(value);
                         setIsPresented(false);
                       }}
-                    />
+                    >
+                      <Text>{value}</Text>
+                    </ListItem>
                   ))}
                 </FieldGroup.Section>
               </FieldGroup>
