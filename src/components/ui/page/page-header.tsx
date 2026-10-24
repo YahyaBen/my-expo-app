@@ -1,6 +1,8 @@
 import { Column, Row } from '@expo/ui';
 import { Platform } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
+import { useLanguage } from '@/context/language.context';
+import { getBrandHeadingFont } from '@/config/brand-assets';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { UniversalTextContent as Text } from '../text/universal-text';
 import { PageBackButton } from './page-back-button';
@@ -24,6 +26,8 @@ export function PageHeader({
 }) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
+  const { language } = useLanguage();
+  const headingFont = getBrandHeadingFont(language);
   const isIOS = Platform.OS === 'ios';
   return (
     <UniversalHost colorScheme={scheme} ignoreSafeArea="all" testID="page-header">
@@ -38,9 +42,14 @@ export function PageHeader({
             spacing={spacing.sm}
             modifiers={nativeCenteredMinHeight(PAGE_HEADER_MIN_HEIGHT)}
           >
-            {onBack ? <PageBackButton color={colors.text} onPress={onBack} /> : null}
+            {onBack ? <PageBackButton color={colors.tint} onPress={onBack} /> : null}
             <Column alignment="start" modifiers={isIOS ? nativeFillWidth : nativeRowWeight}>
-              <Text variant="title" testID="page-title">
+              <Text
+                variant="title"
+                tone="primary"
+                textStyle={{ fontFamily: headingFont }}
+                testID="page-title"
+              >
                 {title}
               </Text>
             </Column>

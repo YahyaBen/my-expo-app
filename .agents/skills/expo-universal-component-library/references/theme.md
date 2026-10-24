@@ -39,6 +39,13 @@ Altarea supplies a 24-point radius. Text presets and field radii also resolve
 through `design`. Do not paint a larger outer background around a smaller native
 clickable control. Legacy size/rounded props have been removed.
 
+`design.header.artwork` enables decorative header waves for UX/Instagram and
+disables them for Altarea. Every titled frame retains native blur over the
+content beneath it by default; the title and Back stay sharp above the backdrop.
+Safe areas, the measured scroll inset and touch shield remain. A frame can
+explicitly opt out with `headerBlur={false}`. Native Reduce Transparency keeps
+its solid-background fallback. Launch artwork does not follow this header setting.
+
 Every `UniversalButton` or `UniversalButtonContent` call requires `variant`. Use [the button skill](../../foodiya-ui-button/SKILL.md) for the current nine variants, native style mapping and supported geometry. Native disabled colors/opacity and press feedback remain platform-owned. Specialized icon and navigation buttons keep their explicitly selected native style.
 
 `UniversalHost` provides its resolved scheme through React context for styled text, loading content and button token resolution through `useHostColorScheme`. Native appearance also follows the owning native Host. `UniversalButton` reuses one `UniversalHost` at an RN boundary, so native appearance and custom descendants share its explicit/inherited scheme and live direction. `UniversalButtonContent` composes within an existing Host and has no scheme prop. Full-width buttons make the label/native surface fill together; intrinsic buttons use inline hosting. See the [button contract](../../foodiya-ui-button/SKILL.md) for geometry and override details.

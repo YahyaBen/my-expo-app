@@ -94,6 +94,12 @@ Launch Screen has Ready, Waiting and ReducedMotion fixtures. Floating Action has
 Interactive, Disabled and RepeatedActions fixtures. Typechecking includes stories,
 but fixture registration does not prove native behavior.
 
+Launch Screen's BottomEdgeLight and BottomEdgeDark fixtures freeze the reveal
+edge beneath a matching launch surface over a contrasting page. Check that the
+front wave joins the surface without a gap and that a distinct lower wave remains
+visible, using the theme's `primaryContainer` and `secondaryContainer` gradient.
+Use Ready to inspect both moving contours during the upward exit.
+
 The Table page at `/ui-component/table` and retained `Components/Table` fixtures
 exercise local filters, row action menus and empty results. Use the
 [Table contract](../.agents/skills/foodiya-ui-table/SKILL.md) for Host ownership

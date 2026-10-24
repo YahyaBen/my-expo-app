@@ -1,9 +1,26 @@
-import { LaunchScreen, UniversalButton, UniversalText } from '@components/ui';
+import { LaunchScreen, PageMotionOverlay, UniversalButton, UniversalText } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { ThemePreferencesProvider, useThemePreferences } from '@/context/theme.context';
 import { getAppBrand } from '@/config/brand';
+import { useThemeColors } from '@/hooks/use-theme';
+
+function LaunchEdgeDemo({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
+  const colors = useThemeColors(colorScheme);
+  return (
+    <View testID="launch-edge-preview" style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
+      <View
+        testID="launch-edge-preview-body"
+        style={{ height: 160, backgroundColor: colors.background }}
+      />
+      <PageMotionOverlay variant="splash" colorScheme={colorScheme} animate={false} />
+      <UniversalText colorScheme={colorScheme}>
+        The background should join the front wave without a gap; the lower wave uses theme colors.
+      </UniversalText>
+    </View>
+  );
+}
 
 function LaunchDemo({
   reducedMotion = false,
@@ -52,3 +69,5 @@ export const Waiting: Story = { args: { waiting: true } };
 export const ReducedMotion: Story = { args: { reducedMotion: true } };
 export const MinimalReady: Story = { args: { mode: 'minimal' } };
 export const MinimalWaiting: Story = { args: { mode: 'minimal', waiting: true } };
+export const BottomEdgeLight: Story = { render: () => <LaunchEdgeDemo colorScheme="light" /> };
+export const BottomEdgeDark: Story = { render: () => <LaunchEdgeDemo colorScheme="dark" /> };

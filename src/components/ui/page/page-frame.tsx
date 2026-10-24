@@ -17,6 +17,7 @@ import { PAGE_HEADER_MIN_HEIGHT } from './page-header-layout';
 import { PageHeaderBackground } from './page-header-background';
 import { PageHeaderTouchShield } from './page-header-touch-shield';
 import { PageWaveContext } from './page-wave-context';
+import { usePageBlurKey } from './use-page-blur-key';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { StartupLayoutContext } from '@/context/startup-layout.context';
@@ -42,7 +43,7 @@ export function PageFrame({
   onBack?: () => void;
   colorScheme?: 'light' | 'dark';
   headerOverlay?: boolean;
-  /** Blur titled headers by default, including full-height overlays. */
+  /** Blur content behind titled headers by default, independently of theme artwork. */
   headerBlur?: boolean;
   /** Children reserve usePageHeaderInset() inside their own scroll content. */
   scrollsBehindHeader?: boolean;
@@ -55,7 +56,8 @@ export function PageFrame({
   }, [onStartupLayout]);
   const insets = useSafeAreaInsets();
   const blurHeader = headerBlur && Boolean(title);
-  const scrollHeader = blurHeader && scrollsBehindHeader && !headerOverlay;
+  const blurKey = usePageBlurKey(blurHeader);
+  const scrollHeader = Boolean(title) && scrollsBehindHeader && !headerOverlay;
   const floating = headerOverlay || scrollHeader;
   const [headerContentHeight, setHeaderContentHeight] = useState(PAGE_HEADER_MIN_HEIGHT);
   const headerHeight = title ? insets.top + headerContentHeight : 0;
@@ -120,6 +122,23 @@ export function PageFrame({
               paddingTop: blurHeader && !headerOverlay && !scrollHeader ? headerHeight : 0,
             }}
           >
+            {blurHeader ? (
+              // Android records target children, so the scene background must be a child
+              // too. Otherwise empty regions can inherit the native window's gray fill.
+              <View
+                testID="page-blur-scene-background"
+                pointerEvents="none"
+                accessible={false}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  backgroundColor: colors.background,
+                }}
+              />
+            ) : null}
             {children}
           </ContentView>
         </PageHeaderInsetContext.Provider>
@@ -127,6 +146,7 @@ export function PageFrame({
       {/* Mount the blur after its content so it tracks native scrolling on Android. */}
       {blurHeader ? (
         <PageHeaderBackground
+          key={blurKey}
           blurTarget={blurTarget}
           colorScheme={colorScheme}
           height={headerHeight}

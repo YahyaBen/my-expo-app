@@ -15,11 +15,27 @@ padding and interaction feedback remain platform-owned. See the
 [website extraction and mobile mapping](altarea-theme.md) for exact source
 values, typography, spacing, shapes and adaptation limits.
 
+Titled page frames blur the content beneath their headers by default in every
+theme. The title and Back remain sharp above that native backdrop. Altarea sets
+`design.header.artwork` to false, omitting colored waves even when an older
+Dunes/Ribbon/Rain preference is stored. Title clearance, safe areas, scrolling
+and touch shielding stay in place. The inactive header-effect picker is hidden
+for Altarea; its saved value is preserved for themes that support the artwork.
+Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
+Transparency retains its existing solid-background fallback.
+Android's exact zero-tint blur requires a new native build with the pinned
+`expo-blur` patch. Existing binaries use a guarded minimal-overlay fallback;
+iOS ultra-thin system materials retain their native color treatment. See the
+[page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md) for the
+shared blur policy and capture-background requirements.
+Page titles use the configured heading font and foreground accent. Home uses
+magenta brand labeling, a warm neutral section and one filled primary action.
+
 The native Tokens page (`/ui-component/tokens`) displays the active palette,
 type ramp, shapes, shared spacing, working button states and an editable field.
 `Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
 
-Settings offers system/light/dark appearance, header effect, Reduce Motion,
+Settings offers system/light/dark appearance, supported header effects, Reduce Motion,
 language, Account/sign-in navigation, the component catalog and app version.
 Placeholder account, notification, support and legal controls have been removed.
 
@@ -61,9 +77,11 @@ Explicit component and Host scheme overrides retain their existing priority.
 Language uses its existing saved provider. Header effect and the explicit motion
 choice still restore before launch completion. Header choices include Default,
 Dunes, Ribbon and Rain; unsupported saved values retain the manifest's initial
-style (Default for Likan, Dunes for the template). Default avoids mounting the wave/canvas/mask while
-retaining the rectangular native header. Existing animated choices and saved
-values are preserved. Persistence remains opt-in; preview providers use neither
+style (Default for Likan, Dunes for the template). Default avoids mounting the
+wave/canvas/mask while retaining the rectangular native header blur. Altarea
+uses that rectangular blur regardless of a saved decorative effect because its
+header artwork is disabled. Existing animated choices and saved values are
+preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.
 
 The [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) defines

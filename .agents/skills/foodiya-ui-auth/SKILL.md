@@ -43,9 +43,14 @@ pending after local sign-out. The [API guide](../../../docs/api-services.md#sess
 owns that lifecycle and its backend/native verification limits.
 
 The wordmark comes from `getAppBrand().name`, uppercased for this frame.
+It uses the theme's secondary accent; the title uses the primary foreground
+accent and active `heading` type preset. The description uses the muted `body`
+preset. Native line spacing and text scaling remain in effect; no fixed title
+size overrides the theme.
 `getBrandHeadingFont` selects the configured platform family for the current
 language; the system-font selection and Arabic use native fallback. The root
-loads the selected font map. Keep font/asset setup with the
+loads the selected font map. Page headers and launch headings use the same
+configured family. Keep font/asset setup with the
 [configuration owner](../foodiya-implementation/references/configuration.md).
 The wordmark and title selectors are `${testID}-brand` and `${testID}-title`.
 Keyboard and safe-area layout stay in the same frame.
@@ -86,6 +91,9 @@ The `viewportHeight` Control exercises overflow in a 360-point/dp viewport;
 Controls exercise the same centered frame. The configured build brand supplies
 the wordmark and heading font; fixture registration does not verify either
 platform's font rendering.
+`AltareaLight` and `AltareaDark` exercise the same frame with Altarea's accents,
+heading/body presets and editable fields. Verify native text wrapping, Arabic
+font fallback and large text on both platforms.
 
 Manual iPad Pro 13-inch / iPadOS 27 checks verified centered Login and Register's
 scrolling through to both actions. Full software-keyboard, narrow-window and

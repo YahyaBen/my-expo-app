@@ -26,7 +26,7 @@ import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useThemeSettings } from '@/context/theme.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAuthGuards } from '@/guards/auth-guards';
-import { useThemeColors } from '@/hooks/use-theme';
+import { useAppTheme, useThemeColors } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import { version as appVersion } from '../../../package.json';
@@ -70,7 +70,7 @@ export function SettingsPage({
 }) {
   const { t } = useTranslation();
   const direction = useLayoutDirection();
-  const colors = useThemeColors();
+  const { colors, design } = useAppTheme();
   const { setReducedMotion, headerMotionReady } = useThemeSettings();
   const reducedMotion = useAppReducedMotion();
   const { height: windowHeight } = useWindowDimensions();
@@ -120,7 +120,9 @@ export function SettingsPage({
               testID="app-settings-appearance"
             >
               <SettingsRow label={t('common.colorScheme')} trailing={<ColorSchemeControl />} />
-              <SettingsRow label={t('settings.headerMotion')} trailing={<HeaderMotionPicker />} />
+              {design.header.artwork ? (
+                <SettingsRow label={t('settings.headerMotion')} trailing={<HeaderMotionPicker />} />
+              ) : null}
               <Switch
                 label={t('settings.reduceMotion')}
                 value={reducedMotion}

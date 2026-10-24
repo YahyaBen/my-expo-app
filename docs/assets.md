@@ -6,7 +6,7 @@ Each brand manifest selects `presentation.headingFont` and
 files, platform font names and supported languages. Config resolution validates
 the selected IDs and files. [`src/config/brand-assets.ts`](../src/config/brand-assets.ts)
 owns literal Metro imports and the small selection helpers used by the root,
-auth headings and launch screen. Native modules never import the Node resolver
+page titles, auth headings and launch screen. Native modules never import the Node resolver
 or full brand manifests.
 
 | Brand      | Heading font                             | Registered launch artwork            | Launch mode |
@@ -22,8 +22,10 @@ manifest fields; changing in-app artwork does not update those assets.
 
 `app.config.js` derives the `expo-font` plugin's files from the selected font.
 The root's `useFonts` map uses the same selection; system typography produces an
-empty map. Auth and launch use platform family names from the metadata. Other
-text controls keep native typography.
+empty map. Page headers, auth headings and launch use platform family names from
+the metadata. Page/auth title sizes still come from the active theme's type
+presets; their foreground uses its primary accent. Other text controls keep
+native typography.
 
 If loading the optional heading font fails, startup continues with native
 typography. The helper returns a family only after its runtime font is loaded;

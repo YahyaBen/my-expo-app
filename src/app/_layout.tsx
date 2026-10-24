@@ -34,7 +34,7 @@ import { ThemePreferencesProvider, useThemeSettings } from '@/context/theme.cont
 import { useAuthGuards } from '@/guards/auth-guards';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useStoreUpdates } from '@/hooks/use-store-updates';
-import { useThemeColors } from '@/hooks/use-theme';
+import { useAppTheme, useThemeColors } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import { getBrandFonts } from '@/config/brand-assets';
 import { getAppBrand } from '@/config/brand';
@@ -101,11 +101,11 @@ function RootLayoutContent() {
     );
   }, [appearancePreference, appearanceReady]);
   const colorScheme = useColorScheme();
-  const colors = useThemeColors(colorScheme);
+  const { colors, design } = useAppTheme(colorScheme);
   const [showLaunchScreen, setShowLaunchScreen] = useState(true);
   const { restoring, requireAuth } = useAuthGuards();
   const pathname = usePathname();
-  const animatedHeader = headerShape !== 'default';
+  const animatedHeader = design.header.artwork && headerShape !== 'default';
   const expanded = animatedHeader && pathname === '/login' && !requireAuth;
   const reducedMotion = useAppReducedMotion();
   const [loginWaveComplete, setLoginWaveComplete] = useState(true);

@@ -73,6 +73,7 @@ export const altareaTheme: ThemePalette = {
 
 /** Mobile type ramp inspired by the site's fluid headings and 18px body. */
 export const altareaDesign: ThemeDesign = {
+  header: { artwork: false },
   typography: {
     heading: { fontSize: 36, fontWeight: '700' },
     title: { fontSize: 30, fontWeight: '700' },

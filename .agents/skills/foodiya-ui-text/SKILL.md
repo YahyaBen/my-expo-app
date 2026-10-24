@@ -30,8 +30,11 @@ Presets set size/weight from the active theme's `design.typography` in
 `src/constants/themes/`; no line height is calculated. UX/Instagram retain their
 original ramp. Altarea uses a larger mobile ramp, including an 18-point body.
 
-Brand typography is selected by the existing asset helper for auth and launch
-headings. Preserve native typography elsewhere. Unsupported languages, including
+Brand typography is selected by the existing asset helper for page titles,
+auth headings and launch headings. Page titles and auth headings use the primary
+foreground accent; auth wordmarks use the secondary accent. This is explicit
+composition in those owners; ordinary text variants do not select a brand font.
+Preserve native typography elsewhere. Unsupported languages, including
 Arabic for the bundled Latin heading fonts, use native fallback. Keep asset and family
 registration with the [configuration owner](../foodiya-implementation/references/configuration.md).
 

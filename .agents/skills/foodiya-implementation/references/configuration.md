@@ -39,8 +39,8 @@ supported selectors belong to [development](../../../../docs/development.md#bran
   assets; never use a manifest path in a dynamic `require`. Font families are
   explicit per platform; verify the file's native names and supported scripts.
   Arabic uses native fallback; failed/unloaded optional fonts also return native
-  typography rather than blocking startup behind the splash. Apply brand fonts to the existing auth
-  and launch headings, not globally to every text control. See
+  typography rather than blocking startup behind the splash. Apply brand fonts to page titles,
+  auth and launch headings, not globally to every text control. See
   [bundled assets](../../../../docs/assets.md) for setup and build requirements.
 - `config/api.js` is a small native-safe module shared by Node and transport.
   `src/services/api.config.ts` owns the lazy native environment read and safe error

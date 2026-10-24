@@ -1,4 +1,4 @@
-import { useThemeColors } from '@/hooks/use-theme';
+import { useAppTheme, useThemeColors } from '@/hooks/use-theme';
 import { Canvas, Group, LinearGradient, Path } from '@shopify/react-native-skia';
 import { useLayoutEffect, useState, type ReactNode } from 'react';
 import { View } from 'react-native';
@@ -31,8 +31,9 @@ export function PageMotionOverlay({
   visible = true,
   ...props
 }: PageMotionOverlayProps) {
+  const { design } = useAppTheme(props.colorScheme);
   const [motion, setMotion] = useState<ReturnType<typeof usePageWaveMotion> | null>(null);
-  const waves = variant === 'splash' || shape !== 'default';
+  const waves = variant === 'splash' || (design.header.artwork && shape !== 'default');
   const artwork = waves ? (
     <PageMotionArtwork
       {...props}
@@ -125,33 +126,44 @@ function PageMotionArtwork({
     >
       <Canvas pointerEvents="none" style={{ flex: 1 }}>
         <Group transform={fit}>
-          <Group transform={backDrift}>
-            <Path path={backWave} opacity={splash ? 1 : overlayBackOpacity}>
-              <LinearGradient
-                start={gradientStart}
-                end={gradientEnd}
-                colors={splash ? [colors.tint, colors.tabIconSelected] : overlayColors}
-              />
-            </Path>
-          </Group>
-          <Group transform={frontDrift}>
-            {splash ? <Path path={frontWave} color={colors.background} /> : null}
-            <Path path={frontWave} opacity={scheme === 'dark' ? 0.2 : 0.12}>
-              <LinearGradient
-                start={gradientStart}
-                end={gradientEnd}
-                colors={splash ? [colors.tint, `${colors.tint}00`] : overlayColors}
-              />
-            </Path>
-            <Path
-              path={frontWave}
-              color={colors.tint}
-              opacity={scheme === 'dark' ? 0.22 : 0.12}
-              style="stroke"
-              strokeWidth={1}
-            />
-          </Group>
-          {!splash ? <Path path={detailWave} color={colors.tint} opacity={detailOpacity} /> : null}
+          {splash ? (
+            <>
+              {/* The deeper contour forms a visible themed band below the background edge. */}
+              <Group transform={frontDrift}>
+                <Path path={frontWave}>
+                  <LinearGradient
+                    start={gradientStart}
+                    end={gradientEnd}
+                    colors={[colors.primaryContainer, colors.secondaryContainer]}
+                  />
+                </Path>
+              </Group>
+              <Group transform={backDrift}>
+                <Path path={backWave} color={colors.background} />
+              </Group>
+            </>
+          ) : (
+            <>
+              <Group transform={backDrift}>
+                <Path path={backWave} opacity={overlayBackOpacity}>
+                  <LinearGradient start={gradientStart} end={gradientEnd} colors={overlayColors} />
+                </Path>
+              </Group>
+              <Group transform={frontDrift}>
+                <Path path={frontWave} opacity={scheme === 'dark' ? 0.2 : 0.12}>
+                  <LinearGradient start={gradientStart} end={gradientEnd} colors={overlayColors} />
+                </Path>
+                <Path
+                  path={frontWave}
+                  color={colors.tint}
+                  opacity={scheme === 'dark' ? 0.22 : 0.12}
+                  style="stroke"
+                  strokeWidth={1}
+                />
+              </Group>
+              <Path path={detailWave} color={colors.tint} opacity={detailOpacity} />
+            </>
+          )}
         </Group>
       </Canvas>
     </View>

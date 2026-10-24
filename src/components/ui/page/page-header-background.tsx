@@ -5,6 +5,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { PageWaveContext } from './page-wave-context';
 import { PageWaveSurface } from './page-wave-surface';
+import { pageBlurProps } from './page-blur';
 
 /** Native backdrop only; the title and back control remain above the blur. */
 export function PageHeaderBackground({
@@ -54,15 +55,13 @@ export function PageHeaderBackground({
       />
     ) : (
       <BlurView
+        {...pageBlurProps(scheme)}
         testID="page-header-blur"
         pointerEvents="none"
         accessible={false}
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
         blurTarget={blurTarget}
-        blurMethod="dimezisBlurViewSdk31Plus"
-        tint={scheme === 'dark' ? 'dark' : 'extraLight'}
-        intensity={40}
         style={style}
       />
     );

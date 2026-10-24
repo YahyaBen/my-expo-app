@@ -9,8 +9,11 @@ component-preview controls and never change the root brand. See the
 
 `altarea.ts` defines the observed purple/magenta/warm-neutral website foundations
 and an explicit mobile dark adaptation. Its `design` sets a mobile type ramp,
-24-point button corners and 6-point field corners. `design.ts` retains the
-original presets and native button shape for UX/Instagram. `useAppTheme` exposes
+24-point button corners, 6-point field corners and `header.artwork: false`.
+Altarea retains native header blur over content without a colored wave.
+`design.ts` retains the original presets, native button shape and enabled header
+artwork for UX/Instagram. Blur remains the default for every titled frame;
+`headerBlur={false}` is an explicit frame opt-out. `useAppTheme` exposes
 these tokens to the existing text, button and input owners. Explicit caller
 geometry/typography keeps priority. Source values and adaptation decisions live
 in the [Altarea design extraction](../../../../docs/altarea-theme.md).

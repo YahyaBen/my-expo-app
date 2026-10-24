@@ -11,8 +11,11 @@ avoidance and measured title clearance remain infrastructure insets.
 previews. See [shared geometry](../../../../docs/layout-consistency.md) for the
 token roles, native-form limitations and component story.
 
-Every titled `PageFrame` blurs its header by default, including Settings, maps,
-developer tools and recovery screens. `headerBlur={false}` explicitly opts out.
+Titled `PageFrame` headers blur the content beneath them by default in every
+theme, including Altarea. `headerBlur={false}` explicitly opts a frame out.
+`design.header.artwork` controls decorative waves independently: it is true for
+UX/Instagram and false for Altarea. The title and Back remain sharp above the
+native blur; disabling artwork does not remove its content target or backdrop.
 The default frame keeps its header in normal layout and reserves the measured
 title height above its content. Its full-frame blur source sits below the header.
 `PageScreen`, Home and Settings use `scrollsBehindHeader` and `usePageHeaderInset()` to reserve that height
@@ -21,6 +24,13 @@ the real header, including the status bar, back button and larger text. The firs
 item starts below the title and can scroll behind it. Content mounts before the
 blur and supplies a `BlurTargetView` reference for Android that excludes the title
 and back button. The mask sits below those controls so they stay sharp.
+Android records the target's descendants into its blur RenderNode; the target's
+own background and ancestor backgrounds are not included. Keep an actual
+absolute, full-frame themed background View inside that target, before its
+content, so empty areas capture the page color instead of the native window fill.
+Scrolling, safe areas, measured title clearance and touch shielding remain when
+a caller explicitly disables blur. Only that explicit opt-out skips the blur
+target and backdrop; its title and Back remain above the scroll content.
 
 Titled frames reserve the top safe area plus a 48-point minimum title row on the
 first render. Pages with and without Back share that minimum, so navigation does
@@ -40,7 +50,13 @@ original cubic vector artwork with independently moving control points. The lead
 40% stays level beneath the title/back button; only the trailing surface deforms.
 Dunes, Ribbon and Rain remain the animated effects. Likan selects Default
 initially; the template selects Dunes. Default is the ordinary rectangular native
-header with no decorative motion. Settings offers all four choices. Rain adds twelve staggered falling drops and impact ripples.
+header with native blur and no decorative motion. Settings offers all four
+choices for themes with header artwork enabled. Rain adds twelve staggered
+falling drops and impact ripples. Altarea's disabled header artwork takes
+precedence over saved effects: it mounts no wave or decorative mask, while the
+rectangular native blur remains. Settings omits the inactive effect picker.
+Saved effects remain available when a theme supports them. Launch artwork is
+unaffected.
 The shared active-time clock drives all paths on the UI thread. Skia uses numeric
 `usePathValue` builders without SVG parsing; the iOS native material mask receives
 animated SVG `d` values from the same control points. SVG serialization lives only
@@ -80,12 +96,29 @@ inside a native SwiftUI mask. An animated SVG uses the same wave path strings an
 transforms as the artwork. This avoids masking an ancestor of UIKit's
 `UIVisualEffectView`, which disables its blur, and keeps a Metal canvas out of the
 SwiftUI mask. The native mask has an explicit height and a bounded Host.
+Rectangular iOS headers use the public light/dark `systemUltraThinMaterial`
+styles. These and SwiftUI's `ultraThin` remain system materials, with native
+color treatment; they do not guarantee an exactly tint-free blur.
 
 Android retains Expo UI's `MaskedView` with a Skia mask and `expo-blur`.
-The Android backdrop uses `extraLight` / `dark` tint at intensity 40, avoiding its
-gray thin-material overlay and keeping more of the content visible. Android 12+
-uses native blur; older Android versions use a translucent fallback. iOS Reduce
-Transparency replaces the blur with the theme's `background` token. The backdrop
+Both rectangular and masked headers share
+[`page-blur.ts`](../../../../src/components/ui/page/page-blur.ts). A guarded
+`ExpoBlur.supportsTransparentTint` check enables the patched Android transparent
+tint: intensity 40 / reduction factor 4 keeps native radius 10 with overlay alpha 0. Older binaries use `default` tint, intensity 1 / reduction factor 0.1, keeping
+radius 10 with a minimal, nonzero overlay alpha of 1/255. The former
+`extraLight`/`dark` at intensity 40 added a color overlay; those settings were
+not colorless. The existing `dimezisBlurViewSdk31Plus` policy remains: Android
+12+ uses native blur, while older versions use the translucent fallback.
+
+[`config/patch-expo-blur.cjs`](../../../../config/patch-expo-blur.cjs) applies the
+Android capability/tint patch during postinstall and validates the exact
+`expo-blur` 57.0.3 version and source anchors. The package's Android autolinking
+`buildFromSource` list includes `expo-blur` so native builds compile this patch.
+An updated Android development build is required for exactly zero tint; an OTA
+update or older development client retains the guarded minimal-overlay fallback.
+Review the patch before changing the pinned package version.
+
+iOS Reduce Transparency replaces the blur with the theme's `background` token. The backdrop
 ignores touches. An absolute transparent shield blocks taps and gestures within
 the header band, including content scrolled underneath it. Its height follows
 the greater of the measured header and the wave's current bottom edge, including
@@ -141,7 +174,8 @@ while `variant="splash"` keeps the 80-point launch reveal edge in normal flow.
 Both variants retain motion guards. Login expansion and its one-second collapse
 keep artwork and native masks aligned and release extended bounds on completion.
 The optional `shape` prop overrides the shared `DEFAULT_HEADER_SHAPE` in
-`src/constants/header-motion.ts`. Root navigation passes the saved preference.
+`src/constants/header-motion.ts`. Root navigation passes the saved preference
+when `design.header.artwork` is enabled and uses Default otherwise.
 Splash retains its original artwork regardless of this preference.
 Header layers share the theme's tint with
 a gentle 20% gradient fade for a more consistent color across the filled area.
@@ -159,8 +193,8 @@ the wave to the header over one second. Opening Register and returning to Login
 use the same slower transition. `onCollapseComplete` releases navigation only
 after a completed rise, so Home cannot interrupt the successful-login animation.
 Reduced motion snaps to the destination and releases navigation immediately.
-Default also bypasses the login wave hold because no completion callback will
-run. The auth request and duplicate-submit guards remain with the feature, and
+Default and themes with header artwork disabled also bypass the login wave hold
+because no completion callback will run. The auth request and duplicate-submit guards remain with the feature, and
 the splash keeps its usual position. Historical Shared Skia motion fixtures
 predate the current starter; use actual Login for the native auth transition.
 The root mounts it above navigation and enables it on Android and iOS after the

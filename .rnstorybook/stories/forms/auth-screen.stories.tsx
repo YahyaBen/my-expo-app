@@ -13,6 +13,7 @@ import { View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { loginResolver } from '@/validation/resolvers/auth';
 import type { LoginFormValues } from '@/validation/schemas/auth';
+import type { StoryThemeProps } from '../../components/story-theme';
 
 function NativeFormDemo({
   pending = false,
@@ -119,7 +120,7 @@ const meta = {
       </View>
     ),
   ],
-} satisfies Meta<typeof NativeFormDemo>;
+} satisfies Meta<Parameters<typeof NativeFormDemo>[0] & StoryThemeProps>;
 
 export default meta;
 
@@ -132,6 +133,14 @@ export const Pending: Story = { args: { pending: true } };
 export const WithoutFieldSelectors: Story = { args: { fieldSelectors: false } };
 
 export const GroupedForm: Story = { args: { grouped: true } };
+
+export const AltareaLight: Story = {
+  args: { themeId: 'altarea', colorScheme: 'light', icons: true },
+};
+
+export const AltareaDark: Story = {
+  args: { themeId: 'altarea', colorScheme: 'dark', icons: true },
+};
 
 export const HostSchemeOverride: Story = {
   args: {

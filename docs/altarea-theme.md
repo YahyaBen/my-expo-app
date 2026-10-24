@@ -116,17 +116,34 @@ hover transitions do not replace native interaction.
 Opt-in native text variants use heading 36/700, title 30/700, subtitle 22/600,
 body 18/400, label 16/600 and caption 13/400 (size/weight). Native text scaling
 and wrapping remain intact. Text with no variant keeps native typography;
-explicit caller text styles still take priority. Likan's auth/launch headings
+explicit caller text styles still take priority. Likan's page/auth/launch headings
 use a bundled static Urbanist Bold. Body text and native control labels keep
 platform fonts; Arabic headings use native fallback. See the
 [font registration and license](assets.md#fonts).
 
 Shared mobile spacing remains 0, 4, 8, 12, 16, 24 and 32 points/dp. Likan starts
-with the existing rectangular Default header, while a previously saved header
-effect still takes priority. The branded launch and reduced-motion behavior
-remain configured through their existing owners. The native splash and adaptive
-icon backgrounds use the new palette; embedded font/splash changes need a
-matching native build.
+with native header blur over the content beneath it, while the title and Back
+remain sharp above the backdrop. `design.header.artwork` is false for Altarea,
+so colored header waves stay absent even with an older saved effect. Settings
+hides that inactive effect picker and preserves its stored value. The measured
+title band, safe area, scroll inset and touch shield remain. Native Reduce
+Transparency keeps its existing solid-background fallback; `headerBlur={false}`
+remains an explicit frame-level opt-out. The branded launch and reduced-motion
+behavior remain configured through their existing owners. The native splash
+and adaptive icon backgrounds use the new palette; embedded font/splash changes
+need a matching native build.
+
+Android separates blur strength from its color overlay. A matching new native
+build provides exactly zero overlay tint through the pinned `expo-blur` patch;
+existing binaries retain a guarded minimal-overlay fallback with the same blur
+radius. iOS uses public ultra-thin system materials, which may still apply their
+own color treatment. The capture background, build requirements and platform
+limits belong to the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md).
+
+Page titles use the purple foreground accent and the selected Urbanist family.
+Auth uses a magenta wordmark, purple heading and the theme's body type scale.
+Home groups its existing introduction and primary sign-in/account action on a
+warm neutral surface, with Settings secondary and developer links lower emphasis.
 
 ## Preview and verification
 

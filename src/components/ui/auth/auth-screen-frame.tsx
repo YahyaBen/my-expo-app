@@ -61,22 +61,20 @@ function AuthScreenContent({
   const headingFont = getBrandHeadingFont(language, brand);
   const heading = (
     <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-      <Text
-        variant="caption"
-        fontWeight="700"
-        textStyle={{ color: colors.tint }}
-        testID={`${testID}-brand`}
-      >
+      <Text variant="caption" tone="secondary" fontWeight="700" testID={`${testID}-brand`}>
         {brand.name.toUpperCase()}
       </Text>
       <Text
         variant="heading"
-        textStyle={{ fontFamily: headingFont, fontSize: 32, lineHeight: 38 }}
+        tone="primary"
+        textStyle={{ fontFamily: headingFont }}
         testID={`${testID}-title`}
       >
         {title}
       </Text>
-      <Text textStyle={{ color: colors.muted, lineHeight: 24 }}>{description}</Text>
+      <Text variant="body" tone="muted">
+        {description}
+      </Text>
     </Column>
   );
   return (

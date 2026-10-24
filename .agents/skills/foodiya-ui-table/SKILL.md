@@ -30,8 +30,9 @@ or combine cell widths with fill-width modifiers.
 
 Strings and numbers returned by `renderCell` or supplied as `emptyState`
 receive themed text automatically. Custom cells, toolbar and empty content
-must compose native UI. Table uses its Host scheme and semantic `surface`,
-`surfaceRaised`, `border` and text colors.
+must compose native UI. Table uses its Host scheme: `surface` for the body,
+`surfaceVariant` for the header background, `text` for header labels, and `border`
+for the outline and row separators.
 
 `toolbar` accepts consumer-owned native filter controls. The consumer owns
 filter state, filtering, result counts, reset, loading/errors, pagination and

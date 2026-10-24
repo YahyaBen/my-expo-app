@@ -78,7 +78,7 @@ export function Table<T>({
               alignment="center"
               spacing={0}
               modifiers={nativeFillWidth}
-              style={{ backgroundColor: colors.surfaceRaised }}
+              style={{ backgroundColor: colors.surfaceVariant }}
               testID={testID ? `${testID}-header` : undefined}
             >
               {columns.map((column) => (
@@ -87,16 +87,12 @@ export function Table<T>({
                   alignment={column.align}
                   style={{ ...cellStyle, width: column.width ?? 144 }}
                 >
-                  <UniversalTextContent variant="label" tone="muted">
-                    {column.header}
-                  </UniversalTextContent>
+                  <UniversalTextContent variant="label">{column.header}</UniversalTextContent>
                 </Column>
               ))}
               {renderActions && (
                 <Column style={{ ...cellStyle, width: actionsWidth }}>
-                  <UniversalTextContent variant="label" tone="muted">
-                    {actionsHeader ?? ''}
-                  </UniversalTextContent>
+                  <UniversalTextContent variant="label">{actionsHeader ?? ''}</UniversalTextContent>
                 </Column>
               )}
             </Row>

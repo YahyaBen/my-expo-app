@@ -6,7 +6,8 @@ description: Compose configured brand palettes, saved app appearance, isolated t
 # Appearance and language
 
 Use the shared `ColorSchemeControl` from `@components/ui` in Settings and login.
-Settings owns its local [HeaderMotionPicker](../../../src/features/settings/header-motion-picker.tsx).
+Settings owns its local [HeaderMotionPicker](../../../src/features/settings/header-motion-picker.tsx),
+shown only when `design.header.artwork` enables decorative effects.
 The [ThemePicker](../../../src/features/ui-showcase/theme-picker.tsx) belongs only
 to the Text component preview. Neither is a public UI export. These controls
 reuse the owning Host. Settings
@@ -37,10 +38,16 @@ resumes live native appearance after a fixed choice. Language restores
 through the existing provider; French, English and Arabic use dictionary autonyms
 and Arabic changes live RTL without remounting forms.
 
-HeaderMotionPicker offers Default, Dunes, Ribbon and Rain. Default uses the
-rectangular native header; the other choices retain their animated artwork and
-iOS SVG mask. Likan selects Default initially; the template selects Dunes through
-`presentation.header`. Existing saved header choices take precedence.
+HeaderMotionPicker offers Default, Dunes, Ribbon and Rain for UX/Instagram.
+Altarea disables decorative header artwork, hides that inactive picker and
+bypasses saved wave effects without deleting the saved preference. Every titled
+frame still blurs the content underneath by default, with its title and Back
+sharp above the native backdrop. `headerBlur={false}` remains an explicit frame
+opt-out; native Reduce Transparency retains its solid-background fallback.
+Default uses the rectangular native blur; the other choices retain their
+animated artwork and iOS SVG mask. Likan selects Default initially; the template
+selects Dunes through `presentation.header`. Existing saved header choices take
+precedence when decorative artwork is enabled.
 The root provider's
 `persistHeaderMotion` also opts into saving the Reduce Motion boolean. Header
 motion uses `appHeaderMotion`; reduction uses `appReducedMotion`. Restoration

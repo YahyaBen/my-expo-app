@@ -55,15 +55,16 @@ export function usePageWaveMotion({
   const scaleY = splash ? SPLASH_SCALE_Y : waveHeight / HEADER_WAVE_HEIGHT;
   const expandedOffset = Math.max(0, height * 0.35 - waveHeight / 2);
   const target = expanded && !splash ? expandedOffset : 0;
+  // Fill above the reveal contour, with enough top bleed to cover vertical drift.
   const splashPaths = useMemo(
     () =>
       splash
         ? {
             front: Skia.Path.MakeFromSVGString(
-              'M0-204c43 28 300-30 423 18s358 8 586 59 351 183 578 38V0H0Z',
+              'M0-204c43 28 300-30 423 18s358 8 586 59 351 183 578 38V-240H0Z',
             )!,
             back: Skia.Path.MakeFromSVGString(
-              'M0-204c43 28 300-30 423 18s374-34 586 59 334-143 630-1V0H0Z',
+              'M0-204c43 28 300-30 423 18s374-34 586 59 334-143 630-1V-240H0Z',
             )!,
           }
         : null,

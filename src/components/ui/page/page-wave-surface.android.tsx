@@ -3,6 +3,7 @@ import { Canvas, Group, Path } from '@shopify/react-native-skia';
 import { BlurView } from 'expo-blur';
 import { StyleSheet } from 'react-native';
 import type { PageWaveSurfaceProps } from './page-wave-surface.types';
+import { pageBlurProps } from './page-blur';
 
 export function PageWaveSurface({ wave, blurTarget, colorScheme }: PageWaveSurfaceProps) {
   return (
@@ -27,12 +28,10 @@ export function PageWaveSurface({ wave, blurTarget, colorScheme }: PageWaveSurfa
       }
     >
       <BlurView
+        {...pageBlurProps(colorScheme)}
         testID="page-header-blur"
         pointerEvents="none"
         blurTarget={blurTarget}
-        blurMethod="dimezisBlurViewSdk31Plus"
-        tint={colorScheme === 'dark' ? 'dark' : 'extraLight'}
-        intensity={40}
         style={StyleSheet.absoluteFill}
       />
     </MaskedView>
