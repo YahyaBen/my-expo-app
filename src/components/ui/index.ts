@@ -31,6 +31,7 @@ export * from './list-item/list-item';
 export * from './list-item/list-item-action';
 export * from './loading/loading-state';
 export * from './native/native-fill-width';
+export * from './navigation/tab-navigation-bar';
 export * from './otp-bottom-sheet/otp-bottom-sheet';
 export * from './page/page-frame';
 export * from './page/page-form-modifiers';

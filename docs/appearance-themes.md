@@ -23,9 +23,8 @@ and touch shielding stay in place. The inactive header-effect picker is hidden
 for Altarea; its saved value is preserved for themes that support the artwork.
 Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
-Android's exact zero-tint blur requires a new native build with the pinned
-`expo-blur` patch. Existing binaries use a guarded minimal-overlay fallback;
-iOS ultra-thin system materials retain their native color treatment. See the
+Android uses the published `expo-blur` defaults for tint, intensity and reduction
+factor. iOS ultra-thin system materials retain their native color treatment. See the
 [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md) for the
 shared blur policy and capture-background requirements.
 Page titles use the configured heading font and foreground accent. Home uses
@@ -35,8 +34,8 @@ The native Tokens page (`/ui-component/tokens`) displays the active palette,
 type ramp, shapes, shared spacing, working button states and an editable field.
 `Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
 
-Settings offers system/light/dark appearance, supported header effects, an
-Android header-blur slider, Reduce Motion, language, Account/sign-in navigation,
+Settings offers system/light/dark appearance, supported header effects,
+Reduce Motion, language, Account/sign-in navigation,
 the component catalog and app version.
 Placeholder account, notification, support and legal controls have been removed.
 
@@ -85,16 +84,10 @@ header artwork is disabled. Existing animated choices and saved values are
 preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.
 
-Android's header-blur slider runs from 5 to 100 in steps of 5, starting at 40.
-Changes apply live. The root's existing `persistHeaderMotion` opt-in restores
-`appHeaderBlur` alongside header/motion preferences before `headerMotionReady`
-allows edits or launch completion. Missing/invalid storage and read failures
-retain the valid initial level; invalid programmatic initial values use 40.
-Saving debounces slider changes for 300ms, then writes the latest value through
-the shared serialized preference queue. Unmount flushes any pending selection
-so a replacement root reads after it. Isolated previews remain in memory and
-never save these changes. iOS Settings omits the numeric control because its
-wave material remains system-owned.
+Header blur strength stays fixed on both platforms. There is no numeric Settings
+control or saved blur-level preference; older `appHeaderBlur` values are ignored.
+Android uses Expo's default strength, while iOS retains its existing native
+material behavior.
 
 The [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) defines
 minimal/branded presentation, optional-font fallback, foreground timing and the

@@ -11,7 +11,10 @@ belongs to the auth feature and is imported locally by Login.
 
 `auth-screen-frame.tsx` owns keyboard/safe-area layout, the full-width native
 Host and scrolling. The screen adds only device safe areas; an inner
-`PageSection` owns symmetric 16-point content padding without a maximum width. The
+`PageSection` owns symmetric 16-point content padding. The Host fills the safe
+viewport up to the shared `screenContentMaxWidth` (640 points/dp) and centers on
+wider or opened displays. Login preferences use the same width after their side
+safe areas, with symmetric native row padding. The
 Host's actual keyboard-adjusted height supplies a native minimum content height:
 short forms center vertically; longer forms grow and scroll from the top. This
 uses the available layout, without device detection or breakpoints. Native
@@ -90,7 +93,10 @@ The `viewportHeight` Control exercises overflow in a 360-point/dp viewport;
 `GroupedForm` exercises the registration container. Appearance and helper text
 Controls exercise the same centered frame. The configured build brand supplies
 the wordmark and heading font; fixture registration does not verify either
-platform's font rendering.
+platform's font rendering. `NarrowScreen` bounds the available width to 360
+points/dp; `WideScreen` uses the actual native preview width and
+`WideScreenOverflow` checks scrolling in a short viewport. Wide cases require
+a wide device or window.
 `AltareaLight` and `AltareaDark` exercise the same frame with Altarea's accents,
 heading/body presets and editable fields. Verify native text wrapping, Arabic
 font fallback and large text on both platforms.

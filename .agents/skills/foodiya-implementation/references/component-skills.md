@@ -1,7 +1,7 @@
 # Component skills
 
 Use this index to select only the component families involved in the change.
-The 33 skills below cover 27 shared UI families and six native primitives.
+The 34 skills below cover 28 shared UI families and six native primitives.
 Each family skill owns its current component contract. Short guidance stays in
 SKILL.md; the longer page and button guides use linked references. Read only
 the relevant family and shared rules. Source folders contain code, not duplicate
@@ -62,6 +62,7 @@ READMEs. The text skill covers native Text and the project text wrappers.
 | Appearance preferences  | [foodiya-ui-appearance](../../foodiya-ui-appearance/SKILL.md)             | [Shared color-scheme control](../../../../src/components/ui/appearance/) and [Settings pickers](../../../../src/features/settings/) |
 | Auth frame and controls | [foodiya-ui-auth](../../foodiya-ui-auth/SKILL.md)                         | [Shared UI](../../../../src/components/ui/auth/) and [Login preferences](../../../../src/features/auth/)                            |
 | Floating action         | [foodiya-ui-floating-action](../../foodiya-ui-floating-action/SKILL.md)   | [floating-action/](../../../../src/components/ui/floating-action/)                                                                  |
+| Tab navigation          | [foodiya-ui-navigation](../../foodiya-ui-navigation/SKILL.md)             | [navigation/](../../../../src/components/ui/navigation/)                                                                            |
 | Launch screen           | [foodiya-ui-launch-screen](../../foodiya-ui-launch-screen/SKILL.md)       | [launch-screen/](../../../../src/components/ui/launch-screen/)                                                                      |
 | OTP bottom sheet        | [foodiya-ui-otp-bottom-sheet](../../foodiya-ui-otp-bottom-sheet/SKILL.md) | [otp-bottom-sheet/](../../../../src/components/ui/otp-bottom-sheet/)                                                                |
 

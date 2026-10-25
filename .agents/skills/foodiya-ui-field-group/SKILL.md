@@ -11,12 +11,13 @@ Follow [Foodiya implementation](../foodiya-implementation/SKILL.md) and
 
 ## Contract and slots
 
-The [local export](../../../src/components/ui/field-group/field-group.tsx) directly
-re-exports Expo UI. The pinned
-[compatibility patch](../../../config/patch-expo-ui.cjs) lets Android sections
-render an existing native ListItem without adding a second Material cell. It
-preserves native grouping, colors, corners and slot markers; ordinary controls
-keep Expo's existing row wrapper. Read the
+The [iOS export](../../../src/components/ui/field-group/field-group.tsx) directly
+re-exports Expo UI. The
+[Android adapter](../../../src/components/ui/field-group/field-group.android.tsx)
+composes public Expo UI native primitives so sections render an existing native
+ListItem without adding a second Material cell. It preserves native grouping,
+colors, corners and slot markers; control-only sections use Expo's existing
+Section implementation. Packages remain unmodified. Read the
 [installed props](../../../node_modules/@expo/ui/src/universal/FieldGroup/types.ts).
 
 | Element                    | Use                                                                     |
@@ -73,11 +74,11 @@ follow the [list item contract](../foodiya-ui-list-item/SKILL.md).
 
 Keep picker/switch rows in passive Row/Column composition or use the native
 labelled control directly. Never put an independently interactive control inside
-an iOS ListItem Button. Android's compatibility patch recognizes original
+an iOS ListItem Button. Android's section adapter recognizes original
 ListItem slot-marker identities, clips the complete native cell to its grouped
 corners and preserves caller colors/modifiers. Opaque custom wrappers that do
 not retain those markers are not recognized. No extra Settings/ListRow component
-or copied form implementation is required.
+is required.
 
 Use `PageFrame scrollsBehindHeader`, a clipped bounded viewport with the page's
 safe areas, and one fill Host. Put `usePageHeaderInset()` padding on a Column

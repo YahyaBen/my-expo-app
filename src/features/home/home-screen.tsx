@@ -11,33 +11,24 @@ import {
 import { useAuthGuards } from '@/guards/auth-guards';
 import { developerScreensEnabled, storybookEnabled } from '@/config/developer-tools';
 import { getAppBrand } from '@/config/brand';
-import { radii, spacing } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme';
+import { spacing } from '@/constants/layout';
+import { SampleRecipeRows } from '@/features/navigation/sample-recipes';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
   const { requireAuth } = useAuthGuards();
-  const colors = useThemeColors();
   const brand = getAppBrand();
   return (
-    <PageScreen showBack={false} title={t('common.home')} description="">
+    <PageScreen tab title={t('common.home')} description="">
       <PageSection spacing={spacing.xl}>
         <UniversalTextContent variant="label" tone="secondary" testID="home-brand">
           {brand.name.toUpperCase()}
         </UniversalTextContent>
-        <Column
-          spacing={spacing.xl}
-          modifiers={nativeFillWidth}
-          style={{
-            backgroundColor: colors.surface,
-            borderRadius: radii.card,
-            padding: spacing.xl,
-          }}
-          testID="home-introduction"
-        >
+        <Column spacing={spacing.xl} modifiers={nativeFillWidth} testID="home-introduction">
           <UniversalTextContent variant="body">{t('starter.homeDescription')}</UniversalTextContent>
           <UniversalButtonContent
             variant="primary"
+            borderRadius={0}
             label={requireAuth ? t('common.account') : t('auth.signIn')}
             testID={requireAuth ? 'home-account' : 'home-login'}
             fullWidth
@@ -46,6 +37,7 @@ export default function HomeScreen() {
         </Column>
         <UniversalButtonContent
           variant="secondary"
+          borderRadius={0}
           label={t('settings.title')}
           testID="home-settings"
           fullWidth
@@ -56,6 +48,7 @@ export default function HomeScreen() {
             {developerScreensEnabled ? (
               <UniversalButtonContent
                 variant="tertiary"
+                borderRadius={0}
                 label={t('tools.showcase')}
                 testID="home-showcase"
                 fullWidth
@@ -65,6 +58,7 @@ export default function HomeScreen() {
             {storybookEnabled ? (
               <UniversalButtonContent
                 variant="tertiary"
+                borderRadius={0}
                 label="Storybook"
                 testID="home-storybook"
                 fullWidth
@@ -73,6 +67,12 @@ export default function HomeScreen() {
             ) : null}
           </Column>
         ) : null}
+      </PageSection>
+      <PageSection spacing={0}>
+        <UniversalTextContent tone="muted">
+          {t('starter.navigationExampleDescription')}
+        </UniversalTextContent>
+        <SampleRecipeRows testIDPrefix="home" />
       </PageSection>
     </PageScreen>
   );

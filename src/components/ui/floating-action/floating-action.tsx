@@ -54,7 +54,17 @@ export function FloatingActionButton({
     <NativeFloatingActionButton
       testID={testID}
       label={label}
-      onPress={onPress}
+      onPress={() => {
+        if (disabled) return;
+        if (process.env.EXPO_OS === 'android') {
+          void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Context_Click).catch(
+            () => {},
+          );
+        } else {
+          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+        }
+        onPress();
+      }}
       disabled={disabled}
       color={disabled ? colors.controlDisabledSurface : colors.primary}
     >
@@ -76,20 +86,7 @@ export function FloatingAction(props: FloatingActionButtonProps) {
       ignoreSafeArea="all"
       style={{ width: 76, height: 76 }}
     >
-      <FloatingActionButton
-        {...props}
-        onPress={() => {
-          if (props.disabled) return;
-          if (process.env.EXPO_OS === 'android') {
-            void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Context_Click).catch(
-              () => {},
-            );
-          } else {
-            void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-          }
-          props.onPress();
-        }}
-      />
+      <FloatingActionButton {...props} />
     </UniversalHost>
   );
 }

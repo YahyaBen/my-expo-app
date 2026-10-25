@@ -5,7 +5,6 @@ import {
   PageSection,
   PageMotionOverlay,
   ScrollView,
-  Slider,
   UniversalHost,
   UniversalButtonContent,
   UniversalTextContent as Text,
@@ -22,8 +21,6 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { LayoutDirectionProvider } from '@/context/layout-direction.context';
 import { spacing, radii } from '@/constants/layout';
 import { DEFAULT_HEADER_SHAPE, HEADER_STYLES } from '@/constants/header-motion';
-import { HEADER_BLUR_STEP, MAX_HEADER_BLUR, MIN_HEADER_BLUR } from '@/constants/header-blur';
-import { useThemeSettings } from '@/context/theme.context';
 
 function HeaderContent({
   colorScheme,
@@ -31,17 +28,14 @@ function HeaderContent({
   onNavigate,
   navigationLabel = 'Open details',
   colorProbe = false,
-  showBlurControl = false,
 }: {
   colorScheme?: 'light' | 'dark';
   presses: number;
   onNavigate?: () => void;
   navigationLabel?: string;
   colorProbe?: boolean;
-  showBlurControl?: boolean;
 }) {
   const colors = useThemeColors(colorScheme);
-  const { headerBlur, setHeaderBlur, headerMotionReady } = useThemeSettings();
   const headerInset = usePageHeaderInset();
   const insets = useSafeAreaInsets();
   const [contentPresses, setContentPresses] = useState(0);
@@ -60,21 +54,6 @@ function HeaderContent({
           style={{ padding: 0, paddingTop: headerInset + insets.top }}
         >
           <PageSection>
-            {showBlurControl ? (
-              <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
-                <Text testID="page-header-blur-value">{`Header blur: ${headerBlur}%`}</Text>
-                <Slider
-                  value={headerBlur}
-                  onValueChange={setHeaderBlur}
-                  min={MIN_HEADER_BLUR}
-                  max={MAX_HEADER_BLUR}
-                  step={HEADER_BLUR_STEP}
-                  disabled={!headerMotionReady}
-                  modifiers={nativeFillWidth}
-                  testID="page-header-blur-level"
-                />
-              </Column>
-            ) : null}
             <TextInput
               label="Retained draft"
               value={draft}
@@ -147,23 +126,16 @@ function HeaderDemo({
   showBack = true,
   shape: _shape,
   colorProbe,
-  showBlurControl,
   ...props
 }: Parameters<typeof PageFrame>[0] & {
   showBack?: boolean;
   shape?: Parameters<typeof PageMotionOverlay>[0]['shape'];
   colorProbe?: boolean;
-  showBlurControl?: boolean;
 }) {
   const [presses, setPresses] = useState(0);
   return (
     <PageFrame {...props} onBack={showBack ? () => setPresses((value) => value + 1) : undefined}>
-      <HeaderContent
-        colorScheme={props.colorScheme}
-        presses={presses}
-        colorProbe={colorProbe}
-        showBlurControl={showBlurControl}
-      />
+      <HeaderContent colorScheme={props.colorScheme} presses={presses} colorProbe={colorProbe} />
     </PageFrame>
   );
 }
@@ -228,7 +200,7 @@ export const AltareaBlurLight: Story = {
     docs: {
       description: {
         story:
-          'Scroll purple and magenta cards beneath the title: they must blur without a gray wash while the title and Back stay sharp. Exact untinted Android blur requires a development build with the native patch; older builds use the minimum supported tint at the same blur radius. Altarea adds no wave even with a retained Dunes preference. Check the retained draft and Back/content press counts.',
+          'Scroll purple and magenta cards beneath the title to inspect the native Expo blur and tint while the title and Back stay sharp. Altarea adds no wave even with a retained Dunes preference. Check the retained draft and Back/content press counts.',
       },
     },
   },
@@ -236,22 +208,6 @@ export const AltareaBlurLight: Story = {
 export const AltareaBlurDark: Story = {
   ...AltareaBlurLight,
   args: { ...AltareaBlurLight.args, colorScheme: 'dark' },
-};
-export const AdjustBlurLevel: Story = {
-  ...AltareaBlurLight,
-  args: { ...AltareaBlurLight.args, showBlurControl: true },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Type a draft and count a content action, then compare header blur at 5%, 40% and 100% on Android. Scroll the purple/magenta cards beneath the title and inspect each strength without a gray wash. Adjusting the slider must retain the same draft, content count and scroll view. This story uses its existing in-memory preferences and does not save app settings.',
-      },
-    },
-  },
-};
-export const AdjustBlurLevelDark: Story = {
-  ...AdjustBlurLevel,
-  args: { ...AdjustBlurLevel.args, colorScheme: 'dark' },
 };
 export const AltareaBlurOverlay: Story = {
   args: {
@@ -319,7 +275,6 @@ function NativeBackReturnHeaderDemo({ colorScheme }: { colorScheme?: 'light' | '
         colorScheme={colorScheme}
         presses={presses}
         colorProbe
-        showBlurControl
         navigationLabel="Open app settings"
         onNavigate={() => router.push('/settings')}
       />
@@ -340,7 +295,7 @@ export const NativeBackReturn: Story = {
     docs: {
       description: {
         story:
-          'Run inside the app Storybook route. Type a draft, count a content action, adjust blur to 5%, 40% or 100%, and open app settings. Use the actual Settings header Back or Android system Back to pop to this retained Storybook screen; the fixture Back only increments its local count. Repeat and scroll purple/magenta cards under the title before and after returning: blur must update without a gray wash, and the selected strength, draft, content count and scroll state must survive. This exercises a native route push/pop without remounting the fixture. Its blur preference stays in memory.',
+          'Run inside the app Storybook route. Type a draft, count a content action, and open app settings. Use the actual Settings header Back or Android system Back to pop to this retained Storybook screen; the fixture Back only increments its local count. Repeat and scroll purple/magenta cards under the title before and after returning: native blur must continue updating, and the draft, content count and scroll state must survive. This exercises a native route push/pop without remounting the fixture.',
       },
     },
   },

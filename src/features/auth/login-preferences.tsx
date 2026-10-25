@@ -1,4 +1,4 @@
-import { spacing } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import {
   BottomSheet,
   ColorSchemeControl,
@@ -12,6 +12,7 @@ import {
   useHostColorScheme,
 } from '@components/ui';
 import { useState } from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useLanguage } from '@/context/language.context';
@@ -30,32 +31,31 @@ export function LoginPreferences() {
 
   return (
     <>
-      <UniversalHost
-        colorScheme={scheme}
-        layoutDirection="leftToRight"
-        ignoreSafeArea="all"
-        testID="auth-login-preferences"
-      >
-        <Row
-          alignment="center"
-          modifiers={nativeFillWidth}
-          style={{
-            paddingVertical: spacing.sm,
-            paddingLeft: insets.left + spacing.lg,
-            paddingRight: insets.right + spacing.lg,
-          }}
+      <View style={{ paddingLeft: insets.left, paddingRight: insets.right }}>
+        <UniversalHost
+          colorScheme={scheme}
+          layoutDirection="leftToRight"
+          ignoreSafeArea="all"
+          style={{ maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
+          testID="auth-login-preferences"
         >
-          <UniversalButtonContent
-            variant="link"
-            label={t('common.language')}
-            testID="auth-login-language"
-            disabled={languageDisabled}
-            onPress={() => setLanguageOpen(true)}
-          />
-          <Spacer flexible />
-          <ColorSchemeControl testID="auth-login-color-scheme" />
-        </Row>
-      </UniversalHost>
+          <Row
+            alignment="center"
+            modifiers={nativeFillWidth}
+            style={{ paddingVertical: spacing.sm, paddingHorizontal: spacing.lg }}
+          >
+            <UniversalButtonContent
+              variant="link"
+              label={t('common.language')}
+              testID="auth-login-language"
+              disabled={languageDisabled}
+              onPress={() => setLanguageOpen(true)}
+            />
+            <Spacer flexible />
+            <ColorSchemeControl testID="auth-login-color-scheme" />
+          </Row>
+        </UniversalHost>
+      </View>
       <BottomSheet
         isPresented={languageOpen}
         onDismiss={() => setLanguageOpen(false)}

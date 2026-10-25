@@ -1,21 +1,42 @@
 # Safe-area handling
 
-Reviewed against Expo SDK 57, Expo UI 57.0.14, and safe-area-context 5.7.0 on 2026-10-03.
+The current tab layout uses Expo Router Tabs with a native Expo UI dock. See the
+[navigation architecture](architecture.md) for route ownership.
 
 ## Ownership
 
-| Surface                        | Top                 | Bottom                 | Sides               |
-| ------------------------------ | ------------------- | ---------------------- | ------------------- |
-| Main tab content               | Screen              | In-flow custom tab bar | Screen              |
-| Detail with shared page header | Screen              | Screen                 | Screen              |
-| Authentication                 | Screen              | Screen                 | Screen              |
-| Account tab                    | Screen              | Tab bar                | Screen              |
-| Launch/session restoration     | Content frame       | Content frame          | Content frame       |
-| Native sheets                  | Native presentation | Native presentation    | Native presentation |
+| Surface                        | Top                 | Bottom              | Sides               |
+| ------------------------------ | ------------------- | ------------------- | ------------------- |
+| Main tab content               | Screen              | In-flow tab dock    | Screen              |
+| Detail with shared page header | Screen              | Screen              | Screen              |
+| Authentication                 | Screen              | Screen              | Screen              |
+| Account screen                 | Screen              | Screen              | Screen              |
+| Launch/session restoration     | Content frame       | Content frame       | Content frame       |
+| Native sheets                  | Native presentation | Native presentation | Native presentation |
 
-`screenInsets` describes this contract without fixed device sizes. The custom bar is in normal navigator layout flow; screens do not reserve its height or add its bottom inset again. Its outer frame owns bottom and side insets. The floating action stays inside the bar's measured bounds, including the area above its rounded panel. Content keeps ordinary spacing separate from system insets.
+`screenInsets` describes inset ownership without fixed device sizes. The custom
+bar receives actual bottom/side values from Router's `BottomTabBarProps` and adds
+them once. Tab routes no longer wrap content in a native-tabs `SafeAreaView`.
+Home and the example pages use `PageScreen tab`; Settings uses its tab mode to
+omit bottom system padding and Back. Page frames retain top/side ownership.
 
-Expo Router already provides the root `SafeAreaProvider`; another provider is not added around the app or individual pages. Hooks handle the changing inset values consistently with navigation transitions. Backgrounds and Skia artwork may reach the edges; controls remain inside protected content bounds. Portrait remains the app's configured orientation; asymmetric side-inset cases cover possible tablet/window layouts and future rotation support without changing that setting.
+The dock's 84-point/dp frame contains the entire raised 76-point/dp button and
+the 56-point/dp tab row in one native layout. Its negative 28-point/dp top margin
+allows content to remain visible beside the raised button; that region has a
+transparent background. The tab row and system bottom inset reserve screen
+height, while the full native frame retains the circle's touch bounds.
+Tab scroll content adds only the shared `tabBarRaisedHeight` clearance after its
+last action, rather than padding for the entire dock. `PageScreen tab` supplies
+inner scroll padding; Settings tab mode uses its last section footer. The dock
+hides while the keyboard is visible. See the
+[navigation contract](../.agents/skills/foodiya-ui-navigation/SKILL.md) for geometry ownership.
+
+Expo Router already provides the root `SafeAreaProvider`; the app does not add
+another provider around individual pages. Hooks handle changing insets with navigation
+transitions. Backgrounds and Skia artwork may reach the edges; controls remain
+inside protected content bounds. Portrait remains the app's configured
+orientation; asymmetric side-inset cases cover possible tablet/window layouts
+and future rotation support without changing that setting.
 
 The page Host opts out of automatic SwiftUI safe areas because the outer frame handles them. RN keyboard padding handles overlap on iOS and Android. Tab and detail pages both use the shared content header, so no native-header keyboard offset is needed. The system-inset frame wraps the keyboard frame so keyboard padding cannot replace its bottom safe area. Authentication uses the same keyboard padding around its native Host. In the installed Android Expo UI implementation, the Host's keyboard-aware viewport measurement only clamps unbounded constraints; it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom sheets keep their presentation's insets and keyboard behavior. The Host wrapper's global defaults are unchanged.
 
@@ -23,9 +44,18 @@ Old 56-point tab-bar offsets were removed from account, maps, Skia, error fallba
 
 ## Documentation
 
-Context7 MCP tools are not connected. Read [Context7's public React Navigation index](https://context7.com/websites/reactnavigation/llms.txt?tokens=10000), including its safe-area source links, then checked the primary [navigation safe-area guidance](https://reactnavigation.org/docs/handling-safe-area/), [SDK 57 safe-area-context reference](https://docs.expo.dev/versions/v57.0.0/sdk/safe-area-context/), [SDK 57 Expo UI Host reference](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/), and installed platform Host implementations. The installed Compose Host exposes keyboard handling separately from SwiftUI's `ignoreSafeArea` semantics; platform behavior must still be checked on devices.
+The tab integration follows the
+[JavaScript tabs guide](https://docs.expo.dev/router/advanced/tabs/) and installed
+Expo Router and Expo UI implementations. See also the
+[SDK 57 safe-area-context reference](https://docs.expo.dev/versions/v57.0.0/sdk/safe-area-context/)
+and [Expo UI Host reference](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/).
+Native rendering, keyboard behavior and device geometry still require device
+checks.
 
-## Verification
+## Historical verification
+
+The records below describe earlier layouts and retired test/flow tooling; they
+do not establish native verification of the current tab layout.
 
 Lint, typecheck, all 70 automated tests, and iOS/Android production JavaScript/Hermes exports pass. Storybook registration was regenerated. The Android SDK's `adb devices` reports no connected devices; native checks below have not run.
 

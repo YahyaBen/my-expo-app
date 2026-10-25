@@ -1,0 +1,53 @@
+import { Icon } from '@expo/ui';
+import { Button, Text, VStack } from '@expo/ui/swift-ui';
+import {
+  accessibilityAddTraits,
+  accessibilityLabel,
+  buttonStyle,
+  contentShape,
+  font,
+  foregroundStyle,
+  frame,
+  lineLimit,
+  shapes,
+  truncationMode,
+} from '@expo/ui/swift-ui/modifiers';
+import type { NavigationTabProps } from './navigation-tab';
+
+export function NavigationTab({
+  icon,
+  label,
+  selected,
+  color,
+  testID,
+  onPress,
+}: NavigationTabProps) {
+  return (
+    <Button
+      testID={testID}
+      onPress={onPress}
+      modifiers={[
+        buttonStyle('plain'),
+        accessibilityLabel(label),
+        accessibilityAddTraits(selected ? ['isSelected'] : []),
+      ]}
+    >
+      <VStack
+        spacing={3}
+        modifiers={[frame({ maxWidth: Infinity, height: 56 }), contentShape(shapes.rectangle())]}
+      >
+        <Icon name={icon} size={22} color={color} modifiers={[frame({ width: 44, height: 28 })]} />
+        <Text
+          modifiers={[
+            font({ size: 11, weight: 'semibold' }),
+            foregroundStyle(color),
+            lineLimit(1),
+            truncationMode('tail'),
+          ]}
+        >
+          {label}
+        </Text>
+      </VStack>
+    </Button>
+  );
+}

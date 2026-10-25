@@ -5,6 +5,20 @@ Settings are public; the component catalog requires its build-time flag. Account
 session predicate; unauthenticated routes contain the existing auth workflow.
 There is no development guest session or local credential bypass.
 
+The public `(tabs)` group uses Expo Router Tabs with the shared Expo UI dock:
+Home, Search, the raised + action, My Recipes and More. Four destinations surround
+the center button. More opens the existing Settings screen. `/`, `/search`,
+`/recipes` and `/settings` retain ordinary URL navigation; authentication,
+Account and developer screens stay on the guarded root stack.
+
+`src/features/navigation/app-tab-bar.tsx` maps route state and cancellable tab
+presses to `TabNavigationBar`. The bar owns bottom/side device insets and reserves
+the entire raised button's touch bounds in normal layout. Screen content owns
+the shared header and side insets. The center action opens a translated example
+sheet; route changes close it and the dock hides while typing. Search filters
+24 local example recipes; Home and My Recipes show the same scrollable sample
+rows. The dock and sample rows use flat edges, without rounded panels or shadows.
+
 | Responsibility                           | Owner                                                                        |
 | ---------------------------------------- | ---------------------------------------------------------------------------- |
 | Routes and access                        | `src/app/`, `src/guards/auth-guards.ts`                                      |

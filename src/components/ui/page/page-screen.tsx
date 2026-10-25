@@ -12,6 +12,7 @@ import { UniversalTextContent } from '../text/universal-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import type { ReactNode } from 'react';
 import { screenInsets } from '@/lib/screen-insets';
+import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 
 export function PageScreen({
   title,
@@ -86,13 +87,17 @@ function PageContent({
           colorScheme={scheme}
           matchContents={false}
           ignoreSafeArea="all"
-          style={{ flex: 1 }}
+          style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
         >
           <RefreshableScrollView onRefresh={onRefresh} testID="page-scroll">
             <Column
               spacing={0}
               modifiers={nativeFillWidth}
-              style={{ padding: 0, paddingTop: headerInset }}
+              style={{
+                padding: 0,
+                paddingTop: headerInset,
+                paddingBottom: tab ? tabBarRaisedHeight : 0,
+              }}
             >
               {description ? (
                 <PageSection>

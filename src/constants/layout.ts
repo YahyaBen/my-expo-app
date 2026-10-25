@@ -1,4 +1,9 @@
 /** Shared geometry for app-owned content; native controls retain their platform defaults. */
+export const screenContentMaxWidth = 640;
+
+/** Raised part of the tab action; only the tab row reserves screen space. */
+export const tabBarRaisedHeight = 28;
+
 export const spacing = {
   none: 0,
   xs: 4,

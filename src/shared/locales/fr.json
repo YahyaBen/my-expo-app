@@ -230,8 +230,6 @@
     "legalInformation": "Informations légales",
     "legalDescription": "Accord de licence d’utilisateur final",
     "headerMotion": "Animation de l’en-tête",
-    "headerBlur": "Flou de l’en-tête",
-    "headerBlurValue": "{{value}} %",
     "headerShapes": {
       "default": "Par défaut",
       "dunes": "Dunes",
@@ -790,6 +788,12 @@
     "demoHint": "Aperçu de l'interface · Saisissez 123456 pour voir l'animation de réussite."
   },
   "starter": {
-    "homeDescription": "Le point de départ de votre application. Explorez les composants natifs, ajustez vos préférences ou connectez-vous à votre serveur."
+    "homeDescription": "Le point de départ de votre application. Explorez les composants natifs, ajustez vos préférences ou connectez-vous à votre serveur.",
+    "centerAction": "Ouvrir l'exemple d'action rapide",
+    "centerActionTitle": "Exemple d'action rapide",
+    "centerActionDescription": "Le bouton + de la barre de navigation ouvre cette feuille native. Utilisez cet espace pour créer un élément ou commencer une nouvelle tâche.",
+    "navigationExampleDescription": "Exemple de navigation avec des recettes de démonstration locales.",
+    "searchExamples": "Rechercher parmi les exemples",
+    "noExampleResults": "Aucune recette d'exemple ne correspond à votre recherche."
   }
 }

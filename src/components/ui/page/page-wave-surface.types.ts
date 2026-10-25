@@ -8,5 +8,4 @@ export type PageWaveSurfaceProps = {
   colorScheme: 'light' | 'dark';
   backgroundColor: string;
   reduceTransparency: boolean;
-  intensity: number;
 };

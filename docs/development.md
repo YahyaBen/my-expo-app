@@ -10,6 +10,10 @@ in `.env.local` for your backend. Retain the npm lockfile and use `npx expo inst
 when explicitly adding a dependency. Installed packages are intentionally retained,
 including packages for future features; unused packages are not a reason to remove them.
 
+Dependencies use their published source without postinstall patches. Keep native
+UI adaptations in the existing TypeScript component adapters and use supported
+Expo APIs instead of rewriting installed packages.
+
 - `npm run typecheck` checks application and retained native story sources.
 - `npm run lint` checks with zero warnings allowed.
 - `npm run check` additionally checks formatting.

@@ -49,24 +49,17 @@ animated artwork and iOS SVG mask. Likan selects Default initially; the template
 selects Dunes through `presentation.header`. Existing saved header choices take
 precedence when decorative artwork is enabled.
 The root provider's `persistHeaderMotion` also opts into saving the Reduce Motion
-boolean and header blur level. Header motion uses `appHeaderMotion`; reduction
-uses `appReducedMotion`; blur uses `appHeaderBlur`. Restoration
+boolean. Header motion uses `appHeaderMotion`; reduction uses `appReducedMotion`. Restoration
 joins launch readiness, validates stored styles and retains the configured initial
 style when storage is missing/invalid/unavailable. The storage key is unchanged,
 so existing Dunes/Ribbon/Rain choices survive. Reads wait for queued writes and
 writes are serialized. Persistence flags default to false; local Storybook
 and Text preview providers remain in memory and must not write app preferences.
 
-Android Settings exposes `app-settings-header-blur`, a native Slider from 5 to
-100 in steps of 5, with a default of 40 and a visible current value. The control
-and `setHeaderBlur` wait for `headerMotionReady`; only finite stepped values in
-range are accepted. Invalid programmatic initial values fall back to 40;
-missing/invalid stored values or failed reads retain the valid initial value.
-Selections update blur live, while storage keeps only the latest selection after
-a 300ms debounce. Provider unmount flushes any pending selection into the same
-serialized preference queue before a replacement root reads. Preview providers
-keep their values in memory only. iOS Settings does not expose a numeric blur
-control because the wave material remains system-owned.
+Header blur strength is fixed. Android uses Expo's default tint, intensity and
+reduction factor; iOS retains its existing system material behavior. Settings
+does not expose a numeric blur control, and the provider has no blur-level state,
+debounced writes or restoration. Older `appHeaderBlur` values are ignored.
 
 Settings has a labeled native `Switch` with selector `app-settings-reduce-motion`.
 On freezes custom header, Lottie, skeleton and OTP artwork and

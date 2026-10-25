@@ -7,6 +7,12 @@ which owns symmetric 16-point padding and a 16-point child gap. Use
 `inset={false}` for full-width sections whose rails/text own horizontal gutters.
 Description and route actions have their own sections. Safe areas, keyboard
 avoidance and measured title clearance remain infrastructure insets.
+`PageScreen` content, page headers and Settings use the shared
+`screenContentMaxWidth` (640 points/dp) at their React Native Host boundary.
+They fill narrower safe viewports and center with equal outer margins on wider
+or opened displays. Keep backgrounds, header blur and artwork edge-to-edge;
+do not constrain `PageFrame` itself or change the global Host defaults.
+`PageSection` still fills its owning content column and owns its existing padding.
 `PageFrame` supplies the selected theme's `background`, including standalone
 previews. See [shared geometry](../../../../docs/layout-consistency.md) for the
 token roles, native-form limitations and component story.
@@ -31,7 +37,10 @@ content, so empty areas capture the page color instead of the native window fill
 Android native stacks retain React state while detaching and restoring native
 screens. `use-page-blur-key.ts` refreshes only the backdrop after a previously
 unfocused route returns, then refreshes its binding after the incoming native
-transition completes. Frame scheduling coalesces same-frame events and cancels
+transition completes. Stack transition events contain `data.closing`; tab
+transition events have no `data`. The shared listener must accept both and read
+`data?.closing` so visiting a tab, including Settings, cannot throw on completion.
+Frame scheduling coalesces same-frame events and cancels
 pending work on blur/unmount. The page, capture target, title, form and scroll
 content retain their identity; ordinary rerenders and header resizing do not
 refresh the backdrop. This JavaScript lifecycle workaround works in existing
@@ -111,31 +120,18 @@ color treatment; they do not guarantee an exactly tint-free blur.
 
 Android retains Expo UI's `MaskedView` with a Skia mask and `expo-blur`.
 Both rectangular and masked headers share
-[`page-blur.ts`](../../../../src/components/ui/page/page-blur.ts). A guarded
-`ExpoBlur.supportsTransparentTint` check enables the patched Android transparent
-tint. The selected strength divided by 4 sets its native radius with overlay
-alpha 0. Older binaries use `default` tint at intensity 1 and reduction factor
-`4 / strength`, producing the same radius with a fixed, minimal overlay alpha
-of 1/255. The default strength of 40 retains radius 10 on both paths. The former
-`extraLight`/`dark` at intensity 40 added a color overlay; those settings were
-not colorless. The existing `dimezisBlurViewSdk31Plus` policy remains: Android
+[`page-blur.ts`](../../../../src/components/ui/page/page-blur.ts). Android leaves
+tint, intensity and reduction factor at Expo's defaults (`default`, 50 and 4).
+There is no custom radius/tint calculation or changing blur-strength prop.
+No native capability check or package patch is required. The existing
+`dimezisBlurViewSdk31Plus` policy remains: Android
 12+ uses native blur, while older versions use the translucent fallback.
 
-Android Settings exposes Header blur from 5% to 100% in five-point steps,
-defaulting to 40%. Both rectangular and wave-masked Android backdrops update
-live without remounting content or increasing the tint. The minimum keeps blur
-enabled. The [appearance owner](../../foodiya-ui-appearance/SKILL.md) documents
-restoration and debounced saving; isolated previews remain in memory. iOS
-Settings omits this numeric control because the SwiftUI wave uses a system-owned
-material strength; its existing material behavior remains intact.
-
-[`config/patch-expo-blur.cjs`](../../../../config/patch-expo-blur.cjs) applies the
-Android capability/tint patch during postinstall and validates the exact
-`expo-blur` 57.0.3 version and source anchors. The package's Android autolinking
-`buildFromSource` list includes `expo-blur` so native builds compile this patch.
-An updated Android development build is required for exactly zero tint; an OTA
-update or older development client retains the guarded minimal-overlay fallback.
-Review the patch before changing the pinned package version.
+Neither platform exposes a numeric header-blur control. The theme provider has
+no blur-level state or persistence; older saved levels are ignored. Rectangular
+iOS headers retain intensity 40, and the SwiftUI wave retains its system-owned
+material strength. The [appearance owner](../../foodiya-ui-appearance/SKILL.md)
+documents the remaining saved preferences.
 
 iOS Reduce Transparency replaces the blur with the theme's `background` token. The backdrop
 ignores touches. An absolute transparent shield blocks taps and gestures within
@@ -157,9 +153,6 @@ retains the same Reduce Transparency fallback.
 
 `Components/Page Header` previews default, dark, scrolling, full-height overlay
 and no-wave headers with deterministic cards and a counted back action.
-`AdjustBlurLevel` and `AdjustBlurLevelDark` expose the live slider over colored
-cards. Check low/default/high strength, retained drafts and counts, then return
-through `NativeBackReturn` to check the selected level and scrolling together.
 `NativeBackReturn` and `NativeBackReturnDark` push the real `/settings` route
 from the retained Storybook screen. Use Settings Back or Android system Back,
 then check the draft, content count, scroll position and colored cards beneath
@@ -174,6 +167,11 @@ uncovered content button works, a button beneath the title cannot be activated
 through it, and Back remains usable before and after scrolling.
 
 `page-screen.tsx` composes scrolling content and actions. Its optional `showBack={false}` hides the back control without applying tab-bar insets; standalone Home uses this mode.
+Tab mode adds `tabBarRaisedHeight` (28 points/dp) inside the scroll content after
+its last action; Settings tab mode adds the same clearance in its final section
+footer. This clears the raised circle while content remains visible beside it.
+The dock already reserves its tab row and bottom system inset; do not add its
+full height again. See the [navigation contract](../../foodiya-ui-navigation/SKILL.md).
 `page-frame.tsx` handles the header's safe area and leaves other edges to content.
 Its optional `headerOverlay` floats the blurred header above full-height content,
 as used by Cartes. Overlay content retains the top device inset for native map controls;
@@ -256,3 +254,6 @@ concrete files directly. [Back to the UI guide](../../../../docs/ui.md).
 The saved app Reduce Motion switch overrides the system preference for custom motion. Before an override is selected, the live system preference applies. Backgrounding still pauses animation. See the appearance skill for preference ownership.
 
 `Components/Page Screen/StandaloneHome` and `BackAction` exercise the `showBack` prop with counted content/back actions and the same native page Host.
+`NarrowScreen`, `WideScreen`, `WideLongContent` and `WideRTL` exercise the
+shared width boundary using the real preview width. Use a wide native device or
+window for the wide cases; fixtures do not simulate an unfolded device.

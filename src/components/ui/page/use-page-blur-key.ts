@@ -1,12 +1,18 @@
 import { useNavigation } from 'expo-router';
-import type { NativeStackNavigationProp } from 'expo-router/native-stack';
-import type { ParamListBase } from 'expo-router/react-navigation';
+import type { EventConsumer, NavigationProp, ParamListBase } from 'expo-router/react-navigation';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
+type PageNavigation = Pick<NavigationProp<ParamListBase>, 'isFocused'> &
+  EventConsumer<{
+    blur: { data: undefined };
+    focus: { data: undefined };
+    transitionEnd: { data: { closing: boolean } | undefined };
+  }>;
+
 /** Rebind only the Android backdrop after its retained native screen reappears. */
 export function usePageBlurKey(enabled: boolean) {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const navigation = useNavigation<PageNavigation>();
   const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
@@ -38,7 +44,8 @@ export function usePageBlurKey(enabled: boolean) {
       refresh();
     });
     const unsubscribeTransition = navigation.addListener('transitionEnd', ({ data }) => {
-      if (data.closing || !returning || !navigation.isFocused()) return;
+      // Stack transitions include closing; tab transitions have no payload.
+      if (data?.closing || !returning || !navigation.isFocused()) return;
       returning = false;
       // Focus can precede native reattachment and the temporary transition hardware
       // layer. Rebind once more after that layer is gone, with the same live target.

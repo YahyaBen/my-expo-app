@@ -5,12 +5,7 @@ import { StyleSheet } from 'react-native';
 import type { PageWaveSurfaceProps } from './page-wave-surface.types';
 import { pageBlurProps } from './page-blur';
 
-export function PageWaveSurface({
-  wave,
-  blurTarget,
-  colorScheme,
-  intensity,
-}: PageWaveSurfaceProps) {
+export function PageWaveSurface({ wave, blurTarget, colorScheme }: PageWaveSurfaceProps) {
   return (
     <MaskedView
       testID="page-wave-blur-mask"
@@ -33,7 +28,7 @@ export function PageWaveSurface({
       }
     >
       <BlurView
-        {...pageBlurProps(colorScheme, intensity)}
+        {...pageBlurProps(colorScheme)}
         testID="page-header-blur"
         pointerEvents="none"
         blurTarget={blurTarget}

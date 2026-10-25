@@ -14,7 +14,7 @@ import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-sc
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { UniversalTextContent as Text } from '../text/universal-text';
 import { useLanguage } from '@/context/language.context';
-import { spacing } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { PageSection } from '../page/page-section';
 import { pageFormModifiers } from '../page/page-form-modifiers';
 import { screenInsets } from '@/lib/screen-insets';
@@ -87,7 +87,7 @@ function AuthScreenContent({
       }}
     >
       <UniversalHost
-        style={{ flex: 1, width: '100%' }}
+        style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
         onLayout={({ nativeEvent: { layout } }) => setViewportHeight(layout.height)}
         colorScheme={scheme}
         seedColor={colors.tint}

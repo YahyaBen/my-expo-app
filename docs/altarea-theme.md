@@ -135,11 +135,10 @@ behavior remain configured through their existing owners. The native splash
 and adaptive icon backgrounds use the new palette; embedded font/splash changes
 need a matching native build.
 
-Android separates blur strength from its color overlay. A matching new native
-build provides exactly zero overlay tint through the pinned `expo-blur` patch;
-existing binaries retain a guarded minimal-overlay fallback with the same blur
-radius. iOS uses public ultra-thin system materials, which may still apply their
-own color treatment. The capture background, build requirements and platform
+Android uses the published `expo-blur` defaults for tint, intensity and reduction
+factor, with no adjustable blur-level preference. iOS uses
+public ultra-thin system materials, which may still apply their own color
+treatment. The capture background and platform
 limits belong to the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md).
 
 Page titles use the purple foreground accent and the selected Urbanist family.

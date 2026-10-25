@@ -22,12 +22,12 @@ while guarding the callback. Shared props and original slot types live in
 [list-item.d.ts](../../../src/components/ui/list-item/list-item.d.ts); Metro selects
 the existing component's iOS or Android renderer.
 
-Place `ListItem` directly in `FieldGroup.Section` (or a Fragment). The pinned
-[Expo UI compatibility patch](../../../config/patch-expo-ui.cjs) lets Android
-FieldGroup recognize native row slot markers and render that cell once, applying
-section colors and an outer clip for connected corners and full-cell ripple.
-The patch runs at postinstall, is idempotent, and fails on unsupported package
-versions/source. Review it during upgrades. It changes JavaScript only.
+Place `ListItem` directly in `FieldGroup.Section` (or a Fragment). The
+[Android FieldGroup adapter](../../../src/components/ui/field-group/field-group.android.tsx)
+recognizes native row slot markers and renders that cell once, applying section
+colors and an outer clip for connected corners and full-cell ripple. It composes
+public Expo UI primitives in application source; dependencies remain unmodified.
+Review this native composition during upgrades.
 
 Keep independently interactive pickers and switches in ordinary passive
 Row/Column composition or use the native labelled control directly. The iOS

@@ -32,9 +32,9 @@ Android must pass `Shape.Circle({ radius: 1 })`: the installed native ShapeRecor
 defaults its radius to zero, which clips both the icon and touch shape down to
 the center. Keep the full-size circular shape explicit when updating Expo UI.
 
-Use `FloatingActionButton` within an existing Host. `FloatingAction` owns a
-fixed-size `UniversalHost` for a React Native boundary and retains native haptic
-feedback on activation. Both honor the owning Host or explicit color scheme.
+Use `FloatingActionButton` within an existing Host. It owns native haptic
+feedback on activation. `FloatingAction` adds a fixed-size `UniversalHost` for a
+React Native boundary. Both honor the owning Host or explicit color scheme.
 The consumer owns positioning, route-specific actions and asynchronous guards.
 
 The starter Buttons showcase preserves the standalone default ID and adds named

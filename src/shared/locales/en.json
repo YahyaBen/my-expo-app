@@ -230,8 +230,6 @@
     "legalInformation": "Legal information",
     "legalDescription": "End user license agreement",
     "headerMotion": "Header motion",
-    "headerBlur": "Header blur",
-    "headerBlurValue": "{{value}}%",
     "headerShapes": {
       "default": "Default",
       "dunes": "Dunes",
@@ -790,6 +788,12 @@
     "demoHint": "UI preview · Enter 123456 to try the success animation."
   },
   "starter": {
-    "homeDescription": "A starting point for your app. Explore the native components, adjust your preferences, or sign in to your backend."
+    "homeDescription": "A starting point for your app. Explore the native components, adjust your preferences, or sign in to your backend.",
+    "centerAction": "Open quick action example",
+    "centerActionTitle": "Quick action example",
+    "centerActionDescription": "The + button in the navigation bar opens this native sheet. Use this space to create an item or start a new task.",
+    "navigationExampleDescription": "Navigation example with local sample recipes.",
+    "searchExamples": "Search sample recipes",
+    "noExampleResults": "No sample recipes match your search."
   }
 }

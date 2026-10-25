@@ -47,7 +47,7 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: 'index',
+  initialRouteName: '(tabs)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -237,7 +237,7 @@ function RootLayoutNav({ holdLogin }: { holdLogin: boolean }) {
           headerShadowVisible: false,
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
         <Stack.Protected guard={developerScreensEnabled}>
           <Stack.Screen name="ui" />
           <Stack.Screen name="ui-component/[name]" />
@@ -245,7 +245,6 @@ function RootLayoutNav({ holdLogin }: { holdLogin: boolean }) {
         <Stack.Protected guard={storybookEnabled}>
           <Stack.Screen name="storybook" />
         </Stack.Protected>
-        <Stack.Screen name="settings" />
         <Stack.Protected guard={requireNoAuth || holdLogin}>
           <Stack.Screen name="(auth)" />
         </Stack.Protected>

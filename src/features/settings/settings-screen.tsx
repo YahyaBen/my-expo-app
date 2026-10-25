@@ -1,5 +1,4 @@
-import { spacing } from '@/constants/layout';
-import { HEADER_BLUR_STEP, MAX_HEADER_BLUR, MIN_HEADER_BLUR } from '@/constants/header-blur';
+import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
@@ -18,7 +17,7 @@ import {
   PageSection,
   pageFormModifiers,
   Row,
-  Slider,
+  Spacer,
   Switch,
   UniversalButtonContent,
   UniversalHost,
@@ -54,6 +53,7 @@ export default function SettingsScreen() {
       onLanguageChange={setLanguage}
       languageReady={ready}
       authenticated={requireAuth}
+      tab
     />
   );
 }
@@ -64,18 +64,20 @@ export function SettingsPage({
   onLanguageChange,
   languageReady = true,
   authenticated = false,
+  tab = false,
   onBack,
 }: {
   language: Language;
   onLanguageChange?: (language: Language) => void;
   languageReady?: boolean;
   authenticated?: boolean;
+  tab?: boolean;
   onBack?: () => void;
 }) {
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors, design } = useAppTheme();
-  const { setReducedMotion, headerMotionReady, headerBlur, setHeaderBlur } = useThemeSettings();
+  const { setReducedMotion, headerMotionReady } = useThemeSettings();
   const reducedMotion = useAppReducedMotion();
   const { height: windowHeight } = useWindowDimensions();
   const languageListHeight = Math.min(320, windowHeight * 0.45);
@@ -92,14 +94,14 @@ export function SettingsPage({
     />
   );
   return (
-    <PageFrame title={t('settings.title')} onBack={back} scrollsBehindHeader>
-      <SettingsViewport>
+    <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
+      <SettingsViewport tab={tab}>
         <UniversalHost
           // Recreate only this iOS form host when direction flips; reused native cells mirror text.
           key={Platform.OS === 'ios' ? direction : undefined}
           matchContents={false}
           ignoreSafeArea="all"
-          style={{ flex: 1 }}
+          style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
           testID="app-settings-content"
         >
           <FieldGroup
@@ -133,28 +135,6 @@ export function SettingsPage({
                 </Column>
                 <ColorSchemeControl />
               </Row>
-              {Platform.OS === 'android' ? (
-                <Column
-                  spacing={spacing.sm}
-                  modifiers={nativeFillWidth}
-                  style={{ paddingVertical: spacing.lg }}
-                >
-                  <Text>{t('settings.headerBlur')}</Text>
-                  <Text tone="muted" testID="app-settings-header-blur-value">
-                    {t('settings.headerBlurValue', { value: headerBlur })}
-                  </Text>
-                  <Slider
-                    value={headerBlur}
-                    onValueChange={setHeaderBlur}
-                    min={MIN_HEADER_BLUR}
-                    max={MAX_HEADER_BLUR}
-                    step={HEADER_BLUR_STEP}
-                    disabled={!headerMotionReady}
-                    modifiers={nativeFillWidth}
-                    testID="app-settings-header-blur"
-                  />
-                </Column>
-              ) : null}
               {design.header.artwork ? (
                 <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
                   <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
@@ -214,6 +194,11 @@ export function SettingsPage({
               >
                 <Text>{t('settings.appVersion')}</Text>
               </ListItem>
+              {tab ? (
+                <FieldGroup.SectionFooter>
+                  <Spacer size={tabBarRaisedHeight} />
+                </FieldGroup.SectionFooter>
+              ) : null}
             </FieldGroup.Section>
           </FieldGroup>
         </UniversalHost>
@@ -317,13 +302,13 @@ function SettingsSectionHeading({
 }
 
 // FieldGroup owns scrolling; the RN boundary supplies a bounded native viewport and safe areas.
-function SettingsViewport({ children }: { children: ReactNode }) {
+function SettingsViewport({ children, tab }: { children: ReactNode; tab: boolean }) {
   const insets = useSafeAreaInsets();
   return (
     <View
       testID="app-settings-viewport"
       collapsable={false}
-      style={{ flex: 1, overflow: 'hidden', ...screenInsets(insets) }}
+      style={{ flex: 1, overflow: 'hidden', ...screenInsets(insets, { tabBarShown: tab }) }}
     >
       {children}
     </View>

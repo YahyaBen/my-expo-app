@@ -12,7 +12,7 @@ import {
   nativeFillWidth,
   nativeRowWeight,
 } from '../native/native-fill-width';
-import { spacing } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 
 /** Page title and optional navigation action. Preferences live in App Settings. */
 export function PageHeader({
@@ -30,7 +30,12 @@ export function PageHeader({
   const headingFont = getBrandHeadingFont(language);
   const isIOS = Platform.OS === 'ios';
   return (
-    <UniversalHost colorScheme={scheme} ignoreSafeArea="all" testID="page-header">
+    <UniversalHost
+      colorScheme={scheme}
+      ignoreSafeArea="all"
+      style={{ maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
+      testID="page-header"
+    >
       <Column
         spacing={spacing.sm}
         modifiers={nativeFillWidth}

@@ -23,6 +23,7 @@ function NativeFormDemo({
   frameColorScheme,
   grouped = false,
   viewportHeight,
+  viewportWidth,
   fieldSelectors = true,
 }: {
   pending?: boolean;
@@ -32,6 +33,7 @@ function NativeFormDemo({
   frameColorScheme?: 'light' | 'dark';
   grouped?: boolean;
   viewportHeight?: number;
+  viewportWidth?: number;
   fieldSelectors?: boolean;
 }) {
   const [submissions, setSubmissions] = useState(0);
@@ -85,7 +87,14 @@ function NativeFormDemo({
     </Column>
   );
   return (
-    <View style={viewportHeight === undefined ? { flex: 1 } : { height: viewportHeight }}>
+    <View
+      style={{
+        ...(viewportHeight === undefined ? { flex: 1 } : { height: viewportHeight }),
+        width: '100%',
+        maxWidth: viewportWidth,
+        alignSelf: 'center',
+      }}
+    >
       <AuthScreenFrame
         testID="native-form"
         colorScheme={frameColorScheme ?? colorScheme}
@@ -111,6 +120,7 @@ const meta = {
     frameColorScheme: { control: 'select', options: ['light', 'dark'] },
     grouped: { control: 'boolean' },
     viewportHeight: { control: 'number' },
+    viewportWidth: { control: 'number' },
   },
   parameters: { layout: 'fullscreen' },
   decorators: [
@@ -133,6 +143,27 @@ export const Pending: Story = { args: { pending: true } };
 export const WithoutFieldSelectors: Story = { args: { fieldSelectors: false } };
 
 export const GroupedForm: Story = { args: { grouped: true } };
+
+export const NarrowScreen: Story = { args: { viewportWidth: 360 } };
+
+export const WideScreen: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use the full available preview on a wide device or window. Check equal outer margins, editable fields and keyboard access without forcing an oversized canvas.',
+      },
+    },
+  },
+};
+
+export const WideScreenOverflow: Story = {
+  args: {
+    viewportHeight: 360,
+    loginHelperText:
+      'This wrapped helper makes the short viewport scroll. Reach the password field and submit action while retaining the centered content width.',
+  },
+};
 
 export const AltareaLight: Story = {
   args: { themeId: 'altarea', colorScheme: 'light', icons: true },

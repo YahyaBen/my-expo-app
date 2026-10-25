@@ -114,14 +114,12 @@ Dunes/Default: draft, content count and scroll position should survive.
 Settings offers all four header styles when the theme enables header artwork.
 Page Header's NativeBackReturn and NativeBackReturnDark open the real Settings
 route. Use its header Back or Android system Back to return, then check retained
-drafts/counts/scroll and the colored cards beneath the header for a gray wash.
+drafts/counts/scroll and that the native blur continues updating over the colored cards.
 Repeat with header scrolling and rapid round trips. The fixture's own Back only
 counts presses; NavigationContinuity is a local geometry example, not a native
 pop. See the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md)
-for Android backdrop refresh ownership. AdjustBlurLevel and AdjustBlurLevelDark
-add a live 5–100 blur slider over the colored cards. Compare 5, 40 and 100, then
-confirm that strength changes retain drafts/counts/scroll and do not add a gray
-tint. NativeBackReturn also retains the selected level. These providers never
+for Android backdrop refresh ownership. Android uses Expo's default blur strength
+and tint; numeric adjustment stories have been removed. These providers never
 save production preferences. Device execution remains pending.
 Verify branded hold/exit, background/resume, live Reduce Motion, actual login
 and recovery readiness on matching native builds. These observations remain
