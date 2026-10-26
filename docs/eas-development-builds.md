@@ -1,5 +1,13 @@
 # EAS development builds
 
+The source now targets SDK 58; see the
+[current SDK baseline](development.md#sdk-and-native-verification-baseline).
+Likan is linked to `@hyrkul/likan`, project
+`7263b456-2908-484f-891e-7279db6b447e`; select `APP_BRAND=likan` for EAS commands.
+The build records below describe earlier SDK 57 binaries and configuration.
+Create new SDK 58 development builds before connecting to the upgraded Metro
+server. No SDK 58 cloud-build or device result is established by these records.
+
 Requested 2026-10-03 after the global checks passed. Used the existing `development` profile with `developmentClient: true`, internal distribution, and the development environment. EAS login and linked project were verified.
 
 ## Android
@@ -110,7 +118,8 @@ not retried on every foreground event; a new cold launch tries again. If a
 check finishes while the app is in the background, it waits for foreground
 before checking again or presenting an update.
 
-`expo-in-app-updates` is pinned to `0.13.0`. The app remains on Expo SDK 57.
+`expo-in-app-updates` is pinned to `0.13.0`. This integration was added on SDK 57;
+the source now targets SDK 58.
 The package's release was developed with SDK 58 and Expo Modules 2.0; its peer
 dependencies accept this installation, but native compatibility still requires
 verification in a new Android build. The native module is autolinked;

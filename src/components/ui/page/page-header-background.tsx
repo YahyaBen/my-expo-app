@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, type RefObject } from 'react';
 import { BlurView } from 'expo-blur';
-import { AccessibilityInfo, Platform, View } from 'react-native';
+import { AccessibilityInfo, Platform, View, type ViewInstance } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { PageWaveContext } from './page-wave-context';
@@ -13,7 +13,7 @@ export function PageHeaderBackground({
   colorScheme,
   height = 0,
 }: {
-  blurTarget: RefObject<View | null>;
+  blurTarget: RefObject<ViewInstance | null>;
   colorScheme?: 'light' | 'dark';
   height?: number;
 }) {

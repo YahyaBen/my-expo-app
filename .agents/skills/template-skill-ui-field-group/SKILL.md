@@ -110,5 +110,5 @@ Appearance and values stay local; a named row opens `/settings` for comparison.
 Check scrolling beneath the header, the final action, keyboard reachability,
 row/switch accessible names, wrapping, RTL and large text on iOS/Android.
 
-API reference checked for SDK 57 / `@expo/ui` 57.0.21:
-[FieldGroup](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/fieldgroup/).
+SDK 58 API reference; compare with the installed `@expo/ui` types:
+[FieldGroup](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/fieldgroup/).

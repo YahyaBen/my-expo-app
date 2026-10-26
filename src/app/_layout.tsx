@@ -49,7 +49,7 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  anchor: '(tabs)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -248,9 +248,9 @@ function RootLayoutNav({ holdLogin }: { holdLogin: boolean }) {
   return (
     <ThemeProvider value={navigationTheme(colorScheme, colors)}>
       <Stack
+        activityEnabled={Platform.OS === 'android' ? 1 : false}
         screenOptions={{
           ...stackMotionOptions(reducedMotion),
-          freezeOnBlur: Platform.OS === 'android',
           contentStyle: { backgroundColor: colors.background, direction },
           headerShown: false,
           headerShadowVisible: false,

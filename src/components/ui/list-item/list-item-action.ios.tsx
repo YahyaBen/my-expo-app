@@ -20,7 +20,9 @@ export function ListItemAction({
       testID={testID}
       modifiers={[buttonStyle('automatic'), nativeDisabled(disabled)]}
     >
-      <VStack modifiers={[...nativeFillWidth, contentShape(shapes.rectangle())]}>{children}</VStack>
+      <VStack spacing={0} modifiers={[...nativeFillWidth, contentShape(shapes.rectangle())]}>
+        {children}
+      </VStack>
     </Button>
   );
 }

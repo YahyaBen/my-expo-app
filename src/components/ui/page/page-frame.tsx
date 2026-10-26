@@ -10,7 +10,7 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
-import { View } from 'react-native';
+import { View, type ViewInstance } from 'react-native';
 import { SafeAreaInsetsContext, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PageHeader } from './page-header';
 import { PAGE_HEADER_MIN_HEIGHT } from './page-header-layout';
@@ -69,7 +69,7 @@ export function PageFrame({
       if (title && headerHeight > 0) setWaveHeight?.(headerHeight);
     }, [title, headerHeight, setWaveHeight]),
   );
-  const blurTarget = useRef<View | null>(null);
+  const blurTarget = useRef<ViewInstance | null>(null);
   const contentTop = headerOverlay ? insets.top : 0;
   const contentInsets = useMemo(
     () => ({ top: contentTop, bottom: insets.bottom, left: insets.left, right: insets.right }),

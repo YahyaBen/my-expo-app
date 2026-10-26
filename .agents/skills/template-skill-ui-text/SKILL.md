@@ -97,5 +97,5 @@ isolation and saved app preferences. Static palette contrast checks do not verif
 native glass, arbitrary overrides or text drawn over artwork.
 Check light/dark, RTL, large text, truncation and contrast on native devices.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Text](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/text/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Text](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/text/).

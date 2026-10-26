@@ -49,8 +49,9 @@ Its SHA-256 is
 The Urbanist Project Authors' SIL Open Font License 1.1 is retained in
 [`assets/fonts/Urbanist-OFL.txt`](../assets/fonts/Urbanist-OFL.txt), sourced from
 [Google Fonts](https://github.com/google/fonts/blob/main/ofl/urbanist/OFL.txt).
-The static file supports this checkout's Expo SDK 57; do not substitute a variable
-font without checking the installed SDK's font support.
+The static file remains the selected heading font on SDK 58. SDK 58 also supports
+variable fonts, but changing the registered font still requires checking its
+metadata, native embedding and rendering on both platforms.
 
 The bundled heading font is enabled only for `en` and `fr`. Arabic headings use
 native fallback; do not force a Latin font on Arabic or all body text. Adding a

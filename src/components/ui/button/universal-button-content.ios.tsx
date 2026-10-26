@@ -48,6 +48,7 @@ export function NativeButtonContent({
       ]}
     >
       <VStack
+        spacing={0}
         modifiers={[
           ...(fullWidth ? [frame({ maxWidth: Infinity })] : []),
           ...(labelColor === undefined ? [] : [foregroundStyle(labelColor)]),

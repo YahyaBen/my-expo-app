@@ -36,7 +36,11 @@ export function NavigationTab({
     >
       <VStack
         spacing={3}
-        modifiers={[frame({ maxWidth: Infinity, height: 56 }), contentShape(shapes.rectangle())]}
+        modifiers={[
+          frame({ height: 56 }),
+          frame({ maxWidth: Infinity }),
+          contentShape(shapes.rectangle()),
+        ]}
       >
         <Icon
           name={icon}

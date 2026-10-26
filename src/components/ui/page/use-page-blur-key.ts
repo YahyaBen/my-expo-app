@@ -1,24 +1,22 @@
-import { useNavigation } from 'expo-router';
-import type { EventConsumer, NavigationProp, ParamListBase } from 'expo-router/react-navigation';
-import { useEffect, useState } from 'react';
+import { useNavigation, type NativeStackNavigationProp } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
-type PageNavigation = Pick<NavigationProp<ParamListBase>, 'isFocused'> &
-  EventConsumer<{
-    blur: { data: undefined };
-    focus: { data: undefined };
-    transitionEnd: { data: { closing: boolean } | undefined };
-  }>;
+type PageNavigation = Pick<
+  NativeStackNavigationProp<Record<string, object | undefined>>,
+  'isFocused' | 'addListener'
+>;
 
 /** Rebind only the Android backdrop after its retained native screen reappears. */
 export function usePageBlurKey(enabled: boolean) {
   const navigation = useNavigation<PageNavigation>();
   const [generation, setGeneration] = useState(0);
+  const leftScreen = useRef(false);
 
   useEffect(() => {
     if (Platform.OS !== 'android' || !enabled) return;
 
-    let leftScreen = !navigation.isFocused();
+    if (!navigation.isFocused()) leftScreen.current = true;
     let returning = false;
     let frame: number | undefined;
     const cancelRefresh = () => {
@@ -33,16 +31,17 @@ export function usePageBlurKey(enabled: boolean) {
       });
     };
     const unsubscribeBlur = navigation.addListener('blur', () => {
-      leftScreen = true;
+      leftScreen.current = true;
       returning = false;
       cancelRefresh();
     });
-    const unsubscribeFocus = navigation.addListener('focus', () => {
-      if (!leftScreen) return;
-      leftScreen = false;
+    const handleFocus = () => {
+      if (!leftScreen.current) return;
+      leftScreen.current = false;
       returning = true;
       refresh();
-    });
+    };
+    const unsubscribeFocus = navigation.addListener('focus', handleFocus);
     const unsubscribeTransition = navigation.addListener('transitionEnd', ({ data }) => {
       // Stack transitions include closing; tab transitions have no payload.
       if (data?.closing || !returning || !navigation.isFocused()) return;
@@ -51,8 +50,12 @@ export function usePageBlurKey(enabled: boolean) {
       // layer. Rebind once more after that layer is gone, with the same live target.
       refresh();
     });
+    // Activity can resume the effect after focus has already been delivered.
+    if (navigation.isFocused()) handleFocus();
 
     return () => {
+      // Preserve departure even when Activity cleans up before the blur listener runs.
+      if (!navigation.isFocused()) leftScreen.current = true;
       cancelRefresh();
       unsubscribeBlur();
       unsubscribeFocus();

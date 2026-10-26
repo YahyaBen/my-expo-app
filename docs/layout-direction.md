@@ -21,8 +21,9 @@ end offsets for React Native alignment. Keep physical safe-area insets and map
 coordinates physical. The input's existing `leftIcon` / `rightIcon` slots behave
 as leading / trailing; Expo UI already maps input padding to start / end. The
 stepper mirrors its artwork only, leaving its native labels and numbers readable.
-The Android page back arrow is selected explicitly: SDK 57's XML icon loader
-ignores the vector's `autoMirrored` attribute. iOS uses the semantic `arrow.backward`.
+The Android page back arrow is selected explicitly, retaining the workaround for
+SDK 57's XML icon loader ignoring the vector's `autoMirrored` attribute. Recheck
+that behavior on SDK 58 before removing the selection. iOS uses the semantic `arrow.backward`.
 
 Use the shared `BottomSheet` export from `@components/ui`. Expo's universal sheet
 creates its own native Host; the shared wrapper bridges content back through a
@@ -39,5 +40,5 @@ Confirm that production pages no longer expose the footer using a signed-in or
 development guest session.
 
 Sources: [Expo localization](https://docs.expo.dev/guides/localization/),
-[SDK 57 Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/),
-[React Native I18nManager](https://reactnative.dev/docs/0.86/i18nmanager).
+[SDK 58 Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/),
+[React Native I18nManager](https://reactnative.dev/docs/0.88/i18nmanager).

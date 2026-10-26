@@ -38,9 +38,9 @@ a Host. Arrange native siblings with `Column`/`Row`, and use content buttons wit
 an explicit semantic variant. See the [Host](../template-skill-ui-host/SKILL.md) and
 [button](../template-skill-ui-button/SKILL.md) skills.
 
-This contract was checked with Expo SDK 57 and `@expo/ui` 57.0.21. Before changing
+This contract targets Expo SDK 58 and the installed `@expo/ui` API. Before changing
 Expo/React Native usage, follow `AGENTS.md`'s installed-version documentation
-lookup. Compare the [SDK 57 TextInput reference](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/textinput/)
+lookup. Compare the [SDK 58 TextInput reference](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/textinput/)
 with the [installed types and native adapters](../../../node_modules/@expo/ui/src/universal/TextInput/).
 The upstream examples use observable values; adapt them to this wrapper's string API.
 

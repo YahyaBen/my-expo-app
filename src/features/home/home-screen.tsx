@@ -13,6 +13,9 @@ import { developerScreensEnabled, storybookEnabled } from '@/config/developer-to
 import { getAppBrand } from '@/config/brand';
 import { spacing } from '@/constants/layout';
 import { SampleRecipeRows } from '@/features/navigation/sample-recipes';
+import { HomeStoryList } from './home-story-list';
+import { HomeStackedCarousel } from './home-stacked-carousel';
+import { HomeVerificationCodeFace } from './home-verification-code-face';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -20,6 +23,12 @@ export default function HomeScreen() {
   const brand = getAppBrand();
   return (
     <PageScreen tab title={t('common.home')} description="">
+      <PageSection testID="home-components">
+        <UniversalTextContent variant="title">{t('starter.componentsTitle')}</UniversalTextContent>
+        <HomeStoryList />
+        <HomeStackedCarousel />
+        <HomeVerificationCodeFace />
+      </PageSection>
       <PageSection spacing={spacing.xl}>
         <UniversalTextContent variant="label" tone="secondary" testID="home-brand">
           {brand.name.toUpperCase()}

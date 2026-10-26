@@ -788,6 +788,17 @@
     "demoHint": "معاينة الواجهة · أدخل 123456 لتجربة حركة نجاح التحقق."
   },
   "starter": {
+    "componentsTitle": "المكونات",
+    "storyListTitle": "قائمة القصص",
+    "stackedCarouselTitle": "عارض البطاقات المتراصة",
+    "verificationFaceTitle": "وجه رمز التحقق",
+    "verificationFaceHint": "عرض تجريبي · أدخل 1111 لوجه مبتسم، أو رمزًا آخر من أربعة أرقام لوجه حزين.",
+    "verificationFaceLabel": "رمز من أربعة أرقام",
+    "verificationFaceSuccess": "الرمز صحيح!",
+    "verificationFaceError": "الرمز غير صحيح. جرّب 1111.",
+    "verificationFaceReset": "إعادة تعيين الرمز",
+    "storyListHint": "اسحب لتصفح الصور.",
+    "storyListPosition": "الصورة {{number}} من {{total}}",
     "homeDescription": "نقطة انطلاق لتطبيقك. استكشف المكونات الأصلية وعدّل تفضيلاتك أو سجّل الدخول إلى خادمك.",
     "centerAction": "فتح الوجهات",
     "centerActionTitle": "الوجهات",

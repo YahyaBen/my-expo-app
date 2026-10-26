@@ -54,7 +54,7 @@ native child in an intrinsic vertical scroll measurement.
 
 This example belongs at an RN boundary with a bounded parent. Consumer `style`
 is applied after derived sizing, so intentional width/height overrides can win.
-The public ref addresses the RN Host view, not a native field or sheet.
+The public ref is `Ref<ViewInstance>` from React Native and addresses the RN Host view, not a native field or sheet. SDK 58 iOS Hosts top-align content; request centering through the native layout when needed.
 
 ## Theme and direction
 
@@ -80,5 +80,5 @@ theme/direction overrides and working counters. Check real bounds, retained
 state, touch activation, scrolling and RTL on native devices. Context values
 alone do not prove native rendering.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/).

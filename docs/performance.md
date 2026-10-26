@@ -56,7 +56,7 @@ the branded hold and slide are intentional product timing, not evidence of slow
 storage or rendering.
 
 [The performance adapter](../src/lib/performance.ts) uses the installed SDK's
-[Expo Observe API](https://docs.expo.dev/versions/v57.0.0/sdk/observe/).
+[Expo Observe API](https://docs.expo.dev/versions/v58.0.0/sdk/observe/).
 `configurePerformance(brand.variant)` runs before mounting; `PerformanceRoot`
 provides Observe when both native modules are present and otherwise falls back
 to a Fragment. Expo Go and older development clients remain usable without

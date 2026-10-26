@@ -64,5 +64,5 @@ route `/ui-component/switch`, covers two independent settings, change counts,
 reset and disabled on/off states. Check label activation, disabled suppression,
 native accessibility state, light/dark, RTL and large text on iOS/Android.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Switch](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/switch/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Switch](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/switch/).

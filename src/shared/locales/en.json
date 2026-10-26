@@ -788,6 +788,17 @@
     "demoHint": "UI preview · Enter 123456 to try the success animation."
   },
   "starter": {
+    "componentsTitle": "Components",
+    "storyListTitle": "Story list",
+    "stackedCarouselTitle": "Stacked carousel",
+    "verificationFaceTitle": "Verification code face",
+    "verificationFaceHint": "Demo · Enter 1111 for a smile, or another four-digit code for a frown.",
+    "verificationFaceLabel": "Four-digit code",
+    "verificationFaceSuccess": "Correct code!",
+    "verificationFaceError": "That code isn't right. Try 1111.",
+    "verificationFaceReset": "Reset code",
+    "storyListHint": "Swipe through the photos.",
+    "storyListPosition": "Photo {{number}} of {{total}}",
     "homeDescription": "A starting point for your app. Explore the native components, adjust your preferences, or sign in to your backend.",
     "centerAction": "Open destinations",
     "centerActionTitle": "Destinations",

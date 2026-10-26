@@ -40,9 +40,15 @@ export function inputFieldAppearance(
       frame({
         width: width as number | undefined,
         height: height as number | undefined,
-        maxWidth: width === undefined ? Infinity : undefined,
-        minHeight: height === undefined ? 48 : undefined,
       }),
+      ...(width === undefined || height === undefined
+        ? [
+            frame({
+              maxWidth: width === undefined ? Infinity : undefined,
+              minHeight: height === undefined ? 48 : undefined,
+            }),
+          ]
+        : []),
       ...(backgroundColor == null ? [] : [background(backgroundColor)]),
       ...(borderRadius == null
         ? []
@@ -81,7 +87,10 @@ export function TextInputIconButton({
       ]}
     >
       {/* Size the label itself so the flexible text field cannot compress the icon. */}
-      <HStack modifiers={[frame({ width: 48, height: 48 }), contentShape(shapes.rectangle())]}>
+      <HStack
+        spacing={0}
+        modifiers={[frame({ width: 48, height: 48 }), contentShape(shapes.rectangle())]}
+      >
         {children}
       </HStack>
     </Button>

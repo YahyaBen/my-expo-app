@@ -67,6 +67,11 @@ RN View geometry is reserved for real navigation, safe-area, keyboard or
 specialized rendering boundaries. A Host is not an ordinary layout stack.
 `native-children.ts` is a private compound-slot parser, not a screen layout API.
 
+In SDK 58, SwiftUI `frame` separates fixed `width`/`height` from flexible
+`min`/`ideal`/`max` dimensions. Chain separate frame modifiers when both are
+needed. Set raw SwiftUI `HStack`/`VStack` spacing explicitly when zero spacing
+is intended; omitted spacing now follows the system default.
+
 ## Showcase
 
 [UI showcase → Native layout](../../../src/features/ui-showcase/native-screen.tsx),
@@ -74,6 +79,6 @@ route `/ui-component/native`, shows width, equal actions, start/center/end,
 fill-size and short/long minimum-height content. Check both native platforms,
 especially direct Row weights, constrained fills, RTL and large text.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Column](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/column/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Column](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/column/).
 Use installed modifier APIs before changing either adapter.

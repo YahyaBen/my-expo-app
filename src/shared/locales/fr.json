@@ -788,6 +788,17 @@
     "demoHint": "Aperçu de l'interface · Saisissez 123456 pour voir l'animation de réussite."
   },
   "starter": {
+    "componentsTitle": "Composants",
+    "storyListTitle": "Liste de stories",
+    "stackedCarouselTitle": "Carrousel empilé",
+    "verificationFaceTitle": "Visage du code de vérification",
+    "verificationFaceHint": "Démo · Saisissez 1111 pour un sourire, ou un autre code à quatre chiffres pour une moue.",
+    "verificationFaceLabel": "Code à quatre chiffres",
+    "verificationFaceSuccess": "Code correct !",
+    "verificationFaceError": "Ce code est incorrect. Essayez 1111.",
+    "verificationFaceReset": "Réinitialiser le code",
+    "storyListHint": "Faites défiler les photos d’un geste.",
+    "storyListPosition": "Photo {{number}} sur {{total}}",
     "homeDescription": "Le point de départ de votre application. Explorez les composants natifs, ajustez vos préférences ou connectez-vous à votre serveur.",
     "centerAction": "Ouvrir les destinations",
     "centerActionTitle": "Destinations",

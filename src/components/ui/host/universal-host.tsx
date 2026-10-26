@@ -1,6 +1,6 @@
 import { Host } from '@expo/ui';
 import { createContext, useContext, type ComponentProps, type Ref } from 'react';
-import type { ColorSchemeName, View } from 'react-native';
+import type { ColorSchemeName, ViewInstance } from 'react-native';
 
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -29,7 +29,7 @@ export function useHostColorScheme(preferredScheme?: ColorSchemeName) {
 
 type Props = ComponentProps<typeof Host> & {
   /** Forwarded to the native Host for RN animation and imperative view access. */
-  ref?: Ref<View>;
+  ref?: Ref<ViewInstance>;
   inline?: boolean;
   viewportHeight?: number;
 };

@@ -33,11 +33,11 @@ shared contract deliberately and check both native implementations and consumers
 Do not replace this adapter with a community sheet library.
 
 Before changing Expo or React Native usage, read installed versions and follow
-`AGENTS.md`'s documentation lookup. This guide was checked with Expo SDK 57 and
-`@expo/ui` 57.0.21. Relevant upstream references:
+`AGENTS.md`'s documentation lookup. This guide targets Expo SDK 58 and the installed
+`@expo/ui` API. Relevant upstream references:
 
-- [SDK 57 BottomSheet](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/bottomsheet/)
-- [SDK 57 ScrollView](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/scrollview/)
+- [SDK 58 BottomSheet](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/bottomsheet/)
+- [SDK 58 ScrollView](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/scrollview/)
 - [Installed native adapters](../../../node_modules/@expo/ui/src/universal/BottomSheet/)
 
 ## Own presentation and draft state

@@ -5,7 +5,7 @@ import { stackMotionOptions } from '@/constants/navigation-motion';
 import { AuthFlowProvider } from '@/features/auth/auth-flow.context';
 import { useThemeColors } from '@/hooks/use-theme';
 
-export const unstable_settings = { initialRouteName: 'login' };
+export const unstable_settings = { anchor: 'login' };
 
 export default function AuthLayout() {
   const colors = useThemeColors();
@@ -13,10 +13,10 @@ export default function AuthLayout() {
   return (
     <AuthFlowProvider>
       <Stack
+        activityEnabled={Platform.OS === 'android' ? 1 : false}
         screenOptions={{
           ...stackMotionOptions(reducedMotion),
           headerShown: false,
-          freezeOnBlur: Platform.OS === 'android',
           contentStyle: { backgroundColor: colors.background },
         }}
       >

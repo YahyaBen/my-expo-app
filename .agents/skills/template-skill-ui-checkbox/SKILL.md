@@ -50,6 +50,6 @@ reset, change counts and disabled checked/unchecked states. Check label/control
 activation, disabled suppression, RTL and large text on native devices.
 Static checks do not prove native appearance or accessibility.
 
-API reference checked for Expo SDK 57 / `@expo/ui` 57.0.21:
-[Checkbox](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/checkbox/).
+SDK 58 API reference; compare with the installed `@expo/ui` types:
+[Checkbox](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/checkbox/).
 Recheck the installed version before changing native APIs.

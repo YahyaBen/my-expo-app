@@ -73,14 +73,15 @@ Translate labels in the caller with `useTranslation().t()`. Keep stable
 
 ## Maintenance
 
-Check the [SDK 57 docs](https://docs.expo.dev/versions/v57.0.0/) and installed
-types before changing native APIs. Expo UI is pinned to unmodified `57.0.21`
-together with Router `57.0.24`. The [dated native version decision](build-verification.md#expo-ui-version)
-records why: Android numeric widths crashed on `57.0.22`, and the next Router
-version required that package. It is historical evidence, not a claim about the
-current registry. Review these two intentional alignment exceptions together in
-a dedicated upgrade change. Keep the direct dependency, override, lockfile and
-Expo install exclusions aligned; do not remove pins through incidental cleanup.
+Check the [SDK 58 docs](https://docs.expo.dev/versions/v58.0.0/) and installed
+types before changing native APIs. Expo UI and Router now follow the SDK 58
+compatible dependency set in the npm lockfile. Their SDK 57 install exclusions
+were removed during this upgrade. The
+[dated native version decision](build-verification.md#expo-ui-version) records
+the earlier Android numeric-width failure; it does not establish SDK 58 behavior.
+Keep the direct dependencies, overrides and lockfile aligned. See the
+[current SDK baseline](development.md#sdk-and-native-verification-baseline) for
+native-build and verification requirements.
 
 Add or update an existing native story when behavior changes. Regenerate story
 registration after story edits with `npm run storybook:generate`. Run

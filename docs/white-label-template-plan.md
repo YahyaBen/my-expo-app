@@ -5,6 +5,11 @@ recorded below; unchecked acceptance criteria are still pending. Component
 contracts continue to belong to their existing skills. See
 [architecture](architecture.md) and [documentation ownership](documentation.md).
 
+The SDK baseline moved to 58 on 2026-10-26. Earlier SDK 57 observations below
+retain their original context; use the
+[current development baseline](development.md#sdk-and-native-verification-baseline)
+for package alignment, new native builds and outstanding device verification.
+
 ## Implementation status
 
 - Step 1 verification tooling implemented: both formatting commands target the
@@ -287,8 +292,9 @@ already provide useful dependency injection without a container.
 
 Work:
 
-- Record the installed SDK and native UI/Router pins and their existing reasons.
-  The current checkout uses SDK 57 with intentionally pinned Expo UI and Router.
+- Record the installed SDK and native UI/Router versions and their existing reasons.
+  The original SDK 57 UI/Router pins were replaced by SDK 58's compatible
+  dependency set during the dedicated upgrade.
 - Keep the committed npm lockfile and existing install workflow.
 - Run typecheck and lint; distinguish source checks from native execution.
 - Repair whole-project formatting enumeration so it does not traverse inaccessible
@@ -832,15 +838,15 @@ criterion for senior-quality architecture.
 
 ## Official references
 
-- [Expo SDK 57](https://docs.expo.dev/versions/v57.0.0/).
+- [Expo SDK 58](https://docs.expo.dev/versions/v58.0.0/).
 - [Dynamic configuration and white labeling](https://docs.expo.dev/workflow/configuration/#switching-configuration-based-on-the-environment).
 - [Multiple app variants](https://docs.expo.dev/tutorial/eas/multiple-app-variants/).
 - [Environment variables](https://docs.expo.dev/guides/environment-variables/).
-- [SDK 57 native Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/).
+- [SDK 58 native Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/).
 - [Protected routes](https://docs.expo.dev/router/advanced/protected/).
 - [Code removal](https://docs.expo.dev/guides/tree-shaking/) and
   [bundle analysis](https://docs.expo.dev/guides/analyzing-bundles/).
 
 Versioned SDK documentation and installed types must be checked again when each
 native/API change is implemented. Some unversioned guides describe later SDKs;
-do not copy newer APIs into this SDK 57 checkout without compatibility verification.
+do not copy newer APIs into this checkout without compatibility verification.

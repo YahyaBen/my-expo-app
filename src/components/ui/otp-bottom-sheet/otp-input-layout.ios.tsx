@@ -19,7 +19,7 @@ export function OtpInputLayout({
   height,
 }: OtpInputLayoutProps) {
   return (
-    <ZStack modifiers={[frame({ maxWidth: Infinity, height })]}>
+    <ZStack modifiers={[frame({ height }), frame({ maxWidth: Infinity })]}>
       <Row
         spacing={spacing.sm}
         modifiers={[frame({ maxWidth: Infinity }), accessibilityHidden(true)]}
@@ -30,7 +30,8 @@ export function OtpInputLayout({
         {...input}
         modifiers={[
           textFieldStyle('plain'),
-          frame({ maxWidth: Infinity, height }),
+          frame({ height }),
+          frame({ maxWidth: Infinity }),
           contentShape(shapes.rectangle()),
           accessibilityLabel(label),
         ]}

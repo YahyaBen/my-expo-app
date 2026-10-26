@@ -58,5 +58,5 @@ route `/ui-component/slider`, compares a 0–100 stepped range, a continuous
 steps, native accessibility adjustment, disabled suppression and RTL on devices.
 A nearby text label alone does not establish a screen-reader association.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Slider](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/slider/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Slider](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/slider/).

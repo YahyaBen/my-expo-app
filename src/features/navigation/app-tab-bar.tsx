@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useFocusEffect } from 'expo-router';
-import type { BottomTabBarProps } from 'expo-router/tabs';
+import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, Platform } from 'react-native';
 import { TabNavigationBar, type TabNavigationItemId } from '@components/ui';
@@ -13,7 +13,7 @@ const routeNames = {
   more: 'settings',
 } as const;
 
-export function AppTabBar({ state, navigation, insets }: BottomTabBarProps) {
+export function AppTabBar({ state, emitter, navigateToTab, insets }: BottomTabBarProps) {
   const { t } = useTranslation();
   const focusedRoute = state.routes[state.index];
   const [actionRouteKey, setActionRouteKey] = useState<string | null>(null);
@@ -48,11 +48,12 @@ export function AppTabBar({ state, navigation, insets }: BottomTabBarProps) {
   function selectTab(id: TabNavigationItemId) {
     const route = state.routes.find((candidate) => candidate.name === routeNames[id]);
     if (!route) return;
-    const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
+    const event = emitter.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
     if (route.key !== focusedRoute.key && !event.defaultPrevented) {
       closeAction();
       Keyboard.dismiss();
-      navigation.navigate(route.name, route.params);
+      // SDK 58 resolves placeholder keys for tabs that have not mounted yet.
+      navigateToTab(route.key);
     }
   }
 

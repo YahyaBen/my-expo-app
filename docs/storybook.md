@@ -30,7 +30,7 @@ Open the application, then **Home → Components**, or the Components section in
 Settings. For fixture Controls and focused compositions:
 
 ```sh
-npm run storybook
+npm run storybook:dev
 ```
 
 The cross-platform launcher sets `NODE_ENV=development` and both public preview
@@ -41,7 +41,7 @@ selects a fixture without the Storybook browser chrome. Omit `canvas=true` for
 the full browser and Controls. Changing the route's mode or requested fixture
 recreates its Storybook root; in-browser Controls/story changes follow Storybook's
 normal lifecycle. The app PageFrame supplies startup readiness, safe areas and Back.
-Optional CLI arguments pass through, for example `npm run storybook -- --port 8093`.
+Optional CLI arguments pass through, for example `npm run storybook:dev -- --port 8093`.
 The command never changes `.env`, saved app settings, package versions or EAS state.
 
 `EXPO_PUBLIC_STORYBOOK_ENABLED=true` is an explicit development-server opt-in.
@@ -53,7 +53,7 @@ conditional Storybook require even if the opt-in flag is accidentally true.
 Do not import fixtures or Storybook from shared UI or ordinary feature code.
 
 The EAS development and preview profiles enable the catalog and disable Storybook;
-production disables both. A development client connected to `npm run storybook`
+production disables both. A development client connected to `npm run storybook:dev`
 uses that server's flags. An embedded preview/release bundle uses the flags from
 its export, build or update. Restart Metro with `--clear` and fully reload after
 changing preview modes, because the Storybook flag also changes Metro resolution.
@@ -80,7 +80,7 @@ Repeat with the catalog enabled for preview builds. A successful bundle proves
 module resolution, not native routing, hit targets, keyboard behavior or layout.
 No automated suite or comparison runner is part of this workflow.
 
-Use `--clear` when exporting after a flag change. In this SDK 57 checkout,
+Use `--clear` when exporting after a flag change. On the previous SDK 57 baseline,
 back-to-back exports with opposite catalog flags reused the earlier transformed
 flag module until the cache was cleared. Source-map source text is the original
 TypeScript and cannot establish the compiled flag values. Inspect the emitted JS

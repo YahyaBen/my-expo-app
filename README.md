@@ -1,6 +1,6 @@
 # Expo mobile starter
 
-An iOS and Android bootstrap application built with Expo SDK 57, Expo Router and native
+An iOS and Android bootstrap application built with Expo SDK 58, Expo Router and native
 Expo UI.
 
 Home, native component showcase, authentication, Account and Settings form the
@@ -9,7 +9,7 @@ packages are retained for future features.
 
 ## Get started
 
-Use Node 22.18 or newer and the committed npm lockfile.
+Use a supported Node release (22.18+, 24.3+ or 26+) and the committed npm lockfile.
 
 ```sh
 npm ci
@@ -17,15 +17,15 @@ npm start
 ```
 
 Copy `.env.example` to `.env.local` and select `APP_BRAND` and `APP_VARIANT`.
-The local default is the unlinked `template` brand. Use `APP_BRAND=likan` with an
-existing Likan development build. Set `EXPO_PUBLIC_API_URL` for the real backend.
+The local default is the unlinked `template` brand. Use `APP_BRAND=likan` with a
+matching SDK 58 Likan development build. Set `EXPO_PUBLIC_API_URL` for the real backend.
 Restart Metro after changing brand or variant selection. See
 [brand configuration](docs/development.md#brand-and-environment-configuration).
 Use `npx expo install <package>` for SDK-compatible dependencies.
 Run `npm run typecheck` and `npm run lint` before finishing a change.
 
 Enable `EXPO_PUBLIC_ENABLE_DEV_SCREENS=true` to browse the native catalog, or use
-`npm run storybook` for the development-only fixture browser and Controls.
+`npm run storybook:dev` for the development-only fixture browser and Controls.
 See [component previews](docs/storybook.md) for matching build/brand setup.
 
 ## Find the guidance

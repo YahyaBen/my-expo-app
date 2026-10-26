@@ -17,7 +17,7 @@ Before choosing props, read the current
 [button guide](references/component-guide.md). For native behavior,
 check both platform adapters. For Expo API changes, read the installed Expo
 major and matching documentation as required by `AGENTS.md`. The reference links
-below were checked against SDK 57 and `@expo/ui` 57.0.21; recheck after upgrades.
+below target SDK 58; compare with the installed `@expo/ui` after upgrades.
 
 Screens and feature components import public buttons and types from
 `@components/ui`. Inside the UI library, import concrete sibling files to avoid

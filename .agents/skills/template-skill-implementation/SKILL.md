@@ -63,7 +63,7 @@ do not add a test runner or restore historical test commands unless requested.
 Update native examples for reusable UI changes and run
 `npm run storybook:generate` when story files change. Follow the current
 [preview workflow](../../../docs/storybook.md): the catalog flag controls links and
-protected routes; `npm run storybook` exposes the development-only fixture entry.
+protected routes; `npm run storybook:dev` exposes the development-only fixture entry.
 Registration alone does not establish device behavior. Report static checks, live-backend verification and
 native device observations separately. Update the existing guide or component
 skill when its implemented contract changes.

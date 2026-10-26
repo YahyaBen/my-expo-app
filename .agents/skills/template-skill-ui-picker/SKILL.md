@@ -21,7 +21,7 @@ Keep this family to the two native implementations and the public declaration.
 The small item extraction stays inside each adapter; it does not need its own
 helper or types file. Recheck both adapters when changing item handling.
 
-The adapters supply behavior missing from the installed `@expo/ui` 57.0.21:
+The adapters retain these project behaviors:
 Android label synchronization, closing on disable and test selectors; iOS glass
 menu styling and callback guards. Both retain fragment support and distinct
 string/number keys. Recheck these differences before replacing them with a
@@ -65,5 +65,5 @@ route `/ui-component/picker`, covers string menus, numeric wheel/dropdown
 selection, reset and disabled callback counts. Check updated labels after
 selection/language changes, popup dismissal, RTL, large text and native focus.
 
-Checked for SDK 57 / `@expo/ui` 57.0.21:
-[Picker](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/picker/).
+SDK 58 reference; compare with the installed `@expo/ui` types:
+[Picker](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/picker/).

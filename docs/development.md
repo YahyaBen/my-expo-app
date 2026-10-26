@@ -1,11 +1,11 @@
 # Development
 
-This iOS/Android starter uses Expo SDK 57 and native Expo UI. Keep non-route code
+This iOS/Android starter uses Expo SDK 58 and native Expo UI. Keep non-route code
 outside `src/app/`; read the [architecture](architecture.md) and [UI guide](ui.md).
 
 ## Run and check
 
-Use Node 22.18+ and `npm ci`, then `npm start`. Configure `EXPO_PUBLIC_API_URL`
+Use a supported Node release (22.18+, 24.3+ or 26+) and `npm ci`, then `npm start`. Configure `EXPO_PUBLIC_API_URL`
 in `.env.local` for your backend. Retain the npm lockfile and use `npx expo install`
 when explicitly adding a dependency. Installed packages are intentionally retained,
 including packages for future features; unused packages are not a reason to remove them.
@@ -32,11 +32,33 @@ test commands as part of normal feature work.
 
 ## SDK and native verification baseline
 
-Keep the current Expo SDK 57, `@expo/ui` 57.0.21 and Expo Router 57.0.24 pins while
-implementing the white-label changes. The UI/Router pairing and install exclusions
-are intentional native compatibility choices; the original evidence is in
-[build verification](build-verification.md#expo-ui-version). Reassess them together
-in a dedicated upgrade with current SDK documentation and native verification.
+The SDK 58 upgrade resolves Expo 58.0.19, `@expo/ui` 58.0.23, Expo Router 58.0.26,
+React 19.3.0 and React Native 0.88.0. Keep Expo packages,
+`@expo/ui`, Expo Router and native dependencies aligned through
+`npx expo install --fix --npm` and the committed npm lockfile. The SDK 57 UI/Router pins and their
+install exclusions have been replaced by this compatible dependency set. The
+[earlier numeric-width failure](build-verification.md#expo-ui-version) remains
+historical evidence; repeat its Host/button/input cases on the new native builds.
+
+Create matching SDK 58 development builds for iOS and Android before connecting
+them to Metro. Existing SDK 57 clients do not acquire the new native runtime from
+a JavaScript reload or EAS Update. SDK 58 generates the iOS scene lifecycle by
+default; the old `enableSceneSupport` opt-in is no longer needed.
+
+The migration follows the [SDK 58 release notes](https://expo.dev/changelog/sdk-58)
+and [Router migration guide](https://docs.expo.dev/router/migrate/sdk-57-to-58/).
+The app uses React Native's strict public types. Native compilation, interaction
+and performance checks remain pending until the new binaries run on devices.
+
+Local upgrade verification on 2026-10-26 passed typecheck, zero-warning lint,
+formatting, all 20 Expo Doctor checks, configuration introspection for both brands,
+and production iOS/Android Hermes bundle exports. These checks do not establish
+native compilation or device behavior.
+
+Development iOS/Android exports with the native Storybook catalog enabled also
+passed on the same date, covering the fixture dependencies excluded from release
+bundles. Cloud compilation still requires an accessible EAS project for the
+selected brand.
 
 Before changing startup or header motion, record the existing behavior on the
 same release-like native builds/devices used for the comparison. Record device,
@@ -118,7 +140,7 @@ APP_BRAND=likan APP_VARIANT=development npx eas-cli@latest project:info
 APP_BRAND=likan APP_VARIANT=development npx eas-cli@latest build:run --platform ios --profile development --latest
 ```
 
-The first command must identify `@ybenabdallah/likan` with the project ID from
+The first command must identify `@hyrkul/likan` with the project ID from
 `config/brands/likan.json`. If EAS asks to configure `expo-mobile-template`, cancel
 that command and select `likan` explicitly. The template has a separate identity.
 
@@ -179,7 +201,7 @@ Home links to the enabled previews, Settings and Account/sign-in. Settings expos
 preferences and the app version. There are no recipe, onboarding, map, Skia,
 device-information, health-check or development-directory screens.
 
-The in-app catalog is the ordinary component browser. `npm run storybook` starts
+The in-app catalog is the ordinary component browser. `npm run storybook:dev` starts
 Metro with an explicit development-only `/storybook` entry and Home link for the
 retained Controls/fixtures. See [component previews](storybook.md) for exact launch
 commands and native verification. Protected catalog routes retain their source

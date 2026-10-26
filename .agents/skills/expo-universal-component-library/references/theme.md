@@ -30,7 +30,7 @@ Text's primary tone uses `tint`, not the `primary` filled-action surface.
 Preserve `primary`/`onPrimary` and explicit text override precedence. Use the
 [Text contract](../../template-skill-ui-text/SKILL.md) for the exact mapping and preview.
 
-Host `colorScheme` selects appearance. Host `seedColor` derives Android Material colors and sets iOS native tint; it does not promise the exact same color for every native control. See [SDK 57 Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/). Use the installed API's real color hooks/props when mapping tokens; do not invent universal `containerColor` props or treat `UniversalStyle` as full RN styling.
+Host `colorScheme` selects appearance. Host `seedColor` derives Android Material colors and sets iOS native tint; it does not promise the exact same color for every native control. See [SDK 58 Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/). Use the installed API's real color hooks/props when mapping tokens; do not invent universal `containerColor` props or treat `UniversalStyle` as full RN styling.
 
 Buttons use shared semantic colors and the active theme's optional button radius,
 preserving native padding, clickable bounds, disabled treatment and feedback.

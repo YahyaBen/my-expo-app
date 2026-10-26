@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router/tabs';
+import { Tabs } from 'expo-router/js-tabs';
 import { useTranslation } from 'react-i18next';
 import { Platform } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -12,12 +12,11 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      initialRouteName="index"
-      backBehavior="initialRoute"
+      backBehavior="firstRoute"
+      activityEnabled={Platform.OS === 'android'}
       tabBar={(props) => <AppTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        freezeOnBlur: Platform.OS === 'android',
         sceneStyle: { backgroundColor: colors.background, direction },
       }}
     >

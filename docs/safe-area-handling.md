@@ -47,8 +47,8 @@ Old 56-point tab-bar offsets were removed from account, maps, Skia, error fallba
 The tab integration follows the
 [JavaScript tabs guide](https://docs.expo.dev/router/advanced/tabs/) and installed
 Expo Router and Expo UI implementations. See also the
-[SDK 57 safe-area-context reference](https://docs.expo.dev/versions/v57.0.0/sdk/safe-area-context/)
-and [Expo UI Host reference](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/).
+[SDK 58 safe-area-context reference](https://docs.expo.dev/versions/v58.0.0/sdk/safe-area-context/)
+and [Expo UI Host reference](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/).
 Native rendering, keyboard behavior and device geometry still require device
 checks.
 

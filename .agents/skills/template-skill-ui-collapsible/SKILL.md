@@ -30,7 +30,7 @@ Retain the direct export rather than duplicating those native implementations
 or replacing the disclosure with a generic button. A complete upstream solution
 needs a header-specific selector on both actual native disclosure actions while
 preserving expanded-state accessibility and native interaction. Recheck the
-installed API after an Expo UI update; this gap remains open in 57.0.21.
+installed API after an Expo UI update before adding a header selector.
 
 ```tsx
 <Collapsible label={t('common.details')} isOpen={open} onOpenChange={setOpen}>
@@ -66,6 +66,6 @@ toggle has its own actionable selector and does not identify the native header.
 The retained story Host ID is also layout-only. Check keyboard/focus when collapsing an
 edited field, native expansion, long labels, RTL and large text on both platforms.
 
-API reference checked for SDK 57 / `@expo/ui` 57.0.21:
-[Collapsible](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/collapsible/).
+SDK 58 API reference; compare with the installed `@expo/ui` types:
+[Collapsible](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/collapsible/).
 Verify installed APIs before changing native behavior.

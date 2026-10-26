@@ -98,15 +98,15 @@ context. Keep deterministic stories within the project's themed owner.
 
 ## Official references
 
-Checked for the installed SDK 57. Read version-matching docs again when native
+References target SDK 58. Read version-matching docs again when native
 usage or dependencies change:
 
-- [Universal Button](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/button/)
+- [Universal Button](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/button/)
   for the upstream contract; its variants differ from the project API.
-- [Universal Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/)
+- [Universal Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/)
   for RN/native boundaries and sizing.
-- [SwiftUI Button](https://docs.expo.dev/versions/v57.0.0/sdk/ui/swift-ui/button/)
-  and [Compose Button](https://docs.expo.dev/versions/v57.0.0/sdk/ui/jetpack-compose/button/)
+- [SwiftUI Button](https://docs.expo.dev/versions/v58.0.0/sdk/ui/swift-ui/button/)
+  and [Compose Button](https://docs.expo.dev/versions/v58.0.0/sdk/ui/jetpack-compose/button/)
   for adapter behavior.
-- [Universal Icon](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/icon/)
+- [Universal Icon](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/icon/)
   for platform icon sources.

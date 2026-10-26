@@ -86,7 +86,7 @@ export function PageWaveSurface({
     undefined,
     svgMatrixAdapter,
   );
-  const bounds = frame({ maxWidth: Infinity, height: wave.overlayHeight });
+  const bounds = [frame({ height: wave.overlayHeight }), frame({ maxWidth: Infinity })];
 
   return (
     <UniversalHost
@@ -99,11 +99,11 @@ export function PageWaveSurface({
       testID="page-wave-blur-mask"
       style={{ position: 'absolute', top: 0, left: 0, right: 0, height: wave.overlayHeight }}
     >
-      <Mask alignment="topLeading" modifiers={[bounds]}>
+      <Mask alignment="topLeading" modifiers={bounds}>
         <Rectangle
           testID={reduceTransparency ? 'page-header-solid-background' : 'page-header-blur'}
           modifiers={[
-            bounds,
+            ...bounds,
             foregroundStyle('transparent'),
             background(
               reduceTransparency ? backgroundColor : { type: 'material', material: 'ultraThin' },

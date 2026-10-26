@@ -31,6 +31,7 @@ export function NativeFloatingActionButton({
       ]}
     >
       <HStack
+        spacing={0}
         modifiers={[
           frame({ width: 76, height: 76 }),
           background(color, shapes.circle()),

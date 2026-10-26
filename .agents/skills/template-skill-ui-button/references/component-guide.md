@@ -27,7 +27,7 @@ renderer.
 Tertiary uses the shared muted foreground when semantic colors are applied;
 link uses the theme tint. Info uses the existing info/onInfo token pair. Destructive also
 sets the native iOS role. `glass` uses
-[`buttonStyle('glass')`](https://docs.expo.dev/versions/v57.0.0/sdk/ui/swift-ui/button/)
+[`buttonStyle('glass')`](https://docs.expo.dev/versions/v58.0.0/sdk/ui/swift-ui/button/)
 on iOS 26+, automatic native styling on older iOS, and outlined Material on Android.
 
 All themes use their existing semantic token pairs when both color props are

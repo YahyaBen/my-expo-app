@@ -57,6 +57,6 @@ long text, large text, screen readers, RTL and light/dark appearance on devices.
 Run lint, typecheck, formatting and Storybook generation after story changes;
 report native checks separately.
 
-Checked against installed `@expo/ui` 57.0.21 and SDK 57:
-[SwiftUI Alert](https://docs.expo.dev/versions/v57.0.0/sdk/ui/swift-ui/alert/) and
-[Compose AlertDialog](https://docs.expo.dev/versions/v57.0.0/sdk/ui/jetpack-compose/alertdialog/).
+SDK 58 references; compare with the installed `@expo/ui` adapters:
+[SwiftUI Alert](https://docs.expo.dev/versions/v58.0.0/sdk/ui/swift-ui/alert/) and
+[Compose AlertDialog](https://docs.expo.dev/versions/v58.0.0/sdk/ui/jetpack-compose/alertdialog/).
