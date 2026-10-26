@@ -8,7 +8,7 @@ and [UI guide](../ui.md) for implementation.
 # Universal component catalog
 
 For the current button API, variants, Host composition and examples, use
-[the authored button skill](../../.agents/skills/foodiya-ui-button/SKILL.md) and current source.
+[the authored button skill](../../.agents/skills/template-skill-ui-button/SKILL.md) and current source.
 Older dated verification entries below describe their historical implementation.
 
 ## Home giveaway ribbon (2026-10-21)
@@ -166,7 +166,7 @@ password behavior remain. `text-input.stories.tsx` now exercises controlled stri
 with external update/reset, and its Maestro flow targets `Controlled`. Portable
 checks cover reset/value/field retention and existing auth/recipe integrations;
 native keyboard, selection and visual behavior require device verification.
-See the [input guide](../../.agents/skills/foodiya-ui-text-input/SKILL.md).
+See the [input guide](../../.agents/skills/template-skill-ui-text-input/SKILL.md).
 
 ## Universal FieldGroup (2026-10-19)
 
@@ -187,7 +187,7 @@ is excluded from the public UI barrel. The existing button stories now expose
 padding and color controls and preserve partial caller overrides. SDK 57's root
 Button still lacks the native color, padding, shape and destructive-role props
 needed here, so the platform adapters remain. See the
-[button guide](../../.agents/skills/foodiya-ui-button/references/component-guide.md) for supported props
+[button guide](../../.agents/skills/template-skill-ui-button/references/component-guide.md) for supported props
 and verification limits.
 
 ## Native sheet height and geometry merge (2026-10-19)
@@ -235,7 +235,7 @@ physical topLeft/topRight/bottomLeft/bottomRight radii; omitted corners are squa
 and this overrides uniform borderRadius. Its existing RN Host clips the square
 native surface because SwiftUI only exposes uniform native button rounding.
 `UniversalButtonContent` keeps its existing uniform radius contract. No theme roles
-or dependencies are added. See the [button guide](../../.agents/skills/foodiya-ui-button/references/component-guide.md).
+or dependencies are added. See the [button guide](../../.agents/skills/template-skill-ui-button/references/component-guide.md).
 Manual iOS 27 / iPhone 18 Pro checks verified both diagonals and upper/lower edge
 activation. Android geometry and automated Maestro execution remain pending.
 
@@ -298,7 +298,7 @@ resizing and module resolution. Empty/filled registration toggles were manually
 checked on the iOS 27 iPhone 18 Pro simulator with unchanged visible surface
 height and retained filled values. Full Storybook/large-text execution is blocked
 by its installed duplicate RNCSafeAreaProvider; Android native checks are pending.
-See [the input guide](../../.agents/skills/foodiya-ui-text-input/SKILL.md).
+See [the input guide](../../.agents/skills/template-skill-ui-text-input/SKILL.md).
 
 `Focused` and `FocusedLight` expose focus/blur actions and observable focus status.
 `.maestro/storybook/text-input-focus.yaml` exercises autofocus, typing, blur and
@@ -442,7 +442,7 @@ the application adapters below with direct Expo UI layout/icon exports.
 Story names refer to `.rnstorybook/stories/expo-ui/`.
 Existing stories are recorded without implying full behavioral coverage.
 
-`OtpBottomSheet` composes the native [BottomSheet](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/bottomsheet/) and [TextInput](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/textinput/) with six visible digit slots. Its public props control presentation, recipient, verification/resend callbacks, cooldown, helper copy, theme and selector prefix. Platform overlay stacks keep a single transparent native input above the slots; an explicit-width direction bridge keeps digits LTR in Arabic. Slots use equal measured widths, explicit font-scale-aware heights and inset rounded fills; the iOS input uses plain field styling. A finite scroll viewport (70% of window height, at most 620 points/dp) prevents unbounded Compose measurement; its iOS frame preserves that height. Shared text/surface/tint/selection/border and success/error roles style the form. A fixed-size Reanimated boundary animates only the native shield and respects reduced motion. `otp-bottom-sheet.stories.tsx` covers both themes, cooldown, request failures and a long recipient using isolated English copy; `.maestro/storybook/otp-bottom-sheet.yaml` covers opening/dismissal, rejection, backspace, success, incomplete input, resend and reopening. Portable checks cover paste/numeric scripts, finite viewport sizing and the installed iOS style translation for narrow rows and larger text. Native keyboard/autofill, accessibility, hit areas, large fonts and constrained geometry remain unverified without devices. See [component guide](../../.agents/skills/foodiya-ui-otp-bottom-sheet/SKILL.md).
+`OtpBottomSheet` composes the native [BottomSheet](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/bottomsheet/) and [TextInput](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/textinput/) with six visible digit slots. Its public props control presentation, recipient, verification/resend callbacks, cooldown, helper copy, theme and selector prefix. Platform overlay stacks keep a single transparent native input above the slots; an explicit-width direction bridge keeps digits LTR in Arabic. Slots use equal measured widths, explicit font-scale-aware heights and inset rounded fills; the iOS input uses plain field styling. A finite scroll viewport (70% of window height, at most 620 points/dp) prevents unbounded Compose measurement; its iOS frame preserves that height. Shared text/surface/tint/selection/border and success/error roles style the form. A fixed-size Reanimated boundary animates only the native shield and respects reduced motion. `otp-bottom-sheet.stories.tsx` covers both themes, cooldown, request failures and a long recipient using isolated English copy; `.maestro/storybook/otp-bottom-sheet.yaml` covers opening/dismissal, rejection, backspace, success, incomplete input, resend and reopening. Portable checks cover paste/numeric scripts, finite viewport sizing and the installed iOS style translation for narrow rows and larger text. Native keyboard/autofill, accessibility, hit areas, large fonts and constrained geometry remain unverified without devices. See [component guide](../../.agents/skills/template-skill-ui-otp-bottom-sheet/SKILL.md).
 
 OTP measures its own native input section. The shared sheet adds no measurement,
 width context or padding, uses the shared surface/text colors and hides the iOS drag indicator. Reopening resets
@@ -816,7 +816,7 @@ native scroll handoff and artwork still require device checks.
 
 ## Toast notifications
 
-`toast.android.tsx` uses a rounded [Compose Surface](https://docs.expo.dev/versions/v57.0.0/sdk/ui/jetpack-compose/surface/) and native IconButton; `toast.ios.tsx` uses SwiftUI background/shadow and a native Button. Both compose universal Row/Column/Icon and hosted text inside UniversalHost. Required props are `variant` (`error`, `success`, `warning`), `message`, and `onDismiss`; optional props are `title` and `colorScheme`. All variants share a localized heading, wrapping message, badge and close control (44pt iOS, 48dp Android). Success uses a green checkmark, warning an amber triangle and error a red alert. Colors consume `surfaceRaised`, `text`, `muted`, the variant's semantic accent/container and iOS `shadow`. Appearance and layout direction inherit from the owning Host. Mount a new keyed instance per notification. The lifetime hook dismisses after six seconds, respects Android's recommended accessibility timeout, announces the heading/message, and holds while VoiceOver/TalkBack is enabled. See [Toast README](../../.agents/skills/foodiya-ui-toast/SKILL.md).
+`toast.android.tsx` uses a rounded [Compose Surface](https://docs.expo.dev/versions/v57.0.0/sdk/ui/jetpack-compose/surface/) and native IconButton; `toast.ios.tsx` uses SwiftUI background/shadow and a native Button. Both compose universal Row/Column/Icon and hosted text inside UniversalHost. Required props are `variant` (`error`, `success`, `warning`), `message`, and `onDismiss`; optional props are `title` and `colorScheme`. All variants share a localized heading, wrapping message, badge and close control (44pt iOS, 48dp Android). Success uses a green checkmark, warning an amber triangle and error a red alert. Colors consume `surfaceRaised`, `text`, `muted`, the variant's semantic accent/container and iOS `shadow`. Appearance and layout direction inherit from the owning Host. Mount a new keyed instance per notification. The lifetime hook dismisses after six seconds, respects Android's recommended accessibility timeout, announces the heading/message, and holds while VoiceOver/TalkBack is enabled. See [Toast README](../../.agents/skills/template-skill-ui-toast/SKILL.md).
 
 `ToastHost` provides a safe-area top overlay above navigation, queue retention before mounting, and stable dismissal IDs. `showToast({ variant, message, title? })` from `src/lib/toasts.ts` queues all variants, coalescing identical variant/message/title combinations. Shared query/mutation cache callbacks and imperative auth failures keep reporting through `reportErrorToast` in `src/lib/error-toasts.ts`, preserving cancellation/session filters and friendly translations. `ErrorToast` and `ErrorToastHost` remain compatibility exports. Client-side field validation and retry buttons stay on screens. `FormTextInput.onEdited` remains optional for local feedback.
 

@@ -37,6 +37,6 @@ See [component previews](docs/storybook.md) for matching build/brand setup.
 - [Documentation ownership](docs/documentation.md): where to maintain each kind of guidance.
 - [Agent entry point](AGENTS.md): project rules and skill routing.
 
-Component contracts live in their existing `.agents/skills/foodiya-ui-*` skills,
+Component contracts live in their existing `.agents/skills/template-skill-ui-*` skills,
 with detailed references only where needed. Source folders hold code; avoid
 reintroducing per-component READMEs.

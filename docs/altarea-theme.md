@@ -139,7 +139,7 @@ Android uses the published `expo-blur` defaults for tint, intensity and reductio
 factor, with no adjustable blur-level preference. iOS uses
 public ultra-thin system materials, which may still apply their own color
 treatment. The capture background and platform
-limits belong to the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md).
+limits belong to the [page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md).
 
 Page titles use the purple foreground accent and the selected Urbanist family.
 Auth uses a magenta wordmark, purple heading and the theme's body type scale.

@@ -22,8 +22,8 @@ Settings has a saved Reduce Motion switch. Custom motion uses the existing share
 activity subscription and effective app preference; frame loops pause while inactive.
 The root config also aligns Reanimated and stack transitions with that choice.
 
-Read the canonical [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md),
-[launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) and
-[appearance contract](../.agents/skills/foodiya-ui-appearance/SKILL.md).
+Read the canonical [page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md),
+[launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) and
+[appearance contract](../.agents/skills/template-skill-ui-appearance/SKILL.md).
 Native timing, blur, touch delivery and background/resume performance require
 device testing; lint, typechecking and exports only verify static/build integration.

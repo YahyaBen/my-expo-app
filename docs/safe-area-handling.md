@@ -29,7 +29,7 @@ Tab scroll content adds only the shared `tabBarRaisedHeight` clearance after its
 last action, rather than padding for the entire dock. `PageScreen tab` supplies
 inner scroll padding; Settings tab mode uses its last section footer. The dock
 hides while the keyboard is visible. See the
-[navigation contract](../.agents/skills/foodiya-ui-navigation/SKILL.md) for geometry ownership.
+[navigation contract](../.agents/skills/template-skill-ui-navigation/SKILL.md) for geometry ownership.
 
 Expo Router already provides the root `SafeAreaProvider`; the app does not add
 another provider around individual pages. Hooks handle changing insets with navigation

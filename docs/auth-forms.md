@@ -4,7 +4,7 @@ The iOS/Android auth screens share native form layout and the configured brand's
 
 The shared [auth UI family](../src/components/ui/auth/) owns the screen frame.
 Login owns its [preferences bar](../src/features/auth/login-preferences.tsx)
-in the auth feature. The [auth UI skill](../.agents/skills/foodiya-ui-auth/SKILL.md)
+in the auth feature. The [auth UI skill](../.agents/skills/template-skill-ui-auth/SKILL.md)
 defines their composition contract.
 
 All auth screens share `AuthScreenFrame` and automatically fill the available width with safe gutters and keyboard avoidance. There is no maximum content width. Short forms center vertically within the Host's actual available height; longer content grows and scrolls. The native minimum-height modifiers preserve natural content height, including validation messages and larger text. No device checks or tablet breakpoints are needed.
@@ -34,7 +34,7 @@ rises for one second. Navigation opens Home when that animation completes.
 Default and Reduce Motion bypass the wave wait and open Home directly; auth
 requests and submission guards remain unchanged. Session-restoration failure
 reveals `app-recovery` and retry without reporting successful `app-ready` or
-waiting for branded launch timing. The [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md)
+waiting for branded launch timing. The [launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md)
 owns the complete startup selector conditions.
 
 Set `EXPO_PUBLIC_API_URL` to the HTTPS Identity API origin in `.env.local`, without a trailing `/api`. Restart Metro after changing it. `.env.local` is ignored by Git. The server must be reachable from the device.
@@ -74,7 +74,7 @@ API failures use the app's shared Expo UI native alerts, including login, regist
 
 Run `npm run check` for TypeScript, lint and formatting. Automated form suites have been removed; component and story test IDs are retained for future coverage.
 
-Use the enabled in-app Text input and Bottom Sheet pages for local input/OTP checks, or launch the retained form fixtures with `npm run storybook` and a matching development build. Verify live authentication, recovery delivery, keyboard layout and accessibility on iOS and Android devices. The [form](../.agents/skills/foodiya-ui-form/SKILL.md) and [input](../.agents/skills/foodiya-ui-text-input/SKILL.md) skills own selector suffixes, native field naming and the Android disabled-state limitation.
+Use the enabled in-app Text input and Bottom Sheet pages for local input/OTP checks, or launch the retained form fixtures with `npm run storybook` and a matching development build. Verify live authentication, recovery delivery, keyboard layout and accessibility on iOS and Android devices. The [form](../.agents/skills/template-skill-ui-form/SKILL.md) and [input](../.agents/skills/template-skill-ui-text-input/SKILL.md) skills own selector suffixes, native field naming and the Android disabled-state limitation.
 
 Selectors retain `auth-login-email` for the email-or-username field. Registration uses `auth-register-username`, `auth-register-first-name`, `auth-register-last-name`, `auth-register-email`, `auth-register-password`, and `auth-register-confirm-password`. Field errors append `-error`. Login and registration have person/mail/lock left icons; password and confirmation use an inline eye action (`-right-icon`) with Show password / Hide password accessibility labels. Each field keeps independent visibility state, starts masked, and disables its action while pending. `FormTextInput.passwordToggle="icon"` selects this composition; other forms retain the existing text button (`-visibility`). Use the Login Form story with the icons/pending Controls for password visibility and disabled states; device execution remains pending. Verification uses `auth-verify-code`, `auth-verify-submit`, and `auth-verify-resend`. API notifications use the root `AlertHost`; native message and OK controls use `app-alert-message` and `app-alert-dismiss`. Account uses `auth-account` and `auth-logout`.
 

@@ -72,6 +72,7 @@ export function TabNavigationBar({
           label={item.label}
           selected={selected}
           color={selected ? colors.tabBarActive : colors.tabBarInactive}
+          selectedBackgroundColor={colors.tabBarSelectedBackground}
           testID={item.testID ?? `tab-${item.id}`}
           onPress={() => onSelect(item.id)}
         />

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useWindowDimensions } from 'react-native';
 import {
@@ -14,7 +13,6 @@ import {
 import { spacing } from '@/constants/layout';
 import { useAppTheme } from '@/hooks/use-theme';
 import { LANGUAGE_FALLBACK, normalizeLanguage, type Language } from '@/lib/i18n';
-import { trackDestinationCellMount } from './destination-list-diagnostics';
 import type { SampleDestination } from './sample-destinations';
 
 const transportIcons = {
@@ -60,8 +58,6 @@ export function DestinationRow({ destination }: { destination: SampleDestination
       (design.typography.label.fontSize +
         design.typography.caption.fontSize * 3 +
         design.typography.subtitle.fontSize);
-
-  useEffect(trackDestinationCellMount, []);
 
   return (
     <UniversalHost

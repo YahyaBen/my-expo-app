@@ -1,10 +1,13 @@
 import { Icon } from '@expo/ui';
 import { Column, Text } from '@expo/ui/jetpack-compose';
 import {
+  background,
+  clip,
   fillMaxWidth,
   height,
   selectable,
   semantics,
+  Shapes,
   size,
   testID as nativeTestID,
 } from '@expo/ui/jetpack-compose/modifiers';
@@ -15,6 +18,7 @@ export function NavigationTab({
   label,
   selected,
   color,
+  selectedBackgroundColor,
   testID,
   onPress,
 }: NavigationTabProps) {
@@ -34,7 +38,11 @@ export function NavigationTab({
         <Column
           horizontalAlignment="center"
           verticalArrangement="center"
-          modifiers={[size(44, 28)]}
+          modifiers={[
+            size(44, 28),
+            clip(Shapes.RoundedCorner(14)),
+            background(selected ? selectedBackgroundColor : 'transparent'),
+          ]}
         >
           <Icon name={icon} size={22} color={color} />
         </Column>

@@ -1,9 +1,9 @@
 # Native performance
 
-[Documentation index](index.md) · [Performance skill](../.agents/skills/foodiya-performance/SKILL.md)
+[Documentation index](index.md) · [Performance skill](../.agents/skills/template-skill-performance/SKILL.md)
 
 Use this guide to make Foodiya performance investigations repeatable. The
-[implementation skill](../.agents/skills/foodiya-implementation/SKILL.md) owns
+[implementation skill](../.agents/skills/template-skill-implementation/SKILL.md) owns
 architecture and verification rules; component skills own native composition.
 Source inspection and passing static checks do not establish device performance.
 
@@ -50,7 +50,7 @@ these fixtures establish reproducible stress cases rather than release timings.
 
 The [root layout](../src/app/_layout.tsx) owns fonts, saved preferences, session
 restoration, initial page layout and launch completion. The
-[launch-screen skill](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) owns the
+[launch-screen skill](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) owns the
 configured presentation lifecycle. Record readiness and presentation separately:
 the branded hold and slide are intentional product timing, not evidence of slow
 storage or rendering.
@@ -109,33 +109,29 @@ Freezing a React subtree does not prove that native consumers are idle. Verify
 that returning to a retained page restores correct blur, touch shielding and
 draft/scroll state.
 
-Read the [List](../.agents/skills/foodiya-ui-list/SKILL.md),
-[Table](../.agents/skills/foodiya-ui-table/SKILL.md) and
-[Page](../.agents/skills/foodiya-ui-page/SKILL.md) contracts for collection work.
+Read the [List](../.agents/skills/template-skill-ui-list/SKILL.md),
+[Table](../.agents/skills/template-skill-ui-table/SKILL.md) and
+[Page](../.agents/skills/template-skill-ui-page/SKILL.md) contracts for collection work.
 Bounded native rows remain appropriate for small content. A growing feed needs
 its own scrolling composition and a benchmark of recycling, native Host costs,
 row geometry and pagination. Check the actual source before treating a sample
 dataset or an installed list package as an implemented production feed.
 
-The tab destination sheet keeps FlashList as its only scrolling container. Its
-intrinsic native cell Hosts have an RN minimum height derived from the row's
+The tab destination sheet displays ten illustrative journeys in a single-column
+FlashList, which remains its only scrolling container. Its intrinsic native
+cell Hosts have an RN minimum height derived from the row's
 spacing and scaled text sizes, so a pending native measurement cannot report a
 zero-height cell and make the list progressively mount the whole dataset. The
 minimum is a floor; native wrapping can still make a row taller. Time formatters
 are reused per supported language, and only rendered cells format their times.
 
-In development, FlashList's `onLoad` logs `[destinations] FlashList initial layout`
-with its initial layout duration, current/peak mounted cell counts and latest
-visible-row count. This is the list's layout milestone, not native paint timing.
-The visible count may still be zero when the event arrives, because viewability
-is reported separately. The feature's
-`getDestinationListDiagnostics()` returns the latest bounded snapshot without
-React state updates or per-scroll logging. Fast Refresh can reset these module
-counters; use a full reload and avoid Fast Refresh during comparisons. Mounted
-cells include FlashList's normal
-off-screen buffer and recycle pool, so they need not equal visible rows. These
-diagnostics are inactive in release builds. Android development-build timings,
-release performance and scrolling/large-text checks remain pending on devices.
+The destination list caps `maxItemsInRecyclePool` at 3 spare native cells. This
+bounds the spare recycle pool; it does not cap visible/buffered cells, total
+mounted cells or the first visible batch. Recycling remains enabled. The cap's
+performance and memory effects still need comparison on devices.
+
+Android development-build timings, release performance and scrolling/large-text
+checks remain pending on devices.
 
 Profile repeated parsing, translated search text and broad subscriptions where
 they affect the scenario. Preserve the existing query/session safeguards. For

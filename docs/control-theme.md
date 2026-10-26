@@ -9,7 +9,7 @@ Buttons also use a configured theme radius; explicit geometry overrides remain
 available. Altarea's 24-point/dp radius adapts its pill buttons through the
 existing native shape APIs. Native sizing, disabled suppression and feedback
 remain platform-owned. See the
-[button skill](../.agents/skills/foodiya-ui-button/SKILL.md) for shape precedence.
+[button skill](../.agents/skills/template-skill-ui-button/SKILL.md) for shape precedence.
 
 Text's primary tone uses `tint`, preserving readable UX dark foregrounds while
 the primary button fill stays black. The configured app palette stays fixed;
@@ -20,7 +20,7 @@ Standalone buttons now use the same project Host as other hosted controls.
 Their explicit/inherited appearance reaches custom icon/text descendants, while
 the shared Host supplies live direction and native tint. Intrinsic/full-width
 constraints and physical corner clipping retain their existing implementation.
-The [button skill](../.agents/skills/foodiya-ui-button/SKILL.md) owns the contract
+The [button skill](../.agents/skills/template-skill-ui-button/SKILL.md) owns the contract
 and manual native checks for this migration.
 
 The original UX Template correction (2026-10-16) supplies a black primary with
@@ -66,4 +66,4 @@ Context7 was consulted for Host theme propagation and native glass styles. Its r
 
 References: [Expo SDK 57 universal UI](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/), [SwiftUI modifiers](https://docs.expo.dev/versions/v57.0.0/sdk/ui/swift-ui/modifiers/), [Apple’s native Liquid Glass adoption](https://developer.apple.com/documentation/technologyoverviews/adopting-liquid-glass).
 
-The text-input follow-up was manually checked in the iOS 27 iPhone 18 Pro simulator: empty/filled password toggles kept the same visible field height and retained the value. Its native Storybook height assertions are saved. The duplicate RNCSafeAreaProvider dependency was removed by the Storybook update; architecture checks now guard shared native module resolution. Android and full large-text native checks remain pending. See the [input guide](../.agents/skills/foodiya-ui-text-input/SKILL.md).
+The text-input follow-up was manually checked in the iOS 27 iPhone 18 Pro simulator: empty/filled password toggles kept the same visible field height and retained the value. Its native Storybook height assertions are saved. The duplicate RNCSafeAreaProvider dependency was removed by the Storybook update; architecture checks now guard shared native module resolution. Android and full large-text native checks remain pending. See the [input guide](../.agents/skills/template-skill-ui-text-input/SKILL.md).

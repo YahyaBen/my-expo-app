@@ -20,7 +20,7 @@ application styling and compatibility, but standard controls no longer map them.
 - `src/components/ui/host/types.ts`: shared `colorScheme`, `seedColor`, and `testID` props.
 - `src/components/ui/host/universal-host.tsx`: native Host wrapper, scheme selection, and sizing defaults.
 
-All themes resolve semantic button token pairs in the [shared button implementation](../../../../src/components/ui/button/universal-button.tsx). Caller colors retain their existing override behavior. Follow [the button color contract](../../foodiya-ui-button/references/props-and-styling.md) for the exact mapping and override precedence.
+All themes resolve semantic button token pairs in the [shared button implementation](../../../../src/components/ui/button/universal-button.tsx). Caller colors retain their existing override behavior. Follow [the button color contract](../../template-skill-ui-button/references/props-and-styling.md) for the exact mapping and override precedence.
 
 ## Token contract
 
@@ -28,7 +28,7 @@ Use semantic roles already present: `background`, `surface`, `text`, `muted`, `b
 
 Text's primary tone uses `tint`, not the `primary` filled-action surface.
 Preserve `primary`/`onPrimary` and explicit text override precedence. Use the
-[Text contract](../../foodiya-ui-text/SKILL.md) for the exact mapping and preview.
+[Text contract](../../template-skill-ui-text/SKILL.md) for the exact mapping and preview.
 
 Host `colorScheme` selects appearance. Host `seedColor` derives Android Material colors and sets iOS native tint; it does not promise the exact same color for every native control. See [SDK 57 Host](https://docs.expo.dev/versions/v57.0.0/sdk/ui/universal/host/). Use the installed API's real color hooks/props when mapping tokens; do not invent universal `containerColor` props or treat `UniversalStyle` as full RN styling.
 
@@ -46,9 +46,9 @@ Safe areas, the measured scroll inset and touch shield remain. A frame can
 explicitly opt out with `headerBlur={false}`. Native Reduce Transparency keeps
 its solid-background fallback. Launch artwork does not follow this header setting.
 
-Every `UniversalButton` or `UniversalButtonContent` call requires `variant`. Use [the button skill](../../foodiya-ui-button/SKILL.md) for the current nine variants, native style mapping and supported geometry. Native disabled colors/opacity and press feedback remain platform-owned. Specialized icon and navigation buttons keep their explicitly selected native style.
+Every `UniversalButton` or `UniversalButtonContent` call requires `variant`. Use [the button skill](../../template-skill-ui-button/SKILL.md) for the current nine variants, native style mapping and supported geometry. Native disabled colors/opacity and press feedback remain platform-owned. Specialized icon and navigation buttons keep their explicitly selected native style.
 
-`UniversalHost` provides its resolved scheme through React context for styled text, loading content and button token resolution through `useHostColorScheme`. Native appearance also follows the owning native Host. `UniversalButton` reuses one `UniversalHost` at an RN boundary, so native appearance and custom descendants share its explicit/inherited scheme and live direction. `UniversalButtonContent` composes within an existing Host and has no scheme prop. Full-width buttons make the label/native surface fill together; intrinsic buttons use inline hosting. See the [button contract](../../foodiya-ui-button/SKILL.md) for geometry and override details.
+`UniversalHost` provides its resolved scheme through React context for styled text, loading content and button token resolution through `useHostColorScheme`. Native appearance also follows the owning native Host. `UniversalButton` reuses one `UniversalHost` at an RN boundary, so native appearance and custom descendants share its explicit/inherited scheme and live direction. `UniversalButtonContent` composes within an existing Host and has no scheme prop. Full-width buttons make the label/native surface fill together; intrinsic buttons use inline hosting. See the [button contract](../../template-skill-ui-button/SKILL.md) for geometry and override details.
 
 ## Documentation and story requirements
 

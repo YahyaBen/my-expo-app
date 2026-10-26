@@ -1,6 +1,6 @@
 # Documentation
 
-[Project home](../README.md) · [Agent rules](../AGENTS.md) · [Component skills](../.agents/skills/foodiya-implementation/references/component-skills.md)
+[Project home](../README.md) · [Agent rules](../AGENTS.md) · [Component skills](../.agents/skills/template-skill-implementation/references/component-skills.md)
 
 Project guides are centralized here. Component contracts live in their matching
 skills; [documentation ownership](documentation.md) explains where to update each topic.

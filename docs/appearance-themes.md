@@ -25,7 +25,7 @@ Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
 factor. iOS ultra-thin system materials retain their native color treatment. See the
-[page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md) for the
+[page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md) for the
 shared blur policy and capture-background requirements.
 Page titles use the configured heading font and foreground accent. Home uses
 magenta brand labeling, a warm neutral section and one filled primary action.
@@ -89,7 +89,7 @@ control or saved blur-level preference; older `appHeaderBlur` values are ignored
 Android uses Expo's default strength, while iOS retains its existing native
 material behavior.
 
-The [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) defines
+The [launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) defines
 minimal/branded presentation, optional-font fallback, foreground timing and the
 separate successful `app-ready` and failed-restoration `app-recovery` selectors.
 Recovery skips the branding delay. Source checks do not establish native startup
@@ -128,6 +128,6 @@ reveal, local preview isolation and unchanged action counts. These device checks
 remain pending; static checks and Hermes exports do not verify them.
 
 The canonical control and persistence contract lives in the
-[appearance skill](../.agents/skills/foodiya-ui-appearance/SKILL.md).
+[appearance skill](../.agents/skills/template-skill-ui-appearance/SKILL.md).
 Native styles, hit areas, contrast, RTL, large text and live preference changes
 still require device verification. Earlier brand/theme reports describe history.

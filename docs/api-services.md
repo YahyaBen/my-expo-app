@@ -116,4 +116,4 @@ inline error/retry and shared alert path.
 Feedback uses Expo UI's native iOS Alert and Android AlertDialog with an OK
 action. Alerts remain until dismissed; there is no timed toast overlay. Keep
 persistent failure context and retry controls on the affected screen. See the
-[alert skill](../.agents/skills/foodiya-ui-alert/SKILL.md) for native composition.
+[alert skill](../.agents/skills/template-skill-ui-alert/SKILL.md) for native composition.

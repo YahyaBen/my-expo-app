@@ -46,7 +46,7 @@ Use `src/services/api.config.ts` for native API configuration and the shared
 in another transport. Refresh remains interceptor-free and must not import the
 authenticated `api.ts` client. The native read is lazy so local public previews
 can open without backend configuration; build-time production validation owns
-release prerequisites. See the [configuration boundaries](../foodiya-implementation/references/configuration.md).
+release prerequisites. See the [configuration boundaries](../template-skill-implementation/references/configuration.md).
 
 ## Validate I/O boundaries
 

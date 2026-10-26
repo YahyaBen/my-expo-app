@@ -8,7 +8,7 @@ Each topic has one canonical owner.
 | Project introduction and quick start            | Root `README.md`                                            |
 | Project rules and skill routing                 | `AGENTS.md`                                                 |
 | Human-facing architecture, setup and operations | Focused guides in `docs/`                                   |
-| Component contract and native composition       | Matching `.agents/skills/foodiya-ui-*/SKILL.md`             |
+| Component contract and native composition       | Matching `.agents/skills/template-skill-ui-*/SKILL.md`      |
 | Detailed page/button guidance or long examples  | That skill’s linked `references/`                           |
 | Shared native layout and theme rules            | Existing Expo mobile and component-library skills           |
 | Historical findings and device observations     | Dated reports; the UI catalog history is in `docs/archive/` |

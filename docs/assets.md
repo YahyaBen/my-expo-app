@@ -31,7 +31,7 @@ If loading the optional heading font fails, startup continues with native
 typography. The helper returns a family only after its runtime font is loaded;
 the native splash cannot remain held behind a font-error boundary. Minimal
 launch does not mount the registered artwork, though its literal asset remains
-bundled for branded previews. See the [launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md).
+bundled for branded previews. See the [launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md).
 
 Android derives its embedded family from the filename. iOS uses the font's
 embedded name, which can differ. Likan's `Urbanist-Bold.ttf` is a static 700-weight
@@ -83,6 +83,6 @@ animated paths and native blur mask from numeric commands. Removed Smoke and
 Water SVGs are no longer bundled. Dunes, Ribbon, Rain and the iOS SVG material
 mask are retained. The branded launch edge keeps cached paths and its drift;
 minimal launch does not mount artwork or that edge. The existing
-[page](../.agents/skills/foodiya-ui-page/references/page-guide.md) and
-[launch](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) skills own these
+[page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
+[launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) skills own these
 presentation contracts.

@@ -4,7 +4,7 @@
 (`altarea`). The configured brand selects one through `presentation.palette`;
 Likan uses `altarea`, the template uses `ux`. App Settings does not select palettes. Palette switches are local
 component-preview controls and never change the root brand. See the
-[appearance contract](../../foodiya-ui-appearance/SKILL.md) for persistence.
+[appearance contract](../../template-skill-ui-appearance/SKILL.md) for persistence.
 `brand-palettes.json` contains only Instagram light/dark colors, resolved through `createBrandTheme`.
 
 `altarea.ts` defines the observed purple/magenta/warm-neutral website foundations

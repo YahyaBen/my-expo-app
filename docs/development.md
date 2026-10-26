@@ -60,8 +60,8 @@ style. Default uses the rectangular native header, and all three animated choice
 remain available. `presentation.launch` accepts `minimal` (the neutral template)
 or `branded` (Likan). Minimal adds no artificial startup wait; branded keeps its
 artwork and exit. Restart Metro after changing these public metadata fields.
-See the [page](../.agents/skills/foodiya-ui-page/references/page-guide.md) and
-[launch](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) contracts for native
+See the [page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
+[launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) contracts for native
 behavior and readiness. Saved header choices use the existing storage key.
 
 Set these selectors in `.env.local` for local Expo commands:
@@ -154,7 +154,7 @@ embedded fonts. Arabic retains native fallback. The configured palette stays
 fixed; user System/Light/Dark appearance is saved by the existing provider.
 Component previews can select palettes locally without changing app preferences.
 See [appearance setup and verification](appearance-themes.md), the
-[launch contract](../.agents/skills/foodiya-ui-launch-screen/SKILL.md) and
+[launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) and
 [preview capabilities](storybook.md). These preview flags are build/update choices,
 not persisted user settings. EAS development/preview enable the catalog; production
 disables it. All profiles disable Storybook in their embedded bundles.

@@ -102,7 +102,7 @@ Use Ready to inspect both moving contours during the upward exit.
 
 The Table page at `/ui-component/table` and retained `Components/Table` fixtures
 exercise local filters, row action menus and empty results. Use the
-[Table contract](../.agents/skills/foodiya-ui-table/SKILL.md) for Host ownership
+[Table contract](../.agents/skills/template-skill-ui-table/SKILL.md) for Host ownership
 and selector derivations. Verify horizontal scrolling, large text, live RTL,
 spoken row action names, dismissal and disabled action suppression on both
 platforms; fixture registration alone does not establish these native behaviors.
@@ -117,7 +117,7 @@ route. Use its header Back or Android system Back to return, then check retained
 drafts/counts/scroll and that the native blur continues updating over the colored cards.
 Repeat with header scrolling and rapid round trips. The fixture's own Back only
 counts presses; NavigationContinuity is a local geometry example, not a native
-pop. See the [page contract](../.agents/skills/foodiya-ui-page/references/page-guide.md)
+pop. See the [page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md)
 for Android backdrop refresh ownership. Android uses Expo's default blur strength
 and tint; numeric adjustment stories have been removed. These providers never
 save production preferences. Device execution remains pending.

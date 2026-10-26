@@ -3,6 +3,7 @@ import { Button, Text, VStack } from '@expo/ui/swift-ui';
 import {
   accessibilityAddTraits,
   accessibilityLabel,
+  background,
   buttonStyle,
   contentShape,
   font,
@@ -19,6 +20,7 @@ export function NavigationTab({
   label,
   selected,
   color,
+  selectedBackgroundColor,
   testID,
   onPress,
 }: NavigationTabProps) {
@@ -36,7 +38,15 @@ export function NavigationTab({
         spacing={3}
         modifiers={[frame({ maxWidth: Infinity, height: 56 }), contentShape(shapes.rectangle())]}
       >
-        <Icon name={icon} size={22} color={color} modifiers={[frame({ width: 44, height: 28 })]} />
+        <Icon
+          name={icon}
+          size={22}
+          color={color}
+          modifiers={[
+            frame({ width: 44, height: 28 }),
+            background(selected ? selectedBackgroundColor : 'transparent', shapes.capsule()),
+          ]}
+        />
         <Text
           modifiers={[
             font({ size: 11, weight: 'semibold' }),

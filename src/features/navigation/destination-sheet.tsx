@@ -1,6 +1,4 @@
-import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
-import { useTranslation } from 'react-i18next';
-import { Platform, View, useWindowDimensions } from 'react-native';
+import { spacing } from '@/constants/layout';
 import {
   BottomSheet,
   Column,
@@ -10,11 +8,9 @@ import {
   UniversalTextContent,
   nativeFillWidth,
 } from '@components/ui';
-import { spacing } from '@/constants/layout';
-import {
-  reportDestinationListLoad,
-  reportDestinationViewability,
-} from './destination-list-diagnostics';
+import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
+import { View, useWindowDimensions } from 'react-native';
 import { DestinationRow } from './destination-row';
 import { sampleDestinations, type SampleDestination } from './sample-destinations';
 
@@ -65,13 +61,12 @@ export function DestinationSheet({
             <FlashList
               data={sampleDestinations}
               renderItem={renderDestination}
+              // Bound spare native Hosts while keeping recycling enabled.
+              maxItemsInRecyclePool={3}
               keyExtractor={destinationKey}
               style={{ flex: 1 }}
               contentContainerStyle={{ paddingBottom: spacing.sm }}
               contentInsetAdjustmentBehavior="never"
-              nestedScrollEnabled={Platform.OS === 'android'}
-              onLoad={__DEV__ ? reportDestinationListLoad : undefined}
-              onViewableItemsChanged={__DEV__ ? reportDestinationViewability : undefined}
               testID="tab-destinations-list"
             />
             <UniversalHost>

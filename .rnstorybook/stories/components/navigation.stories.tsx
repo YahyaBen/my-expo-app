@@ -100,6 +100,14 @@ function NavigationDemo({
 const meta = {
   title: 'Components/Navigation',
   component: NavigationDemo,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'The selected tab has a rounded highlight behind its icon. Tap each of the four destinations: the highlight must move to the selected icon and clear the previous one. Check Light, Dark and RightToLeft; the label stays outside the highlight.',
+      },
+    },
+  },
   args: {
     colorScheme: 'light',
     direction: 'ltr',
