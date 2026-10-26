@@ -1,5 +1,7 @@
 This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
 
+For performance investigations and optimization work, use [Foodiya performance](.agents/skills/foodiya-performance/SKILL.md) for measurement scenarios and evidence-based changes.
+
 ## Project implementation skills
 
 For application features and component work, use [Foodiya implementation](.agents/skills/foodiya-implementation/SKILL.md). It defines the project implementation pattern and routes to the existing Expo, UI, and API skills.

@@ -11,7 +11,7 @@ import {
 } from '@expo/ui';
 import { useEffect, useLayoutEffect, useRef, useState, type ComponentProps } from 'react';
 import Animated, { cubicBezier } from 'react-native-reanimated';
-import { useMotionEnabled } from '@/hooks/use-motion-enabled';
+import { useAppActive, useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { AccessibilityInfo, Platform, useWindowDimensions } from 'react-native';
 import { onSizeChanged } from '@expo/ui/jetpack-compose/modifiers';
 import { onGeometryChange } from '@expo/ui/swift-ui/modifiers';
@@ -400,29 +400,35 @@ function OtpResendButton({
   testID: string;
 }) {
   const { t } = useTranslation();
+  const active = useAppActive();
+  const visible = isPresented && active;
   const [countdown, setCountdown] = useState(() => ({
     deadline,
+    visible,
     remaining: Math.max(0, Math.ceil((deadline - Date.now()) / 1000)),
   }));
-  if (countdown.deadline !== deadline) {
+  if (countdown.deadline !== deadline || countdown.visible !== visible) {
     setCountdown(() => ({
       deadline,
+      visible,
       remaining: Math.max(0, Math.ceil((deadline - Date.now()) / 1000)),
     }));
   }
   const { remaining } = countdown;
   useEffect(() => {
+    // The deadline keeps elapsing in the background; only its visible label needs a clock.
+    if (!visible) return;
     const secondsLeft = () => Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
-    if (!isPresented || secondsLeft() === 0) return;
+    if (secondsLeft() === 0) return;
     const timer = setInterval(() => {
       const next = secondsLeft();
       setCountdown((previous) =>
-        previous.remaining === next ? previous : { deadline, remaining: next },
+        previous.remaining === next ? previous : { deadline, visible, remaining: next },
       );
       if (next === 0) clearInterval(timer);
     }, 1000);
     return () => clearInterval(timer);
-  }, [deadline, isPresented]);
+  }, [deadline, visible]);
 
   return (
     <UniversalButtonContent

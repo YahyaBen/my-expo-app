@@ -789,11 +789,22 @@
   },
   "starter": {
     "homeDescription": "Le point de départ de votre application. Explorez les composants natifs, ajustez vos préférences ou connectez-vous à votre serveur.",
-    "centerAction": "Ouvrir l'exemple d'action rapide",
-    "centerActionTitle": "Exemple d'action rapide",
-    "centerActionDescription": "Le bouton + de la barre de navigation ouvre cette feuille native. Utilisez cet espace pour créer un élément ou commencer une nouvelle tâche.",
+    "centerAction": "Ouvrir les destinations",
+    "centerActionTitle": "Destinations",
+    "centerActionDescription": "Parcourez 100 trajets de démonstration avec leurs heures de départ et d'arrivée.",
     "navigationExampleDescription": "Exemple de navigation avec des recettes de démonstration locales.",
     "searchExamples": "Rechercher parmi les exemples",
     "noExampleResults": "Aucune recette d'exemple ne correspond à votre recherche."
+  },
+  "destinations": {
+    "title": "Destinations",
+    "subtitle": "{{count}} trajets de démonstration",
+    "from": "Départ",
+    "to": "Destination",
+    "departure": "Départ",
+    "arrival": "Arrivée",
+    "journey": "Trajet {{number}}",
+    "train": "Train",
+    "bus": "Bus"
   }
 }

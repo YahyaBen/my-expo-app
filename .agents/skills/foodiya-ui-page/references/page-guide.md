@@ -50,6 +50,16 @@ Scrolling, safe areas, measured title clearance and touch shielding remain when
 a caller explicitly disables blur. Only that explicit opt-out skips the blur
 target and backdrop; its title and Back remain above the scroll content.
 
+`PageFrame` reports a performance marker once its native frame has laid out,
+its route is focused, the app is active and root startup presentation has
+completed. The marker retries on readiness, focus or foreground changes without
+adding layout state or changing the frame's mounting. It labels readiness as
+`frame-layout`: optional data, every native child and transition animations may
+still be pending. The default performance-readiness context is false, keeping
+isolated native previews outside application startup/navigation metrics.
+Reporting failures never block the usable frame. See
+[performance measurement](../../../../docs/performance.md) for the baseline protocol.
+
 Titled frames reserve the top safe area plus a 48-point minimum title row on the
 first render. Pages with and without Back share that minimum, so navigation does
 not stretch the SVG just to accommodate the button. Incomplete native layout

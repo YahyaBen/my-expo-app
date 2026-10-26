@@ -3,15 +3,8 @@ import { useFocusEffect } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, Platform } from 'react-native';
-import {
-  BottomSheet,
-  PageSection,
-  TabNavigationBar,
-  UniversalButtonContent,
-  UniversalHost,
-  UniversalTextContent,
-  type TabNavigationItemId,
-} from '@components/ui';
+import { TabNavigationBar, type TabNavigationItemId } from '@components/ui';
+import { DestinationSheet } from './destination-sheet';
 
 const routeNames = {
   home: 'index',
@@ -81,27 +74,7 @@ export function AppTabBar({ state, navigation, insets }: BottomTabBarProps) {
           }}
         />
       ) : null}
-      <UniversalHost inline ignoreSafeArea="all" style={{ position: 'absolute' }}>
-        <BottomSheet
-          isPresented={actionOpen}
-          onDismiss={closeAction}
-          testID="tab-center-action-sheet"
-        >
-          <PageSection>
-            <UniversalTextContent variant="title">
-              {t('starter.centerActionTitle')}
-            </UniversalTextContent>
-            <UniversalTextContent>{t('starter.centerActionDescription')}</UniversalTextContent>
-            <UniversalButtonContent
-              variant="primary"
-              label={t('common.close')}
-              fullWidth
-              testID="tab-center-action-close"
-              onPress={closeAction}
-            />
-          </PageSection>
-        </BottomSheet>
-      </UniversalHost>
+      <DestinationSheet isPresented={actionOpen} onDismiss={closeAction} />
     </>
   );
 }

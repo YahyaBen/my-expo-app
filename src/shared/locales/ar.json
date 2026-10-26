@@ -789,11 +789,22 @@
   },
   "starter": {
     "homeDescription": "نقطة انطلاق لتطبيقك. استكشف المكونات الأصلية وعدّل تفضيلاتك أو سجّل الدخول إلى خادمك.",
-    "centerAction": "فتح مثال الإجراء السريع",
-    "centerActionTitle": "مثال الإجراء السريع",
-    "centerActionDescription": "يفتح زر + في شريط التنقل هذه النافذة الأصلية. استخدم هذه المساحة لإنشاء عنصر أو بدء مهمة جديدة.",
+    "centerAction": "فتح الوجهات",
+    "centerActionTitle": "الوجهات",
+    "centerActionDescription": "تصفح 100 رحلة تجريبية مع أوقات المغادرة والوصول.",
     "navigationExampleDescription": "مثال للتنقل مع وصفات تجريبية محلية.",
     "searchExamples": "البحث في الوصفات التجريبية",
     "noExampleResults": "لا توجد وصفات تجريبية تطابق بحثك."
+  },
+  "destinations": {
+    "title": "الوجهات",
+    "subtitle": "{{count}} رحلة تجريبية",
+    "from": "من",
+    "to": "إلى",
+    "departure": "المغادرة",
+    "arrival": "الوصول",
+    "journey": "الرحلة {{number}}",
+    "train": "قطار",
+    "bus": "حافلة"
   }
 }

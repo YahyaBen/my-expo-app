@@ -170,6 +170,11 @@ to Home. Account (`/account`) requires a real authenticated session. Login,
 registration, verification and password recovery retain their real backend flows.
 The admin/admin shortcut and development guest authentication have been removed.
 
+The tab dock's center + action opens Destinations, a native bottom sheet with
+100 local sample journeys rendered by FlashList. Each row shows its origin,
+destination, departure and arrival times, and transport icon. These examples are
+illustrative and do not use live timetables.
+
 Home links to the enabled previews, Settings and Account/sign-in. Settings exposes working
 preferences and the app version. There are no recipe, onboarding, map, Skia,
 device-information, health-check or development-directory screens.

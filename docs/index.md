@@ -32,6 +32,7 @@ skills; [documentation ownership](documentation.md) explains where to update eac
 ## Builds and engineering
 
 - [EAS development builds](eas-development-builds.md)
+- [Native performance](performance.md)
 - [White-label template implementation plan](white-label-template-plan.md)
 - [Local SonarQube analysis](sonarqube.md)
 

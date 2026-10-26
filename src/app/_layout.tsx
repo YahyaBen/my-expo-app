@@ -20,7 +20,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Appearance, Platform, View } from 'react-native';
 import { ReducedMotionConfig, ReduceMotion } from 'react-native-reanimated';
-import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
+import { useAppActive, useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { navigationTheme } from '@/constants/navigation-theme';
@@ -40,6 +40,8 @@ import { getBrandFonts } from '@/config/brand-assets';
 import { getAppBrand } from '@/config/brand';
 import { StartupLayoutContext } from '@/context/startup-layout.context';
 import { developerScreensEnabled, storybookEnabled } from '@/config/developer-tools';
+import { PerformanceReadyContext } from '@/context/performance-ready.context';
+import { configurePerformance, markStartupMilestone, PerformanceRoot } from '@/lib/performance';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -57,37 +59,40 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 SplashScreen.setOptions({ duration: 0, fade: false });
 const brand = getAppBrand();
 const brandFonts = getBrandFonts(brand);
+configurePerformance(brand.variant);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts(brandFonts);
+  const fontsReady = loaded || Boolean(error);
+  useEffect(() => {
+    if (fontsReady) markStartupMilestone('fonts_ready');
+  }, [fontsReady]);
 
-  // A failed optional heading font falls back to native typography instead of
-  // leaving an error boundary behind the held native splash.
-  if (!loaded && !error) {
-    return null;
-  }
-
+  // Hydrate preferences and restore the session concurrently with font loading.
+  // Native content still waits for the font or its existing fallback path.
   return (
-    <LayoutDirectionProvider>
-      <LanguageProvider>
-        <ThemePreferencesProvider
-          initialTheme={brand.presentation.palette}
-          initialHeaderShape={brand.presentation.header}
-          persistHeaderMotion
-          persistAppearance
-        >
-          <AppQueryProvider>
-            <AuthProvider>
-              <RootLayoutContent />
-            </AuthProvider>
-          </AppQueryProvider>
-        </ThemePreferencesProvider>
-      </LanguageProvider>
-    </LayoutDirectionProvider>
+    <PerformanceRoot>
+      <LayoutDirectionProvider>
+        <LanguageProvider>
+          <ThemePreferencesProvider
+            initialTheme={brand.presentation.palette}
+            initialHeaderShape={brand.presentation.header}
+            persistHeaderMotion
+            persistAppearance
+          >
+            <AppQueryProvider>
+              <AuthProvider>
+                <RootLayoutContent fontsReady={fontsReady} />
+              </AuthProvider>
+            </AppQueryProvider>
+          </ThemePreferencesProvider>
+        </LanguageProvider>
+      </LayoutDirectionProvider>
+    </PerformanceRoot>
   );
 }
 
-function RootLayoutContent() {
+function RootLayoutContent({ fontsReady }: { fontsReady: boolean }) {
   const {
     colorScheme: appearancePreference,
     appearanceReady,
@@ -108,6 +113,7 @@ function RootLayoutContent() {
   const animatedHeader = design.header.artwork && headerShape !== 'default';
   const expanded = animatedHeader && pathname === '/login' && !requireAuth;
   const reducedMotion = useAppReducedMotion();
+  const active = useAppActive();
   const [loginWaveComplete, setLoginWaveComplete] = useState(true);
   if (expanded && !reducedMotion && !showLaunchScreen && loginWaveComplete)
     setLoginWaveComplete(false);
@@ -123,9 +129,10 @@ function RootLayoutContent() {
   const { ready: languageReady } = useLanguage();
   const animatePageArtwork = !showLaunchScreen;
   const preferencesReady = appearanceReady && languageReady && headerMotionReady;
-  const startupReady = preferencesReady && !restoring && !error;
+  const resourcesReady = fontsReady && preferencesReady;
+  const startupReady = resourcesReady && !restoring && !error;
   // Restoration failures must expose their retry UI instead of keeping the launch overlay.
-  const canReveal = preferencesReady && (!restoring || Boolean(error));
+  const canReveal = resourcesReady && (!restoring || Boolean(error));
   const layoutPhase = restoring ? (error ? 'recovery' : null) : 'ready';
   const [laidOutPhase, setLaidOutPhase] = useState<typeof layoutPhase>(null);
   if (layoutPhase === null && laidOutPhase !== null) setLaidOutPhase(null);
@@ -138,6 +145,16 @@ function RootLayoutContent() {
     SplashScreen.hide();
   }, []);
   useStoreUpdates(startupReady && initialLayoutReady && !showLaunchScreen);
+  const interactive = initialLayoutReady && !showLaunchScreen && (startupReady || Boolean(error));
+  useEffect(() => {
+    if (preferencesReady) markStartupMilestone('preferences_ready');
+    if (!restoring && !error) markStartupMilestone('session_ready');
+    if (initialLayoutReady) markStartupMilestone('page_layout_ready');
+    if (startupReady && initialLayoutReady) markStartupMilestone('content_ready');
+    if (interactive && active) markStartupMilestone(error ? 'recovery_interactive' : 'interactive');
+  }, [preferencesReady, restoring, error, initialLayoutReady, startupReady, interactive, active]);
+
+  if (!fontsReady) return null;
 
   return (
     <LoginTransitionContext.Provider value={holdLogin}>
@@ -162,9 +179,11 @@ function RootLayoutContent() {
           expanded={expanded}
           onCollapseComplete={finishLoginWave}
         >
-          <StartupLayoutContext.Provider value={onInitialLayout}>
-            {canReveal || !showLaunchScreen ? <RootLayoutNav holdLogin={holdLogin} /> : null}
-          </StartupLayoutContext.Provider>
+          <PerformanceReadyContext.Provider value={interactive}>
+            <StartupLayoutContext.Provider value={onInitialLayout}>
+              {canReveal || !showLaunchScreen ? <RootLayoutNav holdLogin={holdLogin} /> : null}
+            </StartupLayoutContext.Provider>
+          </PerformanceReadyContext.Provider>
         </PageMotionOverlay>
         {showLaunchScreen && appearanceReady && (
           <LaunchScreen

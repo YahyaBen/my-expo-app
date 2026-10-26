@@ -24,7 +24,7 @@ Optional `onResend` enables a 30-second resend cooldown; `resendCooldownSeconds`
 
 One transparent native text field sits above six decorative digit slots, preserving native paste, autofill, selection, and backspace. Input normalizes Western, Arabic, Persian and full-width digits and strips pasted separators. The numeric row has an explicit-width LTR Host so Arabic copy retains its surrounding RTL direction. The OTP form measures its own native input section; the input mounts once that measurement is available and retains its value across resizing. Their explicit height grows for larger font scales. Inset rounded fills draw complete borders on both platforms; iOS uses a plain field so native field chrome does not cover the slots. Platform adapters supply overlapping native stacks because the universal API has no overlay stack.
 
-Opening resets React form state before committing the presentation and clears the existing native value in a layout effect. It does not force a keyed form remount; the platform sheet still owns its native mounting and dismissal lifecycle. The resend countdown owns its own React state and stops its timer at zero, on dismissal, or when the resend action is absent. Countdown ticks do not render the form or native input. Feedback reads motion settings only while visible and uses declarative Reanimated CSS keyframes for its fade/scale or error shake. It has no animation-driving effect, shared-value timing, or JS animation timer. Verification, resend and stale-completion guards remain active.
+Opening resets React form state before committing the presentation and clears the existing native value in a layout effect. It does not force a keyed form remount; the platform sheet still owns its native mounting and dismissal lifecycle. The resend countdown owns its own React state and stops its timer at zero, on dismissal, while the app is inactive, or when the resend action is absent. It reuses the shared activity subscription and recomputes the remaining seconds from the wall-clock deadline immediately on resume; backgrounding does not extend the cooldown. Countdown ticks do not render the form or native input. Feedback reads motion settings only while visible and uses declarative Reanimated CSS keyframes for its fade/scale or error shake. It has no animation-driving effect, shared-value timing, or JS animation timer. Verification, resend and stale-completion guards remain active.
 
 The form follows the supplied reference: leading-aligned heading and delivery copy, a bold recipient, six empty rounded boxes with neutral fills, and a stronger text-colored focus outline. Filled boxes keep their neutral appearance; rejected codes use the error palette. Only supplied hints, resend confirmation and errors add helper text. The existing UniversalButtonContent verification and resend controls retain their styling and behavior.
 
@@ -36,8 +36,8 @@ Native [OTP stories](../../../.rnstorybook/stories/forms/otp-bottom-sheet.storie
 expose Light and RequestFailure, with appearance, cooldown and request/resend
 failure Controls and isolated English copy. Automated suites have been removed;
 existing test IDs remain for future tests. Check input readiness on opening and
-reopening, incomplete and duplicate submissions, request failure, resend reset
-and stale completion manually. Native keyboard/autofill, narrow widths, large
+reopening, incomplete and duplicate submissions, request failure, resend reset,
+background/resume across cooldown expiry and stale completion manually. Native keyboard/autofill, narrow widths, large
 fonts, screen-reader traversal, hit-area edges and motion require device
 verification; story registration and typechecking alone do not prove them.
 

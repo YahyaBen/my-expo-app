@@ -20,6 +20,7 @@ packages and current source determine available APIs.
 | Find a component's skill and source                     | The relevant row in [component skills](references/component-skills.md)                                                          |
 | Backend entity, response validation, query, or mutation | [API services](../expo-api-services/SKILL.md)                                                                                   |
 | Brand identity, native assets or API environment        | [Configuration boundaries](references/configuration.md)                                                                         |
+| Performance, startup, scrolling or idle resource use    | [Performance workflow](../foodiya-performance/SKILL.md)                                                                         |
 
 Read the relevant component skill, such as [buttons](../foodiya-ui-button/SKILL.md),
 when its family is involved. Each skill owns its component guidance; longer

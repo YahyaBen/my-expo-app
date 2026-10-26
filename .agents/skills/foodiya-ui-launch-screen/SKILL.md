@@ -21,8 +21,10 @@ Keep selection and static imports with the
 [configuration owner](../foodiya-implementation/references/configuration.md).
 
 The root owns font resolution, appearance/session/language/header readiness and
-the initial page frame's native layout. It mounts the overlay after appearance
-restoration; `onReady` fires on overlay layout and the root hides the native
+the initial page frame's native layout. Preference hydration and session restore
+run concurrently with font loading; native content still waits for fonts or
+their existing fallback path. It mounts the overlay after appearance
+restoration and font readiness; `onReady` fires on overlay layout and the root hides the native
 splash. `exiting` waits for a usable page or recovery frame beneath the overlay.
 For branded mode, a cancellable two-second foreground hold precedes the
 two-second upward Reanimated slide. Backgrounding pauses the remaining hold and

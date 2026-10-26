@@ -21,6 +21,7 @@ import { usePageBlurKey } from './use-page-blur-key';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { StartupLayoutContext } from '@/context/startup-layout.context';
+import { usePagePerformance } from '@/hooks/use-page-performance';
 
 const PageHeaderInsetContext = createContext(0);
 
@@ -50,6 +51,7 @@ export function PageFrame({
 }>) {
   const colors = useThemeColors(useHostColorScheme(colorScheme));
   const onStartupLayout = useContext(StartupLayoutContext);
+  const markFrameLayout = usePagePerformance();
   const laidOut = useRef(false);
   useEffect(() => {
     if (laidOut.current) onStartupLayout?.();
@@ -105,6 +107,7 @@ export function PageFrame({
       onLayout={() => {
         laidOut.current = true;
         onStartupLayout?.();
+        markFrameLayout();
       }}
     >
       {!floating && header}
