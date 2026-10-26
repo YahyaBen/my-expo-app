@@ -16,6 +16,8 @@ import { SampleRecipeRows } from '@/features/navigation/sample-recipes';
 import { HomeStoryList } from './home-story-list';
 import { HomeStackedCarousel } from './home-stacked-carousel';
 import { HomeVerificationCodeFace } from './home-verification-code-face';
+import { HomeCircularCarousel } from './home-circular-carousel';
+import { HomeThemeCanvas } from './home-theme-canvas';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -28,6 +30,8 @@ export default function HomeScreen() {
         <HomeStoryList />
         <HomeStackedCarousel />
         <HomeVerificationCodeFace />
+        <HomeCircularCarousel />
+        <HomeThemeCanvas />
       </PageSection>
       <PageSection spacing={spacing.xl}>
         <UniversalTextContent variant="label" tone="secondary" testID="home-brand">
