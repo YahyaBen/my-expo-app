@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, useWindowDimensions, type ViewInstance } from 'react-native';
 import { Image } from 'expo-image';
-import { useTranslation } from 'react-i18next';
 import {
   GestureDetector,
   GestureHandlerRootView,
   usePanGesture,
 } from 'react-native-gesture-handler';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   cancelAnimation,
   interpolate,
@@ -23,80 +21,154 @@ import { UniversalButtonContent, UniversalButton } from '../button/universal-but
 import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
 import { UniversalHost, useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
-import { radii, screenContentMaxWidth, spacing } from '@/constants/layout';
+import type { PhotoItem } from '../photo-item';
+import { radii, spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
-const photos = [1018, 1015, 1016, 1025, 1039, 1043, 1011, 1020, 1024, 1035, 1040, 1042];
-const rows = [photos.slice(0, 4), photos.slice(4, 8), photos.slice(8, 12)];
+export type IosHomeGridProps = {
+  items: readonly PhotoItem[];
+  /** Available content width in points/dp; the caller owns page padding and safe areas. */
+  width: number;
+  closeLabel: string;
+  /** Maximum columns; narrow containers reduce the count to keep native targets usable. */
+  columns?: number;
+  gap?: number;
+  borderRadius?: number;
+  dismissHint?: string;
+  onSelect?: (item: PhotoItem, index: number) => void;
+  /** Runs once when Close, drag dismissal or an accessibility dismissal is accepted. */
+  onClose?: (item: PhotoItem, index: number) => void;
+  testID?: string;
+};
+
 const spring = { duration: 400, dampingRatio: 1 };
 type Rect = { x: number; y: number; width: number; height: number };
-type Selection = { id: number; number: number; source: Rect; width: number; height: number };
-const photoUri = (id: number) => `https://picsum.photos/id/${id}/600/600`;
+type Selection = { index: number; source: Rect; width: number; height: number };
+type GridProps = IosHomeGridProps & {
+  columns: number;
+  gap: number;
+  borderRadius: number;
+  testID: string;
+};
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/ios-home-grid
-export function IosHomeGrid() {
-  const { t } = useTranslation();
-  const { width: windowWidth, fontScale } = useWindowDimensions();
-  const insets = useSafeAreaInsets();
+export function IosHomeGrid({
+  columns = 4,
+  gap = spacing.sm,
+  borderRadius = radii.card,
+  testID = 'ios-home-grid',
+  ...props
+}: IosHomeGridProps) {
+  const { fontScale } = useWindowDimensions();
   const direction = useHostLayoutDirection();
-  const width = Math.max(
-    1,
-    Math.min(windowWidth - insets.left - insets.right, screenContentMaxWidth) - spacing.lg * 2,
-  );
+  const { width, items } = props;
+  if (!Number.isFinite(width) || width <= 0 || items.length === 0) return null;
+
+  const requestedGap = Number.isFinite(gap) ? Math.max(0, gap) : spacing.sm;
+  const requestedColumns = Number.isFinite(columns) ? Math.max(1, Math.floor(columns)) : 4;
+  const fittedColumns = Math.max(1, Math.floor((width + requestedGap) / (48 + requestedGap)));
+  const columnCount = Math.min(requestedColumns, fittedColumns);
+  const safeGap = columnCount > 1 ? requestedGap : 0;
+  const safeRadius = Number.isFinite(borderRadius) ? Math.max(0, borderRadius) : radii.card;
+  // Labels can change row height; discard measured geometry when data or layout changes.
+  const layoutKey = JSON.stringify([
+    width,
+    fontScale,
+    direction,
+    columnCount,
+    safeGap,
+    safeRadius,
+    items.map((item) => [item.id, item.label]),
+  ]);
 
   return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID="home-ios-home-grid">
-      <UniversalTextContent variant="subtitle">{t('starter.homeGridTitle')}</UniversalTextContent>
-      <UniversalTextContent tone="muted">{t('starter.homeGridHint')}</UniversalTextContent>
-      <PhotoGrid key={`${width}-${fontScale}-${direction}`} width={width} />
-    </Column>
+    <PhotoGrid
+      key={layoutKey}
+      {...props}
+      columns={columnCount}
+      gap={safeGap}
+      borderRadius={safeRadius}
+      testID={testID}
+    />
   );
 }
 
-function PhotoGrid({ width }: { width: number }) {
-  const { t } = useTranslation();
+function PhotoGrid({
+  items,
+  width,
+  columns,
+  gap,
+  borderRadius,
+  closeLabel,
+  dismissHint,
+  onSelect,
+  onClose,
+  testID,
+}: GridProps) {
   const scene = useRef<ViewInstance>(null);
+  const mounted = useRef(false);
   const busy = useRef(false);
+  const closeRequested = useRef(false);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [closing, setClosing] = useState(false);
   const progress = useSharedValue(0);
   const motionEnabled = useMotionEnabled();
-  const tileSize = Math.max(1, (width - spacing.sm * 3) / 4);
+  const tileSize = Math.max(1, (width - gap * (columns - 1)) / columns);
+  const rows: (readonly PhotoItem[])[] = [];
+  for (let index = 0; index < items.length; index += columns)
+    rows.push(items.slice(index, index + columns));
+  const selectedItem = selection ? items[selection.index] : undefined;
   const gridStyle = useAnimatedStyle(() => ({
     opacity: 1 - progress.get() * 0.5,
     transform: [{ scale: motionEnabled ? 1 - progress.get() * 0.05 : 1 }],
   }));
-  const close = useCallback(() => setClosing(true), []);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      cancelAnimation(progress);
+    };
+  }, [progress]);
+
+  const close = useCallback(() => {
+    if (!selection || !selectedItem || closeRequested.current) return;
+    closeRequested.current = true;
+    setClosing(true);
+    onClose?.(selectedItem, selection.index);
+  }, [onClose, selectedItem, selection]);
   const finish = useCallback(() => {
+    if (!mounted.current) return;
     busy.current = false;
+    closeRequested.current = false;
     setSelection(null);
   }, []);
 
-  function open(id: number, number: number, rect: Rect) {
-    if (busy.current || !scene.current) return;
+  function open(index: number, rect: Rect) {
+    if (!mounted.current || busy.current || !scene.current) return;
     busy.current = true;
     scene.current.measureInWindow((x, y, sceneWidth, height) => {
-      if (!scene.current || sceneWidth <= 0 || height <= 0 || rect.width <= 0) {
+      if (!mounted.current || !scene.current || sceneWidth <= 0 || height <= 0 || rect.width <= 0) {
         busy.current = false;
         return;
       }
       progress.set(0);
       setClosing(false);
       setSelection({
-        id,
-        number,
+        index,
         source: { ...rect, x: rect.x - x, y: rect.y - y },
         width: sceneWidth,
         height,
       });
+      onSelect?.(items[index], index);
     });
   }
 
   return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth}>
+    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
-        {/* This RN boundary owns the expanding artwork overlay above the native grid. */}
+        {/* This RN boundary owns the expanding artwork above the native grid. */}
         <GestureHandlerRootView style={{ width }}>
           <View ref={scene} collapsable={false} style={{ width }}>
             <Animated.View
@@ -106,32 +178,47 @@ function PhotoGrid({ width }: { width: number }) {
               importantForAccessibility={selection ? 'no-hide-descendants' : 'auto'}
             >
               <UniversalHost>
-                <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
+                <Column spacing={gap} modifiers={nativeFillWidth}>
                   {rows.map((row, rowIndex) => (
-                    <Row key={rowIndex} spacing={spacing.sm} modifiers={nativeFillWidth}>
-                      {row.map((id, columnIndex) => (
-                        <Column key={id} modifiers={nativeRowWeight}>
-                          <PhotoTile
-                            id={id}
-                            number={rowIndex * 4 + columnIndex + 1}
-                            size={tileSize}
-                            disabled={selection !== null}
-                            onOpen={open}
-                          />
-                        </Column>
-                      ))}
+                    <Row key={rowIndex} spacing={gap} modifiers={nativeFillWidth}>
+                      {Array.from({ length: columns }, (_, columnIndex) => {
+                        const item = row[columnIndex];
+                        return (
+                          <Column
+                            key={item?.id ?? `empty-${columnIndex}`}
+                            modifiers={nativeRowWeight}
+                          >
+                            {item ? (
+                              <PhotoTile
+                                item={item}
+                                index={rowIndex * columns + columnIndex}
+                                size={tileSize}
+                                borderRadius={borderRadius}
+                                disabled={selection !== null}
+                                onOpen={open}
+                                testID={`${testID}-photo-${item.id}`}
+                              />
+                            ) : null}
+                          </Column>
+                        );
+                      })}
                     </Row>
                   ))}
                 </Column>
               </UniversalHost>
             </Animated.View>
-            {selection ? (
+            {selection && selectedItem ? (
               <ExpandedPhoto
+                item={selectedItem}
                 selection={selection}
                 progress={progress}
                 closing={closing}
+                borderRadius={borderRadius}
+                closeLabel={closeLabel}
+                dismissHint={dismissHint}
                 onClose={close}
                 onClosed={finish}
+                testID={`${testID}-expanded`}
               />
             ) : null}
           </View>
@@ -139,29 +226,32 @@ function PhotoGrid({ width }: { width: number }) {
       </RNHostView>
       <UniversalButtonContent
         variant="secondary"
-        label={t('common.close')}
+        label={closeLabel}
         onPress={close}
         disabled={!selection || closing}
-        testID="home-ios-home-grid-close"
+        testID={`${testID}-close`}
       />
     </Column>
   );
 }
 
 function PhotoTile({
-  id,
-  number,
+  item,
+  index,
   size,
+  borderRadius,
   disabled,
   onOpen,
+  testID,
 }: {
-  id: number;
-  number: number;
+  item: PhotoItem;
+  index: number;
   size: number;
+  borderRadius: number;
   disabled: boolean;
-  onOpen: (id: number, number: number, rect: Rect) => void;
+  onOpen: (index: number, rect: Rect) => void;
+  testID: string;
 }) {
-  const { t } = useTranslation();
   const image = useRef<ViewInstance>(null);
   const colors = useThemeColors(useHostColorScheme());
 
@@ -172,23 +262,21 @@ function PhotoTile({
           variant="tertiary"
           contentPadding={0}
           fullWidth
-          borderRadius={radii.card}
+          borderRadius={borderRadius}
           disabled={disabled}
-          testID={`home-ios-home-grid-photo-${id}`}
+          testID={testID}
           onPress={() =>
             image.current?.measureInWindow((x, y, width, height) =>
-              onOpen(id, number, { x, y, width, height }),
+              onOpen(index, { x, y, width, height }),
             )
           }
         >
           <Column spacing={spacing.xs} alignment="center">
             <Column style={{ width: size, height: size }} />
-            <UniversalTextContent variant="caption">
-              {t('starter.homeGridPhoto', { number })}
-            </UniversalTextContent>
+            <UniversalTextContent variant="caption">{item.label}</UniversalTextContent>
           </Column>
         </UniversalButton>
-        {/* A sibling artwork overlay lets the native button receive image-area taps. */}
+        {/* A sibling overlay keeps the native button's entire photo area tappable. */}
         <View
           ref={image}
           collapsable={false}
@@ -196,13 +284,13 @@ function PhotoTile({
           style={{ position: 'absolute', top: 0, left: 0, width: size, height: size }}
         >
           <Image
-            source={photoUri(id)}
+            source={item.source}
             contentFit="cover"
             accessible={false}
             style={{
               width: size,
               height: size,
-              borderRadius: radii.card,
+              borderRadius,
               backgroundColor: colors.surfaceVariant,
             }}
           />
@@ -213,19 +301,28 @@ function PhotoTile({
 }
 
 function ExpandedPhoto({
+  item,
   selection,
   progress,
   closing,
+  borderRadius,
+  closeLabel,
+  dismissHint,
   onClose,
   onClosed,
+  testID,
 }: {
+  item: PhotoItem;
   selection: Selection;
   progress: SharedValue<number>;
   closing: boolean;
+  borderRadius: number;
+  closeLabel: string;
+  dismissHint?: string;
   onClose: () => void;
   onClosed: () => void;
+  testID: string;
 }) {
-  const { t } = useTranslation();
   const motionEnabled = useMotionEnabled();
   const colors = useThemeColors(useHostColorScheme());
   const drag = useSharedValue(0);
@@ -268,7 +365,7 @@ function ExpandedPhoto({
     return {
       width: interpolate(p, [0, 1], [source.width, width]),
       height: interpolate(p, [0, 1], [source.height, height]),
-      borderRadius: radii.card,
+      borderRadius,
       transform: [
         { translateX: source.x * (1 - p) },
         {
@@ -285,20 +382,20 @@ function ExpandedPhoto({
         style={StyleSheet.absoluteFill}
         accessible
         accessibilityRole="image"
-        accessibilityLabel={t('starter.homeGridPhoto', { number: selection.number })}
-        accessibilityHint={t('starter.homeGridDismiss')}
-        accessibilityActions={[{ name: 'dismiss', label: t('common.close') }]}
+        accessibilityLabel={item.label}
+        accessibilityHint={dismissHint}
+        accessibilityActions={[{ name: 'dismiss', label: closeLabel }]}
         onAccessibilityAction={({ nativeEvent }) => {
           if (nativeEvent.actionName === 'dismiss') onClose();
         }}
         onAccessibilityEscape={onClose}
-        testID="home-ios-home-grid-expanded"
+        testID={testID}
       >
         <Animated.View
           style={[styles.expanded, { backgroundColor: colors.surfaceVariant }, imageStyle]}
         >
           <Image
-            source={photoUri(selection.id)}
+            source={item.source}
             contentFit="cover"
             style={StyleSheet.absoluteFill}
             accessible={false}

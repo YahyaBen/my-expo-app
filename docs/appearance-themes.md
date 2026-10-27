@@ -52,7 +52,8 @@ build; screenshot coverage and transition timing remain device-verification work
 Home retains the smaller
 [appearance canvas](../src/components/ui/theme-canvas/color-scheme-canvas.tsx)
 inside the shared [ThemeCanvas](../src/components/ui/theme-canvas/theme-canvas.tsx)
-component. Its reveal and composition contract lives in the
+component. Home passes its resolved appearance and existing preference setter;
+the reusable switch owns no saved state or demo labels. Its reveal and composition contract lives in the
 [theme-canvas skill](../.agents/skills/template-skill-ui-theme-canvas/SKILL.md).
 
 The configured root palette stays fixed. A user chooses appearance, not another

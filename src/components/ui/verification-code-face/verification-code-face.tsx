@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { Canvas, Circle, Group, Path, Skia } from '@shopify/react-native-skia';
 import Animated, {
   Easing,
@@ -10,7 +9,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Column, RNHostView, type TextInputRef } from '@expo/ui';
 import { UniversalButtonContent } from '../button/universal-button';
-import { UniversalTextContent } from '../text/universal-text';
 import { TextInput } from '../text-input/text-input';
 import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
 import { useHostColorScheme } from '../host/universal-host';
@@ -18,98 +16,136 @@ import { spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
-type FaceStatus = 'default' | 'success' | 'error';
-const codeLength = 4;
-const correctCode = '1111';
+export type VerificationCodeFaceStatus = 'default' | 'success' | 'error';
 
-// Reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/verification-code-face
-export function VerificationCodeFace() {
-  const { t } = useTranslation();
-  const [code, setCode] = useState('');
-  const inputRef = useRef<TextInputRef>(null);
-  // Preserve native editing and normalize supported numeric scripts only for comparison.
-  const digits = code.replace(/[\u0660-\u0669\u06f0-\u06f9\uff10-\uff19]/g, (digit) => {
+export type VerificationCodeFaceProps = {
+  /** Keep the raw string in the parent so native cursor/editing behavior stays intact. */
+  value: string;
+  onChangeText: (value: string) => void;
+  label: string;
+  length?: number;
+  /** Validation belongs to the caller; this controls presentation only. */
+  status?: VerificationCodeFaceStatus;
+  helperText?: string;
+  resetLabel?: string;
+  faceSize?: number;
+  disabled?: boolean;
+  /** Called for a new complete numeric entry, with supported digits normalized to ASCII. */
+  onComplete?: (code: string) => void;
+  testID?: string;
+};
+
+function normalizeDigits(value: string) {
+  return value.replace(/[\u0660-\u0669\u06f0-\u06f9\uff10-\uff19]/g, (digit) => {
     const point = digit.charCodeAt(0);
     const zero = point >= 0xff10 ? 0xff10 : point >= 0x06f0 ? 0x06f0 : 0x0660;
     return String(point - zero);
   });
-  const status: FaceStatus = /[^0-9]/.test(digits)
-    ? 'error'
-    : digits.length < codeLength
-      ? 'default'
-      : digits === correctCode
-        ? 'success'
-        : 'error';
+}
+
+// Reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/verification-code-face
+export function VerificationCodeFace({
+  value,
+  onChangeText,
+  label,
+  length = 4,
+  status = 'default',
+  helperText,
+  resetLabel,
+  faceSize = 96,
+  disabled = false,
+  onComplete,
+  testID = 'verification-code-face',
+}: VerificationCodeFaceProps) {
+  const inputRef = useRef<TextInputRef>(null);
+  const codeLength = Number.isFinite(length) ? Math.max(1, Math.trunc(length)) : 4;
+  const size = Number.isFinite(faceSize) ? Math.max(1, faceSize) : 96;
+  const digits = normalizeDigits(value);
+  const progress = Math.min(digits.replace(/[^0-9]/g, '').length / codeLength, 1);
 
   return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID="home-verification-face">
-      <UniversalTextContent variant="subtitle">
-        {t('starter.verificationFaceTitle')}
-      </UniversalTextContent>
-      <UniversalTextContent tone="muted">{t('starter.verificationFaceHint')}</UniversalTextContent>
+    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <Column alignment="center" modifiers={nativeFillWidthCenter}>
         <RNHostView matchContents>
           <View
-            style={styles.artwork}
+            style={[styles.artwork, { width: size * 1.5, height: size * 1.5 }]}
             pointerEvents="none"
             accessible={false}
             accessibilityElementsHidden
             importantForAccessibility="no-hide-descendants"
           >
-            <VerificationFace length={digits.replace(/[^0-9]/g, '').length} status={status} />
+            <VerificationFace
+              progress={progress}
+              status={status}
+              size={size}
+              testID={`${testID}-artwork`}
+            />
           </View>
         </RNHostView>
       </Column>
       <TextInput
         ref={inputRef}
-        value={code}
+        value={value}
         onChangeText={(text) => {
-          setCode(text);
-          if (text.length === codeLength) inputRef.current?.blur();
+          if (disabled) return;
+          // Return the original text; normalizing the controlled value here can break native edits.
+          onChangeText(text);
+          const normalized = normalizeDigits(text);
+          if (normalized.length === codeLength && /^[0-9]+$/.test(normalized)) {
+            inputRef.current?.blur();
+            if (text !== value) onComplete?.(normalized);
+          }
         }}
-        label={t('starter.verificationFaceLabel')}
-        placeholder="0000"
+        label={label}
+        placeholder={'0'.repeat(codeLength)}
         keyboardType="number-pad"
         autoComplete="one-time-code"
         autoCorrect={false}
         autoCapitalize="none"
         selectTextOnFocus
         maxLength={codeLength}
+        disabled={disabled}
         textAlign="center"
         textStyle={{ fontSize: 32, letterSpacing: spacing.md }}
         style={{ paddingVertical: spacing.md }}
         status={status}
-        helperText={
-          status === 'default'
-            ? undefined
-            : t(
-                status === 'success'
-                  ? 'starter.verificationFaceSuccess'
-                  : 'starter.verificationFaceError',
-              )
-        }
+        helperText={helperText}
         onSubmitEditing={() => inputRef.current?.blur()}
-        testID="home-verification-face-input"
+        testID={`${testID}-input`}
       />
-      <UniversalButtonContent
-        variant="secondary"
-        label={t('starter.verificationFaceReset')}
-        onPress={() => {
-          setCode('');
-          inputRef.current?.blur();
-        }}
-        fullWidth
-        testID="home-verification-face-reset"
-      />
+      {resetLabel ? (
+        <UniversalButtonContent
+          variant="secondary"
+          label={resetLabel}
+          onPress={() => {
+            if (disabled) return;
+            onChangeText('');
+            inputRef.current?.blur();
+          }}
+          disabled={disabled}
+          fullWidth
+          testID={`${testID}-reset`}
+        />
+      ) : null}
     </Column>
   );
 }
 
-function VerificationFace({ length, status }: { length: number; status: FaceStatus }) {
+function VerificationFace({
+  progress: inputProgress,
+  status,
+  size,
+  testID,
+}: {
+  progress: number;
+  status: VerificationCodeFaceStatus;
+  size: number;
+  testID: string;
+}) {
   const colors = useThemeColors(useHostColorScheme());
   const motionEnabled = useMotionEnabled();
   const progress = useDerivedValue(() =>
-    withTiming(length / codeLength, {
+    withTiming(inputProgress, {
       duration: motionEnabled ? 150 : 0,
       easing: Easing.bezier(0.23, 1, 0.32, 1),
     }),
@@ -141,14 +177,14 @@ function VerificationFace({ length, status }: { length: number; status: FaceStat
 
   return (
     <Animated.View
-      testID="home-verification-face-artwork"
+      testID={testID}
       style={[
-        styles.tile,
+        { width: size, height: size, borderRadius: size / 4 },
         {
           backgroundColor: colors.primary,
           transform: [
             { perspective: 300 },
-            { rotateY: `${motionEnabled ? (length / codeLength) * 45 - 22.5 : 0}deg` },
+            { rotateY: `${motionEnabled ? inputProgress * 45 - 22.5 : 0}deg` },
             { rotateX: `${motionEnabled ? -22.5 : 0}deg` },
           ],
           transitionProperty: 'transform',
@@ -157,26 +193,29 @@ function VerificationFace({ length, status }: { length: number; status: FaceStat
         },
       ]}
     >
-      <Canvas style={styles.tile} pointerEvents="none" accessible={false}>
-        <Group transform={faceTransform}>
-          <Path
-            path={eyebrows}
-            color={colors.onPrimary}
-            style="stroke"
-            strokeWidth={1.5}
-            strokeCap="round"
-          />
-          <Circle cx={35} cy={44} r={10} color={colors.onPrimary} />
-          <Circle cx={61} cy={44} r={10} color={colors.onPrimary} />
-          <Circle cx={pupilLeft} cy={47} r={pupilRadius} color={colors.primary} />
-          <Circle cx={pupilRight} cy={47} r={pupilRadius} color={colors.primary} />
-          <Path
-            path={mouth}
-            color={colors.onPrimary}
-            style="stroke"
-            strokeWidth={2}
-            strokeCap="round"
-          />
+      <Canvas style={{ width: size, height: size }} pointerEvents="none" accessible={false}>
+        {/* Keep the illustration's 96-unit coordinate system at every requested size. */}
+        <Group transform={[{ scale: size / 96 }]}>
+          <Group transform={faceTransform}>
+            <Path
+              path={eyebrows}
+              color={colors.onPrimary}
+              style="stroke"
+              strokeWidth={1.5}
+              strokeCap="round"
+            />
+            <Circle cx={35} cy={44} r={10} color={colors.onPrimary} />
+            <Circle cx={61} cy={44} r={10} color={colors.onPrimary} />
+            <Circle cx={pupilLeft} cy={47} r={pupilRadius} color={colors.primary} />
+            <Circle cx={pupilRight} cy={47} r={pupilRadius} color={colors.primary} />
+            <Path
+              path={mouth}
+              color={colors.onPrimary}
+              style="stroke"
+              strokeWidth={2}
+              strokeCap="round"
+            />
+          </Group>
         </Group>
       </Canvas>
     </Animated.View>
@@ -184,6 +223,5 @@ function VerificationFace({ length, status }: { length: number; status: FaceStat
 }
 
 const styles = StyleSheet.create({
-  artwork: { width: 144, height: 144, alignItems: 'center', justifyContent: 'center' },
-  tile: { width: 96, height: 96, borderRadius: spacing.xl },
+  artwork: { alignItems: 'center', justifyContent: 'center' },
 });

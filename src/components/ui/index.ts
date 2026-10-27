@@ -42,6 +42,7 @@ export * from './page/page-motion-overlay';
 export * from './page/page-screen';
 export * from './page/page-section';
 export * from './picker/picker';
+export type { PhotoItem } from './photo-item';
 export * from './refreshable-scroll-view/refreshable-scroll-view';
 export * from './refreshable-scroll-view/refreshable-scroll-view.types';
 export * from './segmented-control/segmented-control';

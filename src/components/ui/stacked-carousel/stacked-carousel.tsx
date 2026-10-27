@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Column, RNHostView, Row } from '@expo/ui';
 import Animated, {
   Extrapolation,
@@ -16,31 +14,61 @@ import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
 import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
 
-import { radii, screenContentMaxWidth, spacing } from '@/constants/layout';
+import { radii, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
-const photos = [1018, 1015, 1016, 1025, 1039, 1043];
+import type { PhotoItem } from '../photo-item';
+
+export type StackedCarouselProps = {
+  /** Unique, stable IDs; an empty list renders nothing. */
+  items: readonly PhotoItem[];
+  /** Available viewport dimensions in native points/dp, supplied by the parent. */
+  width: number;
+  height?: number;
+  itemWidth?: number;
+  accessibilityLabel: string;
+  /** Format a zero-based index for both the visible caption and screen reader. */
+  getPositionLabel?: (index: number, total: number) => string;
+  /** Fires once when a user selects a different item, never on initial render. */
+  onIndexChange?: (index: number, item: PhotoItem) => void;
+  showIndicators?: boolean;
+  testID?: string;
+};
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/stacked-carousel
-export function StackedCarousel() {
-  const { t } = useTranslation();
-  const testID = 'home-stacked-carousel';
-  const title = t('starter.stackedCarouselTitle');
+export function StackedCarousel(props: StackedCarouselProps) {
+  if (props.items.length === 0 || !Number.isFinite(props.width) || props.width <= 0) return null;
+  // A changed data order starts a fresh selection; resizing keeps the current item.
+  return (
+    <StackedCarouselContent key={JSON.stringify(props.items.map((item) => item.id))} {...props} />
+  );
+}
 
-  const { width: windowWidth } = useWindowDimensions();
-  const insets = useSafeAreaInsets();
+function StackedCarouselContent({
+  items,
+  width: availableWidth,
+  height: requestedHeight,
+  itemWidth: requestedItemWidth,
+  showIndicators = true,
+  accessibilityLabel,
+  getPositionLabel,
+  onIndexChange,
+  testID = 'stacked-carousel',
+}: StackedCarouselProps) {
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
   const colors = useThemeColors(useHostColorScheme());
-  const width = Math.max(
+  const width = Math.max(1, availableWidth);
+  const cardWidth = Math.max(
     1,
-    Math.min(windowWidth - insets.left - insets.right, screenContentMaxWidth) - spacing.lg * 2,
+    Math.min(width, requestedItemWidth ?? Math.min(width - spacing.sm * 2, 320)),
   );
-
-  const cardWidth = Math.max(1, Math.min(width - spacing.sm * 2, 320));
-  const cardHeight = cardWidth * 0.625;
-  const height = cardHeight + spacing.xl * 3;
+  const height = Math.max(
+    spacing.xl * 3 + 1,
+    requestedHeight ?? cardWidth * 0.625 + spacing.xl * 3,
+  );
+  const cardHeight = height - spacing.xl * 3;
   const scrollRef = useRef<Animated.ScrollView>(null);
   const selectedIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -57,29 +85,34 @@ export function StackedCarousel() {
     scrollOffset.set(x);
   }, [cardWidth, rtl, scrollOffset]);
 
-  function selectPhoto(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, photos.length - 1));
+  function updateSelection(index: number) {
+    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
+    if (nextIndex === selectedIndex.current) return;
     selectedIndex.current = nextIndex;
     setActiveIndex(nextIndex);
+    onIndexChange?.(nextIndex, items[nextIndex]);
+  }
+
+  function selectPhoto(index: number) {
+    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
+    updateSelection(nextIndex);
     scrollRef.current?.scrollTo({ x: nextIndex * cardWidth, animated: !reducedMotion });
   }
+  const positionLabel = getPositionLabel?.(activeIndex, items.length);
 
   return (
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
-      <UniversalTextContent variant="subtitle">{title}</UniversalTextContent>
-      <UniversalTextContent tone="muted">{t('starter.storyListHint')}</UniversalTextContent>
-
       <RNHostView matchContents>
         <View
           style={{ width, height, overflow: 'hidden', direction: 'ltr' }}
           accessible
           accessibilityRole="adjustable"
-          accessibilityLabel={title}
+          accessibilityLabel={accessibilityLabel}
           accessibilityValue={{
             min: 1,
-            max: photos.length,
+            max: items.length,
             now: activeIndex + 1,
-            text: t('starter.storyListPosition', { number: activeIndex + 1, total: photos.length }),
+            text: positionLabel ?? items[activeIndex].label,
           }}
           accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
           onAccessibilityAction={({ nativeEvent }) => {
@@ -92,15 +125,15 @@ export function StackedCarousel() {
           <Animated.ScrollView
             ref={scrollRef}
             horizontal
+            scrollEnabled={items.length > 1}
             accessible={false}
             onScroll={onScroll}
             onMomentumScrollEnd={({ nativeEvent }) => {
               const index = Math.max(
                 0,
-                Math.min(Math.round(nativeEvent.contentOffset.x / cardWidth), photos.length - 1),
+                Math.min(Math.round(nativeEvent.contentOffset.x / cardWidth), items.length - 1),
               );
-              selectedIndex.current = index;
-              setActiveIndex(index);
+              updateSelection(index);
             }}
             snapToInterval={cardWidth}
             decelerationRate="fast"
@@ -112,13 +145,14 @@ export function StackedCarousel() {
             style={[styles.scroll, rtl && styles.mirrored]}
             testID={`${testID}-scroll`}
           >
-            <View style={{ width: cardWidth * (photos.length - 1) + width, height }} />
+            <View style={{ width: cardWidth * (items.length - 1) + width, height }} />
           </Animated.ScrollView>
           <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-            {photos.map((id, index) => (
+            {items.map((item, index) => (
               <PhotoCard
-                key={id}
-                id={id}
+                key={item.id}
+                item={item}
+                count={items.length}
                 index={index}
                 width={cardWidth}
                 height={cardHeight}
@@ -126,37 +160,42 @@ export function StackedCarousel() {
                 scrollOffset={scrollOffset}
                 rtl={rtl}
                 reducedMotion={reducedMotion}
-                testID={`${testID}-photo-${id}`}
+                testID={`${testID}-photo-${item.id}`}
               />
             ))}
           </View>
         </View>
       </RNHostView>
-      <Column alignment="center" modifiers={nativeFillWidthCenter}>
-        <Row spacing={spacing.sm}>
-          {photos.map((id, index) => (
-            <Column
-              key={id}
-              testID={`${testID}-dot-${index}`}
-              style={{
-                width: spacing.sm,
-                height: spacing.sm,
-                borderRadius: radii.pill,
-                backgroundColor: index === activeIndex ? colors.tint : colors.surfaceVariant,
-              }}
-            />
-          ))}
-        </Row>
-      </Column>
-      <UniversalTextContent variant="caption" tone="muted" testID={`${testID}-position`}>
-        {t('starter.storyListPosition', { number: activeIndex + 1, total: photos.length })}
-      </UniversalTextContent>
+      {showIndicators ? (
+        <Column alignment="center" modifiers={nativeFillWidthCenter}>
+          <Row spacing={spacing.sm}>
+            {items.map((item, index) => (
+              <Column
+                key={item.id}
+                testID={`${testID}-dot-${index}`}
+                style={{
+                  width: spacing.sm,
+                  height: spacing.sm,
+                  borderRadius: radii.pill,
+                  backgroundColor: index === activeIndex ? colors.tint : colors.surfaceVariant,
+                }}
+              />
+            ))}
+          </Row>
+        </Column>
+      ) : null}
+      {positionLabel ? (
+        <UniversalTextContent variant="caption" tone="muted" testID={`${testID}-position`}>
+          {positionLabel}
+        </UniversalTextContent>
+      ) : null}
     </Column>
   );
 }
 
 function PhotoCard({
-  id,
+  item,
+  count,
   index,
   width,
   height,
@@ -166,7 +205,8 @@ function PhotoCard({
   reducedMotion,
   testID,
 }: {
-  id: number;
+  item: PhotoItem;
+  count: number;
   index: number;
   width: number;
   height: number;
@@ -222,7 +262,7 @@ function PhotoCard({
           right: rtl ? insetX : undefined,
           width: width,
           height: height,
-          zIndex: photos.length - index,
+          zIndex: count - index,
           borderRadius: radii.card,
           borderWidth: 0,
           borderColor: colors.background,
@@ -233,7 +273,7 @@ function PhotoCard({
       ]}
     >
       <Image
-        source={{ uri: `https://picsum.photos/id/${id}/600/800` }}
+        source={item.source}
         contentFit="cover"
         cachePolicy="memory-disk"
         accessible={false}

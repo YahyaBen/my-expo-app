@@ -16,23 +16,35 @@ import { useMeasuredWidth } from '@/hooks/use-measured-width';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
-const height = 160;
+export type ColorSchemeCanvasProps = {
+  /** Omit to follow the owning Host; supplying a value affects only this artwork. */
+  colorScheme?: 'light' | 'dark';
+  height?: number;
+  testID?: string;
+};
 
 /** Decorative artwork follows its Host; the appearance control owns preference changes. */
-export function ColorSchemeCanvas({ testID = 'color-scheme-canvas' }: { testID?: string }) {
+export function ColorSchemeCanvas({
+  colorScheme,
+  height: requestedHeight = 160,
+  testID = 'color-scheme-canvas',
+}: ColorSchemeCanvasProps) {
   const [width, setWidth] = useMeasuredWidth();
-  const dark = useHostColorScheme() === 'dark';
+  const height = Math.max(1, requestedHeight);
+  const dark = useHostColorScheme(colorScheme) === 'dark';
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const motionEnabled = useMotionEnabled();
   const lightColors = useThemeColors('light');
   const darkColors = useThemeColors('dark');
   const baseDark = useSharedValue(dark);
   const radius = useSharedValue(0);
+  // Keep the illustration and reveal origin inside small, consumer-sized canvases.
+  const artworkScale = Math.min(1, width / 96, height / 96);
+  const originX = rtl ? Math.min(spacing.xl, width / 2) : width - Math.min(spacing.xl, width / 2);
+  const originY = Math.min(spacing.xl, height / 2);
   const darkOpacity = useDerivedValue(() => (baseDark.get() ? 1 : 0));
   const clip = useDerivedValue(() =>
-    Skia.PathBuilder.Make()
-      .addCircle(rtl ? spacing.xl : width - spacing.xl, spacing.xl, radius.get())
-      .build(),
+    Skia.PathBuilder.Make().addCircle(originX, originY, radius.get()).build(),
   );
 
   useEffect(() => {
@@ -43,7 +55,7 @@ export function ColorSchemeCanvas({ testID = 'color-scheme-canvas' }: { testID?:
     } else {
       radius.set(
         withTiming(
-          Math.hypot(width - spacing.xl, height - spacing.xl),
+          Math.hypot(Math.max(originX, width - originX), Math.max(originY, height - originY)),
           { duration: 300, easing: Easing.bezier(0.23, 1, 0.32, 1) },
           (finished) => {
             if (!finished) return;
@@ -54,27 +66,32 @@ export function ColorSchemeCanvas({ testID = 'color-scheme-canvas' }: { testID?:
       );
     }
     return () => cancelAnimation(radius);
-  }, [dark, width, rtl, motionEnabled, baseDark, radius]);
+  }, [dark, width, height, originX, originY, motionEnabled, baseDark, radius]);
 
   const lightScene = (
     <Group>
       <Rect x={0} y={0} width={width} height={height} color={lightColors.background} />
-      <Circle cx={width / 2} cy={height / 2} r={30} color={lightColors.warning} />
+      <Circle cx={width / 2} cy={height / 2} r={30 * artworkScale} color={lightColors.warning} />
       <Circle
         cx={width / 2}
         cy={height / 2}
-        r={38}
+        r={38 * artworkScale}
         color={lightColors.warning}
         style="stroke"
-        strokeWidth={2}
+        strokeWidth={2 * artworkScale}
       />
     </Group>
   );
   const darkScene = (
     <Group>
       <Rect x={0} y={0} width={width} height={height} color={darkColors.background} />
-      <Circle cx={width / 2} cy={height / 2} r={32} color={darkColors.text} />
-      <Circle cx={width / 2 + 15} cy={height / 2 - 12} r={28} color={darkColors.background} />
+      <Circle cx={width / 2} cy={height / 2} r={32 * artworkScale} color={darkColors.text} />
+      <Circle
+        cx={width / 2 + 15 * artworkScale}
+        cy={height / 2 - 12 * artworkScale}
+        r={28 * artworkScale}
+        color={darkColors.background}
+      />
     </Group>
   );
 

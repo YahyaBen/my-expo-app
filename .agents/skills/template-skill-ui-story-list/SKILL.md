@@ -1,24 +1,42 @@
 ---
 name: template-skill-ui-story-list
-description: Compose overlapping photo stories with snap selection and native accessibility.
+description: Compose a caller-configured native photo carousel with overlapping-card motion.
 ---
 
 # Story list
 
-Import `StoryList` from `@components/ui` inside an existing native Host.
-[Source](../../../src/components/ui/story-list/story-list.tsx) owns the Picsum
-starter photos, overlapping-card transforms, labels and selectors.
+Import `StoryList`, `StoryListProps` and `PhotoItem` from `@components/ui`
+inside an existing native Host.
+[Source](../../../src/components/ui/story-list/story-list.tsx) owns
+presentation; the caller owns images, translated labels, data and surrounding layout.
 
-- Use page-width content: card geometry follows the window, safe areas and shared
-  page spacing rather than an arbitrary narrow parent.
-- Keep native controls/text around the RN artwork/scroll boundary.
-- Continuous scroll offset stays on the UI runtime. React updates selection
-  only when scrolling settles or an accessibility action selects a photo.
-- Preserve snap scrolling, overlapping-card transforms, physical LTR scroll
-  coordinates and explicit RTL mirroring.
-- Restore the selected photo after width/direction changes and retain adjustable
-  increment/decrement actions.
-- Reduced motion uses the simpler fade. Keep helpers within this family.
+## Props
 
-Use [native stories](../../../.rnstorybook/stories/components/story-list.stories.tsx)
-to verify swiping, accessible selection, live RTL, resizing and both appearances.
+- Required: `items: readonly PhotoItem[]`, `width: number`,
+  `accessibilityLabel: string`. Items need unique stable string IDs, an Expo
+  Image source (URI, object or bundled asset number) and a translated label.
+- `itemWidth` changes the card width; `height` is the artwork viewport height. Cards default to 78% of the supplied width.
+- `getPositionLabel(index, total)` formats a zero-based index for the optional
+  caption and spoken value. Without it, accessibility uses the item's label.
+- `onIndexChange(index, item)` runs once for a changed user selection. Initial
+  render, resizing, identical selections and dataset resets do not emit events.
+- `testID` defaults to `story-list`. Caller-supplied prefixes identify instances.
+
+## State and boundaries
+
+- Empty data or a nonpositive/nonfinite width renders nothing. Ordered ID changes reset selection to the first
+  item; source/label updates under the same IDs preserve selection. Width and
+  direction changes keep the current photo aligned.
+- The parent supplies available content width in points/dp after padding/safe
+  areas. The component makes no screen-width assumptions and adds no headings.
+- This is for small visual collections; all images render. Continuous offset
+  and transforms stay on the UI runtime; React handles settled selection only.
+- Preserve snap scrolling, physical LTR scroll coordinates with explicit RTL
+  mirroring, adjustable accessibility actions, theme and reduced-motion behavior.
+- Keep native text/controls around the RN artwork boundary. UI files contain no
+  Picsum fixtures, translations, feature state, navigation or public-barrel imports.
+
+[Native stories](../../../.rnstorybook/stories/components/story-list.stories.tsx)
+exercise caller data, sizes, selection callbacks, replacement/empty/single-item
+data, RTL and reduced motion. Verify scrolling, spoken selection and resizing
+on both native platforms; registration is not device verification.

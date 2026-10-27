@@ -27,14 +27,31 @@ const AppearanceControlContext = createContext<{
   disabled: boolean;
 } | null>(null);
 
-export function ColorSchemeTransitionControl() {
+export function ColorSchemeTransitionControl({
+  testID = 'color-scheme-transition-control',
+}: {
+  testID?: string;
+}) {
   const control = useContext(AppearanceControlContext);
   if (!control) throw new Error('ColorSchemeTransitionControl requires ColorSchemeTransition.');
-  return <ColorSchemeControl {...control} />;
+  return <ColorSchemeControl {...control} testID={testID} />;
 }
 
+export type ColorSchemeTransitionProps = {
+  children: ReactNode;
+  /** Reveal time in milliseconds; reduced motion still applies the preference immediately. */
+  duration?: number;
+  testID?: string;
+  revealTestID?: string;
+};
+
 /** Reveal live screen content beneath a temporary image of its previous appearance. */
-export function ColorSchemeTransition({ children }: { children: ReactNode }) {
+export function ColorSchemeTransition({
+  children,
+  duration = 300,
+  testID = 'color-scheme-transition',
+  revealTestID = `${testID}-reveal`,
+}: ColorSchemeTransitionProps) {
   const { colorScheme, setColorScheme, appearanceReady } = useThemeSettings();
   const motionEnabled = useMotionEnabled();
   const view = useRef<ViewInstance>(null);
@@ -85,7 +102,7 @@ export function ColorSchemeTransition({ children }: { children: ReactNode }) {
           withTiming(
             Math.hypot(snapshot.width, snapshot.height) / 2,
             {
-              duration: 300,
+              duration: Math.max(0, duration),
               easing: Easing.bezier(0.23, 1, 0.32, 1),
             },
             (finished) => {
@@ -100,7 +117,7 @@ export function ColorSchemeTransition({ children }: { children: ReactNode }) {
       cancelAnimationFrame(revealFrame);
       cancelAnimation(radius);
     };
-  }, [snapshot, motionEnabled, setColorScheme, radius, finish]);
+  }, [snapshot, motionEnabled, duration, setColorScheme, radius, finish]);
 
   async function changeScheme(next: ColorSchemePreference) {
     if (busy.current || !appearanceReady || next === colorScheme) return;
@@ -166,7 +183,7 @@ export function ColorSchemeTransition({ children }: { children: ReactNode }) {
             finish();
           }
         }}
-        testID="app-settings-theme-transition"
+        testID={testID}
       >
         {children}
         {snapshot ? (
@@ -177,7 +194,7 @@ export function ColorSchemeTransition({ children }: { children: ReactNode }) {
             accessible={false}
             accessibilityElementsHidden
             importantForAccessibility="no-hide-descendants"
-            testID="app-settings-theme-reveal"
+            testID={revealTestID}
           >
             <Group clip={clip} invertClip>
               <Image image={snapshot.image} x={0} y={0} width={width} height={height} fit="fill" />

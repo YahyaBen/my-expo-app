@@ -1,24 +1,42 @@
 ---
 name: template-skill-ui-circular-carousel
-description: Compose a circular photo carousel with native scale selection and arc motion.
+description: Compose a caller-configured native photo carousel with circular clipping and arc motion.
 ---
 
 # Circular carousel
 
-Import `CircularCarousel` from `@components/ui` inside an existing native Host.
-[Source](../../../src/components/ui/circular-carousel/circular-carousel.tsx)
-owns the Picsum starter photos, arc transforms and native Scale switch.
+Import `CircularCarousel`, `CircularCarouselProps` and `PhotoItem` from `@components/ui`
+inside an existing native Host.
+[Source](../../../src/components/ui/circular-carousel/circular-carousel.tsx) owns
+presentation; the caller owns images, translated labels, data and surrounding layout.
 
-- Use page-width content: geometry derives from the window, safe areas and shared
-  page spacing rather than an arbitrary narrow parent.
-- Keep snap scrolling, continuous offset and scale interpolation on the UI runtime.
-  Native controls/text surround the RN artwork/scroll boundary.
-- Preserve circular clipping, arc/opacity interpolation and optional spring scale.
-- Keep adjustable accessibility actions and selected-photo restoration after
-  width/direction changes. RTL mirrors physical scrolling and card placement.
-- Reduced motion uses the flat strip and disables optional scaling.
-- Keep implementation helpers and existing selectors within this family.
+## Props
 
-Use [native stories](../../../.rnstorybook/stories/components/circular-carousel.stories.tsx)
-to verify Scale activation, swiping, accessibility selection, resizing,
-reduced motion, light/dark and live RTL.
+- Required: `items: readonly PhotoItem[]`, `width: number`,
+  `accessibilityLabel: string`. Items need unique stable string IDs, an Expo
+  Image source (URI, object or bundled asset number) and a translated label.
+- `itemSize` changes the image step/diameter; `height` is the artwork viewport height. `scaleEnabled` defaults to false; the caller owns any Scale switch.
+- `getPositionLabel(index, total)` formats a zero-based index for the optional
+  caption and spoken value. Without it, accessibility uses the item's label.
+- `onIndexChange(index, item)` runs once for a changed user selection. Initial
+  render, resizing, identical selections and dataset resets do not emit events.
+- `testID` defaults to `circular-carousel`. Caller-supplied prefixes identify instances.
+
+## State and boundaries
+
+- Empty data or a nonpositive/nonfinite width renders nothing. Ordered ID changes reset selection to the first
+  item; source/label updates under the same IDs preserve selection. Width and
+  direction changes keep the current photo aligned.
+- The parent supplies available content width in points/dp after padding/safe
+  areas. The component makes no screen-width assumptions and adds no headings.
+- This is for small visual collections; all images render. Continuous offset
+  and transforms stay on the UI runtime; React handles settled selection only.
+- Preserve snap scrolling, physical LTR scroll coordinates with explicit RTL
+  mirroring, adjustable accessibility actions, theme and reduced-motion behavior.
+- Keep native text/controls around the RN artwork boundary. UI files contain no
+  Picsum fixtures, translations, feature state, navigation or public-barrel imports.
+
+[Native stories](../../../.rnstorybook/stories/components/circular-carousel.stories.tsx)
+exercise caller data, sizes, selection callbacks, replacement/empty/single-item
+data, RTL and reduced motion. Verify scrolling, spoken selection and resizing
+on both native platforms; registration is not device verification.

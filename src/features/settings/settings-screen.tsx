@@ -95,7 +95,10 @@ export function SettingsPage({
     />
   );
   return (
-    <ColorSchemeTransition>
+    <ColorSchemeTransition
+      testID="app-settings-theme-transition"
+      revealTestID="app-settings-theme-reveal"
+    >
       <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
         <SettingsViewport tab={tab}>
           <UniversalHost
@@ -135,7 +138,7 @@ export function SettingsPage({
                   <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
                     <Text>{t('common.colorScheme')}</Text>
                   </Column>
-                  <ColorSchemeTransitionControl />
+                  <ColorSchemeTransitionControl testID="app-settings-color-scheme-picker" />
                 </Row>
                 {design.header.artwork ? (
                   <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>

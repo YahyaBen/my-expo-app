@@ -1,32 +1,37 @@
-import { useTranslation } from 'react-i18next';
 import { Column } from '@expo/ui';
 import { ColorSchemeCanvas } from './color-scheme-canvas';
 import { Switch } from '../switch/switch';
-import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillWidth } from '../native/native-fill-width';
-import { useHostColorScheme } from '../host/universal-host';
 import { spacing } from '@/constants/layout';
-import { useThemeSettings } from '@/context/theme.context';
 
-export function ThemeCanvas() {
-  const { t } = useTranslation();
-  const dark = useHostColorScheme() === 'dark';
-  const { setColorScheme, appearanceReady } = useThemeSettings();
+export type ThemeCanvasProps = {
+  colorScheme: 'light' | 'dark';
+  onColorSchemeChange: (colorScheme: 'light' | 'dark') => void;
+  label: string;
+  disabled?: boolean;
+  height?: number;
+  testID?: string;
+};
 
+/** Controlled native content: the caller owns labels, appearance and persistence. */
+export function ThemeCanvas({
+  colorScheme,
+  onColorSchemeChange,
+  label,
+  disabled = false,
+  height = 160,
+  testID = 'theme-canvas',
+}: ThemeCanvasProps) {
   return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID="home-theme-canvas">
-      <UniversalTextContent variant="subtitle">
-        {t('starter.themeCanvasTitle')}
-      </UniversalTextContent>
-      <UniversalTextContent tone="muted">{t('starter.themeCanvasHint')}</UniversalTextContent>
+    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <Switch
-        label={t('common.darkMode')}
-        value={dark}
-        onValueChange={(enabled) => setColorScheme(enabled ? 'dark' : 'light')}
-        disabled={!appearanceReady}
-        testID="home-theme-canvas-switch"
+        label={label}
+        value={colorScheme === 'dark'}
+        onValueChange={(enabled) => onColorSchemeChange(enabled ? 'dark' : 'light')}
+        disabled={disabled}
+        testID={`${testID}-switch`}
       />
-      <ColorSchemeCanvas testID="home-theme-canvas-artwork" />
+      <ColorSchemeCanvas colorScheme={colorScheme} height={height} testID={`${testID}-artwork`} />
     </Column>
   );
 }

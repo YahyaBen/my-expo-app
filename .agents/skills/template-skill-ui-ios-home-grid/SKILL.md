@@ -1,26 +1,45 @@
 ---
 name: template-skill-ui-ios-home-grid
-description: Compose a native photo grid with measured expansion and drag dismissal.
+description: Compose a caller-configured native photo grid with measured expansion and drag dismissal.
 ---
 
 # Photo home grid
 
-Import `IosHomeGrid` from `@components/ui` inside an existing native Host.
-[Source](../../../src/components/ui/ios-home-grid/ios-home-grid.tsx) owns the
-four-column Picsum starter grid on iOS and Android.
+Import `IosHomeGrid`, `IosHomeGridProps` and `PhotoItem` from `@components/ui`
+inside an existing native Host. [Source](../../../src/components/ui/ios-home-grid/ios-home-grid.tsx)
+owns presentation on iOS and Android; callers own photo data and translated text.
 
-- Native buttons own tile/Close activation. Keep photo artwork as a
-  pointer-transparent sibling of its tile button: an RN bridge inside the native
-  button label can consume photo-area taps on Android.
-- Measure the tapped photo and scene in window coordinates so expansion follows
-  the actual LTR/RTL layout. Keep the local `GestureHandlerRootView`.
-- Preserve spring return, downward distance/velocity dismissal and cancelled-drag
-  reset. Hide/disable the underlying grid while expanded.
-- Retain the named Close action, accessibility dismiss action and escape handler.
-- Width, text-scale and direction changes reset selection. Reduced motion applies
-  state without zoom or drag transforms.
-- Keep helpers within this family and preserve public exports/selectors.
+## Props
 
-Use [native stories](../../../.rnstorybook/stories/components/ios-home-grid.stories.tsx)
-to verify photo/label edge taps, different source tiles, Close, short/cancelled
-drags, drag dismissal, large text and live RTL on both platforms.
+- Required: `items: readonly PhotoItem[]`, `width: number`, `closeLabel: string`.
+  Each item has a unique stable string `id`, an Expo Image `source` (URI, source
+  object or bundled asset number), and a translated `label`.
+- Optional: `columns` (maximum, default 4), `gap` (8), `borderRadius` (16),
+  `dismissHint`, `onSelect(item, index)`, `onClose(item, index)`, and `testID`
+  (default `ios-home-grid`). Width is content width in points/dp; the caller owns
+  surrounding padding and safe areas. Narrow widths reduce columns to keep
+  native targets usable. Empty data or nonpositive/nonfinite width renders nothing.
+- `onSelect` runs after a valid measured expansion is accepted. `onClose` runs
+  once when a Close, downward drag or accessibility dismissal is accepted.
+  These are action callbacks, never render/effect notifications.
+
+## State and native boundaries
+
+- Ordered item IDs/labels, width, columns, gap, radius, font scale or direction changes
+  remount the internal scene and cancel stale expansion. This reset does not emit
+  `onClose`. Labels join the key because wrapping can change row height. Source
+  updates with unchanged IDs/labels use current data while expanded.
+- Native buttons own tile/Close activation. Keep artwork as a pointer-transparent
+  sibling: an RN bridge inside a native button label can consume Android photo taps.
+- Measure photo/scene in window coordinates for LTR/RTL expansion. Preserve the
+  local gesture root, async measurement/unmount guards and duplicate-close guard.
+- Keep spring return, downward distance/velocity dismissal and cancelled-drag
+  reset. Hide/disable the underlying grid while expanded. Retain named Close,
+  accessibility dismissal and escape. Reduced motion skips zoom/drag transforms.
+- Keep helpers within the family. The component has no Picsum fixture, screen
+  heading, app navigation, translations or preference persistence.
+
+[Native stories](../../../.rnstorybook/stories/components/ios-home-grid.stories.tsx)
+exercise custom data/labels/width, callbacks, replacement while expanded, empty
+and one-item data, and a partial three-column row. Verify native edge taps,
+short/cancelled drags, large text, live RTL and both appearances on devices.
