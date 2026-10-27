@@ -4,9 +4,9 @@ The source now targets SDK 58; see the
 [current SDK baseline](development.md#sdk-and-native-verification-baseline).
 Likan is linked to `@hyrkul/likan`, project
 `7263b456-2908-484f-891e-7279db6b447e`; select `APP_BRAND=likan` for EAS commands.
-The build records below describe earlier SDK 57 binaries and configuration.
-Create new SDK 58 development builds before connecting to the upgraded Metro
-server. No SDK 58 cloud-build or device result is established by these records.
+SDK 58 Android development-build validation is recorded below. The later
+historical sections describe SDK 57 binaries and configuration. Device behavior
+remains unverified.
 
 ## Android development build memory limits
 
@@ -30,19 +30,41 @@ The Skia maintainers confirmed that 2.14.0 exhausts EAS medium-worker memory in
 an SDK 58 reproduction. The additional heavy C++ translation units compile in
 parallel; [upstream fix #4284](https://github.com/wcandillon/react-native-skia/pull/4284)
 reduces that compiler memory use and is included in the newer 2.x release.
-This project currently retains Expo's pinned Skia 2.14.0 with the concurrency
-limits above.
+The project now pins Skia 2.15.2, including that fix, through the npm alias
+documented in the [SDK baseline](development.md#sdk-and-native-verification-baseline).
+The existing concurrency limits remain enabled. The earlier build records below
+used Skia 2.14.0.
 
 Local validation on 2026-10-26 completed `:app:assembleDebug` for all four ABIs
 in 33m 2s, with a measured cgroup peak of 10.62 GiB and zero OOM kills. This ran
-against the retained EAS native project with cached Java/Kotlin tasks, so it does
-not establish a clean cloud-build result or device behavior. A fresh cloud build
-is required to verify the complete development profile.
+against the retained EAS native project with cached Java/Kotlin tasks; the fresh
+cloud build below verifies the complete development profile.
 
 An incremental rebuild on 2026-10-27 included the current `react-native-view-shot`
 6.1.1 dependency and completed in 3m 9s. Its APK contains all four ABIs and passes
 Android APK signature verification; cgroup memory counters report zero OOM kills.
 Installation and runtime behavior remain untested.
+
+The fresh SDK 58 Android development cloud build finished successfully on
+2026-10-27. The worker ran the configured command above, compiled all four ABIs,
+completed Gradle in 40m 18s, and uploaded the APK. EAS reports `FINISHED` with no
+build error; all 799 actionable tasks executed. This validates the memory limits
+on the existing medium worker; device execution remains untested.
+
+- [Build 6b702a67-2f2c-4db3-bbcb-b958183bd80e](https://expo.dev/accounts/hyrkul/projects/likan/builds/6b702a67-2f2c-4db3-bbcb-b958183bd80e)
+- [SDK 58 Android development APK](https://expo.dev/artifacts/eas/EAruSzUQABzjDoBcggqWTCwjObUJPJd-ndVvKvJvLK4.apk)
+
+## Skia 2.15.2 Android development build — 2026-10-27
+
+Submitted the current SDK 58 source with Expo 58.0.19 and Skia 2.15.2 using the
+existing `development` profile, remote Android signing credentials and the
+current `yarn.lock`. EAS accepted
+[build f6aa826d-0349-4704-aa39-9af52a9711ee](https://expo.dev/accounts/hyrkul/projects/likan/builds/f6aa826d-0349-4704-aa39-9af52a9711ee)
+at 14:42 UTC; its verified submission status was `IN_QUEUE`.
+
+Typecheck, zero-warning lint, formatting of the changed files and all 20 Expo
+Doctor checks passed before submission. Native compilation and device behavior
+remain pending for this Skia version; the completed builds above used 2.14.0.
 
 ## Historical SDK 57 build records
 

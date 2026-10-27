@@ -1,13 +1,19 @@
 ---
 name: template-skill-ui-row
-description: "Use Template's public native Row export when composing row content and boundaries."
+description: Compose horizontal native layouts with the public Row export.
 ---
 
 # Row
 
-Compose horizontal native content with Row from @components/ui. For equal-width full-width actions, give each child Column nativeRowWeight. Keep translated labels and large text readable; use a vertical arrangement when a row becomes crowded.
+Import `Row` from `@components/ui` for horizontal native content.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+- Compose inside an existing native Host.
+- Use `spacing` for gaps and `alignment` for cross-axis alignment.
+- To share remaining width, put `nativeRowWeight` on each direct child Column.
+- For equal actions, place one full-width button inside each weighted Column.
+- Switch to a vertical arrangement when translations or large text crowd the row.
+- Preserve live layout direction; do not force physical left/right ordering.
+
+Read the [public export](../../../src/components/ui/index.ts) and installed
+[Row types](../../../node_modules/@expo/ui/src/universal/Row/)
+before adding props or modifiers.

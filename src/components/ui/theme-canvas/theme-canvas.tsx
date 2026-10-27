@@ -1,16 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import {
-  ColorSchemeCanvas,
-  Column,
-  Switch,
-  UniversalTextContent,
-  nativeFillWidth,
-  useHostColorScheme,
-} from '@components/ui';
+import { Column } from '@expo/ui';
+import { ColorSchemeCanvas } from './color-scheme-canvas';
+import { Switch } from '../switch/switch';
+import { UniversalTextContent } from '../text/universal-text';
+import { nativeFillWidth } from '../native/native-fill-width';
+import { useHostColorScheme } from '../host/universal-host';
 import { spacing } from '@/constants/layout';
 import { useThemeSettings } from '@/context/theme.context';
 
-export function HomeThemeCanvas() {
+export function ThemeCanvas() {
   const { t } = useTranslation();
   const dark = useHostColorScheme() === 'dark';
   const { setColorScheme, appearanceReady } = useThemeSettings();

@@ -1,101 +1,44 @@
 ---
 name: template-skill-ui-text
-description: Choose or maintain Template raw native Text, UniversalTextContent and hosted UniversalText with semantic typography, tones, wrapping and explicit overrides. Use for text composition and its in-app showcase.
+description: Choose native text boundaries, semantic typography and explicit color precedence.
 ---
 
 # Text
 
-Import text components/types from `@components/ui`. Follow
-[Template implementation](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md).
-Read the [implementation and types](../../../src/components/ui/text/universal-text.tsx).
+Import text components and types from `@components/ui`.
+Source: [universal-text.tsx](../../../src/components/ui/text/universal-text.tsx).
 
-## Pick the actual rendering boundary
+| Component              | Use                                                      |
+| ---------------------- | -------------------------------------------------------- |
+| `UniversalTextContent` | Themed content inside an existing native Host            |
+| `UniversalText`        | Standalone text at an RN boundary; owns its Host         |
+| `Text`                 | Raw native text when inherited foreground is intentional |
 
-| Component              | Use                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------ |
-| `UniversalTextContent` | Themed text inside PageScreen, native groups and existing Hosts.                     |
-| `UniversalText`        | Standalone text at an RN boundary; owns a UniversalHost.                             |
-| `Text`                 | Raw Expo UI native export; useful when native foreground inheritance is intentional. |
+Children are strings in the installed contract. Use Row/Column for layout.
 
-Do not put hosted standalone text inside ordinary native layout. Use native
-`Column`/`Row` for siblings. Text children are a string in the installed
-contract, not an RN rich-text tree or an arbitrary React subtree.
+## Typography and color
 
-## Typography and foreground
-
-Supported `variant` values are `heading`, `title`, `subtitle`, `body`,
-`label` and `caption`. Omit variant/font overrides to keep native typography.
-Presets set size/weight from the active theme's `design.typography` in
-`src/constants/themes/`; no line height is calculated. UX/Instagram retain their
-original ramp. Altarea uses a larger mobile ramp, including an 18-point body.
-
-Brand typography is selected by the existing asset helper for page titles,
-auth headings and launch headings. Page titles and auth headings use the primary
-foreground accent; auth wordmarks use the secondary accent. This is explicit
-composition in those owners; ordinary text variants do not select a brand font.
-Preserve native typography elsewhere. Unsupported languages, including
-Arabic for the bundled Latin heading fonts, use native fallback. Keep asset and family
-registration with the [configuration owner](../template-skill-implementation/references/configuration.md).
-
-`tone` selects foreground independently: `default`, `muted`, `primary`,
-`secondary`, `success`, `warning`, `error` or `info`.
-Default maps to `text`; primary maps to the foreground accent `tint`. Keep
-`primary`/`onPrimary` for filled buttons: a fill can deliberately stay black in
-dark mode and is not an ordinary text foreground. Other tones use their matching
-semantic tokens. Content resolves its owning Host's
-scheme unless explicitly overridden.
-
-```tsx
-<UniversalTextContent variant="body" tone="muted" modifiers={nativeFillWidth}>
-  {t('showcase.gallery.longText')}
-</UniversalTextContent>
-```
-
-Precedence is intentional:
-
-- `fontSize`/`fontWeight` override the preset; final `textStyle` font fields
+- Variants: heading, title, subtitle, body, label, caption. Omit variant/font
+  overrides for native typography. Presets read the active theme's typography.
+- Tones: default, muted, primary, secondary, success, warning, error, info.
+  Default uses text; primary uses tint. Filled-control primary/onPrimary tokens
+  have different contrast duties.
+- Explicit fontSize/fontWeight override presets; final textStyle font fields
   override both.
-- The active `lightColor` or `darkColor` overrides tone; final
-  `textStyle.color` overrides both.
-- Content `colorScheme` changes color resolution, not its owning native Host.
-  Standalone text also passes its scheme to its Host.
-- Raw `Text` can inherit a native button's contrasting foreground. The themed
-  content wrapper supplies its own foreground and can override that contrast;
-  do not use it blindly in filled-button labels.
+- Active lightColor/darkColor overrides tone; final textStyle.color overrides both.
+- Content colorScheme changes resolution; standalone text also sets its Host scheme.
+- Raw Text can inherit a filled button's foreground. The themed wrapper supplies
+  its own foreground and may override that contrast.
+- Brand fonts are selected explicitly by heading owners. Preserve native fallback
+  for unsupported languages, including Arabic in bundled Latin fonts.
 
-## Layout and accessibility
+## Layout
 
-Use native `style` for supported box properties and `textStyle` for typography.
-Do not pass RN style arrays or invent font/line-clamp props. Native text
-`numberOfLines` truncates; leave essential instructions/errors free to wrap.
-Use logical layout and native text direction for Arabic. Do not force
-left/right alignment globally or hardcode a height around large text.
+Use supported native box `style` and typography `textStyle`. Avoid RN style
+arrays and invented props. `numberOfLines` truncates; let essential instructions
+and errors wrap. Preserve logical alignment and large-text growth.
 
-Keep labels/messages translated and semantic colors in shared theme tokens.
-A tone does not replace an understandable status message or establish heading/
-screen-reader semantics. Check actual VoiceOver/TalkBack output when changing
-accessibility behavior. Custom line height has platform differences; prefer
-the existing native/preset behavior without a specific need.
-
-## Showcase
-
-[UI showcase → Text](../../../src/features/ui-showcase/text-screen.tsx), route
-`/ui-component/text`, compares all six variants, all eight tones, wrapping,
-two-line truncation, native/custom typography and standalone hosting.
-Its isolated palette/appearance controls compare every tone on `background`,
-`surface` and `surfaceRaised`, explicit appearance/style color precedence and a
-counted primary button. The existing `demo-text-tone-*` selectors remain on the
-background samples; other surfaces add their role to the selector. Override
-samples use `demo-text-appearance-override` and `demo-text-style-override`.
-The retained `Components/Text/ThemeComparison` story uses the same composition.
-Only the color-sample area has an isolated provider. It re-enters native UI
-through an explicit-scheme `UniversalHost` after `HostedPreview`'s RN bridge;
-page chrome and the other text examples keep the app's configured appearance.
-Follow the [appearance contract](../template-skill-ui-appearance/SKILL.md) for preview
-isolation and saved app preferences. Static palette contrast checks do not verify
-native glass, arbitrary overrides or text drawn over artwork.
-Check light/dark, RTL, large text, truncation and contrast on native devices.
-
-SDK 58 reference; compare with the installed `@expo/ui` types:
-[Text](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/text/).
+Check wrapping, truncation, override precedence, surface contrast and spoken
+semantics using the [Text showcase](../../../src/features/ui-showcase/text-screen.tsx).
+Isolated previews must re-enter native UI with an explicit scheme after RN bridges
+and must not write saved app preferences.

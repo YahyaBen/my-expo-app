@@ -1,39 +1,44 @@
 # Documentation ownership
 
-Use [the central index](index.md) to find maintained project documentation.
-Each topic has one canonical owner.
+Use [the documentation index](index.md) for guides and [the skill index](skills.md)
+for task selection. Keep one maintained owner for each topic.
 
-| Material                                        | Owner                                                       |
-| ----------------------------------------------- | ----------------------------------------------------------- |
-| Project introduction and quick start            | Root `README.md`                                            |
-| Project rules and skill routing                 | `AGENTS.md`                                                 |
-| Human-facing architecture, setup and operations | Focused guides in `docs/`                                   |
-| Component contract and native composition       | Matching `.agents/skills/template-skill-ui-*/SKILL.md`      |
-| Detailed page/button guidance or long examples  | That skill’s linked `references/`                           |
-| Shared native layout and theme rules            | Existing Expo mobile and component-library skills           |
-| Historical findings and device observations     | Dated reports; the UI catalog history is in `docs/archive/` |
+| Material                                           | Owner                                              |
+| -------------------------------------------------- | -------------------------------------------------- |
+| Introduction and quick start                       | Root `README.md`                                   |
+| Project-wide constraints and verification          | `AGENTS.md`                                        |
+| Skill discovery                                    | `docs/skills.md`                                   |
+| Human setup, architecture and operations           | Focused guides in `docs/`                          |
+| Agent workflow or component contract               | Its `.agents/skills/<name>/SKILL.md`               |
+| Substantial detail needed only for a specific task | That skill's own `references/`                     |
+| Dated observations                                 | Historical reports, clearly separated in the index |
 
-## Maintain one source
+## Independent skills
 
-Update a component’s existing skill when its props, Host ownership, theme roles
-or platform behavior change. Keep source links and available native story paths
-accurate. Link to shared rules instead of repeating them in every skill.
-Do not add a README to a component, source or asset folder.
+Apply SOLID as practical authoring rules:
 
-Keep skill descriptions specific enough for discovery. Read the relevant skill
-first, then only the references needed for the task. Short component guides live
-directly in `SKILL.md`; the longer page and button guides use references.
-Do not create another skill when the existing family already owns the behavior.
+| Principle             | Rule                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| Single responsibility | Give each skill one task or component family.                                                     |
+| Open/closed           | Extend the owning skill for a new supported mode; add a skill only for a distinct responsibility. |
+| Substitution          | Keep instructions consistent with project rules and the common iOS/Android public contract.       |
+| Interface segregation | Use a short, specific description; include only constraints needed for that task.                 |
+| Dependency inversion  | Depend on public contracts and source, not another skill's workflow.                              |
 
-Reports record the state when they were written. They may mention retired tests,
-fixtures or older APIs; they do not override current source, package scripts,
-AGENTS.md or canonical component skills.
+A skill must work without loading another skill. Do not link to another skill,
+include a skill-selection table or require a router skill. Discovery belongs in
+`docs/skills.md`. Source links, official documentation and a skill's own references
+are appropriate when they clarify its work.
 
-## Check a documentation change
+Keep entry points concise. Preserve non-obvious behavior and limitations; remove
+generic advice, repeated project rules, exhaustive examples and historical logs.
+Do not duplicate component contracts in human guides or source-folder READMEs.
+Keep references only when they contain useful detail that does not belong in the
+entry point.
 
-Check local links after moving material, format edited Markdown, and validate
-changed skill metadata. Run the current lint and typecheck commands required by
-AGENTS.md. Do not claim native execution from documentation or registration.
+## Verification
 
-This layout follows Codex’s [skill guidance](https://github.com/openai/codex/blob/main/codex-rs/skills/src/assets/samples/skill-creator/SKILL.md)
-on concise entry points and progressive disclosure, checked with Context7.
+Validate skill metadata and local links after edits or moves. Format edited files
+and run lint/typecheck as required by `AGENTS.md`. Report native observations
+separately; registered stories and documentation do not prove device behavior.
+Historical reports do not override current source or maintained guidance.

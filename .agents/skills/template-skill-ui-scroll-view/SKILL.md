@@ -1,13 +1,19 @@
 ---
 name: template-skill-ui-scroll-view
-description: "Use Template's public native ScrollView export when composing scroll view content and boundaries."
+description: Compose bounded scrolling native content with the public ScrollView export.
 ---
 
 # ScrollView
 
-Use the native ScrollView export for bounded native content. Reuse RefreshableScrollView when the screen needs pull-to-refresh. Keep query state and refresh workflows with the feature. Native grouped List and ScrollView do not provide recycled rows for an unbounded feed.
+Import `ScrollView` from `@components/ui` inside an existing native Host.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+- Give the scroll viewport bounded dimensions and let content grow along its axis.
+- Avoid nested scroll containers on the same axis.
+- Use the existing `RefreshableScrollView` component when pull-to-refresh is needed.
+- Keep query state and refresh work in the feature.
+- Use a virtualized feature list for large datasets; ScrollView renders its children.
+- Preserve the owning page's header clearance and safe-area insets.
+
+Read the [public export](../../../src/components/ui/index.ts) and installed
+[ScrollView types](../../../node_modules/@expo/ui/src/universal/ScrollView/)
+before adding props or modifiers.

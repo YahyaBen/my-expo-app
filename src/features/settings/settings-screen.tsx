@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomSheet,
   Column,
+  ColorSchemeTransition,
+  ColorSchemeTransitionControl,
   FieldGroup,
   Icon,
   ListItem,
@@ -35,10 +37,6 @@ import { version as appVersion } from '../../../package.json';
 import { HeaderMotionPicker } from './header-motion-picker';
 import { developerScreensEnabled } from '@/config/developer-tools';
 import { getBrandHeadingFont } from '@/config/brand-assets';
-import {
-  SettingsAppearanceControl,
-  SettingsAppearanceTransition,
-} from './settings-appearance-transition';
 
 const languageKeys: Record<Language, string> = {
   fr: 'common.french',
@@ -97,7 +95,7 @@ export function SettingsPage({
     />
   );
   return (
-    <SettingsAppearanceTransition>
+    <ColorSchemeTransition>
       <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
         <SettingsViewport tab={tab}>
           <UniversalHost
@@ -137,7 +135,7 @@ export function SettingsPage({
                   <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
                     <Text>{t('common.colorScheme')}</Text>
                   </Column>
-                  <SettingsAppearanceControl />
+                  <ColorSchemeTransitionControl />
                 </Row>
                 {design.header.artwork ? (
                   <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
@@ -273,7 +271,7 @@ export function SettingsPage({
           </UniversalHost>
         </SettingsViewport>
       </PageFrame>
-    </SettingsAppearanceTransition>
+    </ColorSchemeTransition>
   );
 }
 

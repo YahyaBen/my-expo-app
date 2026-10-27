@@ -14,7 +14,7 @@
     "@react-native-firebase/app": "^26.4.0",
     "@react-native-firebase/messaging": "^26.4.0",
     "@shopify/flash-list": "2.3.2",
-    "@shopify/react-native-skia": "2.14.0",
+    "@shopify/react-native-skia": "npm:react-native-skia@2.15.2",
     "@stepperize/react": "^7.0.0",
     "@tanstack/react-query": "^5.96.2",
     "axios": "^1.15.0",
@@ -120,6 +120,11 @@
   },
   "private": true,
   "expo": {
+    "install": {
+      "exclude": [
+        "@shopify/react-native-skia"
+      ]
+    },
     "autolinking": {
       "ios": {
         "exclude": [

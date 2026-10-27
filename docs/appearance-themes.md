@@ -44,14 +44,16 @@ shared [color-scheme control](../src/components/ui/appearance/color-scheme-contr
 serves Settings and login.
 Settings applies the circular reveal to its actual page, including the header
 and native form. Its System/Light/Dark picker uses the existing saved preference.
-The [transition wrapper](../src/features/settings/settings-appearance-transition.tsx)
+The shared [transition wrapper](../src/components/ui/theme-canvas/color-scheme-transition.tsx)
 briefly captures the old page with `react-native-view-shot`, then reveals the
 live page in its new appearance. Capture failure and Reduce Motion apply the
 preference immediately. The native capture package requires a new development
 build; screenshot coverage and transition timing remain device-verification work.
 Home retains the smaller
-[appearance canvas](../src/components/ui/appearance/color-scheme-canvas.tsx)
-as a component demo.
+[appearance canvas](../src/components/ui/theme-canvas/color-scheme-canvas.tsx)
+inside the shared [ThemeCanvas](../src/components/ui/theme-canvas/theme-canvas.tsx)
+component. Its reveal and composition contract lives in the
+[theme-canvas skill](../.agents/skills/template-skill-ui-theme-canvas/SKILL.md).
 
 The configured root palette stays fixed. A user chooses appearance, not another
 client's identity or demo palette. The Text showcase at `/ui-component/text` has

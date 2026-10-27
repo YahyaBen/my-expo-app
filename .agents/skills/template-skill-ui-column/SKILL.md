@@ -1,13 +1,19 @@
 ---
 name: template-skill-ui-column
-description: "Use Template's public native Column export when composing column content and boundaries."
+description: Compose vertical native layouts with the public Column export.
 ---
 
 # Column
 
-Compose ordinary vertical native content with Column from @components/ui. Use nativeFillWidth for a constrained full-width stack and nativeRowWeight when a column shares a Row. A Host provides native ownership, not sibling layout. Do not introduce a wrapper solely to rename this public export.
+Import `Column` from `@components/ui` for vertical native content.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+- Compose inside an existing native Host; `PageScreen` already supplies one.
+- Use `spacing` for child gaps and `alignment` for cross-axis alignment.
+- Apply `nativeFillWidth` only when the parent supplies a width constraint.
+- Use `nativeRowWeight` when the Column is a direct child sharing a Row.
+- Let translated labels and large text grow; avoid fixed content heights.
+- A Host provides native ownership; Column arranges its children.
+
+Read the [public export](../../../src/components/ui/index.ts) and installed
+[Column types](../../../node_modules/@expo/ui/src/universal/Column/)
+before adding props or modifiers.

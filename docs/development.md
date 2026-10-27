@@ -36,8 +36,13 @@ The SDK 58 upgrade resolves Expo 58.0.19, `@expo/ui` 58.0.23, Expo Router 58.0.2
 React 19.3.0 and React Native 0.88.0. Keep Expo packages,
 `@expo/ui`, Expo Router and native dependencies aligned through
 `npx expo install --fix --npm` and the committed npm lockfile. The SDK 57 UI/Router pins and their
-install exclusions have been replaced by this compatible dependency set. The
-[earlier numeric-width failure](build-verification.md#expo-ui-version) remains
+install exclusions have been replaced by this compatible dependency set.
+Skia is intentionally pinned to 2.15.2 through the npm alias
+`@shopify/react-native-skia: npm:react-native-skia@2.15.2`, retaining existing
+imports while using the published package name. Its `expo.install.exclude`
+entry keeps Expo's SDK 58 recommendation of 2.14.0 from replacing this explicit
+version. Create a new development build after changing this native dependency.
+The [earlier numeric-width failure](build-verification.md#expo-ui-version) remains
 historical evidence; repeat its Host/button/input cases on the new native builds.
 
 Create matching SDK 58 development builds for iOS and Android before connecting

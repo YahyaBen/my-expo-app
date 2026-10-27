@@ -123,7 +123,7 @@ route → feature screen → workflow when needed → query/mutation options →
 Start with the real request/response contract, validate it at transport, then add
 only the query/mutation policy the feature needs. Keep transient form state local,
 render through `@components/ui`, and preserve stable actionable `testID` values.
-The [implementation pattern](../.agents/skills/template-skill-implementation/references/implementation-pattern.md)
+The [implementation skill](../.agents/skills/template-skill-implementation/SKILL.md)
 and [API skill](../.agents/skills/expo-api-services/SKILL.md) own detailed conventions.
 No repository, DI container or base-component hierarchy is required by this path.
 

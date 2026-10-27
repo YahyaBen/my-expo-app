@@ -1,69 +1,30 @@
 ---
 name: template-skill-ui-picker
-description: Compose or maintain Template Picker menus and iOS wheels with typed string/number items, controlled selection and disabled guards. Use for Picker.Item composition and the in-app showcase.
+description: Compose typed native picker menus and iOS wheel selection.
 ---
 
 # Picker
 
-Import `Picker` and its public types from `@components/ui`, inside the existing
-Host. Follow [Template implementation](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md).
+Import `Picker` from `@components/ui` inside an existing Host.
+Source: [picker/](../../../src/components/ui/picker/).
 
-## Contract
+- Props: `selectedValue`, `onValueChange`, `children`, `appearance`,
+  `enabled`, `testID`. The public declaration owns their types.
+- The consumer owns a string/number value that exactly matches one item:
+  numeric `2` and string `'2'` differ. Callbacks receive the value directly.
+- Supply unique, stable `Picker.Item` values and translate labels. Items are
+  parser markers; direct children, arrays and fragments are supported.
+  Opaque custom wrappers around Items are not.
+- Reconcile selection in the feature when options change.
+- Disable with `enabled={false}`. Both adapters guard callbacks; Android also
+  closes an expanded dropdown. There is no per-item disabled contract.
+- `appearance="menu"` is default; `"wheel"` is an iOS wheel and remains an
+  Android dropdown. Keep native Host colors and iOS menu-glass fallback.
+- There are no `disabled`, `style`, `modifiers`, `label`, `color` or
+  `onChange` props. Compose a nearby visible translated label when needed.
+- Preserve Android label synchronization and `testID-option-index` selectors;
+  option indexes are not domain values. Keep extraction in existing adapters.
 
-Read the [public declaration](../../../src/components/ui/picker/picker.d.ts) and
-both [iOS](../../../src/components/ui/picker/picker.ios.tsx) /
-[Android](../../../src/components/ui/picker/picker.android.tsx) implementations.
-Supported props are `selectedValue`, `onValueChange`, `children`,
-`appearance`, `enabled` and `testID`.
-
-Keep this family to the two native implementations and the public declaration.
-The small item extraction stays inside each adapter; it does not need its own
-helper or types file. Recheck both adapters when changing item handling.
-
-The adapters retain these project behaviors:
-Android label synchronization, closing on disable and test selectors; iOS glass
-menu styling and callback guards. Both retain fragment support and distinct
-string/number keys. Recheck these differences before replacing them with a
-direct package export.
-
-```tsx
-<Picker selectedValue={servings} onValueChange={setServings} testID="recipe-servings">
-  <Picker.Item label={t('showcase.gallery.servings', { value: 1 })} value={1} />
-  <Picker.Item label={t('showcase.gallery.servings', { value: 2 })} value={2} />
-</Picker>
-```
-
-The consumer owns a string or number value. It must exactly match an item:
-`2` and `'2'` differ. Keep values/React keys stable and translate only labels.
-The callback receives the value directly, not an index, label or event.
-
-## Items and native behavior
-
-- Use `Picker.Item` markers directly or in supported fragments/arrays. They are
-  data markers, not arbitrary rendered rows. Wrapping an Item in a custom
-  component prevents the existing parser from recognizing it.
-- Keep item values unique. When options change, reconcile invalid selection in
-  the feature; do not leave a selected value absent from the options.
-- Set `enabled={false}` to disable. Both adapters guard selection; Android
-  closes an expanded dropdown when it becomes disabled. There is no `disabled`
-  prop or per-item disabled contract.
-- `appearance="menu"` is the default. `"wheel"` uses an iOS wheel; Android
-  retains a dropdown. Do not promise identical geometry across platforms.
-- There are no `style`, `modifiers`, `label`, `color` or `onChange` props
-  in this project picker contract. Put a visible translated label beside it
-  with native layout when needed.
-- Native colors follow the Host. The iOS menu adapter requests native glass
-  styling; retain the platform fallback and Android Material dropdown.
-- Android uses the supplied selector on its anchor and derives
-  `testID-option-index` for options. Do not use an option index as domain state.
-
-## Showcase
-
-[UI showcase → Picker](../../../src/features/ui-showcase/picker-screen.tsx),
-route `/ui-component/picker`, covers string menus, numeric wheel/dropdown
-selection, reset and disabled callback counts. Check updated labels after
-selection/language changes, popup dismissal, RTL, large text and native focus.
-
-SDK 58 reference; compare with the installed `@expo/ui` types:
-[Picker](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/picker/).
+Use the [showcase](../../../src/features/ui-showcase/picker-screen.tsx)
+at `/ui-component/picker`. Verify string/number values, reset, disabling an
+open menu, translated label updates, native focus, RTL and large text.

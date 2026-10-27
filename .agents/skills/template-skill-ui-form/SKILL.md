@@ -1,44 +1,41 @@
 ---
 name: template-skill-ui-form
-description: 'Connect Template FormTextInput and FormSubmit to React Hook Form, validation and submission state.'
+description: Bind native form fields and submit feedback to React Hook Form.
 ---
 
-# Form fields and submission
+# Form adapters
 
-Exports: `FormTextInput` and `FormSubmit`. Ordinary fields use `TextInput` from
-`@components/ui` with a string `value` and `onChangeText`.
+Import `FormTextInput` and `FormSubmit` from `@components/ui` inside an
+existing Host. Source: [form/](../../../src/components/ui/form/).
 
-`FormTextInput` binds `control` and `name` from React Hook Form to that same
-`TextInput`. The shared input owns native value synchronization, including
-external form resets. The adapter handles translated errors, helper text,
-password visibility and validation feedback. `FormSubmit` composes submission
-feedback.
+## Field binding
 
-```tsx
-<FormTextInput control={form.control} name="email" label="Email" />
-```
+- `FormTextInput` requires React Hook Form `control` and `name`.
+  It owns `value`, `defaultValue`, `ref`, `onChangeText`, `onBlur` and
+  visual `status`; do not supply those separately.
+- The shared input synchronizes external form resets without remounting.
+  `onEdited` notifies the feature after a change.
+- Translated validation errors take priority over helper text. Render a message
+  only when present and allow wrapping; do not reserve empty error space.
+- `password` enables visibility control; `passwordToggle` selects
+  `button` (default) or `icon`. Preserve native text/ref and validation state.
+  Non-password fields retain caller secure-entry/trailing-icon props.
+- Optional field IDs derive `-error` / `-helper`, `-visibility` for a text
+  toggle, and `-right-icon` for an icon toggle. Without a field ID, leave these
+  unassigned. Translate Show/Hide names independently of selectors.
+- The visible input label names the native editable field. Check spoken output
+  on device; opacity/editability alone do not prove a native disabled announcement.
 
-Compose inside an existing Host. Keep schemas, pending state,
-duplicate-submission guards and API operations in the owning feature.
+## Submission
 
-Non-password fields retain caller-supplied secure-entry and trailing-icon props.
-Password toggles preserve the native value, ref and validation lifecycle.
-Error messages take priority over helpers and render only when present. Messages
-wrap naturally without reserving empty space. Selectors retain the supplied field
-ID with `-error` or `-helper` suffixes. The text password toggle appends
-`-visibility`; the icon toggle uses the input's `-right-icon`. Derive these only
-when the optional field ID is present; omission leaves them unassigned rather
-than producing `undefined-*`. Supply explicit field IDs for application actions.
-Translated Show/Hide password names remain independent of selectors and update
-with visibility. The shared field forwards its visible label as its native
-editable-control name; see the input skill for native verification limits.
+- `FormSubmit` requires `testID`, `label`, `pending` and `onPress`;
+  optional `error` and `notice` remain visible below the action.
+- It renders a full-width primary content button, disables while pending and
+  uses the translated waiting label. It has no arbitrary variant or
+  prerequisite-disable prop.
+- Connect the feature's validated submit handler. Schemas, requests, pending
+  ownership and duplicate-submission guards stay in the feature.
 
-Existing [auth stories](../../../.rnstorybook/stories/forms/auth-screen.stories.tsx)
-cover FormTextInput/FormSubmit, including `WithoutFieldSelectors` for optional-ID
-omission. The in-app Text input page covers ordinary string inputs. See the
-[input guide](../template-skill-ui-text-input/SKILL.md) and
-[UI guide](../../../docs/ui.md).
-
-Follow the [implementation pattern](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md). Local filenames in
-this guide refer to [src/components/ui/form/](../../../src/components/ui/form/).
+Use [auth stories](../../../.rnstorybook/stories/forms/auth-screen.stories.tsx)
+to verify resets, error focus, password visibility, optional-ID omission and
+pending recovery.

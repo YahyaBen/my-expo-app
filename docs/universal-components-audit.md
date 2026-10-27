@@ -26,7 +26,7 @@ platforms as of 2026-10-19. ListItem only adds the missing Android selector. Pic
 controls retain the necessary platform behavior with Host-derived appearance.
 iOS menu Picker triggers use native glass style on supported systems. See the
 [current control contract](control-theme.md) and
-[component catalog](../.agents/skills/expo-universal-component-library/references/components.md)
+[skill index](skills.md)
 for current paths, stories and verification. The dated audit below is historical;
 its adapter paths and exact per-control token mappings have been superseded.
 

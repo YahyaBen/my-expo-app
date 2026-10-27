@@ -1,52 +1,55 @@
 ---
 name: template-skill-ui-otp-bottom-sheet
-description: 'Use or maintain Template OTP sheet presentation, verification, resend cooldown and native input composition.'
+description: Maintain six-digit OTP entry, verification and resend lifecycle.
 ---
 
 # OTP bottom sheet
 
-`OtpBottomSheet` presents a six-digit verification form with native Expo UI controls on iOS and Android. Import it from `@components/ui`. Control `isPresented` and `onDismiss`, supply a display `recipient`, and implement `onVerify(code)` to return acceptance or throw on request failure. The component performs no authentication or delivery itself.
+Import `OtpBottomSheet` from `@components/ui`.
+Source: [otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
 
-Keep this family in four files. `otp-bottom-sheet.tsx` owns the public props and
-sheet, the form, code normalization, feedback artwork and resend countdown.
-The countdown and feedback remain private React components defined at module
-scope; moving them into this file must preserve their independent state and
-mounting boundaries. Only `OtpBottomSheet` and `OtpBottomSheetProps` are public.
-`otp-input-layout.ios.tsx` and `otp-input-layout.android.tsx` own the native input
-overlays; `otp-input-layout.d.ts` owns their private props and signature. Extend
-these existing owners rather than splitting small helpers into new files.
+## Public workflow
 
-It uses the shared native `BottomSheet`, without shell styling or extra padding.
-OTP adds the verification form and bounded scrolling; it has no separate sheet
-styling or presentation behavior. The iOS drag indicator is hidden.
+- Control `isPresented` / `onDismiss`, display `recipient`, and implement
+  `onVerify(code)` to return acceptance or throw on request failure.
+  The component performs no authentication or delivery itself.
+- Optional `onResend` enables a 30-second cooldown;
+  `resendCooldownSeconds` overrides it. Other options: `hint`,
+  `colorScheme`, `testID`.
+- Successful verification shows confirmation and Done. Reopening clears code
+  and feedback. Preserve duplicate-request and stale-session guards after
+  dismissal/unmount.
+- Opening resets React form state before presenting and clears native text in
+  a layout effect. Do not key/remount the form merely to reset it.
 
-Optional `onResend` enables a 30-second resend cooldown; `resendCooldownSeconds` customizes it. `hint` supplies helper copy, `colorScheme` overrides form appearance, and `testID` prefixes native selectors. Successful verification shows a confirmation and Done button. Reopening clears the code and feedback. Duplicate requests are blocked; dismissed/unmounted sessions ignore late completions.
+## Native input and presentation
 
-One transparent native text field sits above six decorative digit slots, preserving native paste, autofill, selection, and backspace. Input normalizes Western, Arabic, Persian and full-width digits and strips pasted separators. The numeric row has an explicit-width LTR Host so Arabic copy retains its surrounding RTL direction. The OTP form measures its own native input section; the input mounts once that measurement is available and retains its value across resizing. Their explicit height grows for larger font scales. Inset rounded fills draw complete borders on both platforms; iOS uses a plain field so native field chrome does not cover the slots. Platform adapters supply overlapping native stacks because the universal API has no overlay stack.
+- One transparent native field overlays six decorative slots, preserving
+  paste/autofill/selection/backspace. Normalize Western, Arabic, Persian and
+  full-width digits; strip pasted separators.
+- Keep the measured numeric row in an explicit-width LTR Host while surrounding
+  copy follows RTL. Mount input after its native section is measured; retain
+  values on resize and grow height for font scaling.
+- Preserve platform overlay stacks, inset rounded slot fills and the plain iOS
+  input. These prevent native chrome from covering slots or clipping borders.
+- Use the shared sheet's native shell and transition. Its bounded scroll
+  viewport is `min(windowHeight * 0.7, 620)`; an unbounded Compose vertical
+  scroll can fail measurement. Avoid iOS width-only modifiers that erase height.
+- Heading/delivery copy is leading-aligned, recipient bold. Filled slots keep
+  neutral fills; focus uses text color and rejection uses error colors.
+  Display only supplied hints, resend confirmation and actual errors.
 
-Opening resets React form state before committing the presentation and clears the existing native value in a layout effect. It does not force a keyed form remount; the platform sheet still owns its native mounting and dismissal lifecycle. The resend countdown owns its own React state and stops its timer at zero, on dismissal, while the app is inactive, or when the resend action is absent. It reuses the shared activity subscription and recomputes the remaining seconds from the wall-clock deadline immediately on resume; backgrounding does not extend the cooldown. Countdown ticks do not render the form or native input. Feedback reads motion settings only while visible and uses declarative Reanimated CSS keyframes for its fade/scale or error shake. It has no animation-driving effect, shared-value timing, or JS animation timer. Verification, resend and stale-completion guards remain active.
+## Timers and feedback
 
-The form follows the supplied reference: leading-aligned heading and delivery copy, a bold recipient, six empty rounded boxes with neutral fills, and a stronger text-colored focus outline. Filled boxes keep their neutral appearance; rejected codes use the error palette. Only supplied hints, resend confirmation and errors add helper text. The existing UniversalButtonContent verification and resend controls retain their styling and behavior.
+- Keep private countdown/feedback components at module scope with independent
+  state boundaries. Countdown ticks must not rerender the form/input.
+- Stop the timer at zero, on dismissal/inactivity or without a resend action.
+  Recompute from the wall-clock deadline on resume; backgrounding does not
+  extend cooldown.
+- Feedback uses existing declarative Reanimated CSS keyframes and respects
+  activity/reduced motion. Preserve verification/resend guards independently.
 
-The sheet uses the platform transition. Status artwork is shown only after successful verification, with its existing short fade/scale. Motion respects live reduced-motion and app activity settings. Native keyboard avoidance belongs to the sheet. The scroll viewport is limited to 70% of the current window height, capped at 620 points/dp. This gives the intrinsic sheet Host a finite scrolling height on opening and window resizing; an unbounded vertical scroll can throw during Compose measurement. The scroll has no width-only frame modifier that would override its height on iOS. No dependencies or native configuration change.
-
-Theme roles: native light/dark appearance for the sheet shell, plus `surfaceVariant`, `text`, `muted`, `border`, `error`, `errorContainer`, `success`, and `successContainer` for the form and the unchanged shared button palette. Native button feedback and loading indicators remain intact. Copy is available in English, French and Arabic.
-
-Native [OTP stories](../../../.rnstorybook/stories/forms/otp-bottom-sheet.stories.tsx)
-expose Light and RequestFailure, with appearance, cooldown and request/resend
-failure Controls and isolated English copy. Automated suites have been removed;
-existing test IDs remain for future tests. Check input readiness on opening and
-reopening, incomplete and duplicate submissions, request failure, resend reset,
-background/resume across cooldown expiry and stale completion manually. Native keyboard/autofill, narrow widths, large
-fonts, screen-reader traversal, hit-area edges and motion require device
-verification; story registration and typechecking alone do not prove them.
-
-The Bottom Sheet component showcase (`/ui-component/bottom-sheet`) opens a local UI demo. Only `123456` succeeds; other complete codes demonstrate rejection. Resend is simulated and sends no message.
-
-Run lint and typecheck, check edited-file formatting and validate the skill's
-local links. Native interaction and release-build opening latency require
-separate device verification.
-
-Follow the [implementation pattern](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md). Local filenames in
-this guide refer to [src/components/ui/otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
+The [showcase](../../../src/features/ui-showcase/bottom-sheet-screen.tsx)
+uses local simulation: only `123456` succeeds and resend sends no message.
+Verify reopening, native autofill/keyboard, incomplete/duplicate submissions,
+request failure, cooldown expiry across backgrounding and late completions.

@@ -1,60 +1,35 @@
 ---
 name: template-skill-ui-loading
-description: 'Compose Template loading, query content and error states while preserving cached content and retry context.'
+description: Present loading, query results and retry states while preserving cached content.
 ---
 
-# Loading, query states and recovery
+# Loading and recovery
 
-Exports: `LoadingContent`, `LoadingScreen`, `QueryContent`, `ContentQuery`
-and `ScreenError`.
+Import `LoadingContent`, `LoadingScreen`, `QueryContent`, `ContentQuery`
+and `ScreenError` from `@components/ui`.
+Source: [loading/](../../../src/components/ui/loading/).
 
-Keep this family in four files. `loading-state.tsx` owns all public components,
-the `ContentQuery` type and the private resolved-content helper.
-`loading-indicator.ios.tsx` renders native SwiftUI progress;
-`loading-indicator.android.tsx` renders native Compose circular progress.
-`loading-indicator.d.ts` supplies their shared private props and signature.
-Extend these existing owners when adding a loading or recovery presentation.
+## State ownership
 
-`LoadingContent` is used by session restoration, OTP requests and the button
-showcase. `QueryContent` has the native state fixtures below. `LoadingScreen`
-and `ScreenError` remain available for route/Suspense and route-error consumers.
+- Use `LoadingContent` inside an existing Host and `LoadingScreen` at a
+  route/Suspense boundary. `ScreenError` presents route-error recovery.
+- Keep queries, prerequisites and retry work in the feature.
+- A disabled query waits for prerequisites; a paused query waits for connectivity.
+  Neither is active loading.
+- Preserve cached content during refresh and refresh failure.
+- Show persistent errors with retry. Disable retry while fetching, prerequisite
+  disabled or paused offline.
+- Render an empty message after data resolves and the caller marks it empty.
+- Native progress rendering belongs in the existing iOS/Android adapters;
+  shared state selection belongs in `loading-state.tsx`.
 
-Use `LoadingContent` inside a Host and `LoadingScreen` at a route/Suspense
-boundary. A disabled query waits for a prerequisite; an offline paused query
-waits for connectivity. Neither is active loading. Keep cached content during
-refresh, show persistent errors with retry, and show empty content only after
-successful data resolution.
+## Instance selectors
 
-Resolved content/empty selection uses a private presentation helper. It does not
-change the native tree, cached-content behavior, status messages, or retry guards.
-Verify these state combinations manually; automated suites have been removed.
+Give simultaneous `QueryContent` instances distinct stable `testID` prefixes.
+Owned nodes append `-error`, `-retry`, `-offline`, `-loading` and `-idle`.
+Without a prefix, preserve `query-error`, `query-retry`, `query-offline`,
+`query-idle` and `loading-state`. Selectors must be independent of translations.
 
-Queries and retry work remain in the feature; these components present them.
-
-`QueryContent.testID` is an optional instance prefix. Supply distinct stable IDs
-when two queries coexist: owned nodes append `-error`, `-retry`, `-offline`,
-`-loading` and `-idle`; the root Column uses the prefix itself. Without a prefix,
-the existing `query-error`, `query-offline`, `query-idle` and `loading-state`
-selectors remain, and retry uses `query-retry`. The retry ID reaches the native
-button; root/status IDs identify layout or messages. Keep retry disabled while
-fetching, disabled by prerequisites or paused offline. Do not derive IDs from
-translations, random values or array positions.
-
-The in-app [Loading and retry page](../../../src/features/ui-showcase/loading-screen.tsx),
-route `/ui-component/loading`, presents two independent local retry examples.
-The retained `RepeatedQueries` story uses that page; other state fixtures retain
-the default IDs. Check independent activation and native naming, focus order,
-large text and offline/pending retry suppression on both platforms. Registration
-and exports do not establish those device results.
-
-The initial-error fixture exports `ErrorState` (display name Error), avoiding a
-built-in name collision. Its existing selector is `expo-ui-loading-state--error-state`.
-
-Existing composition story: [loading-state.stories.tsx](../../../.rnstorybook/stories/components/loading-state.stories.tsx).
-
-Import public components from `@components/ui`; UI implementations import
-concrete files directly. [Back to the UI guide](../../../docs/ui.md).
-
-Follow the [implementation pattern](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md). Local filenames in
-this guide refer to [src/components/ui/loading/](../../../src/components/ui/loading/).
+Check initial error, cached error, offline/disabled states, pending retry
+suppression and independent activation using the
+[Loading showcase](../../../src/features/ui-showcase/loading-screen.tsx).

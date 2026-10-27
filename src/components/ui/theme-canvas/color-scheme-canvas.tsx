@@ -18,7 +18,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 
 const height = 160;
 
-/** Decorative artwork follows its Host; the existing appearance control owns preference changes. */
+/** Decorative artwork follows its Host; the appearance control owns preference changes. */
 export function ColorSchemeCanvas({ testID = 'color-scheme-canvas' }: { testID?: string }) {
   const [width, setWidth] = useMeasuredWidth();
   const dark = useHostColorScheme() === 'dark';

@@ -1,13 +1,19 @@
 ---
 name: template-skill-ui-rn-host-view
-description: "Use Template's public native RNHostView export when composing rn host view content and boundaries."
+description: Bridge React Native content into an existing native UI tree.
 ---
 
 # RNHostView
 
-Use RNHostView only for an existing React Native or specialized artwork boundary inside native content. Entering its RN subtree breaks immediate native ownership: use standalone controls or one UniversalHost for a group. Give the bridge a real width; percentage widths can collapse under intrinsic measurement.
+Import `RNHostView` from `@components/ui` for React Native components or
+specialized artwork that must appear inside native content.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+- Keep ordinary native layout in Row and Column.
+- Supply an explicit width constraint; percentage widths can collapse under
+  intrinsic native measurement.
+- Its children enter a React Native subtree. A native group inside that subtree
+  needs one `UniversalHost` or an existing standalone hosted control.
+- Check the bridge's actual bounds, touch handling and large-text layout.
+
+Source: [public export](../../../src/components/ui/index.ts) and installed
+[RNHostView types](../../../node_modules/@expo/ui/src/universal/RNHostView/).

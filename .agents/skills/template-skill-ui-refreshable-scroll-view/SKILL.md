@@ -1,34 +1,24 @@
 ---
 name: template-skill-ui-refreshable-scroll-view
-description: 'Use or maintain Template native scroll refresh, request coalescing and refresh completion behavior.'
+description: Coordinate native pull-to-refresh gestures and release indicators after settlement.
 ---
 
 # Refreshable scroll view
 
-Exports: `RefreshableScrollView` and `RefreshableScrollViewProps`.
+Import `RefreshableScrollView` and `RefreshableScrollViewProps` from
+`@components/ui` inside an existing native Host.
+Source: [refreshable-scroll-view/](../../../src/components/ui/refreshable-scroll-view/).
 
-The iOS adapter uses SwiftUI refreshable; Android uses Compose PullToRefreshBox.
-The declaration and shared props stay beside both implementations.
+- iOS uses SwiftUI refreshable; Android uses Compose PullToRefreshBox.
+- Without an onRefresh callback or when disabled, retain ordinary scrolling.
+- The async callback owns work and user-visible error feedback.
+- Repeated gestures share the pending promise. Release the native indicator
+  on settlement, including rejection, so a later gesture can recover.
+- Keep shared coordination in use-pending-refresh.ts. Android supplies the
+  spinner state callback; iOS needs no added JS spinner state.
+- Preserve native indicator colors and disabled/hidden interaction guards.
+- Check callback changes during pending work, duplicate gestures, rejection,
+  recovery and retained content.
 
-Compose inside a Host. With no callback or a disabled scroll view, it renders
-ordinary scrolling. An async `onRefresh` owns work and error feedback; the
-wrapper waits for settlement, releases the indicator on failure and coalesces
-pending gestures.
-
-`use-pending-refresh.ts` shares only promise coordination and error completion.
-Android supplies its existing spinner state setter; iOS adds no JS spinner state.
-Both retain their native indicator colors and the disabled/hidden interaction
-guard. Tests cover callback changes during a pending request, duplicate gestures,
-success, rejection, recovery and retained content.
-
-See [API refresh guidance](../../../docs/api-services.md). Native gestures,
-indicator placement and short-content behavior require device verification.
-
-Existing composition story: page-screen.stories.tsx (retired fixture).
-
-Import public components from `@components/ui`; UI implementations import
-concrete files directly. [Back to the UI guide](../../../docs/ui.md).
-
-Follow the [implementation pattern](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md). Local filenames in
-this guide refer to [src/components/ui/refreshable-scroll-view/](../../../src/components/ui/refreshable-scroll-view/).
+Native gestures, indicator placement and short-content behavior require
+verification on iOS and Android.

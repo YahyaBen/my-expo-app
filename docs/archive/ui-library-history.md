@@ -2,7 +2,7 @@
 
 This is the pre-migration component catalog, retained as historical observations.
 Its dated entries can refer to removed tests, stories and older contracts. Read
-[the current component catalog](../../.agents/skills/expo-universal-component-library/references/components.md)
+[the current skill index](../skills.md)
 and [UI guide](../ui.md) for implementation.
 
 # Universal component catalog
@@ -187,7 +187,7 @@ is excluded from the public UI barrel. The existing button stories now expose
 padding and color controls and preserve partial caller overrides. SDK 57's root
 Button still lacks the native color, padding, shape and destructive-role props
 needed here, so the platform adapters remain. See the
-[button guide](../../.agents/skills/template-skill-ui-button/references/component-guide.md) for supported props
+[button skill](../../.agents/skills/template-skill-ui-button/SKILL.md) for supported props
 and verification limits.
 
 ## Native sheet height and geometry merge (2026-10-19)
@@ -235,7 +235,7 @@ physical topLeft/topRight/bottomLeft/bottomRight radii; omitted corners are squa
 and this overrides uniform borderRadius. Its existing RN Host clips the square
 native surface because SwiftUI only exposes uniform native button rounding.
 `UniversalButtonContent` keeps its existing uniform radius contract. No theme roles
-or dependencies are added. See the [button guide](../../.agents/skills/template-skill-ui-button/references/component-guide.md).
+or dependencies are added. See the [button skill](../../.agents/skills/template-skill-ui-button/SKILL.md).
 Manual iOS 27 / iPhone 18 Pro checks verified both diagonals and upper/lower edge
 activation. Android geometry and automated Maestro execution remain pending.
 

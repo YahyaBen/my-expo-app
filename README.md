@@ -35,7 +35,7 @@ See [component previews](docs/storybook.md) for matching build/brand setup.
 - [Architecture](docs/architecture.md): routes, features, services and shared boundaries.
 - [Native UI](docs/ui.md): component selection and canonical skill links.
 - [Documentation ownership](docs/documentation.md): where to maintain each kind of guidance.
-- [Agent entry point](AGENTS.md): project rules and skill routing.
+- [Agent rules](AGENTS.md) and [skill index](docs/skills.md): project constraints and task-specific guidance.
 
 Component contracts live in their existing `.agents/skills/template-skill-ui-*` skills,
 with detailed references only where needed. Source folders hold code; avoid

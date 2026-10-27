@@ -1,13 +1,17 @@
 ---
 name: template-skill-ui-spacer
-description: "Use Template's public native Spacer export when composing spacer content and boundaries."
+description: Add native flexible space inside Row and Column layouts.
 ---
 
 # Spacer
 
-Use Spacer from @components/ui within the existing native Row or Column. Read the installed SpacerProps for its supported sizing behavior rather than imitating React Native flex props. Preserve the owning screen’s safe-area handling.
+Import `Spacer` from `@components/ui` inside an existing native Row or Column.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+- Use it to distribute available space along the owning layout's axis.
+- Give the parent real bounds when flexible space must expand.
+- Use the parent's `spacing` for ordinary gaps between children.
+- Preserve the screen's existing safe-area and keyboard insets.
+- Check installed `SpacerProps`; React Native flex props are not its contract.
+
+Source: [public export](../../../src/components/ui/index.ts) and installed
+[Spacer types](../../../node_modules/@expo/ui/src/universal/Spacer/).

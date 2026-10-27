@@ -1,33 +1,26 @@
 ---
 name: template-skill-ui-icon
-description: "Use Template's public native Icon export when composing icon content and boundaries."
+description: Select native SF Symbols and Material XML icons through the public Icon export.
 ---
 
 # Icon
 
-Use Icon from @components/ui with Icon.select to choose an SF Symbol on iOS and an installed Material XML asset on Android. Read the installed Icon types before choosing an asset or accessibility prop. An icon is not an interactive button. Reuse named native icon-action adapters, and keep visible text in generic button content.
-
-Use synchronous, literal `require()` calls for Android XML assets:
+Import `Icon` from `@components/ui`. Select an SF Symbol on iOS and a literal,
+synchronous `require()` of an installed Material XML asset on Android.
 
 ```tsx
-import { Icon } from '@components/ui';
-
 const starIcon = Icon.select({
   ios: 'star.fill',
   android: require('@expo/material-symbols/star.xml'),
 });
 ```
 
-The installed Expo UI Babel plugin recognizes `Icon` imports from `@expo/ui`,
-not the project's public re-export. Dynamic `import()` through `@components/ui`
-therefore stays a Promise and throws on Android. Keep the public entry point and
-use `require()`; adding the same Babel plugin again does not extend its matching.
-The project's lint rule rejects dynamic Material Symbol imports in source and
-native stories. After changing an asset path, verify it exists in the installed
-package; TypeScript does not validate `require()` paths. This runtime selection
-does not remove the unused platform's XML assets from the bundle.
+- Dynamic `import()` through the project re-export stays a Promise: Expo's
+  Babel plugin recognizes imports from `@expo/ui` only.
+- Verify XML paths exist; TypeScript does not validate `require()` paths.
+- An icon supplies artwork. Use an existing named native action control for
+  interaction, and preserve its accessible name.
+- Read installed types before choosing accessibility or sizing props.
 
-Follow the [mobile UI requirements](../expo-mobile-ui-only/SKILL.md) and
-[component library](../expo-universal-component-library/SKILL.md).
-The [public exports](../../../src/components/ui/index.ts) and installed
-[Expo UI source](../../../node_modules/@expo/ui/src/universal/) define the contract.
+Source: [public export](../../../src/components/ui/index.ts) and installed
+[Icon types](../../../node_modules/@expo/ui/src/universal/Icon/).

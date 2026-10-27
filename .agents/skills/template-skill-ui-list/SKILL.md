@@ -1,18 +1,22 @@
 ---
 name: template-skill-ui-list
-description: 'Use or maintain Template native grouped lists, refresh handling and list content composition.'
+description: Compose native grouped lists and coordinate their pull-to-refresh completion.
 ---
 
 # Native list
 
-`list.tsx` delegates rows, scrolling, refresh indicator and appearance to the universal Expo UI List. It adds only shared promise coordination to coalesce pending refreshes and safely finish failures. The caller displays error feedback. Compose with ListItem inside a bounded Host; use the feature’s virtualized data list for large datasets.
+Import `List` from `@components/ui` inside a bounded native Host.
+Source: [list/](../../../src/components/ui/list/).
 
-Import from `@components/ui` and compose inside `UniversalHost`. The Host uses the shared light/dark scheme and theme tint; Host seedColor overrides remain available; use native modifiers only where exposed by the component API. No custom glass layer or Android glass imitation is added.
+- Compose native `ListItem` rows; the upstream List owns grouping, scrolling,
+  refresh indicators and platform appearance.
+- Use a virtualized feature list for large datasets.
+- The wrapper adds promise coordination: duplicate gestures share pending work,
+  and settlement releases the indicator even after rejection.
+- The caller owns refresh work and visible error feedback.
+- Inherit the Host's color scheme and tint; retain supported seed overrides.
+- Use only modifiers exposed by the installed component contract.
 
-Native story: [expo-ui/list.stories.tsx](../../../.rnstorybook/stories/components/list.stories.tsx). Light/dark and interaction fixtures remain available. JS checks cover public behavior and native module resolution; device appearance, glass and touch behavior still need iOS/Android verification.
-
-See [native control themes](../../../docs/control-theme.md) and [UI guide](../../../docs/ui.md).
-
-Follow the [implementation pattern](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md). Local filenames in
-this guide refer to [src/components/ui/list/](../../../src/components/ui/list/).
+Check refresh success, rejection, repeated gestures and retained content on both
+platforms. The [native stories](../../../.rnstorybook/stories/components/list.stories.tsx)
+provide grouped-list and interaction examples.

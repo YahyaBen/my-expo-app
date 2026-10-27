@@ -19,7 +19,7 @@ import {
 import { scheduleOnRN } from 'react-native-worklets';
 import { useThemeSettings, type ColorSchemePreference } from '@/context/theme.context';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
-import { ColorSchemeControl } from '@components/ui';
+import { ColorSchemeControl } from '../appearance/color-scheme-control';
 
 type Snapshot = { image: SkImage; scheme: ColorSchemePreference; width: number; height: number };
 const AppearanceControlContext = createContext<{
@@ -27,14 +27,14 @@ const AppearanceControlContext = createContext<{
   disabled: boolean;
 } | null>(null);
 
-export function SettingsAppearanceControl() {
+export function ColorSchemeTransitionControl() {
   const control = useContext(AppearanceControlContext);
-  if (!control) throw new Error('Settings appearance control requires its transition wrapper.');
+  if (!control) throw new Error('ColorSchemeTransitionControl requires ColorSchemeTransition.');
   return <ColorSchemeControl {...control} />;
 }
 
-/** Reveal the live Settings screen beneath a temporary image of its previous appearance. */
-export function SettingsAppearanceTransition({ children }: { children: ReactNode }) {
+/** Reveal live screen content beneath a temporary image of its previous appearance. */
+export function ColorSchemeTransition({ children }: { children: ReactNode }) {
   const { colorScheme, setColorScheme, appearanceReady } = useThemeSettings();
   const motionEnabled = useMotionEnabled();
   const view = useRef<ViewInstance>(null);

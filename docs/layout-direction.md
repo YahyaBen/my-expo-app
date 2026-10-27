@@ -29,15 +29,13 @@ Use the shared `BottomSheet` export from `@components/ui`. Expo's universal shee
 creates its own native Host; the shared wrapper bridges content back through a
 `UniversalHost` so open sheets follow theme and direction changes.
 
-Storybook **Pages / Layout direction** includes light, dark and initial RTL
-fixtures, a draft field, leading/trailing actions, a stepper and an open-sheet
-switch. Its direction-only frame lives in
-[`LayoutDirectionFrame`](../.rnstorybook/components/layout-direction-frame.tsx),
-outside the production UI API. Automated suites have been removed; existing
-test IDs remain for future tests. Check draft preservation, open-sheet updates,
-native appearance, text cursor/focus and back gestures manually on iOS and Android.
-Confirm that production pages no longer expose the footer using a signed-in or
-development guest session.
+Current native fixtures include [page RTL](../.rnstorybook/stories/components/page-screen.stories.tsx),
+[tab direction](../.rnstorybook/stories/components/navigation.stories.tsx) and
+[live button direction](../.rnstorybook/stories/components/button.stories.tsx).
+Check draft preservation, open-sheet updates, native appearance, text cursor/focus
+and back gestures manually on iOS and Android. Existing selectors remain available;
+automated suites have been removed. Confirm production pages have no direction
+footer through normal public or authenticated navigation.
 
 Sources: [Expo localization](https://docs.expo.dev/guides/localization/),
 [SDK 58 Host](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/host/),

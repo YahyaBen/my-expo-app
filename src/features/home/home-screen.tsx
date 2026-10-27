@@ -7,17 +7,18 @@ import {
   PageSection,
   UniversalButtonContent,
   UniversalTextContent,
+  StoryList,
+  StackedCarousel,
+  VerificationCodeFace,
+  CircularCarousel,
+  ThemeCanvas,
+  IosHomeGrid,
 } from '@components/ui';
 import { useAuthGuards } from '@/guards/auth-guards';
 import { developerScreensEnabled, storybookEnabled } from '@/config/developer-tools';
 import { getAppBrand } from '@/config/brand';
 import { spacing } from '@/constants/layout';
 import { SampleRecipeRows } from '@/features/navigation/sample-recipes';
-import { HomeStoryList } from './home-story-list';
-import { HomeStackedCarousel } from './home-stacked-carousel';
-import { HomeVerificationCodeFace } from './home-verification-code-face';
-import { HomeCircularCarousel } from './home-circular-carousel';
-import { HomeThemeCanvas } from './home-theme-canvas';
 
 export default function HomeScreen() {
   const { t } = useTranslation();
@@ -27,11 +28,12 @@ export default function HomeScreen() {
     <PageScreen tab title={t('common.home')} description="">
       <PageSection testID="home-components">
         <UniversalTextContent variant="title">{t('starter.componentsTitle')}</UniversalTextContent>
-        <HomeStoryList />
-        <HomeStackedCarousel />
-        <HomeVerificationCodeFace />
-        <HomeCircularCarousel />
-        <HomeThemeCanvas />
+        <StoryList />
+        <StackedCarousel />
+        <VerificationCodeFace />
+        <CircularCarousel />
+        <ThemeCanvas />
+        <IosHomeGrid />
       </PageSection>
       <PageSection spacing={spacing.xl}>
         <UniversalTextContent variant="label" tone="secondary" testID="home-brand">

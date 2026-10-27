@@ -1,55 +1,25 @@
 ---
 name: template-skill-ui-checkbox
-description: Compose or maintain Template Checkbox choices with controlled booleans, translated labels, disabled guards and native Host styling. Use for checkbox usage and the in-app showcase.
+description: Compose controlled native checkbox choices with disabled-state guards.
 ---
 
 # Checkbox
 
-Use `Checkbox` from `@components/ui` inside an existing `PageScreen` or
-`UniversalHost`. Follow [Template implementation](../template-skill-implementation/SKILL.md)
-and [mobile UI requirements](../expo-mobile-ui-only/SKILL.md).
+Import `Checkbox` from `@components/ui` inside the existing Host.
+Source: [checkbox.tsx](../../../src/components/ui/checkbox/checkbox.tsx).
+The wrapper re-exports Expo props and guards disabled callbacks.
 
-## Contract
+- Required: `value: boolean`, `onValueChange(next: boolean)`.
+- Optional: translated `label`, `disabled`, `testID`, native `modifiers`.
+- Use the callback's next value. Each independent choice has its own state.
+  This API has no radio-group, mixed/indeterminate or validation behavior.
+- Disabling preserves the selected value and suppresses activation; it does not
+  clear state, validate or save preferences.
+- Keep native label semantics, touch targets and Host appearance. Avoid nesting
+  inside another clickable row or adding custom checkbox artwork.
+- There are no `checked`, `onChange`, RN `style`, `color` or children props.
+  Persistence and validation stay in the feature/form owner.
 
-Read the [wrapper](../../../src/components/ui/checkbox/checkbox.tsx) and
-[installed props](../../../node_modules/@expo/ui/src/universal/Checkbox/types.ts).
-Required props are `value: boolean` and `onValueChange(next: boolean)`.
-Optional props are `label`, `disabled`, `testID` and native `modifiers`.
-
-```tsx
-<Checkbox
-  label={t('showcase.savePreference')}
-  value={checked}
-  onValueChange={setChecked}
-  testID="recipe-save-choice"
-/>
-```
-
-The caller owns `checked` and its setter. Use the callback's next value rather
-than toggling captured state. Keep independent choices independent; this control
-does not implement a radio group, mixed/indeterminate state or form validation.
-There are no `checked`, `onChange`, `style`, `color` or children props.
-
-## Composition
-
-- Supply a translated label. Do not nest the checkbox inside another clickable
-  button/row; retain its native semantics and touch target.
-- Set `disabled` for unavailable choices. The wrapper guards callbacks as well
-  as disabling the native control. A disabled selected value remains selected;
-  disabling does not clear state or persist a preference.
-- Appearance and tint come from the owning Host. Do not add another Host for an
-  ordinary field, emulate native glass, or introduce custom checkbox artwork.
-- Keep persistence and validation in the feature or existing form adapter.
-  Changing a demo choice must not silently update stored app preferences.
-
-## Showcase
-
-[UI showcase → Checkbox](../../../src/features/ui-showcase/checkbox-screen.tsx),
-route `/ui-component/checkbox`, covers independent choices, a wrapping label,
-reset, change counts and disabled checked/unchecked states. Check label/control
-activation, disabled suppression, RTL and large text on native devices.
-Static checks do not prove native appearance or accessibility.
-
-SDK 58 API reference; compare with the installed `@expo/ui` types:
-[Checkbox](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/checkbox/).
-Recheck the installed version before changing native APIs.
+Use the [showcase](../../../src/features/ui-showcase/checkbox-screen.tsx)
+at `/ui-component/checkbox` to verify independent choices, reset, disabled
+checked/unchecked values, long labels, RTL and native accessibility.

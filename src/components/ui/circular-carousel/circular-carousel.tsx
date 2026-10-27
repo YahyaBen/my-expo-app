@@ -3,77 +3,52 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Column, RNHostView } from '@expo/ui';
 import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
+  useDerivedValue,
   withSpring,
   type SharedValue,
 } from 'react-native-reanimated';
-import {
-  Column,
-  RNHostView,
-  Row,
-  Switch,
-  UniversalTextContent,
-  nativeFillWidth,
-  nativeFillWidthCenter,
-  useHostColorScheme,
-  useHostLayoutDirection,
-} from '@components/ui';
+import { UniversalTextContent } from '../text/universal-text';
+import { nativeFillWidth } from '../native/native-fill-width';
+import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
+import { Switch } from '../switch/switch';
 import { radii, screenContentMaxWidth, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
 const photos = [1018, 1015, 1016, 1025, 1039, 1043];
 
-const carouselDetails = {
-  stories: { titleKey: 'starter.storyListTitle', testID: 'home-story-list' },
-  stacked: { titleKey: 'starter.stackedCarouselTitle', testID: 'home-stacked-carousel' },
-  circular: { titleKey: 'starter.circularCarouselTitle', testID: 'home-circular-carousel' },
-};
-
-type CarouselVariant = keyof typeof carouselDetails;
-
-// Motion references: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/story-list
-// and https://github.com/enzomanuelmangano/demos/tree/main/src/animations/stacked-carousel
-// and https://github.com/enzomanuelmangano/demos/tree/main/src/animations/circular-carousel
-export function HomePhotoCarousel({ variant }: { variant: CarouselVariant }) {
+// Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/circular-carousel
+export function CircularCarousel() {
   const { t } = useTranslation();
-  const stacked = variant === 'stacked';
-  const circular = variant === 'circular';
-  const { titleKey, testID } = carouselDetails[variant];
-  const title = t(titleKey);
+  const testID = 'home-circular-carousel';
+  const title = t('starter.circularCarouselTitle');
   const [scaleEnabled, setScaleEnabled] = useState(false);
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
-  const colors = useThemeColors(useHostColorScheme());
   const width = Math.max(
     1,
     Math.min(windowWidth - insets.left - insets.right, screenContentMaxWidth) - spacing.lg * 2,
   );
-  const cardWidth = circular
-    ? width / 4
-    : stacked
-      ? Math.max(1, Math.min(width - spacing.sm * 2, 320))
-      : width * 0.78;
-  const cardHeight = circular
-    ? cardWidth
-    : stacked
-      ? cardWidth * 0.625
-      : Math.min(width * 1.05, 420);
-  const height = circular ? cardWidth * 3 : stacked ? cardHeight + spacing.xl * 3 : cardHeight;
+
+  const cardWidth = width / 4;
+  const cardHeight = cardWidth;
+  const height = cardWidth * 3;
   const scrollRef = useRef<Animated.ScrollView>(null);
   const selectedIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollOffset = useSharedValue(0);
+
   const scaleProgress = useDerivedValue<number>(() => {
-    if (!circular || reducedMotion) return 0;
+    if (reducedMotion) return 0;
     return withSpring(scaleEnabled ? 1 : 0, { duration: 400, dampingRatio: 1 });
   });
   const onScroll = useAnimatedScrollHandler((event) => {
@@ -98,15 +73,13 @@ export function HomePhotoCarousel({ variant }: { variant: CarouselVariant }) {
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <UniversalTextContent variant="subtitle">{title}</UniversalTextContent>
       <UniversalTextContent tone="muted">{t('starter.storyListHint')}</UniversalTextContent>
-      {circular ? (
-        <Switch
-          label={t('starter.circularCarouselScale')}
-          value={scaleEnabled}
-          onValueChange={setScaleEnabled}
-          disabled={reducedMotion}
-          testID={`${testID}-scale`}
-        />
-      ) : null}
+      <Switch
+        label={t('starter.circularCarouselScale')}
+        value={scaleEnabled}
+        onValueChange={setScaleEnabled}
+        disabled={reducedMotion}
+        testID={`${testID}-scale`}
+      />
       <RNHostView matchContents>
         <View
           style={{ width, height, overflow: 'hidden', direction: 'ltr' }}
@@ -160,36 +133,18 @@ export function HomePhotoCarousel({ variant }: { variant: CarouselVariant }) {
                 index={index}
                 width={cardWidth}
                 height={cardHeight}
-                inset={(width - cardWidth) / (stacked || circular ? 2 : 4)}
+                inset={(width - cardWidth) / 2}
                 scrollOffset={scrollOffset}
                 scaleProgress={scaleProgress}
                 rtl={rtl}
                 reducedMotion={reducedMotion}
-                variant={variant}
                 testID={`${testID}-photo-${id}`}
               />
             ))}
           </View>
         </View>
       </RNHostView>
-      {stacked ? (
-        <Column alignment="center" modifiers={nativeFillWidthCenter}>
-          <Row spacing={spacing.sm}>
-            {photos.map((id, index) => (
-              <Column
-                key={id}
-                testID={`${testID}-dot-${index}`}
-                style={{
-                  width: spacing.sm,
-                  height: spacing.sm,
-                  borderRadius: radii.pill,
-                  backgroundColor: index === activeIndex ? colors.tint : colors.surfaceVariant,
-                }}
-              />
-            ))}
-          </Row>
-        </Column>
-      ) : null}
+
       <UniversalTextContent variant="caption" tone="muted" testID={`${testID}-position`}>
         {t('starter.storyListPosition', { number: activeIndex + 1, total: photos.length })}
       </UniversalTextContent>
@@ -207,7 +162,6 @@ function PhotoCard({
   scaleProgress,
   rtl,
   reducedMotion,
-  variant,
   testID,
 }: {
   id: number;
@@ -219,101 +173,48 @@ function PhotoCard({
   scaleProgress: SharedValue<number>;
   rtl: boolean;
   reducedMotion: boolean;
-  variant: CarouselVariant;
   testID: string;
 }) {
   const colors = useThemeColors(useHostColorScheme());
-  const circular = variant === 'circular';
-  const insetX = inset + (circular ? spacing.sm : 0);
+  const insetX = inset + spacing.sm;
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
-    if (circular) {
-      const distance = position - index;
-      const range = [-2, -1, 0, 1, 2];
-      const scale = interpolate(distance, range, [0.5, 0.9, 1.2, 0.9, 0.5], Extrapolation.CLAMP);
-      return {
-        opacity: reducedMotion
-          ? 1
-          : interpolate(distance, range, [0.5, 1, 1, 1, 0.5], Extrapolation.CLAMP),
-        transform: [
-          { translateX: (index - position) * width * (rtl ? -1 : 1) },
-          {
-            translateY: reducedMotion
-              ? 0
-              : interpolate(
-                  distance,
-                  range,
-                  [0, -width / 3, -width / 2, -width / 3, 0],
-                  Extrapolation.CLAMP,
-                ),
-          },
-          { scale: 1 + (scale - 1) * scaleProgress.get() },
-        ],
-      };
-    }
-    if (reducedMotion) {
-      return {
-        opacity: interpolate(
-          position,
-          [index - 1, index, index + 1],
-          [0, 1, 0],
-          Extrapolation.CLAMP,
-        ),
-        transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
-      };
-    }
-    if (variant === 'stacked') {
-      const distance = position - index;
-      const range = [-2, -1, 0, 1, 2];
-      return {
-        opacity: Math.max(
-          0,
-          Math.min(
-            1,
-            interpolate(distance, [-3, ...range], [0, 0.2, 0.8, 1, -1, -2], Extrapolation.CLAMP),
-          ),
-        ),
-        transform: [
-          {
-            translateY: interpolate(distance, range, [65, 35, 0, -100, -100], Extrapolation.CLAMP),
-          },
-          { scale: interpolate(distance, range, [0.7, 0.8, 1, 1.5, 1.5], Extrapolation.CLAMP) },
-          { perspective: 600 },
-          { rotateX: `${interpolate(distance, range, [45, 30, 0, 0, 0], Extrapolation.CLAMP)}deg` },
-        ],
-      };
-    }
-    const range = [index - 2, index - 1, index, index + 1];
+    const distance = position - index;
+    const range = [-2, -1, 0, 1, 2];
+    const scale = interpolate(distance, range, [0.5, 0.9, 1.2, 0.9, 0.5], Extrapolation.CLAMP);
     return {
-      opacity: 1,
+      opacity: reducedMotion
+        ? 1
+        : interpolate(distance, range, [0.5, 1, 1, 1, 0.5], Extrapolation.CLAMP),
       transform: [
+        { translateX: (index - position) * width * (rtl ? -1 : 1) },
         {
-          translateX:
-            interpolate(
-              position,
-              range,
-              [inset * 4, inset * 2, 0, -width - inset * 2],
-              Extrapolation.CLAMP,
-            ) * (rtl ? -1 : 1),
+          translateY: reducedMotion
+            ? 0
+            : interpolate(
+                distance,
+                range,
+                [0, -width / 3, -width / 2, -width / 3, 0],
+                Extrapolation.CLAMP,
+              ),
         },
-        { scale: interpolate(position, range, [0.8, 0.9, 1, 1], Extrapolation.CLAMP) },
+        { scale: 1 + (scale - 1) * scaleProgress.get() },
       ],
     };
   });
-
   return (
     <Animated.View
       style={[
         {
           position: 'absolute',
-          top: circular ? width + spacing.sm : variant === 'stacked' ? spacing.xl : 0,
+          top: width + spacing.sm,
           left: rtl ? undefined : insetX,
           right: rtl ? insetX : undefined,
-          width: circular ? Math.max(1, width - spacing.lg) : width,
-          height: circular ? Math.max(1, height - spacing.lg) : height,
+          width: Math.max(1, width - spacing.lg),
+          height: Math.max(1, height - spacing.lg),
           zIndex: photos.length - index,
-          borderRadius: circular ? radii.pill : radii.card,
-          borderWidth: circular ? 2 : 0,
+          borderRadius: radii.pill,
+          borderWidth: 2,
           borderColor: colors.background,
           overflow: 'hidden',
           backgroundColor: colors.surfaceVariant,
@@ -322,7 +223,7 @@ function PhotoCard({
       ]}
     >
       <Image
-        source={{ uri: `https://picsum.photos/id/${id}/${circular ? '400/400' : '600/800'}` }}
+        source={{ uri: `https://picsum.photos/id/${id}/400/400` }}
         contentFit="cover"
         cachePolicy="memory-disk"
         accessible={false}

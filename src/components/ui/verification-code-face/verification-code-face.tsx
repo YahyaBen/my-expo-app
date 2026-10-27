@@ -8,17 +8,12 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {
-  Column,
-  RNHostView,
-  TextInput,
-  UniversalButtonContent,
-  UniversalTextContent,
-  nativeFillWidth,
-  nativeFillWidthCenter,
-  useHostColorScheme,
-  type TextInputRef,
-} from '@components/ui';
+import { Column, RNHostView, type TextInputRef } from '@expo/ui';
+import { UniversalButtonContent } from '../button/universal-button';
+import { UniversalTextContent } from '../text/universal-text';
+import { TextInput } from '../text-input/text-input';
+import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
+import { useHostColorScheme } from '../host/universal-host';
 import { spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -28,7 +23,7 @@ const codeLength = 4;
 const correctCode = '1111';
 
 // Reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/verification-code-face
-export function HomeVerificationCodeFace() {
+export function VerificationCodeFace() {
   const { t } = useTranslation();
   const [code, setCode] = useState('');
   const inputRef = useRef<TextInputRef>(null);

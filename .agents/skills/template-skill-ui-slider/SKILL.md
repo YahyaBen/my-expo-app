@@ -1,62 +1,28 @@
 ---
 name: template-skill-ui-slider
-description: Compose or maintain Template Slider controls with continuous or stepped numeric ranges, controlled updates and disabled guards. Use for slider sizing, value feedback and its in-app showcase.
+description: Compose controlled native sliders with continuous or stepped numeric ranges.
 ---
 
 # Slider
 
-Use `Slider` from `@components/ui` inside the existing Host. Follow
-[Template implementation](../template-skill-implementation/SKILL.md) and
-[mobile UI requirements](../expo-mobile-ui-only/SKILL.md).
-Read the [wrapper](../../../src/components/ui/slider/slider.tsx) and
-[installed props](../../../node_modules/@expo/ui/src/universal/Slider/types.ts).
+Import `Slider` from `@components/ui` inside an existing Host.
+Source: [slider.tsx](../../../src/components/ui/slider/slider.tsx).
 
-## Contract
+- Required: numeric `value`, `onValueChange(next: number)`.
+- Optional: `min` (0), `max` (1), `step`, `disabled`, `testID`,
+  native `modifiers`.
+- Supply finite values, `min < max` and an in-range value. Omit step for a
+  continuous range; a discrete range needs positive aligned steps/endpoints.
+- Give the native parent/control real width. Show translated description/value
+  and units nearby; proximity alone does not prove an accessibility association.
+- Drag callbacks are frequent. Update local preview state and reuse the feature's
+  commit/debounce policy for storage/network work. Format display precision
+  separately from the editable value.
+- Disabled preserves value and suppresses callbacks. Keep native thumb, track,
+  colors and feedback supplied by the Host/platform.
+- There are no `label`, RN `style`, `minimumValue`, `maximumValue`,
+  `onSlidingComplete`, track-color or children props.
 
-Required: numeric `value` and `onValueChange(next: number)`.
-Optional: `min` (default 0), `max` (default 1), `step`, `disabled`,
-`testID` and native `modifiers`.
-
-```tsx
-<Slider
-  min={0}
-  max={100}
-  step={10}
-  value={amount}
-  onValueChange={setAmount}
-  modifiers={nativeFillWidth}
-  testID="recipe-amount"
-/>
-```
-
-The caller owns `amount`. Supply finite values, a range with `min < max`,
-and an in-range value. Omit step for a continuous range; use a positive step
-for discrete values and align the chosen value/endpoints deliberately.
-Do not rely on the native control to repair NaN or an invalid domain range.
-
-## Interaction and composition
-
-Show a nearby translated description/value with the appropriate unit.
-Give the control actual available width through its native parent/modifiers.
-There is no slider `label`, RN `style`, `minimumValue`, `maximumValue`,
-`onSlidingComplete`, track-color or children API in this wrapper.
-
-`onValueChange` can fire many times while dragging. Update local preview state;
-do not write storage or fire a request on every tick. Reuse the owning feature's
-existing commit/debounce policy when persistence is requested. Format displayed
-precision separately instead of rounding every incoming value needlessly.
-
-`disabled` disables the native control and the wrapper guards its callback.
-It does not reset the value. Native thumb, track, colors and feedback follow
-the Host/platform; do not paint an imitation slider or glass layer.
-
-## Showcase
-
-[UI showcase → Slider](../../../src/features/ui-showcase/slider-screen.tsx),
-route `/ui-component/slider`, compares a 0–100 stepped range, a continuous
-0–1 range, reset and a disabled control with a change counter. Check endpoints,
-steps, native accessibility adjustment, disabled suppression and RTL on devices.
-A nearby text label alone does not establish a screen-reader association.
-
-SDK 58 reference; compare with the installed `@expo/ui` types:
-[Slider](https://docs.expo.dev/versions/v58.0.0/sdk/ui/universal/slider/).
+Use the [showcase](../../../src/features/ui-showcase/slider-screen.tsx)
+at `/ui-component/slider`. Verify endpoints, step alignment, reset, disabled
+suppression, accessibility adjustment and RTL on devices.
