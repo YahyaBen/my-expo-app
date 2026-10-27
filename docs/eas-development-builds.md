@@ -8,6 +8,44 @@ The build records below describe earlier SDK 57 binaries and configuration.
 Create new SDK 58 development builds before connecting to the upgraded Metro
 server. No SDK 58 cloud-build or device result is established by these records.
 
+## Android development build memory limits
+
+The Android `development` profile runs `:app:assembleDebug` with one Gradle worker,
+parallel project execution disabled, and `config/android-build-memory.gradle` as
+an init script. The script adds a shared CMake/Ninja pool to Android application
+and library modules: one compiler for Skia's heavy translation units and two for
+other native modules, including autolinked dependencies. Gradle
+worker limits alone do not limit Ninja's internal compiler jobs. All four existing
+Android ABIs remain enabled.
+
+These limits address local reproductions where Gradle, three Kotlin compiler
+JVMs, and simultaneous Skia C++ compilers exhausted the roughly 16 GB build
+environment. A later cloud retry still used the medium worker's parallel build
+defaults and failed with the same disappearing-daemon error. The current EAS
+account is on the Free plan, so the development profile keeps the medium worker.
+The limits trade build speed for lower peak memory. They do not change
+SDK/package versions, runtime behavior, or heap settings.
+
+The Skia maintainers confirmed that 2.14.0 exhausts EAS medium-worker memory in
+an SDK 58 reproduction. The additional heavy C++ translation units compile in
+parallel; [upstream fix #4284](https://github.com/wcandillon/react-native-skia/pull/4284)
+reduces that compiler memory use and is included in the newer 2.x release.
+This project currently retains Expo's pinned Skia 2.14.0 with the concurrency
+limits above.
+
+Local validation on 2026-10-26 completed `:app:assembleDebug` for all four ABIs
+in 33m 2s, with a measured cgroup peak of 10.62 GiB and zero OOM kills. This ran
+against the retained EAS native project with cached Java/Kotlin tasks, so it does
+not establish a clean cloud-build result or device behavior. A fresh cloud build
+is required to verify the complete development profile.
+
+An incremental rebuild on 2026-10-27 included the current `react-native-view-shot`
+6.1.1 dependency and completed in 3m 9s. Its APK contains all four ABIs and passes
+Android APK signature verification; cgroup memory counters report zero OOM kills.
+Installation and runtime behavior remain untested.
+
+## Historical SDK 57 build records
+
 Requested 2026-10-03 after the global checks passed. Used the existing `development` profile with `developmentClient: true`, internal distribution, and the development environment. EAS login and linked project were verified.
 
 ## Android

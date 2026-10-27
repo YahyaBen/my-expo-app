@@ -13,6 +13,7 @@ export {
 } from '@expo/ui';
 
 export * from './appearance/color-scheme-control';
+export * from './appearance/color-scheme-canvas';
 export * from './alert/alert';
 export * from './auth/auth-screen-frame';
 export * from './bottom-sheet/bottom-sheet';

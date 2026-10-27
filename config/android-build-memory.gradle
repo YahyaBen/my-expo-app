@@ -1,0 +1,16 @@
+// Configure every Android module, including autolinked native dependencies.
+// Gradle worker limits alone do not limit the jobs Ninja launches internally.
+gradle.beforeProject { project ->
+    ['com.android.application', 'com.android.library'].each { pluginId ->
+        project.pluginManager.withPlugin(pluginId) {
+            def android = project.extensions.getByName('android')
+            // Skia's JSI/recorder translation units are the measured memory hotspot.
+            def compileJobs = project.name == 'shopify_react-native-skia' ? 1 : 2
+            android.defaultConfig.externalNativeBuild.cmake.arguments.addAll([
+                '-DCMAKE_JOB_POOLS=expo_native_compile=' + compileJobs,
+                '-DCMAKE_JOB_POOL_COMPILE=expo_native_compile',
+                '-DCMAKE_JOB_POOL_LINK=expo_native_compile'
+            ])
+        }
+    }
+}

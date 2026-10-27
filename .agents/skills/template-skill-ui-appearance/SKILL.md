@@ -6,6 +6,31 @@ description: Compose configured brand palettes, saved app appearance, isolated t
 # Appearance and language
 
 Use the shared `ColorSchemeControl` from `@components/ui` in Settings and login.
+Settings wraps its real page in the local
+[SettingsAppearanceTransition](../../../src/features/settings/settings-appearance-transition.tsx).
+`ColorSchemeControl` accepts optional `onValueChange` and `disabled` props for
+that coordination; an override must apply the selected preference through the
+existing setter. Without an override, the control still applies it directly.
+The wrapper captures the old page with `react-native-view-shot`, changes the
+saved appearance, then reveals the live page through a 300ms Skia circle.
+It includes the Settings header and native form, preserves System/Light/Dark,
+blocks duplicate selections and releases the temporary capture file. Reduce
+Motion, resize or capture failure apply the preference immediately; late
+captures after unmount are ignored. The native capture module requires a rebuilt
+development client. Native rendering and snapshot coverage need device checks.
+
+Home keeps `ColorSchemeCanvas` beside its Dark mode switch as a component demo.
+The canvas is decorative, accepts an optional `testID`, and inherits its Host's
+scheme and direction. It measures the available native width within a fixed
+160-point/dp frame. A 300ms Skia circle reveals
+the sun/moon artwork on an appearance change. Reduce Motion and inactive app
+state settle it immediately; cancellation handles rapid changes and unmounting.
+It creates no preference provider, storage or native Host. Native controls stay
+outside the artwork. The isolated
+[Appearance Canvas stories](../../../.rnstorybook/stories/components/appearance-canvas.stories.tsx)
+cover both initial appearances and provide motion controls; verify native form
+layout, System updates, RTL and actual control activation on devices.
+
 Settings owns its local [HeaderMotionPicker](../../../src/features/settings/header-motion-picker.tsx),
 shown only when `design.header.artwork` enables decorative effects.
 The [ThemePicker](../../../src/features/ui-showcase/theme-picker.tsx) belongs only

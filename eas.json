@@ -14,6 +14,9 @@
         "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "true",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
       },
+      "android": {
+        "gradleCommand": ":app:assembleDebug --max-workers=1 --no-parallel --init-script ../config/android-build-memory.gradle"
+      },
       "ios": {
         "image": "macos-tahoe-26.6-xcode-27.1",
         "simulator": true

@@ -4,17 +4,21 @@ import { Picker } from '../picker/picker';
 
 export function ColorSchemeControl({
   testID = 'app-settings-color-scheme-picker',
+  onValueChange,
+  disabled = false,
 }: {
   testID?: string;
+  onValueChange?: (scheme: ColorSchemePreference) => void;
+  disabled?: boolean;
 }) {
   const { t } = useTranslation();
   const { colorScheme, setColorScheme, appearanceReady } = useThemeSettings();
   return (
     <Picker<ColorSchemePreference>
       selectedValue={colorScheme}
-      onValueChange={setColorScheme}
+      onValueChange={onValueChange ?? setColorScheme}
       appearance="menu"
-      enabled={appearanceReady}
+      enabled={appearanceReady && !disabled}
       testID={testID}
     >
       <Picker.Item label={t('common.systemMode')} value="system" />
