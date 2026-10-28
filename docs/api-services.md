@@ -17,6 +17,11 @@ features. Create only the layers required by an actual endpoint. Preserve abort
 signals, account ownership, session-generation checks and mandatory cache work
 when composing success navigation.
 
+Current-identity and entity-detail queries use `skipToken` until their required
+identifiers exist. Empty/whitespace identifiers and an empty detail identifier
+tuple cannot start a request through manual refetch. Normalize identifiers once
+for both the query key and the readiness check.
+
 Transport modules may use the existing `.api.ts` or `.service.ts` convention;
 both have the same enforced import boundary. Keep React/navigation and cache
 effects in consumers or query/mutation modules, and schemas/mappers free of

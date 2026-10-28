@@ -59,7 +59,7 @@ export function detailQueryOptions<TItem>(
   staleTime = 60_000,
 ) {
   const normalized = ids.map((id) => id?.trim() ?? '');
-  const valid = normalized.every(Boolean);
+  const valid = normalized.length > 0 && normalized.every(Boolean);
   return queryOptions({
     queryKey: keys.detail(...normalized),
     queryFn: valid ? ({ signal }) => fetchDetail(normalized, { signal }) : skipToken,
