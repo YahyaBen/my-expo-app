@@ -1,0 +1,6 @@
+{
+  "react-native": {
+    "app_data_collection_default_enabled": false,
+    "messaging_auto_init_enabled": false
+  }
+}
