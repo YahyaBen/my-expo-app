@@ -2,7 +2,7 @@
 
 The selected brand's `presentation.palette` chooses UX Template (`ux`),
 Instagram (`instagram`) or Altarea (`altarea`), each in light and dark appearance.
-Likan selects Altarea; the template retains UX. Palette colors and semantic tokens stay in
+The default template selects UX. Palette colors and semantic tokens stay in
 `src/constants/themes/`; Instagram's palette is bundled static JSON. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
@@ -16,19 +16,18 @@ padding and interaction feedback remain platform-owned. See the
 values, typography, spacing, shapes and adaptation limits.
 
 Titled page frames blur the content beneath their headers by default in every
-theme. The title and Back remain sharp above that native backdrop. Altarea sets
+theme. The title and Back remain sharp above that native backdrop. UX and Altarea set
 `design.header.artwork` to false, omitting colored waves even when an older
 Dunes/Ribbon/Rain preference is stored. Title clearance, safe areas, scrolling
 and touch shielding stay in place. The inactive header-effect picker is hidden
-for Altarea; its saved value is preserved for themes that support the artwork.
+for those palettes; its saved value is preserved for themes that support artwork.
 Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
 factor. iOS ultra-thin system materials retain their native color treatment. See the
 [page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md) for the
 shared blur policy and capture-background requirements.
-Page titles use the configured heading font and foreground accent. Home uses
-magenta brand labeling, a warm neutral section and one filled primary action.
+Page titles and Home branding use the configured font and theme foreground.
 
 The native Tokens page (`/ui-component/tokens`) displays the active palette,
 type ramp, shapes, shared spacing, working button states and an editable field.
@@ -81,9 +80,9 @@ Explicit component and Host scheme overrides retain their existing priority.
 Language uses its existing saved provider. Header effect and the explicit motion
 choice still restore before launch completion. Header choices include Default,
 Dunes, Ribbon and Rain; unsupported saved values retain the manifest's initial
-style (Default for Likan, Dunes for the template). Default avoids mounting the
-wave/canvas/mask while retaining the rectangular native header blur. Altarea
-uses that rectangular blur regardless of a saved decorative effect because its
+style (Default for the template). Default avoids mounting the
+wave/canvas/mask while retaining the rectangular native header blur. UX and Altarea
+use that rectangular blur regardless of a saved decorative effect because their
 header artwork is disabled. Existing animated choices and saved values are
 preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.

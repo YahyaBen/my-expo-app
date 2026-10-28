@@ -23,7 +23,7 @@ Current guides are listed first. Component contracts belong to independent skill
 - [Live LTR / RTL](layout-direction.md)
 - [Safe-area handling](safe-area-handling.md)
 - [App Settings and appearance](appearance-themes.md)
-- [Altarea and Likan theme](altarea-theme.md)
+- [Altarea palette reference](altarea-theme.md)
 - [Native control themes](control-theme.md)
 - [Shared Skia page motion](shared-skia-motion.md)
 
@@ -82,6 +82,7 @@ These files record actual native observations. Keep their dated context when usi
 them; they do not establish current SDK behavior.
 
 - [Build verification](build-verification.md)
+- [Native build evidence for retired client configurations](archive/native-build-evidence.md)
 - [Former Home catalog](home-catalog-layout.md)
 - [Navigation wave verification](navbar-wave-verification.md)
 - [UI library history](archive/ui-library-history.md)

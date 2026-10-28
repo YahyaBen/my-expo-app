@@ -9,10 +9,13 @@ owns literal Metro imports and the small selection helpers used by the root,
 page titles, auth headings and launch screen. Native modules never import the Node resolver
 or full brand manifests.
 
-| Brand      | Heading font                             | Registered launch artwork            | Launch mode |
-| ---------- | ---------------------------------------- | ------------------------------------ | ----------- |
-| `likan`    | Bundled Urbanist Bold for French/English | `assets/animations/blue-pepe.lottie` | Branded     |
-| `template` | Native system typography                 | `assets/images/icon.png`             | Minimal     |
+| Brand      | Heading font             | Registered launch artwork | Launch mode |
+| ---------- | ------------------------ | ------------------------- | ----------- |
+| `template` | Native system typography | `assets/images/icon.png`  | Minimal     |
+
+`assets/animations/blue-pepe.lottie` remains bundled and registered as `bluePepe`.
+Branded Lottie launch support is retained: a manifest can select
+`presentation.launch: "branded"` and `presentation.launchArtwork: "bluePepe"`.
 
 The template image is an existing Expo placeholder. Replace it with client artwork
 before distribution. Native app/adaptive icons and the native splash are separate
@@ -34,7 +37,7 @@ launch does not mount the registered artwork, though its literal asset remains
 bundled for branded previews. See the [launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md).
 
 Android derives its embedded family from the filename. iOS uses the font's
-embedded name, which can differ. Likan's `Urbanist-Bold.ttf` is a static 700-weight
+embedded name, which can differ. The retained `Urbanist-Bold.ttf` is a static 700-weight
 TrueType font with family `Urbanist`, subfamily `Bold`, and PostScript name
 `Urbanist-Bold`. Both platform entries use `Urbanist-Bold`. The retained Inter
 Black asset uses `Inter-Black`; the alias `InterBlack` does not occur in its name
@@ -49,7 +52,7 @@ Its SHA-256 is
 The Urbanist Project Authors' SIL Open Font License 1.1 is retained in
 [`assets/fonts/Urbanist-OFL.txt`](../assets/fonts/Urbanist-OFL.txt), sourced from
 [Google Fonts](https://github.com/google/fonts/blob/main/ofl/urbanist/OFL.txt).
-The static file remains the selected heading font on SDK 58. SDK 58 also supports
+The static file remains available as a registered heading font on SDK 58. SDK 58 also supports
 variable fonts, but changing the registered font still requires checking its
 metadata, native embedding and rendering on both platforms.
 

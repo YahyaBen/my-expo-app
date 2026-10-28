@@ -5,7 +5,6 @@ const { resolveApiBaseUrl } = require('./api');
 const assets = require('./brand-assets.json');
 
 const brands = {
-  likan: require('./brands/likan.json'),
   template: require('./brands/template.json'),
 };
 const variants = ['development', 'preview', 'production'];

@@ -14,8 +14,8 @@ code and does not replace production auth requests.
 ## Launch the maintained examples
 
 Use a matching iOS/Android development build; the configured native modules need
-that build. The local default brand is the unlinked template. For an existing
-Likan build, set `APP_BRAND=likan` and `APP_VARIANT=development` first. See
+that build. The registered brand is `template`; select `APP_VARIANT=development`
+and use its matching native build. See
 [development setup](development.md#brand-and-environment-configuration).
 
 Catalog only, in PowerShell:

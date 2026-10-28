@@ -1,7 +1,7 @@
-# Altarea reference and Likan theme
+# Altarea palette reference
 
-The `altarea` theme is selected by Likan's brand manifest. The neutral template
-keeps UX Template. This reference records the public website design observed on
+The `altarea` palette remains available for isolated previews and future brands.
+The default template selects UX. This reference records the public website design observed on
 2026-10-23 and the values adapted to the native app. The
 [appearance guide](appearance-themes.md) owns configuration and preview behavior;
 component skills own the implementation contracts.
@@ -29,7 +29,7 @@ headings, small uppercase section labels and restrained line icons. News and
 project cards emphasize the image and text; large feature panels sometimes have
 an oversized corner on one side. The mobile header uses a circular outlined menu
 button. Photographs, the Altarea logo and its decorative brand mark are website
-content; Likan retains its own name and artwork.
+content; a client manifest supplies its own name and artwork.
 
 ## Website typography
 
@@ -116,24 +116,24 @@ hover transitions do not replace native interaction.
 Opt-in native text variants use heading 36/700, title 30/700, subtitle 22/600,
 body 18/400, label 16/600 and caption 13/400 (size/weight). Native text scaling
 and wrapping remain intact. Text with no variant keeps native typography;
-explicit caller text styles still take priority. Likan's page/auth/launch headings
-use a bundled static Urbanist Bold. Settings section and language-sheet headings
+explicit caller text styles still take priority. A manifest can select the
+retained bundled Urbanist Bold for page/auth/launch headings. Settings section and language-sheet headings
 use the same font and primary foreground: purple `#502882` in light appearance,
 with the existing lighter purple adaptation in dark appearance. Body text and native control labels keep
 platform fonts; Arabic headings use native fallback. See the
 [font registration and license](assets.md#fonts).
 
-Shared mobile spacing remains 0, 4, 8, 12, 16, 24 and 32 points/dp. Likan starts
-with native header blur over the content beneath it, while the title and Back
+Shared mobile spacing remains 0, 4, 8, 12, 16, 24 and 32 points/dp. Page frames use
+native header blur over the content beneath them, while the title and Back
 remain sharp above the backdrop. `design.header.artwork` is false for Altarea,
 so colored header waves stay absent even with an older saved effect. Settings
 hides that inactive effect picker and preserves its stored value. The measured
 title band, safe area, scroll inset and touch shield remain. Native Reduce
 Transparency keeps its existing solid-background fallback; `headerBlur={false}`
 remains an explicit frame-level opt-out. The branded launch and reduced-motion
-behavior remain configured through their existing owners. The native splash
-and adaptive icon backgrounds use the new palette; embedded font/splash changes
-need a matching native build.
+behavior remain configured through their existing owners. Native splash and
+adaptive icons remain manifest-owned; selecting a palette does not change them.
+Embedded font/splash changes need a matching native build.
 
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
 factor, with no adjustable blur-level preference. iOS uses
@@ -141,10 +141,9 @@ public ultra-thin system materials, which may still apply their own color
 treatment. The capture background and platform
 limits belong to the [page contract](../.agents/skills/template-skill-ui-page/references/page-guide.md).
 
-Page titles use the purple foreground accent and the selected Urbanist family.
-Auth uses a magenta wordmark, purple heading and the theme's body type scale.
-Home groups its existing introduction and primary sign-in/account action on a
-warm neutral surface, with Settings secondary and developer links lower emphasis.
+When selected, this palette supplies purple primary and magenta secondary
+foregrounds. Heading fonts remain selected by the brand manifest, independently
+of the palette. Existing screens keep their layout and semantic token choices.
 
 ## Preview and verification
 

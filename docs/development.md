@@ -83,12 +83,12 @@ mode. `config/brand.js` validates and resolves the
 selected manifest for `app.config.js`. Register a new manifest in its small
 registry; do not copy identity fields into screens or the shared app config.
 
-`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. Both manifests
-select Default. The template's UX wireframe disables decorative header artwork,
+`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. The template
+selects Default. Its UX wireframe disables decorative header artwork,
 including previously saved effects, while preserving those saved values.
 Default uses the rectangular native header, and all three animated choices
-remain available. `presentation.launch` accepts `minimal` (the neutral template)
-or `branded` (Likan). Minimal adds no artificial startup wait; branded keeps its
+remain available. `presentation.launch` accepts `minimal` (the default)
+or `branded`. Minimal adds no artificial startup wait; branded keeps its
 artwork and exit. Restart Metro after changing these public metadata fields.
 See the [page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
 [launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) contracts for native
@@ -103,7 +103,7 @@ APP_VARIANT=development
 
 | Setting                          | Values and behavior                                                                        |
 | -------------------------------- | ------------------------------------------------------------------------------------------ |
-| `APP_BRAND`                      | `template` (local default) or `likan`; unknown IDs fail configuration                      |
+| `APP_BRAND`                      | `template` (the registered default); unknown IDs fail configuration                        |
 | `APP_VARIANT`                    | `development` (default), `preview` or `production`; independent of brand and `NODE_ENV`    |
 | `EXPO_PUBLIC_API_URL`            | Absolute HTTP(S) backend base URL; omit locally to browse public screens without a backend |
 | `GOOGLE_MAPS_ANDROID_API_KEY`    | Optional key restricted to the selected brand's Android package                            |
@@ -118,18 +118,15 @@ while signed in to an account with access to that project. No owner, API URL or
 Firebase configuration needs to be added for the starter build. The same project
 ID serves the other standard profiles; normal platform signing still applies.
 
-`template` uses `com.example.mobiletemplate` / `expomobiletemplate`, generic
-existing Expo artwork, an empty EAS project-ID slot and no Firebase file. `likan` retains
-`com.hyrkul.likan`, `myappexpo`, its existing EAS link and Android Firebase file.
-Its native display name is now `Likan`. These brands have different installation
-identities. Variants within a brand deliberately share its identity, preserving
-the installed Likan development clients and Firebase package mapping; they replace
-one another rather than installing side by side. Add a separately registered
+`template` owns the native IDs, scheme and artwork in its manifest, with an EAS
+project-ID slot and no Firebase file. It is the only registered brand.
+Variants within a brand deliberately share its identity; they replace one
+another rather than installing side by side. Add a separately registered
 identity and matching integrations if side-by-side installation is required.
 
 The standard EAS build profiles explicitly select `template` and their matching
 variant. Link that manifest to its own EAS project before cloud builds; it does
-not inherit Likan's project or Firebase configuration. Other clients require
+not inherit another client's project or Firebase configuration. Other clients require
 explicit brand selection in a dedicated profile. The template remains the default
 when `APP_BRAND` is absent, including production. Production requires the selected
 brand's project ID and rejects either developer catalog or Storybook
@@ -156,37 +153,23 @@ $env:APP_VARIANT = 'development'
 npm start
 ```
 
-Commands such as `npx eas-cli@latest build:run` resolve the EAS project from the
-local brand. Metro reads the selectors in `.env.local`, but EAS CLI project lookup
-also needs them set explicitly for the command. For the existing Likan project on
-macOS (zsh/bash), use inline selectors:
-
-```bash
-APP_BRAND=likan APP_VARIANT=development npx eas-cli@latest project:info
-APP_BRAND=likan APP_VARIANT=development npx eas-cli@latest build:run --platform ios --profile development --latest
-```
-
-The first command must identify `@hyrkul/likan` with the project ID from
-`config/brands/likan.json`. If EAS asks to configure `expo-mobile-template`, cancel
-that command and select `likan` explicitly. The template has a separate identity.
-
-On Windows PowerShell:
+Commands such as `npx eas-cli@latest build:run` resolve the project from the
+selected manifest. For the default template on Windows PowerShell:
 
 ```powershell
-$env:APP_BRAND = 'likan'
+$env:APP_BRAND = 'template'
 $env:APP_VARIANT = 'development'
 npx eas-cli@latest build:run --platform android --profile development --latest
 ```
 
-Its project ID remains in `config/brands/likan.json`. The default `template` is
-unlinked. `build:run` installs an existing development build; its profile filter
+Its project ID belongs in `config/brands/template.json`.
+`build:run` installs an existing development build; its profile filter
 does not select the brand, load that build profile's environment or create a new
 build. Use the current CLI because `eas.json` specifies a minimum version that an
 older global `eas` installation may not satisfy.
 
 Changing native identity, icons, native splash or embedded fonts requires a matching
-native build. To use a previously installed Likan client, select `likan` before
-starting Metro. The local template can resolve and export without API credentials;
+native build. The local template can resolve and export without API credentials;
 auth actions require a real backend and show safe configuration feedback otherwise.
 
 Only `{ id, name, variant, presentation }` is projected to `extra.brand` for native consumers.

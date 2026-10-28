@@ -15,7 +15,7 @@ Header geometry stays numeric in the common motion source. iOS serializes the
 two SVG paths inside its animated material-mask props; Android consumes Skia paths
 without SVG serialization. The launch edge keeps its cached paths and drift,
 without evaluating deforming header contours or details. The neutral template's
-minimal launch mounts no artwork or edge; Likan retains the branded Lottie/image
+minimal launch mounts no artwork or edge; opt-in branded launch retains Lottie/image
 presentation and upward exit. No package or SVG support was removed.
 
 Settings has a saved Reduce Motion switch. Custom motion uses the existing shared
