@@ -19,6 +19,7 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
+import { interpolatePhotoMotion } from '../photo-motion';
 
 export type StackedCarouselProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -137,7 +138,7 @@ function StackedCarouselContent({
             }}
             snapToInterval={cardWidth}
             decelerationRate="fast"
-            disableIntervalMomentum
+            directionalLockEnabled
             bounces={false}
             overScrollMode="never"
             showsHorizontalScrollIndicator={false}
@@ -233,22 +234,21 @@ function PhotoCard({
       };
     }
     const distance = position - index;
-    const range = [-2, -1, 0, 1, 2];
+    // Hidden cards must settle to a constant style rather than keep committing
+    // transforms while the visible cards move.
+    if (distance <= -3 || distance >= 1) return { opacity: 0 };
+    const range = [-2, -1, 0, 1];
     return {
-      opacity: Math.max(
-        0,
-        Math.min(
-          1,
-          interpolate(distance, [-3, ...range], [0, 0.2, 0.8, 1, -1, -2], Extrapolation.CLAMP),
-        ),
-      ),
+      // Fade throughout the outgoing step; negative opacity targets made the
+      // front card disappear halfway through a swipe.
+      opacity: interpolatePhotoMotion(distance, [-3, -2, -1, 0, 1], [0, 0.2, 0.8, 1, 0]),
       transform: [
-        {
-          translateY: interpolate(distance, range, [65, 35, 0, -100, -100], Extrapolation.CLAMP),
-        },
-        { scale: interpolate(distance, range, [0.7, 0.8, 1, 1.5, 1.5], Extrapolation.CLAMP) },
         { perspective: 600 },
-        { rotateX: `${interpolate(distance, range, [45, 30, 0, 0, 0], Extrapolation.CLAMP)}deg` },
+        {
+          translateY: interpolatePhotoMotion(distance, range, [65, 35, 0, -height * 0.2]),
+        },
+        { scale: interpolatePhotoMotion(distance, range, [0.86, 0.93, 1, 1.12]) },
+        { rotateX: `${interpolatePhotoMotion(distance, range, [32, 16, 0, 0])}deg` },
       ],
     };
   });

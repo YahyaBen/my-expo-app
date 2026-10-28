@@ -78,7 +78,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Caller-owned photos, labels, width and columns. Open and dismiss photos to inspect callbacks, then replace the dataset while expanded. Verify partial rows, empty/one-item data, native photo/label edge taps, RTL, large text and Reduce motion on devices.',
+          'Caller-owned photos, labels, width and columns. On first and repeated opens, the thumbnail stays visible until the expanded image displays, then zooms. Check slow/failed image loads and Close before display, then replace the dataset while expanded. Verify callbacks, partial rows, empty/one-item data, native photo/label edge taps, RTL, large text and Reduce motion on devices.',
       },
     },
   },

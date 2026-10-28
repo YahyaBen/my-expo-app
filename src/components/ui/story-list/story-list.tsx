@@ -19,6 +19,7 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
+import { interpolatePhotoMotion } from '../photo-motion';
 
 export type StoryListProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -129,7 +130,7 @@ function StoryListContent({
             }}
             snapToInterval={cardWidth}
             decelerationRate="fast"
-            disableIntervalMomentum
+            directionalLockEnabled
             bounces={false}
             overScrollMode="never"
             showsHorizontalScrollIndicator={false}
@@ -207,20 +208,20 @@ function PhotoCard({
         transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
       };
     }
+    // Cards outside the visible stack keep a constant style instead of receiving
+    // new native transforms on every scroll frame.
+    const distance = position - index;
+    if (distance <= -3 || distance >= 1) return { opacity: 0 };
     const range = [index - 2, index - 1, index, index + 1];
     return {
-      opacity: 1,
+      opacity: interpolatePhotoMotion(distance, [-3, -2, 0, 1], [0, 1, 1, 1]),
       transform: [
         {
           translateX:
-            interpolate(
-              position,
-              range,
-              [inset * 4, inset * 2, 0, -width - inset * 2],
-              Extrapolation.CLAMP,
-            ) * (rtl ? -1 : 1),
+            interpolatePhotoMotion(position, range, [inset * 4, inset * 2, 0, -width - inset * 2]) *
+            (rtl ? -1 : 1),
         },
-        { scale: interpolate(position, range, [0.8, 0.9, 1, 1], Extrapolation.CLAMP) },
+        { scale: interpolatePhotoMotion(position, range, [0.88, 0.94, 1, 1]) },
       ],
     };
   });

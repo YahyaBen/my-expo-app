@@ -44,7 +44,14 @@ export type IosHomeGridProps = {
 
 const spring = { duration: 400, dampingRatio: 1 };
 type Rect = { x: number; y: number; width: number; height: number };
-type Selection = { index: number; source: Rect; width: number; height: number };
+type LoadedImageSize = { source: PhotoItem['source']; width: number; height: number };
+type Selection = {
+  index: number;
+  source: Rect;
+  width: number;
+  height: number;
+  imageSize?: LoadedImageSize;
+};
 type GridProps = IosHomeGridProps & {
   columns: number;
   gap: number;
@@ -145,7 +152,7 @@ function PhotoGrid({
     setSelection(null);
   }, []);
 
-  function open(index: number, rect: Rect) {
+  function open(index: number, rect: Rect, imageSize?: LoadedImageSize) {
     if (!mounted.current || busy.current || !scene.current) return;
     busy.current = true;
     scene.current.measureInWindow((x, y, sceneWidth, height) => {
@@ -160,6 +167,7 @@ function PhotoGrid({
         source: { ...rect, x: rect.x - x, y: rect.y - y },
         width: sceneWidth,
         height,
+        imageSize,
       });
       onSelect?.(items[index], index);
     });
@@ -249,10 +257,11 @@ function PhotoTile({
   size: number;
   borderRadius: number;
   disabled: boolean;
-  onOpen: (index: number, rect: Rect) => void;
+  onOpen: (index: number, rect: Rect, imageSize?: LoadedImageSize) => void;
   testID: string;
 }) {
   const image = useRef<ViewInstance>(null);
+  const imageSize = useRef<LoadedImageSize | undefined>(undefined);
   const colors = useThemeColors(useHostColorScheme());
 
   return (
@@ -267,7 +276,7 @@ function PhotoTile({
           testID={testID}
           onPress={() =>
             image.current?.measureInWindow((x, y, width, height) =>
-              onOpen(index, { x, y, width, height }),
+              onOpen(index, { x, y, width, height }, imageSize.current),
             )
           }
         >
@@ -286,6 +295,16 @@ function PhotoTile({
           <Image
             source={item.source}
             contentFit="cover"
+            cachePolicy="memory-disk"
+            onLoad={({ source }) => {
+              if (source.width > 0 && source.height > 0) {
+                imageSize.current = {
+                  source: item.source,
+                  width: source.width,
+                  height: source.height,
+                };
+              }
+            }}
             accessible={false}
             style={{
               width: size,
@@ -327,14 +346,27 @@ function ExpandedPhoto({
   const colors = useThemeColors(useHostColorScheme());
   const drag = useSharedValue(0);
   const { source, width, height } = selection;
+  const [imageSize, setImageSize] = useState(selection.imageSize);
+  const [displayedSourceKey, setDisplayedSourceKey] = useState<string>();
+  // Equivalent source objects can be recreated by the caller without reloading
+  // the native image. Keep their measured aspect ratio across those renders.
+  const sourceKey = JSON.stringify(item.source);
+  const imageReady = displayedSourceKey === sourceKey;
+  const intrinsicSize =
+    imageSize && JSON.stringify(imageSize.source) === sourceKey ? imageSize : { width, height };
+  const coverScale = Math.max(width / intrinsicSize.width, height / intrinsicSize.height);
+  const imageWidth = intrinsicSize.width * coverScale;
+  const imageHeight = intrinsicSize.height * coverScale;
 
   useEffect(() => {
+    // Keep the existing thumbnail visible until the new native image has pixels.
+    if (!imageReady && !closing) return;
     const complete = (finished: boolean | undefined) => {
       'worklet';
       if (finished && closing) scheduleOnRN(onClosed);
     };
     progress.set(
-      motionEnabled
+      motionEnabled && imageReady
         ? withSpring(closing ? 0 : 1, spring, complete)
         : withTiming(closing ? 0 : 1, { duration: 0 }, complete),
     );
@@ -343,10 +375,10 @@ function ExpandedPhoto({
       cancelAnimation(progress);
       cancelAnimation(drag);
     };
-  }, [closing, drag, motionEnabled, onClosed, progress]);
+  }, [closing, drag, imageReady, motionEnabled, onClosed, progress]);
 
   const pan = usePanGesture({
-    enabled: !closing,
+    enabled: imageReady && !closing,
     activeOffsetY: 8,
     failOffsetX: [-20, 20],
     onUpdate: (event) => {
@@ -356,13 +388,23 @@ function ExpandedPhoto({
       if (!event.canceled && (event.translationY > height * 0.25 || event.velocityY > 800)) {
         scheduleOnRN(onClose);
       } else {
-        drag.set(motionEnabled ? withSpring(0, { ...spring, velocity: event.velocityY }) : 0);
+        drag.set(
+          motionEnabled
+            ? withSpring(0, {
+                ...spring,
+                dampingRatio: 0.8,
+                velocity: event.velocityY,
+                overshootClamping: true,
+              })
+            : 0,
+        );
       }
     },
   });
   const imageStyle = useAnimatedStyle(() => {
     const p = motionEnabled ? progress.get() : 1;
     return {
+      opacity: imageReady ? 1 : 0,
       width: interpolate(p, [0, 1], [source.width, width]),
       height: interpolate(p, [0, 1], [source.height, height]),
       borderRadius,
@@ -372,6 +414,19 @@ function ExpandedPhoto({
           translateY: source.y * (1 - p) + (motionEnabled ? Math.min(drag.get(), height) * 0.3 : 0),
         },
         { scale: motionEnabled ? 1 - Math.min(drag.get() / height, 1) * 0.15 : 1 },
+      ],
+    };
+  });
+
+  const bitmapStyle = useAnimatedStyle(() => {
+    const p = motionEnabled ? progress.get() : 1;
+    const currentWidth = interpolate(p, [0, 1], [source.width, width]);
+    const currentHeight = interpolate(p, [0, 1], [source.height, height]);
+    return {
+      transform: [
+        { translateX: (currentWidth - width) / 2 },
+        { translateY: (currentHeight - height) / 2 },
+        { scale: Math.max(currentWidth / imageWidth, currentHeight / imageHeight) },
       ],
     };
   });
@@ -394,12 +449,50 @@ function ExpandedPhoto({
         <Animated.View
           style={[styles.expanded, { backgroundColor: colors.surfaceVariant }, imageStyle]}
         >
-          <Image
-            source={item.source}
-            contentFit="cover"
-            style={StyleSheet.absoluteFill}
-            accessible={false}
-          />
+          {/* Only the clipping frame changes size. The bitmap keeps fixed native
+              dimensions and scales uniformly, preserving cover cropping. */}
+          <Animated.View
+            style={[
+              {
+                position: 'absolute',
+                left: (width - imageWidth) / 2,
+                top: (height - imageHeight) / 2,
+                width: imageWidth,
+                height: imageHeight,
+              },
+              bitmapStyle,
+            ]}
+          >
+            <Image
+              key={sourceKey}
+              source={item.source}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              transition={0}
+              onDisplay={() => setDisplayedSourceKey(sourceKey)}
+              onError={() => {
+                progress.set(0);
+                onClosed();
+              }}
+              onLoad={({ source: loadedSource }) => {
+                if (loadedSource.width <= 0 || loadedSource.height <= 0) return;
+                setImageSize((current) =>
+                  current &&
+                  JSON.stringify(current.source) === sourceKey &&
+                  current.width === loadedSource.width &&
+                  current.height === loadedSource.height
+                    ? current
+                    : {
+                        source: item.source,
+                        width: loadedSource.width,
+                        height: loadedSource.height,
+                      },
+                );
+              }}
+              style={StyleSheet.absoluteFill}
+              accessible={false}
+            />
+          </Animated.View>
         </Animated.View>
       </View>
     </GestureDetector>

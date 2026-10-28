@@ -145,6 +145,56 @@ media features, compare appropriately sized thumbnails and progressive previews
 using actual image/network conditions. Retained memory should settle after
 navigation and scrolling rather than increase indefinitely.
 
+## Home photo transitions — 2026-10-28
+
+Source inspection found redundant native transform updates for hidden carousel
+cards, a stacked-card opacity curve that reached zero halfway through its
+outgoing step, and a grid image whose native dimensions changed throughout its
+expansion. Hidden cards now return a constant transparent style, the outgoing
+fade spans the complete step, and the grid scales a fixed-size bitmap inside
+its changing clipping frame. The clipping frame still performs layout work.
+
+A mocked-worklet comparison against the baseline used six photos in a 300-point
+viewport, 240-point story/stacked cards and 75-point circular cards. At the first
+selection, each carousel went from six cards returning changing transforms to
+three. This is a source-level workload count, **not a frame-rate measurement**.
+Sampling covered 7,272 carousel states across LTR/RTL and reduced motion, plus
+1,212 grid states with square, landscape and portrait images. Checks covered
+the outgoing fade, constant hidden styles, fixed bitmap dimensions, centered
+cover cropping and reduced-motion geometry.
+
+The fluidity follow-up replaces piecewise-linear artwork paths with monotone
+cubic spatial interpolation: adjacent segments share their velocity, including
+at the edges. The native scroll offset still drives the artwork directly, with
+no delayed spring following the finger. Gentler story/stack scale and stack tilt
+reduce large visual jumps. Native momentum can cross multiple cards while
+retaining snapping; grid drag return carries release velocity into a clamped
+400ms spring with damping ratio 0.8.
+
+Numerical checks sampled 34,034 path positions, verifying exact keyframes,
+continuous velocity, clamped edges and no scale/opacity overshoot. The revised
+bundle loaded on a Xiaomi 21091116AG running Android 13 in the development
+client. That check caught and resolved a worklet dependency-initialization error;
+it does not establish frame-rate or release-build smoothness.
+
+Native baseline/changed release-build frame times, image decoding and memory
+measurements remain **pending**, as do complete swipe/drag interaction checks.
+On the same iPhone and Android device, compare repeated forward/reverse swipes
+and grid open/short-drag/cancel/close interactions with the same cache state;
+repeat with RTL, reduced motion, source replacement and background/resume.
+No live-backend verification applies to these presentation changes.
+
+The grid opening handoff now waits for the expanded image's native `onDisplay`
+event. Until then, the overlay stays transparent and progress remains at zero,
+leaving the loaded thumbnail visible. Display readiness is tied to the source;
+source replacement waits again. Failed loads cancel the pending selection, and
+Close before display completes immediately. The existing ready-image closing
+spring is unchanged. Mocked lifecycle checks cover delayed display, load/display
+ordering, duplicate events, source identity/replacement, reduced motion, early
+Close and error recovery. One Android development-client opening reached a
+rendered expanded image; repeated-cycle and frame-by-frame flash verification
+remain pending. This is not an iOS or release-build result.
+
 ## Results template
 
 Copy this table into a dated investigation report and link it from the index

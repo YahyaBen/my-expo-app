@@ -3,8 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
 import Animated, {
-  Extrapolation,
-  interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -20,6 +18,7 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
+import { interpolatePhotoMotion } from '../photo-motion';
 
 export type CircularCarouselProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -137,7 +136,7 @@ function CircularCarouselContent({
             }}
             snapToInterval={cardWidth}
             decelerationRate="fast"
-            disableIntervalMomentum
+            directionalLockEnabled
             bounces={false}
             overScrollMode="never"
             showsHorizontalScrollIndicator={false}
@@ -158,6 +157,7 @@ function CircularCarouselContent({
                 height={cardHeight}
                 inset={(width - cardWidth) / 2}
                 scrollOffset={scrollOffset}
+                sceneWidth={width}
                 sceneHeight={height}
                 scaleProgress={scaleProgress}
                 rtl={rtl}
@@ -187,6 +187,7 @@ function PhotoCard({
   inset,
   scrollOffset,
   scaleProgress,
+  sceneWidth,
   sceneHeight,
   rtl,
   reducedMotion,
@@ -200,6 +201,7 @@ function PhotoCard({
   inset: number;
   scrollOffset: SharedValue<number>;
   scaleProgress: SharedValue<number>;
+  sceneWidth: number;
   sceneHeight: number;
   rtl: boolean;
   reducedMotion: boolean;
@@ -210,23 +212,24 @@ function PhotoCard({
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
     const distance = position - index;
+    const translateX = -distance * width * (rtl ? -1 : 1);
+    const diameter = Math.max(1, width - spacing.lg);
+    const left = rtl ? sceneWidth - insetX - diameter : insetX;
+    // Include the largest possible scale so a card is never hidden while any
+    // of its artwork can still enter the viewport.
+    const centerX = left + diameter / 2 + translateX;
+    const radius = diameter * 0.6;
+    if (centerX + radius <= 0 || centerX - radius >= sceneWidth) return { opacity: 0 };
     const range = [-2, -1, 0, 1, 2];
-    const scale = interpolate(distance, range, [0.5, 0.9, 1.2, 0.9, 0.5], Extrapolation.CLAMP);
+    const scale = interpolatePhotoMotion(distance, range, [0.5, 0.9, 1.2, 0.9, 0.5]);
     return {
-      opacity: reducedMotion
-        ? 1
-        : interpolate(distance, range, [0.5, 1, 1, 1, 0.5], Extrapolation.CLAMP),
+      opacity: reducedMotion ? 1 : interpolatePhotoMotion(distance, range, [0.5, 1, 1, 1, 0.5]),
       transform: [
-        { translateX: (index - position) * width * (rtl ? -1 : 1) },
+        { translateX },
         {
           translateY: reducedMotion
             ? 0
-            : interpolate(
-                distance,
-                range,
-                [0, -width / 3, -width / 2, -width / 3, 0],
-                Extrapolation.CLAMP,
-              ),
+            : interpolatePhotoMotion(distance, range, [0, -width / 3, -width / 2, -width / 3, 0]),
         },
         { scale: 1 + (scale - 1) * scaleProgress.get() },
       ],
