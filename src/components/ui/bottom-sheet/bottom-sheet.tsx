@@ -21,7 +21,7 @@ export function BottomSheet({
   onDismiss,
   testID,
   contentHeight,
-}: BottomSheetProps) {
+}: Readonly<BottomSheetProps>) {
   const colors = useThemeColors(useHostColorScheme());
   return (
     <NativeBottomSheet

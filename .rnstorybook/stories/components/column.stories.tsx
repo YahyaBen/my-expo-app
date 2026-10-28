@@ -10,7 +10,7 @@ import { NativeStoryFrame, nativeThemeControls } from '../../components/native-s
 
 type DemoProps = UniversalColumnProps & { itemCount: number; nested: boolean };
 
-function ColumnDemo({ itemCount, nested, ...args }: DemoProps) {
+function ColumnDemo({ itemCount, nested, ...args }: Readonly<DemoProps>) {
   const colors = useThemeColors(args.colorScheme);
   return (
     <UniversalColumn {...args} style={{ backgroundColor: colors.surface, ...args.style }}>

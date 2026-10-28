@@ -1,6 +1,6 @@
 import { Slider as NativeSlider, type SliderProps } from '@expo/ui';
 
-export function Slider({ disabled, onValueChange, ...props }: SliderProps) {
+export function Slider({ disabled, onValueChange, ...props }: Readonly<SliderProps>) {
   return (
     <NativeSlider
       {...props}

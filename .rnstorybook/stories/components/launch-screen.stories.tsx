@@ -6,7 +6,7 @@ import { ThemePreferencesProvider, useThemePreferences } from '@/context/theme.c
 import { getAppBrand } from '@/config/brand';
 import { useThemeColors } from '@/hooks/use-theme';
 
-function LaunchEdgeDemo({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
+function LaunchEdgeDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark' }>) {
   const colors = useThemeColors(colorScheme);
   return (
     <View testID="launch-edge-preview" style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
@@ -26,11 +26,11 @@ function LaunchDemo({
   reducedMotion = false,
   waiting = false,
   mode = 'branded',
-}: {
+}: Readonly<{
   reducedMotion?: boolean;
   waiting?: boolean;
   mode?: 'minimal' | 'branded';
-}) {
+}>) {
   const [presented, setPresented] = useState(true);
   const brand = getAppBrand();
   const preferences = useThemePreferences();

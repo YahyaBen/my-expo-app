@@ -43,7 +43,7 @@ export function LoginScreen() {
           label={t('auth.identity')}
           leftIcon={Icon.select({
             ios: 'person',
-            android: require('@expo/material-symbols/person.xml'),
+            android: 'person',
           })}
           placeholder={t('auth.emailPlaceholder')}
           autoComplete="username"
@@ -61,7 +61,7 @@ export function LoginScreen() {
             label={t('auth.password')}
             leftIcon={Icon.select({
               ios: 'lock',
-              android: require('@expo/material-symbols/lock.xml'),
+              android: 'lock',
             })}
             passwordToggle="icon"
             placeholder={t('auth.enterPassword')}

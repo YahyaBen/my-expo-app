@@ -8,4 +8,4 @@ export interface OtpInputLayoutProps {
   height: number;
 }
 
-export declare function OtpInputLayout(props: OtpInputLayoutProps): React.JSX.Element;
+export declare function OtpInputLayout(props: Readonly<OtpInputLayoutProps>): React.JSX.Element;

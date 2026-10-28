@@ -133,11 +133,11 @@ function ComponentSection({
   title,
   hint,
   children,
-}: {
+}: Readonly<{
   title: string;
   hint: string;
   children: ReactNode;
-}) {
+}>) {
   return (
     <Column spacing={spacing.md} modifiers={nativeFillWidth}>
       <UniversalTextContent variant="subtitle">{title}</UniversalTextContent>

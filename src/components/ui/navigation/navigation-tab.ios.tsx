@@ -1,4 +1,4 @@
-import { Icon } from '@expo/ui';
+import { Icon } from '../icon/icon';
 import { Button, Text, VStack } from '@expo/ui/swift-ui';
 import {
   accessibilityAddTraits,
@@ -23,7 +23,7 @@ export function NavigationTab({
   selectedBackgroundColor,
   testID,
   onPress,
-}: NavigationTabProps) {
+}: Readonly<NavigationTabProps>) {
   return (
     <Button
       testID={testID}

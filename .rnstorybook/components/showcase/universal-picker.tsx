@@ -16,7 +16,7 @@ export function UniversalPicker({
   seedColor,
   options,
   ...props
-}: UniversalPickerProps) {
+}: Readonly<UniversalPickerProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

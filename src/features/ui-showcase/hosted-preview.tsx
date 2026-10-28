@@ -5,7 +5,7 @@ import { RNHostView } from '@components/ui';
 import { spacing } from '@/constants/layout';
 
 /** Real RN boundary for demonstrating hosted components inside a native page section. */
-export function HostedPreview({ children }: { children: ReactNode }) {
+export function HostedPreview({ children }: Readonly<{ children: ReactNode }>) {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const contentWidth = Math.max(1, width - insets.left - insets.right - spacing.lg * 2);

@@ -34,7 +34,7 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | Skill                                                                                     | Responsibility                             |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
 | [template-skill-ui-text](../.agents/skills/template-skill-ui-text/SKILL.md)               | Native text and semantic text wrappers     |
-| [template-skill-ui-icon](../.agents/skills/template-skill-ui-icon/SKILL.md)               | Native icon content                        |
+| [template-skill-ui-icon](../.agents/skills/template-skill-ui-icon/SKILL.md)               | Expo Symbols artwork in native UI          |
 | [template-skill-ui-list](../.agents/skills/template-skill-ui-list/SKILL.md)               | Grouped native lists                       |
 | [template-skill-ui-list-item](../.agents/skills/template-skill-ui-list-item/SKILL.md)     | Row content and accessory slots            |
 | [template-skill-ui-table](../.agents/skills/template-skill-ui-table/SKILL.md)             | Bounded fixed-column tables                |

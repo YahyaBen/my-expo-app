@@ -7,7 +7,7 @@ export function RefreshableScrollView({
   onRefresh,
   modifiers = [],
   ...props
-}: RefreshableScrollViewProps) {
+}: Readonly<RefreshableScrollViewProps>) {
   const refresh = usePendingRefresh(onRefresh);
   // Expo UI stores this listener for native refresh events; it does not invoke it during render.
   const refreshModifier = refreshable(refresh);

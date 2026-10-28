@@ -5,7 +5,10 @@ import { useState } from 'react';
 import type { RefreshableScrollViewProps } from './refreshable-scroll-view.types';
 import { usePendingRefresh } from './use-pending-refresh';
 
-export function RefreshableScrollView({ onRefresh, ...props }: RefreshableScrollViewProps) {
+export function RefreshableScrollView({
+  onRefresh,
+  ...props
+}: Readonly<RefreshableScrollViewProps>) {
   const [refreshing, setRefreshing] = useState(false);
   const refresh = usePendingRefresh(onRefresh, setRefreshing);
   if (!onRefresh || props.disabled || props.hidden) return <ScrollView {...props} />;

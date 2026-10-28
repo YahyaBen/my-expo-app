@@ -25,7 +25,7 @@ function NativeFormDemo({
   viewportHeight,
   viewportWidth,
   fieldSelectors = true,
-}: {
+}: Readonly<{
   pending?: boolean;
   icons?: boolean;
   loginHelperText?: string;
@@ -35,7 +35,7 @@ function NativeFormDemo({
   viewportHeight?: number;
   viewportWidth?: number;
   fieldSelectors?: boolean;
-}) {
+}>) {
   const [submissions, setSubmissions] = useState(0);
   const form = useForm<LoginFormValues>({
     resolver: loginResolver,
@@ -50,11 +50,7 @@ function NativeFormDemo({
         name="login"
         label="Email or username"
         helperText={loginHelperText}
-        leftIcon={
-          icons
-            ? Icon.select({ ios: 'person', android: require('@expo/material-symbols/person.xml') })
-            : undefined
-        }
+        leftIcon={icons ? Icon.select({ ios: 'person', android: 'person' }) : undefined}
         testID={fieldSelectors ? 'native-form-login' : undefined}
         disabled={pending}
         autoCapitalize="none"
@@ -66,11 +62,7 @@ function NativeFormDemo({
         control={form.control}
         name="password"
         label="Password"
-        leftIcon={
-          icons
-            ? Icon.select({ ios: 'lock', android: require('@expo/material-symbols/lock.xml') })
-            : undefined
-        }
+        leftIcon={icons ? Icon.select({ ios: 'lock', android: 'lock' }) : undefined}
         passwordToggle={icons ? 'icon' : 'button'}
         testID={fieldSelectors ? 'native-form-password' : undefined}
         password

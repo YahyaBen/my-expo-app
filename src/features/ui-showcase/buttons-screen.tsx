@@ -40,11 +40,11 @@ const variants = [
 
 const starIcon = Icon.select({
   ios: 'star.fill',
-  android: require('@expo/material-symbols/star.xml'),
+  android: 'star',
 });
 const checkIcon = Icon.select({
   ios: 'checkmark',
-  android: require('@expo/material-symbols/check.xml'),
+  android: 'check',
 });
 
 const iconPlacements = [
@@ -60,10 +60,12 @@ function IconButtonExample({
   placement = 'leading',
   label,
   ...props
-}: Omit<UniversalButtonContentProps, 'children' | 'label'> & {
-  label: string;
-  placement?: IconPlacement;
-}) {
+}: Readonly<
+  Omit<UniversalButtonContentProps, 'children' | 'label'> & {
+    label: string;
+    placement?: IconPlacement;
+  }
+>) {
   return (
     <UniversalButtonContent {...props}>
       {placement === 'above' ? (
@@ -93,11 +95,11 @@ function GallerySection({
   title,
   description,
   children,
-}: {
+}: Readonly<{
   title: string;
   description?: string;
   children: ReactNode;
-}) {
+}>) {
   return (
     <PageSection spacing={spacing.md}>
       <UniversalTextContent variant="subtitle">{title}</UniversalTextContent>
@@ -348,7 +350,7 @@ export default function ButtonsScreen() {
   );
 }
 
-function PendingButtonDemo({ onComplete }: { onComplete: () => void }) {
+function PendingButtonDemo({ onComplete }: Readonly<{ onComplete: () => void }>) {
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -383,7 +385,7 @@ function PendingButtonDemo({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-function IconVariantButtons({ onPress }: { onPress: (labelKey: string) => void }) {
+function IconVariantButtons({ onPress }: Readonly<{ onPress: (labelKey: string) => void }>) {
   const { t } = useTranslation();
   return (
     <GallerySection
@@ -418,7 +420,7 @@ function IconVariantButtons({ onPress }: { onPress: (labelKey: string) => void }
   );
 }
 
-function SemanticColorButtons({ onPress }: { onPress: (labelKey: string) => void }) {
+function SemanticColorButtons({ onPress }: Readonly<{ onPress: (labelKey: string) => void }>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   return (
@@ -452,7 +454,9 @@ function SemanticColorButtons({ onPress }: { onPress: (labelKey: string) => void
 }
 
 /** Shared with the native fixture; these controls cross a real RN boundary. */
-export function StandaloneButtonPreview({ onPress }: { onPress: (labelKey: string) => void }) {
+export function StandaloneButtonPreview({
+  onPress,
+}: Readonly<{ onPress: (labelKey: string) => void }>) {
   const { t } = useTranslation();
   const lightColors = useThemeColors('light');
   const darkColors = useThemeColors('dark');
@@ -521,7 +525,7 @@ export function StandaloneButtonPreview({ onPress }: { onPress: (labelKey: strin
   );
 }
 
-function StandaloneButtonLabel({ label, testID }: { label: string; testID: string }) {
+function StandaloneButtonLabel({ label, testID }: Readonly<{ label: string; testID: string }>) {
   const { t } = useTranslation();
   const scheme = useHostColorScheme();
   const direction = useHostLayoutDirection();

@@ -11,7 +11,7 @@ function AlertDemo({
   title,
   colorScheme,
   direction = 'ltr',
-}: Omit<AlertProps, 'onDismiss'> & { direction?: 'ltr' | 'rtl' }) {
+}: Readonly<Omit<AlertProps, 'onDismiss'> & { direction?: 'ltr' | 'rtl' }>) {
   const [visible, setVisible] = useState(false);
   const [shown, setShown] = useState(0);
   const [dismissals, setDismissals] = useState(0);

@@ -1,4 +1,5 @@
-import { Column, Icon, Row } from '@expo/ui';
+import { Column, Row } from '@expo/ui';
+import { Icon } from '../icon/icon';
 import { View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
@@ -30,20 +31,20 @@ export type TabNavigationBarProps = {
 };
 
 const icons = {
-  home: Icon.select({ ios: 'house', android: require('@expo/material-symbols/home.xml') }),
+  home: Icon.select({ ios: 'house', android: 'home' }),
   search: Icon.select({
     ios: 'magnifyingglass',
-    android: require('@expo/material-symbols/search.xml'),
+    android: 'search',
   }),
-  recipes: Icon.select({ ios: 'book', android: require('@expo/material-symbols/menu_book.xml') }),
+  recipes: Icon.select({ ios: 'book', android: 'menu_book' }),
   more: Icon.select({
     ios: 'line.3.horizontal',
-    android: require('@expo/material-symbols/menu.xml'),
+    android: 'menu',
   }),
 };
 const selectedHome = Icon.select({
   ios: 'house.fill',
-  android: require('@expo/material-symbols/home.xml'),
+  android: 'home',
 });
 
 /** Four native destinations surround a raised action inside one measured dock. */
@@ -56,7 +57,7 @@ export function TabNavigationBar({
   leftInset = 0,
   rightInset = 0,
   colorScheme,
-}: TabNavigationBarProps) {
+}: Readonly<TabNavigationBarProps>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection();

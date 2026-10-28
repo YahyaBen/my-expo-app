@@ -34,7 +34,7 @@ export function TextInputIconButton({
   onPress,
   accessibilityLabel,
   testID: id,
-}: TextInputIconButtonProps) {
+}: Readonly<TextInputIconButtonProps>) {
   return (
     <IconButton
       enabled={!disabled}

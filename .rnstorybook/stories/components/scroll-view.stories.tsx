@@ -13,7 +13,7 @@ type DemoProps = UniversalScrollViewProps & {
   onItemPress: (item: number) => void;
 };
 
-function ScrollViewDemo({ itemCount, onItemPress, ...args }: DemoProps) {
+function ScrollViewDemo({ itemCount, onItemPress, ...args }: Readonly<DemoProps>) {
   const colors = useThemeColors(args.colorScheme);
   const Container = args.direction === 'horizontal' ? Row : Column;
   return (

@@ -56,7 +56,7 @@ export function VerificationCodeFace({
   disabled = false,
   onComplete,
   testID = 'verification-code-face',
-}: VerificationCodeFaceProps) {
+}: Readonly<VerificationCodeFaceProps>) {
   const inputRef = useRef<TextInputRef>(null);
   const codeLength = Number.isFinite(length) ? Math.max(1, Math.trunc(length)) : 4;
   const size = Number.isFinite(faceSize) ? Math.max(1, faceSize) : 96;
@@ -136,12 +136,12 @@ function VerificationFace({
   status,
   size,
   testID,
-}: {
+}: Readonly<{
   progress: number;
   status: VerificationCodeFaceStatus;
   size: number;
   testID: string;
-}) {
+}>) {
   const colors = useThemeColors(useHostColorScheme());
   const motionEnabled = useMotionEnabled();
   const progress = useDerivedValue(() =>

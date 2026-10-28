@@ -26,7 +26,7 @@ const LanguageContext = createContext<{
   setLanguage: (language: Language) => void;
 } | null>(null);
 
-export function LanguageProvider({ children }: PropsWithChildren) {
+export function LanguageProvider({ children }: Readonly<PropsWithChildren>) {
   const [ready, setReady] = useState(false);
   const { setDirection } = useLayoutDirectionSettings();
 

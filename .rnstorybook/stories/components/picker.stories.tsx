@@ -15,7 +15,7 @@ const cities = [
   { label: 'Marrakech', value: 'marrakech' },
 ];
 
-function PickerDemo(args: UniversalPickerProps) {
+function PickerDemo(args: Readonly<UniversalPickerProps>) {
   const [selectedValue, setSelectedValue] = useState(args.selectedValue);
   return (
     <View style={{ gap: 16 }}>

@@ -35,7 +35,7 @@ type LaunchScreenProps = {
   onExitComplete: () => void;
 };
 
-export function LaunchScreen({ mode = 'branded', ...props }: LaunchScreenProps) {
+export function LaunchScreen({ mode = 'branded', ...props }: Readonly<LaunchScreenProps>) {
   return mode === 'minimal' ? (
     <MinimalLaunchScreen {...props} />
   ) : (
@@ -43,7 +43,7 @@ export function LaunchScreen({ mode = 'branded', ...props }: LaunchScreenProps) 
   );
 }
 
-function MinimalLaunchScreen({ exiting, onReady, onExitComplete }: LaunchScreenProps) {
+function MinimalLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<LaunchScreenProps>) {
   const active = useAppActive();
   const [laidOut, setLaidOut] = useState(false);
   useEffect(() => {
@@ -63,7 +63,7 @@ function MinimalLaunchScreen({ exiting, onReady, onExitComplete }: LaunchScreenP
   );
 }
 
-function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: LaunchScreenProps) {
+function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<LaunchScreenProps>) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const brand = getAppBrand();

@@ -19,7 +19,7 @@ const titleKeys = {
 } as const;
 
 /** Mount while visible; Expo UI owns the native modal and its accessibility. */
-export function Alert({ variant, title, message, onDismiss, colorScheme }: AlertProps) {
+export function Alert({ variant, title, message, onDismiss, colorScheme }: Readonly<AlertProps>) {
   const { t } = useTranslation();
   return (
     <UniversalHost

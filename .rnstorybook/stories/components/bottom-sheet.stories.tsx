@@ -22,7 +22,7 @@ type DemoProps = BottomSheetProps & {
   onClose: () => void;
 };
 
-function BottomSheetDemo({ title, content, onOpen, onClose, ...args }: DemoProps) {
+function BottomSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<DemoProps>) {
   const [isPresented, setIsPresented] = useState(args.isPresented);
   const [controlledPresentation, setControlledPresentation] = useState(args.isPresented);
   if (controlledPresentation !== args.isPresented) {

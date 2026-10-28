@@ -26,7 +26,7 @@ function OtpDemo({
   requestFailure,
   resendFailure,
   recipient = 'hello@example.com',
-}: DemoProps) {
+}: Readonly<DemoProps>) {
   const [open, setOpen] = useState(false);
   const [resends, setResends] = useState(0);
   return (

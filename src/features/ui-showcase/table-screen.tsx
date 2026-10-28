@@ -48,7 +48,7 @@ export function TableDemo({
   initialStatus = 'all',
   readOnly = false,
   testID = 'demo-table',
-}: TableDemoProps) {
+}: Readonly<TableDemoProps>) {
   const { t, i18n } = useTranslation();
   const [orders, setOrders] = useState(sampleOrders);
   const [search, setSearch] = useState(initialSearch);

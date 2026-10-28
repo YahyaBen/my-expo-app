@@ -28,10 +28,10 @@ function destinationKey(destination: SampleDestination) {
 export function DestinationSheet({
   isPresented,
   onDismiss,
-}: {
+}: Readonly<{
   isPresented: boolean;
   onDismiss: () => void;
-}) {
+}>) {
   const { t } = useTranslation();
   const { height, fontScale } = useWindowDimensions();
   const { design } = useAppTheme(useHostColorScheme());

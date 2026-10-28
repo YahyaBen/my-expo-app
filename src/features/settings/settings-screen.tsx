@@ -66,14 +66,14 @@ export function SettingsPage({
   authenticated = false,
   tab = false,
   onBack,
-}: {
+}: Readonly<{
   language: Language;
   onLanguageChange?: (language: Language) => void;
   languageReady?: boolean;
   authenticated?: boolean;
   tab?: boolean;
   onBack?: () => void;
-}) {
+}>) {
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors, design } = useAppTheme();
@@ -87,7 +87,7 @@ export function SettingsPage({
     <Icon
       name={Icon.select({
         ios: 'chevron.forward',
-        android: require('@expo/material-symbols/chevron_right.xml'),
+        android: 'chevron_right',
       })}
       size={18}
       color={colors.muted}
@@ -244,7 +244,7 @@ export function SettingsPage({
                             <Icon
                               name={Icon.select({
                                 ios: 'checkmark',
-                                android: require('@expo/material-symbols/check.xml'),
+                                android: 'check',
                               })}
                               size={20}
                               color={colors.tint}
@@ -277,11 +277,11 @@ function SettingsSectionHeading({
   label,
   language,
   first = false,
-}: {
+}: Readonly<{
   label: string;
   language: Language;
   first?: boolean;
-}) {
+}>) {
   const headerInset = usePageHeaderInset();
   return (
     <Column
@@ -302,7 +302,7 @@ function SettingsSectionHeading({
 }
 
 // FieldGroup owns scrolling; the RN boundary supplies a bounded native viewport and safe areas.
-function SettingsViewport({ children, tab }: { children: ReactNode; tab: boolean }) {
+function SettingsViewport({ children, tab }: Readonly<{ children: ReactNode; tab: boolean }>) {
   const insets = useSafeAreaInsets();
   return (
     <View

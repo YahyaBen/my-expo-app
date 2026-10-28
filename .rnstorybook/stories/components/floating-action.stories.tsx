@@ -7,11 +7,11 @@ function FloatingDemo({
   kind = 'create',
   disabled = false,
   repeated = false,
-}: {
+}: Readonly<{
   kind?: FloatingActionKind;
   disabled?: boolean;
   repeated?: boolean;
-}) {
+}>) {
   const [presses, setPresses] = useState(0);
   const [secondaryPresses, setSecondaryPresses] = useState(0);
   return (

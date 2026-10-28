@@ -1,4 +1,4 @@
-import type { IconName } from '@expo/ui';
+import type { IconName } from '../icon/icon';
 
 export type NavigationTabProps = {
   icon: IconName;
@@ -10,4 +10,4 @@ export type NavigationTabProps = {
   onPress: () => void;
 };
 
-export declare function NavigationTab(props: NavigationTabProps): React.JSX.Element;
+export declare function NavigationTab(props: Readonly<NavigationTabProps>): React.JSX.Element;

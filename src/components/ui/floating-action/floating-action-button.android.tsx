@@ -9,7 +9,7 @@ export function NativeFloatingActionButton({
   onPress,
   disabled,
   testID: id,
-}: NativeFloatingActionButtonProps) {
+}: Readonly<NativeFloatingActionButtonProps>) {
   return (
     <Button
       onClick={disabled ? undefined : onPress}

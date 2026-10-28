@@ -10,7 +10,7 @@ import {
 
 type DemoProps = SpacerProps & NativeStoryTheme & { direction: 'vertical' | 'horizontal' };
 
-function SpacerDemo({ colorScheme, seedColor, direction, ...args }: DemoProps) {
+function SpacerDemo({ colorScheme, seedColor, direction, ...args }: Readonly<DemoProps>) {
   const colors = useThemeColors(colorScheme);
   const Container = direction === 'horizontal' ? Row : Column;
   return (

@@ -49,11 +49,11 @@ export type SkeletonProps = {
 export type SkeletonContentProps = Omit<SkeletonProps, 'animate'>;
 
 /** Hosted placeholder at an RN boundary. Use SkeletonContent inside an existing Host. */
-export function Skeleton({ animate = true, ...props }: SkeletonProps) {
+export function Skeleton({ animate = true, ...props }: Readonly<SkeletonProps>) {
   return animate ? <AnimatedSkeleton {...props} /> : <HostedSkeleton {...props} />;
 }
 
-function AnimatedSkeleton(props: SkeletonContentProps) {
+function AnimatedSkeleton(props: Readonly<SkeletonContentProps>) {
   const enabled = useMotionEnabled();
   return <HostedSkeleton {...props} pulse={enabled} animated />;
 }
@@ -64,7 +64,7 @@ function HostedSkeleton({
   style,
   pulse = false,
   animated = false,
-}: SkeletonContentProps & { pulse?: boolean; animated?: boolean }) {
+}: Readonly<SkeletonContentProps & { pulse?: boolean; animated?: boolean }>) {
   const hostProps: ComponentProps<typeof UniversalHost> = {
     colorScheme,
     inline: typeof style?.width === 'number',
@@ -83,7 +83,11 @@ function HostedSkeleton({
 }
 
 /** Static native placeholder: no animation timers, subscriptions, or nested Hosts. */
-export function SkeletonContent({ colorScheme, testID, style = {} }: SkeletonContentProps) {
+export function SkeletonContent({
+  colorScheme,
+  testID,
+  style = {},
+}: Readonly<SkeletonContentProps>) {
   const colors = useThemeColors(useHostColorScheme(colorScheme));
   return (
     <Column

@@ -1,7 +1,8 @@
 import { spacing } from '@/constants/layout';
 import { translateValidationMessage } from '@/lib/i18n';
 import { useTranslation } from 'react-i18next';
-import { Column, Icon } from '@expo/ui';
+import { Column } from '@expo/ui';
+import { Icon } from '../icon/icon';
 import { nativeFillWidth, nativeFillWidthEnd } from '../native/native-fill-width';
 import { useEffect, useRef, useState } from 'react';
 import { useController, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
@@ -38,9 +39,7 @@ function passwordInputOverrides(
     secureTextEntry,
     rightIcon: Icon.select({
       ios: shown ? 'eye.slash' : 'eye',
-      android: shown
-        ? require('@expo/material-symbols/visibility_off.xml')
-        : require('@expo/material-symbols/visibility.xml'),
+      android: shown ? 'visibility_off' : 'visibility',
     }),
     onRightIconPress: onToggle,
     rightIconAccessibilityLabel: actionLabel,
@@ -56,7 +55,7 @@ export function FormTextInput<T extends FieldValues>({
   helperText,
   testID,
   ...props
-}: Props<T>) {
+}: Readonly<Props<T>>) {
   const { t } = useTranslation();
   const { field, fieldState } = useController({ control, name });
   const value = typeof field.value === 'string' ? field.value : '';

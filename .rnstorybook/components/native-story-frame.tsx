@@ -23,7 +23,7 @@ export function NativeStoryFrame({
   colorScheme,
   seedColor,
   testID,
-}: PropsWithChildren<NativeStoryTheme>) {
+}: Readonly<PropsWithChildren<NativeStoryTheme>>) {
   const scheme = useColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const [width, setWidth] = useMeasuredWidth();

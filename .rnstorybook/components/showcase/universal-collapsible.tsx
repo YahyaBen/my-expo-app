@@ -13,7 +13,7 @@ export function UniversalCollapsible({
   seedColor,
   testID,
   ...props
-}: UniversalCollapsibleProps) {
+}: Readonly<UniversalCollapsibleProps>) {
   return (
     <UniversalHost testID={testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Collapsible {...props} />

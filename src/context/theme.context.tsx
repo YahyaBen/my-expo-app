@@ -52,17 +52,19 @@ export function ThemePreferencesProvider({
   persistHeaderMotion = false,
   persistAppearance = false,
   allowThemeSelection = false,
-}: PropsWithChildren<{
-  initialTheme?: ThemeId;
-  initialColorScheme?: ColorSchemePreference;
-  initialHeaderShape?: PageHeaderStyle;
-  initialReducedMotion?: boolean | null;
-  persistHeaderMotion?: boolean;
-  /** Only the app root persists appearance; isolated previews stay in memory. */
-  persistAppearance?: boolean;
-  /** Explicit opt-in for local component previews, never the app root. */
-  allowThemeSelection?: boolean;
-}>) {
+}: Readonly<
+  PropsWithChildren<{
+    initialTheme?: ThemeId;
+    initialColorScheme?: ColorSchemePreference;
+    initialHeaderShape?: PageHeaderStyle;
+    initialReducedMotion?: boolean | null;
+    persistHeaderMotion?: boolean;
+    /** Only the app root persists appearance; isolated previews stay in memory. */
+    persistAppearance?: boolean;
+    /** Explicit opt-in for local component previews, never the app root. */
+    allowThemeSelection?: boolean;
+  }>
+>) {
   const [themeId, updateThemeId] = useState(initialTheme);
   const [colorScheme, updateColorScheme] = useState(initialColorScheme);
   const [appearanceReady, setAppearanceReady] = useState(!persistAppearance);

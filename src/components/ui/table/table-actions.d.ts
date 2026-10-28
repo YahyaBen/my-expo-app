@@ -16,4 +16,4 @@ export interface TableActionsProps {
 }
 
 /** Native row menu; reuse the current Host. Metro selects the platform adapter. */
-export declare function TableActions(props: TableActionsProps): React.JSX.Element;
+export declare function TableActions(props: Readonly<TableActionsProps>): React.JSX.Element;

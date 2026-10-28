@@ -5,11 +5,11 @@ export function DemoSection({
   title,
   hint,
   children,
-}: {
+}: Readonly<{
   title: string;
   hint?: string;
   children: ReactNode;
-}) {
+}>) {
   return (
     <PageSection>
       <Text variant="title">{title}</Text>

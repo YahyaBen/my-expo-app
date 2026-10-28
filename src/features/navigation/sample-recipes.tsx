@@ -21,10 +21,10 @@ export const sampleRecipes: readonly SampleRecipe[] = Array.from({ length: 24 },
 export function SampleRecipeRows({
   recipes = sampleRecipes,
   testIDPrefix,
-}: {
+}: Readonly<{
   recipes?: readonly SampleRecipe[];
   testIDPrefix: string;
-}) {
+}>) {
   const { t } = useTranslation();
   const colors = useThemeColors();
 

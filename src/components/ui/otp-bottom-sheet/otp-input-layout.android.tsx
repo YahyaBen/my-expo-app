@@ -9,7 +9,12 @@ import {
 import type { OtpInputLayoutProps } from './otp-input-layout';
 
 /** The topmost BasicTextField handles native typing, paste, selection and backspace. */
-export function OtpInputLayout({ slots, input, accessibilityLabel, height }: OtpInputLayoutProps) {
+export function OtpInputLayout({
+  slots,
+  input,
+  accessibilityLabel,
+  height,
+}: Readonly<OtpInputLayoutProps>) {
   return (
     <Box contentAlignment="center" modifiers={[fillMaxWidth(), nativeHeight(height)]}>
       <Row spacing={spacing.sm} modifiers={[fillMaxWidth()]}>

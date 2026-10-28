@@ -7,7 +7,11 @@ import {
 
 export type UniversalCheckboxProps = CheckboxProps & UniversalThemeProps;
 
-export function UniversalCheckbox({ colorScheme, seedColor, ...props }: UniversalCheckboxProps) {
+export function UniversalCheckbox({
+  colorScheme,
+  seedColor,
+  ...props
+}: Readonly<UniversalCheckboxProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

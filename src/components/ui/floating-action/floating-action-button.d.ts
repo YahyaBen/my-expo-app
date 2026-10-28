@@ -10,5 +10,5 @@ export interface NativeFloatingActionButtonProps {
 }
 
 export declare function NativeFloatingActionButton(
-  props: NativeFloatingActionButtonProps,
+  props: Readonly<NativeFloatingActionButtonProps>,
 ): ReactElement;

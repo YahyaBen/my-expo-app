@@ -51,11 +51,11 @@ function FieldGroupContent({
   mode,
   onModeChange,
   colorScheme,
-}: {
+}: Readonly<{
   mode: AppearanceMode;
   onModeChange: (mode: AppearanceMode) => void;
   colorScheme: 'light' | 'dark';
-}) {
+}>) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const headerInset = usePageHeaderInset();
@@ -113,7 +113,7 @@ function FieldGroupContent({
                     <Icon
                       name={Icon.select({
                         ios: 'person.fill',
-                        android: require('@expo/material-symbols/person.xml'),
+                        android: 'person',
                       })}
                       size={24}
                       color={colors.tint}
@@ -221,7 +221,7 @@ function FieldGroupContent({
                   <Icon
                     name={Icon.select({
                       ios: 'chevron.forward',
-                      android: require('@expo/material-symbols/chevron_right.xml'),
+                      android: 'chevron_right',
                     })}
                     size={18}
                     color={colors.muted}

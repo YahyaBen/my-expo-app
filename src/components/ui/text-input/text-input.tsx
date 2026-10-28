@@ -2,16 +2,15 @@ import { spacing } from '@/constants/layout';
 import { useAppTheme } from '@/hooks/use-theme';
 import {
   Column,
-  Icon,
   Row,
   Text,
   TextInput as ExpoTextInput,
   useNativeState,
-  type IconProps,
   type TextInputProps as ExpoTextInputProps,
 } from '@expo/ui';
 import { useEffect, useRef, useState } from 'react';
 import { useHostColorScheme } from '../host/universal-host';
+import { Icon, type IconProps } from '../icon/icon';
 import { nativeFillWidth } from '../native/native-fill-width';
 import {
   inputAccessibilityModifiers,
@@ -71,7 +70,7 @@ export function TextInput({
   onRightIconPress,
   rightIconAccessibilityLabel,
   ...inputProps
-}: TextInputProps) {
+}: Readonly<TextInputProps>) {
   const nativeValue = useNativeState(value ?? defaultValue ?? '');
   useEffect(() => {
     // Synchronize external edits/resets while retaining the same native field and ref.

@@ -9,7 +9,7 @@ export function ListItemAction({
   onPress,
   disabled = false,
   testID,
-}: ListItemActionProps) {
+}: Readonly<ListItemActionProps>) {
   return (
     <Surface
       color="transparent"

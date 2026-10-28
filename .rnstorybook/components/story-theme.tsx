@@ -21,7 +21,7 @@ export function StoryTheme({
   children,
   themeId = 'ux',
   colorScheme = 'light',
-}: PropsWithChildren<StoryThemeProps>) {
+}: Readonly<PropsWithChildren<StoryThemeProps>>) {
   const appColorScheme = useThemePreferences()?.colorScheme ?? 'system';
   return (
     <ThemePreferencesProvider
@@ -38,7 +38,7 @@ export function StoryTheme({
 function StoryCanvas({
   children,
   restoreColorScheme,
-}: PropsWithChildren<{ restoreColorScheme: ColorSchemePreference }>) {
+}: Readonly<PropsWithChildren<{ restoreColorScheme: ColorSchemePreference }>>) {
   const { colorScheme } = useThemeSettings();
   const colors = useThemeColors();
   const focused = useIsFocused();

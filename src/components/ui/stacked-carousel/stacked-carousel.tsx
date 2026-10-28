@@ -38,7 +38,7 @@ export type StackedCarouselProps = {
 };
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/stacked-carousel
-export function StackedCarousel(props: StackedCarouselProps) {
+export function StackedCarousel(props: Readonly<StackedCarouselProps>) {
   if (props.items.length === 0 || !Number.isFinite(props.width) || props.width <= 0) return null;
   // A changed data order starts a fresh selection; resizing keeps the current item.
   return (
@@ -56,7 +56,7 @@ function StackedCarouselContent({
   getPositionLabel,
   onIndexChange,
   testID = 'stacked-carousel',
-}: StackedCarouselProps) {
+}: Readonly<StackedCarouselProps>) {
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
   const colors = useThemeColors(useHostColorScheme());
@@ -205,7 +205,7 @@ function PhotoCard({
   rtl,
   reducedMotion,
   testID,
-}: {
+}: Readonly<{
   item: PhotoItem;
   count: number;
   index: number;
@@ -217,7 +217,7 @@ function PhotoCard({
   rtl: boolean;
   reducedMotion: boolean;
   testID: string;
-}) {
+}>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset;
   const animatedStyle = useAnimatedStyle(() => {

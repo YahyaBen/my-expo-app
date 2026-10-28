@@ -10,7 +10,7 @@ export function ListItem({
   testID,
   modifiers,
   ...props
-}: ListItemProps) {
+}: Readonly<ListItemProps>) {
   const row = (
     <NativeListItem
       {...props}

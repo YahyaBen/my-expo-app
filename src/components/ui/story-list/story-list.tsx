@@ -38,7 +38,7 @@ export type StoryListProps = {
 };
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/story-list
-export function StoryList(props: StoryListProps) {
+export function StoryList(props: Readonly<StoryListProps>) {
   if (props.items.length === 0 || !Number.isFinite(props.width) || props.width <= 0) return null;
   // A changed data order starts a fresh selection; resizing keeps the current item.
   return <StoryListContent key={JSON.stringify(props.items.map((item) => item.id))} {...props} />;
@@ -54,7 +54,7 @@ function StoryListContent({
   getPositionLabel,
   onIndexChange,
   testID = 'story-list',
-}: StoryListProps) {
+}: Readonly<StoryListProps>) {
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
 
@@ -180,7 +180,7 @@ function PhotoCard({
   rtl,
   reducedMotion,
   testID,
-}: {
+}: Readonly<{
   item: PhotoItem;
   count: number;
   index: number;
@@ -192,7 +192,7 @@ function PhotoCard({
   rtl: boolean;
   reducedMotion: boolean;
   testID: string;
-}) {
+}>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset;
   const animatedStyle = useAnimatedStyle(() => {

@@ -9,7 +9,7 @@ import { View } from 'react-native';
 import { action } from 'storybook/actions';
 import { NativeStoryFrame, nativeThemeControls } from '../../components/native-story-frame';
 
-function CheckboxDemo(args: UniversalCheckboxProps) {
+function CheckboxDemo(args: Readonly<UniversalCheckboxProps>) {
   const [value, setValue] = useState(args.value);
   return (
     <View style={{ gap: 16 }}>

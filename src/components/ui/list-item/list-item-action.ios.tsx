@@ -13,7 +13,7 @@ export function ListItemAction({
   onPress,
   disabled = false,
   testID,
-}: ListItemActionProps) {
+}: Readonly<ListItemActionProps>) {
   return (
     <Button
       onPress={disabled ? undefined : onPress}

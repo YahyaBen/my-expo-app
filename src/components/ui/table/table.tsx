@@ -48,7 +48,7 @@ export function Table<T>({
   actionsHeader,
   actionsWidth = 112,
   testID,
-}: TableProps<T>) {
+}: Readonly<TableProps<T>>) {
   const colors = useThemeColors(useHostColorScheme());
   const tableWidth =
     columns.reduce((total, column) => total + (column.width ?? 144), 0) +

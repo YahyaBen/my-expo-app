@@ -19,13 +19,13 @@ function NavigationDemo({
   bottomInset = 24,
   disabled = false,
   longContent = false,
-}: {
+}: Readonly<{
   colorScheme?: 'light' | 'dark';
   direction?: 'ltr' | 'rtl';
   bottomInset?: number;
   disabled?: boolean;
   longContent?: boolean;
-}) {
+}>) {
   const [activeId, setActiveId] = useState<TabNavigationItemId>('home');
   const [presses, setPresses] = useState(0);
   const [contentPresses, setContentPresses] = useState(0);

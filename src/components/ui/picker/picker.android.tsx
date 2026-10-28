@@ -22,7 +22,7 @@ export function Picker<T extends PickerItemValue>({
   enabled = true,
   children,
   testID,
-}: PickerProps<T>) {
+}: Readonly<PickerProps<T>>) {
   const items = flattenNativeChildren(children).flatMap((child) =>
     isValidElement<PickerItemProps<T>>(child) && child.type === UniversalPicker.Item
       ? [child.props]

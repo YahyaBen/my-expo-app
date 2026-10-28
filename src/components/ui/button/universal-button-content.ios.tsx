@@ -10,6 +10,7 @@ import {
   tint,
 } from '@expo/ui/swift-ui/modifiers';
 import type { UniversalButtonContentProps } from './universal-button';
+import { IconColorContext } from '../icon/icon-color-context';
 
 /** Internal renderer; callers resolve theme colors before reaching the native control. */
 export function NativeButtonContent({
@@ -24,7 +25,7 @@ export function NativeButtonContent({
   contentPadding,
   color,
   contentColor,
-}: UniversalButtonContentProps) {
+}: Readonly<UniversalButtonContentProps>) {
   let style: Parameters<typeof buttonStyle>[0] = 'borderedProminent';
   if (variant === 'secondary') style = 'bordered';
   if (variant === 'tertiary' || variant === 'link') style = 'plain';
@@ -55,7 +56,9 @@ export function NativeButtonContent({
           ...(contentPadding === undefined ? [] : [padding({ all: contentPadding })]),
         ]}
       >
-        {children ?? <Text>{label ?? ''}</Text>}
+        <IconColorContext.Provider value={labelColor}>
+          {children ?? <Text>{label ?? ''}</Text>}
+        </IconColorContext.Provider>
       </VStack>
     </Button>
   );

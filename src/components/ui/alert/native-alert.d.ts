@@ -5,4 +5,6 @@ export interface NativeAlertProps {
   onDismiss: () => void;
 }
 
-export declare function NativeAlert(props: NativeAlertProps): import('react').ReactElement;
+export declare function NativeAlert(
+  props: Readonly<NativeAlertProps>,
+): import('react').ReactElement;

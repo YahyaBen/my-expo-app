@@ -4,7 +4,7 @@ import { useEffect, type PropsWithChildren } from 'react';
 import { AppState } from 'react-native';
 import { queryClient } from '@/lib/react-query';
 
-export function AppQueryProvider({ children }: PropsWithChildren) {
+export function AppQueryProvider({ children }: Readonly<PropsWithChildren>) {
   useEffect(() => {
     focusManager.setFocused(AppState.currentState === 'active');
     const focus = AppState.addEventListener('change', (state) =>

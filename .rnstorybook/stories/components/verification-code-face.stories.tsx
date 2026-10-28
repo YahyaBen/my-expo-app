@@ -27,7 +27,7 @@ function VerificationCodeFaceDemo({
   initialValue = '',
   initialStatus = 'default',
   ...preview
-}: DemoProps) {
+}: Readonly<DemoProps>) {
   return (
     <AnimatedComponentPreview {...preview}>
       <CodeEntry
@@ -48,8 +48,8 @@ function CodeEntry({
   disabled,
   initialValue,
   initialStatus,
-}: Required<
-  Pick<DemoProps, 'length' | 'faceSize' | 'disabled' | 'initialValue' | 'initialStatus'>
+}: Readonly<
+  Required<Pick<DemoProps, 'length' | 'faceSize' | 'disabled' | 'initialValue' | 'initialStatus'>>
 >) {
   const [value, setValue] = useState(initialValue);
   const [status, setStatus] = useState(initialStatus);

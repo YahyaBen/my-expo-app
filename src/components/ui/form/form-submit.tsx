@@ -14,14 +14,14 @@ export function FormSubmit({
   onPress,
   error,
   notice,
-}: {
+}: Readonly<{
   testID: string;
   label: string;
   pending: boolean;
   onPress: () => void;
   error?: string;
   notice?: string;
-}) {
+}>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   return (

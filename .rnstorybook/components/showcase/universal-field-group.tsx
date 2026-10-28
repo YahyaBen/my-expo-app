@@ -14,7 +14,7 @@ export function UniversalFieldGroup({
   seedColor,
   viewportHeight = 440,
   ...props
-}: UniversalFieldGroupProps) {
+}: Readonly<UniversalFieldGroupProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

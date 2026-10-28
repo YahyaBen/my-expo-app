@@ -13,11 +13,11 @@ function PageDemo({
   showBack = false,
   viewportWidth,
   longContent = false,
-}: {
+}: Readonly<{
   showBack?: boolean;
   viewportWidth?: number;
   longContent?: boolean;
-}) {
+}>) {
   const [actions, setActions] = useState(0);
   const [backs, setBacks] = useState(0);
   return (

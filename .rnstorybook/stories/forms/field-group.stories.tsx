@@ -51,7 +51,7 @@ function FieldGroupDemo({
   onAcceptedChange,
   onVolumeChange,
   ...args
-}: DemoProps) {
+}: Readonly<DemoProps>) {
   const [notify, setNotify] = useState(notifications);
   const [checked, setChecked] = useState(accepted);
   const [level, setLevel] = useState(volume);
@@ -189,7 +189,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Preferences: Story = {};
 
-function SettingsRowFeedbackDemo({ colorScheme, seedColor }: DemoProps) {
+function SettingsRowFeedbackDemo({ colorScheme, seedColor }: Readonly<DemoProps>) {
   const [isPresented, setIsPresented] = useState(false);
   const [language, setLanguage] = useState('English');
   const [openCount, setOpenCount] = useState(0);

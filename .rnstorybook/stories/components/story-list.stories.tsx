@@ -27,7 +27,7 @@ function StoryListDemo({
   height,
   itemWidth,
   ...preview
-}: Props) {
+}: Readonly<Props>) {
   const { width: screenWidth } = useWindowDimensions();
   const width = Math.max(1, Math.min(requestedWidth, screenWidth - spacing.lg * 2));
   const [replacement, setReplacement] = useState<readonly PhotoItem[] | null>(null);

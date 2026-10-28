@@ -21,13 +21,13 @@ import { spacing } from '@/constants/layout';
 const inputIcons = {
   search: Icon.select({
     ios: 'magnifyingglass',
-    android: require('@expo/material-symbols/search.xml'),
+    android: 'search',
   }),
   clear: Icon.select({
     ios: 'xmark.circle.fill',
-    android: require('@expo/material-symbols/cancel.xml'),
+    android: 'cancel',
   }),
-  info: Icon.select({ ios: 'info.circle', android: require('@expo/material-symbols/info.xml') }),
+  info: Icon.select({ ios: 'info.circle', android: 'info' }),
 };
 
 const statuses = [
@@ -56,11 +56,11 @@ function InputSection({
   title,
   hint,
   children,
-}: {
+}: Readonly<{
   title: string;
   hint: string;
   children: ReactNode;
-}) {
+}>) {
   return (
     <PageSection>
       <Text variant="title">{title}</Text>
@@ -227,13 +227,11 @@ function PasswordInputDemo() {
         autoComplete="off"
         leftIcon={Icon.select({
           ios: 'lock',
-          android: require('@expo/material-symbols/lock.xml'),
+          android: 'lock',
         })}
         rightIcon={Icon.select({
           ios: shown ? 'eye.slash' : 'eye',
-          android: shown
-            ? require('@expo/material-symbols/visibility_off.xml')
-            : require('@expo/material-symbols/visibility.xml'),
+          android: shown ? 'visibility_off' : 'visibility',
         })}
         rightIconAccessibilityLabel={t(shown ? 'auth.hidePassword' : 'auth.showPassword')}
         onRightIconPress={() => setShown((current) => !current)}
@@ -322,7 +320,7 @@ function InputKeyboardDemo() {
         onSubmitEditing={() => notesRef.current?.focus()}
         leftIcon={Icon.select({
           ios: 'envelope',
-          android: require('@expo/material-symbols/mail.xml'),
+          android: 'mail',
         })}
         testID="demo-input-email"
       />

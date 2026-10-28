@@ -33,7 +33,7 @@ const AuthContext = createContext<
   | null
 >(null);
 
-export function AuthProvider({ children }: PropsWithChildren) {
+export function AuthProvider({ children }: Readonly<PropsWithChildren>) {
   const { t } = useTranslation();
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<AuthSnapshot>({

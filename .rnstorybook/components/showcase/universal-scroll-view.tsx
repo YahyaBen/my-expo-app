@@ -9,7 +9,7 @@ export function UniversalScrollView({
   seedColor,
   viewportHeight = 320,
   ...props
-}: UniversalScrollViewProps) {
+}: Readonly<UniversalScrollViewProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

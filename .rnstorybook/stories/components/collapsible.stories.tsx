@@ -10,7 +10,7 @@ import { NativeStoryFrame, nativeThemeControls } from '../../components/native-s
 
 type DemoProps = UniversalCollapsibleProps & { content: string };
 
-function CollapsibleDemo({ content, ...args }: DemoProps) {
+function CollapsibleDemo({ content, ...args }: Readonly<DemoProps>) {
   const [isOpen, setIsOpen] = useState(args.isOpen);
   return (
     <UniversalCollapsible

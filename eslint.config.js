@@ -2,10 +2,10 @@
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 const prettierConfig = require('eslint-config-prettier/flat');
-const synchronousMaterialIcons = {
-  selector: String.raw`ImportExpression[source.value=/^@expo\u002Fmaterial-symbols\u002F/]`,
+const expoSymbolIcons = {
+  selector: String.raw`:matches(ImportDeclaration[source.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], ImportExpression[source.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], CallExpression[callee.name='require'][arguments.0.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], ImportDeclaration[source.value=/^@expo\u002Fui(?:\u002F|$)/] > ImportSpecifier[imported.name=/^(?:Icon|IconName|IconProps)$/])`,
   message:
-    'Use a literal require() for Material XML icons. Dynamic imports through @components/ui are not rewritten by the Expo UI Babel plugin and crash on Android.',
+    'Use the shared Icon backed by expo-symbols, with typed iOS and Android symbol names. UI implementations import the icon sibling; consumers use @components/ui.',
 };
 const nativeControlImports = [
   {
@@ -121,7 +121,7 @@ module.exports = defineConfig([
     files: ['src/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': restrictImports(),
-      'no-restricted-syntax': ['error', synchronousMaterialIcons],
+      'no-restricted-syntax': ['error', expoSymbolIcons],
     },
   },
   {
@@ -253,7 +253,7 @@ module.exports = defineConfig([
     rules: {
       'no-restricted-syntax': [
         'error',
-        synchronousMaterialIcons,
+        expoSymbolIcons,
         {
           selector: String.raw`ImportDeclaration[source.value=/^@expo\/ui(?:\/|$)/]`,
           message:
@@ -296,7 +296,7 @@ module.exports = defineConfig([
     files: ['.rnstorybook/stories/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': ['error', { paths: nativeControlImports }],
-      'no-restricted-syntax': ['error', synchronousMaterialIcons],
+      'no-restricted-syntax': ['error', expoSymbolIcons],
     },
   },
   {

@@ -37,7 +37,7 @@ export type CircularCarouselProps = {
 };
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/circular-carousel
-export function CircularCarousel(props: CircularCarouselProps) {
+export function CircularCarousel(props: Readonly<CircularCarouselProps>) {
   if (props.items.length === 0 || !Number.isFinite(props.width) || props.width <= 0) return null;
   // A changed data order starts a fresh selection; resizing keeps the current item.
   return (
@@ -56,7 +56,7 @@ function CircularCarouselContent({
   getPositionLabel,
   onIndexChange,
   testID = 'circular-carousel',
-}: CircularCarouselProps) {
+}: Readonly<CircularCarouselProps>) {
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
 
@@ -192,7 +192,7 @@ function PhotoCard({
   rtl,
   reducedMotion,
   testID,
-}: {
+}: Readonly<{
   item: PhotoItem;
   count: number;
   index: number;
@@ -206,7 +206,7 @@ function PhotoCard({
   rtl: boolean;
   reducedMotion: boolean;
   testID: string;
-}) {
+}>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset + spacing.sm;
   const animatedStyle = useAnimatedStyle(() => {

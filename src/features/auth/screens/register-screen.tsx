@@ -58,7 +58,7 @@ export function RegisterScreen() {
           label={t('auth.username')}
           leftIcon={Icon.select({
             ios: 'person',
-            android: require('@expo/material-symbols/person.xml'),
+            android: 'person',
           })}
           placeholder={t('auth.usernamePlaceholder')}
           autoComplete="username"
@@ -74,7 +74,7 @@ export function RegisterScreen() {
           label={t('auth.firstName')}
           leftIcon={Icon.select({
             ios: 'person',
-            android: require('@expo/material-symbols/person.xml'),
+            android: 'person',
           })}
           placeholder={t('auth.firstName')}
           autoComplete="given-name"
@@ -89,7 +89,7 @@ export function RegisterScreen() {
           label={t('auth.lastName')}
           leftIcon={Icon.select({
             ios: 'person',
-            android: require('@expo/material-symbols/person.xml'),
+            android: 'person',
           })}
           placeholder={t('auth.lastName')}
           autoComplete="family-name"
@@ -111,7 +111,7 @@ export function RegisterScreen() {
           label={t('auth.email')}
           leftIcon={Icon.select({
             ios: 'envelope',
-            android: require('@expo/material-symbols/mail.xml'),
+            android: 'mail',
           })}
           placeholder={t('auth.emailPlaceholder')}
           keyboardType="email-address"
@@ -128,7 +128,7 @@ export function RegisterScreen() {
           label={t('auth.password')}
           leftIcon={Icon.select({
             ios: 'lock',
-            android: require('@expo/material-symbols/lock.xml'),
+            android: 'lock',
           })}
           passwordToggle="icon"
           placeholder={t('auth.createPassword')}
@@ -147,7 +147,7 @@ export function RegisterScreen() {
           label={t('auth.confirmPassword')}
           leftIcon={Icon.select({
             ios: 'lock',
-            android: require('@expo/material-symbols/lock.xml'),
+            android: 'lock',
           })}
           passwordToggle="icon"
           placeholder={t('auth.repeatPassword')}

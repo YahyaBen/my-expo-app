@@ -50,7 +50,7 @@ export function UniversalHost({
   matchContents = defaultMatchContents(viewportHeight, inline),
   style,
   ...props
-}: Props) {
+}: Readonly<Props>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection(layoutDirection);

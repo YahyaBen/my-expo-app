@@ -21,7 +21,7 @@ import {
   useLayoutDirectionSettings,
 } from '@/context/layout-direction.context';
 
-function ButtonDemo(args: UniversalButtonProps) {
+function ButtonDemo(args: Readonly<UniversalButtonProps>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={args.colorScheme}>
@@ -109,7 +109,7 @@ export const Destructive: Story = { args: { variant: 'destructive', label: 'Dele
 export const Info: Story = { args: { variant: 'info', label: 'Learn more' } };
 export const Glass: Story = { args: { variant: 'glass', label: 'Open options' } };
 
-function InteractionDemo(args: UniversalButtonProps) {
+function InteractionDemo(args: Readonly<UniversalButtonProps>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={args.colorScheme}>
@@ -147,7 +147,9 @@ function InteractionDemo(args: UniversalButtonProps) {
 export const Interaction: Story = { render: (args) => <InteractionDemo {...args} /> };
 
 /** Use component defaults so a preview cannot hide a missing semantic color mapping. */
-function SemanticVariantsDemo({ colorScheme }: Pick<UniversalButtonProps, 'colorScheme'>) {
+function SemanticVariantsDemo({
+  colorScheme,
+}: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={colorScheme}>
@@ -208,7 +210,7 @@ export const SemanticVariantsDark: Story = {
   render: (args) => <SemanticVariantsDemo colorScheme={args.colorScheme} />,
 };
 
-function StandaloneHostDemo({ colorScheme }: Pick<UniversalButtonProps, 'colorScheme'>) {
+function StandaloneHostDemo({ colorScheme }: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
   return (
     <LayoutDirectionProvider initialDirection="ltr">
       <StandaloneHostContent colorScheme={colorScheme} />
@@ -216,7 +218,9 @@ function StandaloneHostDemo({ colorScheme }: Pick<UniversalButtonProps, 'colorSc
   );
 }
 
-function StandaloneHostContent({ colorScheme }: Pick<UniversalButtonProps, 'colorScheme'>) {
+function StandaloneHostContent({
+  colorScheme,
+}: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
   const [presses, setPresses] = useState(0);
   const { direction, setDirection } = useLayoutDirectionSettings();
   return (

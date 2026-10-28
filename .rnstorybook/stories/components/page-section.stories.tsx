@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
 
-function SectionDemo({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
+function SectionDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark' }>) {
   const colors = useThemeColors(colorScheme);
   const [value, setValue] = useState('Shared section');
   const [presses, setPresses] = useState(0);

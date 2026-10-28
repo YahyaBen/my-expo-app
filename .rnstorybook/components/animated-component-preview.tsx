@@ -12,7 +12,7 @@ export function AnimatedComponentPreview({
   children,
   rtl = false,
   ...theme
-}: PropsWithChildren<AnimatedComponentPreviewProps>) {
+}: Readonly<PropsWithChildren<AnimatedComponentPreviewProps>>) {
   return (
     <StoryTheme {...theme}>
       <UniversalHost

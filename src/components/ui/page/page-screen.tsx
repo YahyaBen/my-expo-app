@@ -24,7 +24,7 @@ export function PageScreen({
   colorScheme,
   onBack,
   showBack = true,
-}: {
+}: Readonly<{
   title: string;
   description: string;
   children?: ReactNode;
@@ -34,7 +34,7 @@ export function PageScreen({
   onBack?: () => void;
   showBack?: boolean;
   actions?: { label: string; href: Href; testID?: string }[];
-}) {
+}>) {
   const scheme = useColorScheme(colorScheme);
   const goBack = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   return (
@@ -64,14 +64,14 @@ function PageContent({
   tab,
   onRefresh,
   colorScheme: scheme,
-}: {
+}: Readonly<{
   description: string;
   actions: { label: string; href: Href; testID?: string }[];
   children?: ReactNode;
   tab: boolean;
   onRefresh?: () => Promise<void>;
   colorScheme: 'light' | 'dark';
-}) {
+}>) {
   const insets = useSafeAreaInsets();
   const headerInset = usePageHeaderInset();
   return (

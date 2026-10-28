@@ -71,10 +71,10 @@ export const Card: Story = {
 function AnimationControlsDemo({
   colorScheme = 'light',
   animate = true,
-}: {
+}: Readonly<{
   colorScheme?: 'light' | 'dark';
   animate?: boolean;
-}) {
+}>) {
   const [playing, setPlaying] = useState(true);
   return (
     <NativeStoryFrame colorScheme={colorScheme}>

@@ -74,7 +74,7 @@ export function TextInputIconButton({
   onPress,
   accessibilityLabel,
   testID,
-}: TextInputIconButtonProps) {
+}: Readonly<TextInputIconButtonProps>) {
   return (
     <Button
       testID={testID}

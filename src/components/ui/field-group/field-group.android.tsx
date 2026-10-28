@@ -16,7 +16,7 @@ import { clip, fillMaxSize, fillMaxWidth, Shapes } from '@expo/ui/jetpack-compos
 import { Children, cloneElement, Fragment, isValidElement, type ReactNode } from 'react';
 
 /** Native form composition keeps complete ListItem cells out of another Material cell. */
-export function FieldGroup({ children, style, ...props }: FieldGroupProps) {
+export function FieldGroup({ children, style, ...props }: Readonly<FieldGroupProps>) {
   const colors = useMaterialColors();
   const sections: ReactNode[] = [];
   let rows: ReactNode[] = [];
@@ -52,7 +52,7 @@ function Section({
   titleUppercase = false,
   modifiers,
   ...props
-}: FieldSectionProps) {
+}: Readonly<FieldSectionProps>) {
   const colors = useMaterialColors();
   let header: ReactNode;
   let footer: ReactNode;

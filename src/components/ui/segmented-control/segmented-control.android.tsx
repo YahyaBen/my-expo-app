@@ -2,7 +2,11 @@ import { SegmentedButton, SingleChoiceSegmentedButtonRow, Text } from '@expo/ui/
 import { fillMaxWidth, testID } from '@expo/ui/jetpack-compose/modifiers';
 import type { SegmentedControlProps } from './segmented-control';
 
-export function SegmentedControl({ options, selectedValue, onValueChange }: SegmentedControlProps) {
+export function SegmentedControl({
+  options,
+  selectedValue,
+  onValueChange,
+}: Readonly<SegmentedControlProps>) {
   return (
     <SingleChoiceSegmentedButtonRow modifiers={[fillMaxWidth()]}>
       {options.map((option) => (

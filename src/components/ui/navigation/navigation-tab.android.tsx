@@ -1,4 +1,4 @@
-import { Icon } from '@expo/ui';
+import { Icon } from '../icon/icon';
 import { Column, Text } from '@expo/ui/jetpack-compose';
 import {
   background,
@@ -21,7 +21,7 @@ export function NavigationTab({
   selectedBackgroundColor,
   testID,
   onPress,
-}: NavigationTabProps) {
+}: Readonly<NavigationTabProps>) {
   return (
     <Column
       horizontalAlignment="center"

@@ -18,10 +18,10 @@ import { PageSection } from '../page/page-section';
 export function LoadingContent({
   label,
   testID = 'loading-state',
-}: {
+}: Readonly<{
   label?: string;
   testID?: string;
-}) {
+}>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   return (
@@ -36,10 +36,10 @@ export function LoadingContent({
 export function LoadingScreen({
   label,
   colorScheme,
-}: {
+}: Readonly<{
   label?: string;
   colorScheme?: 'light' | 'dark';
-}) {
+}>) {
   const scheme = useHostColorScheme(colorScheme);
   const insets = useSafeAreaInsets();
   const colors = useThemeColors(scheme);
@@ -84,7 +84,7 @@ export function QueryContent<T>({
   disabledMessage,
   emptyMessage,
   testID,
-}: {
+}: Readonly<{
   query: ContentQuery<T>;
   empty?: boolean;
   disabledMessage?: string;
@@ -92,7 +92,7 @@ export function QueryContent<T>({
   /** Prefix for this composition's status and retry controls. */
   testID?: string;
   children: ReactNode;
-}) {
+}>) {
   const { t } = useTranslation();
   return (
     <Column spacing={spacing.lg} testID={testID}>
@@ -134,7 +134,7 @@ export function QueryContent<T>({
 }
 
 /** Recovery UI uses the same native Expo UI controls as the rest of the app. */
-export function ScreenError({ error, retry }: ErrorBoundaryProps) {
+export function ScreenError({ error, retry }: Readonly<ErrorBoundaryProps>) {
   const { t } = useTranslation();
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();

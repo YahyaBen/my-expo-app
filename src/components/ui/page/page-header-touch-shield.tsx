@@ -19,7 +19,7 @@ const shieldProps = {
 };
 
 /** Intercepts covered content without reserving space or covering the back control. */
-export function PageHeaderTouchShield({ height }: { height: number }) {
+export function PageHeaderTouchShield({ height }: Readonly<{ height: number }>) {
   const wave = useContext(PageWaveContext);
   return wave ? (
     <WaveTouchShield height={height} wave={wave} />
@@ -31,10 +31,10 @@ export function PageHeaderTouchShield({ height }: { height: number }) {
 function WaveTouchShield({
   height,
   wave,
-}: {
+}: Readonly<{
   height: number;
   wave: NonNullable<ContextType<typeof PageWaveContext>>;
-}) {
+}>) {
   const { fit, waveHeight } = wave;
   const animatedStyle = useAnimatedStyle(() => ({
     height: Math.max(height, (fit.get()[1].translateY ?? 0) + waveHeight),

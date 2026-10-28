@@ -30,7 +30,7 @@ export function PageMotionOverlay({
   variant = 'overlay',
   visible = true,
   ...props
-}: PageMotionOverlayProps) {
+}: Readonly<PageMotionOverlayProps>) {
   const { design } = useAppTheme(props.colorScheme);
   const [motion, setMotion] = useState<ReturnType<typeof usePageWaveMotion> | null>(null);
   const waves = variant === 'splash' || (design.header.artwork && shape !== 'default');
@@ -69,10 +69,12 @@ function PageMotionArtwork({
   onCollapseComplete,
   visible = true,
   onMotion,
-}: Omit<PageMotionOverlayProps, 'shape' | 'children'> & {
-  shape?: PageHeaderShape;
-  onMotion?: (motion: ReturnType<typeof usePageWaveMotion> | null) => void;
-}) {
+}: Readonly<
+  Omit<PageMotionOverlayProps, 'shape' | 'children'> & {
+    shape?: PageHeaderShape;
+    onMotion?: (motion: ReturnType<typeof usePageWaveMotion> | null) => void;
+  }
+>) {
   const scheme = useColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const splash = variant === 'splash';

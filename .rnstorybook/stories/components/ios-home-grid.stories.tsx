@@ -29,7 +29,12 @@ type GridDemoProps = AnimatedComponentPreviewProps & {
   contentWidth?: number;
 };
 
-function IosHomeGridDemo({ columns, itemCount, contentWidth, ...preview }: GridDemoProps) {
+function IosHomeGridDemo({
+  columns,
+  itemCount,
+  contentWidth,
+  ...preview
+}: Readonly<GridDemoProps>) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const availableWidth =

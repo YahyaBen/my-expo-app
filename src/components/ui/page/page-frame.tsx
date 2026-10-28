@@ -39,16 +39,18 @@ export function PageFrame({
   headerOverlay = false,
   headerBlur = true,
   scrollsBehindHeader = false,
-}: PropsWithChildren<{
-  title?: string;
-  onBack?: () => void;
-  colorScheme?: 'light' | 'dark';
-  headerOverlay?: boolean;
-  /** Blur content behind titled headers by default, independently of theme artwork. */
-  headerBlur?: boolean;
-  /** Children reserve usePageHeaderInset() inside their own scroll content. */
-  scrollsBehindHeader?: boolean;
-}>) {
+}: Readonly<
+  PropsWithChildren<{
+    title?: string;
+    onBack?: () => void;
+    colorScheme?: 'light' | 'dark';
+    headerOverlay?: boolean;
+    /** Blur content behind titled headers by default, independently of theme artwork. */
+    headerBlur?: boolean;
+    /** Children reserve usePageHeaderInset() inside their own scroll content. */
+    scrollsBehindHeader?: boolean;
+  }>
+>) {
   const colors = useThemeColors(useHostColorScheme(colorScheme));
   const onStartupLayout = useContext(StartupLayoutContext);
   const markFrameLayout = usePagePerformance();

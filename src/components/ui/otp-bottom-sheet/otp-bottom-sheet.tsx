@@ -1,7 +1,6 @@
 import { spacing, radii } from '@/constants/layout';
 import {
   Column,
-  Icon,
   RNHostView,
   Row,
   ScrollView,
@@ -21,6 +20,7 @@ import { useMeasuredWidth } from '@/hooks/use-measured-width';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { UniversalButtonContent } from '../button/universal-button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { Icon } from '../icon/icon';
 import { LoadingContent } from '../loading/loading-state';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
@@ -58,7 +58,7 @@ export function OtpBottomSheet({
   colorScheme,
   testID = 'otp-sheet',
   ...props
-}: OtpBottomSheetProps) {
+}: Readonly<OtpBottomSheetProps>) {
   return (
     <UniversalHost colorScheme={colorScheme}>
       <BottomSheet isPresented={props.isPresented} onDismiss={props.onDismiss} testID={testID}>
@@ -77,7 +77,7 @@ function OtpForm({
   resendCooldownSeconds = 30,
   hint,
   testID = 'otp-sheet',
-}: OtpBottomSheetProps) {
+}: Readonly<OtpBottomSheetProps>) {
   const { t } = useTranslation();
   const scheme = useHostColorScheme();
   const colors = useThemeColors(scheme);
@@ -392,13 +392,13 @@ function OtpResendButton({
   busy,
   onPress,
   testID,
-}: {
+}: Readonly<{
   deadline: number;
   isPresented: boolean;
   busy: boolean;
   onPress: () => void;
   testID: string;
-}) {
+}>) {
   const { t } = useTranslation();
   const active = useAppActive();
   const visible = isPresented && active;
@@ -465,19 +465,19 @@ const shake = {
 function OtpFeedback({
   status,
   visible,
-}: {
+}: Readonly<{
   status: 'idle' | 'verifying' | 'resending' | 'error' | 'success';
   visible: boolean;
-}) {
+}>) {
   if (!visible) return null;
   return <AnimatedOtpFeedback status={status} />;
 }
 
 function AnimatedOtpFeedback({
   status,
-}: {
+}: Readonly<{
   status: 'idle' | 'verifying' | 'resending' | 'error' | 'success';
-}) {
+}>) {
   const scheme = useHostColorScheme();
   const colors = useThemeColors(scheme);
   const motion = useMotionEnabled(true);
@@ -511,11 +511,7 @@ function AnimatedOtpFeedback({
                 : error
                   ? 'exclamationmark.shield.fill'
                   : 'lock.shield.fill',
-              android: success
-                ? require('@expo/material-symbols/verified_user.xml')
-                : error
-                  ? require('@expo/material-symbols/gpp_maybe.xml')
-                  : require('@expo/material-symbols/shield_lock.xml'),
+              android: success ? 'verified_user' : error ? 'gpp_maybe' : 'shield_lock',
             })}
             size={36}
             color={error ? colors.error : colors.success}

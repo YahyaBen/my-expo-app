@@ -28,7 +28,7 @@ export function ResetPasswordScreen() {
   return <ResetPasswordForm key={validChallenge ?? 'invalid'} challengeId={validChallenge} />;
 }
 
-function ResetPasswordForm({ challengeId }: { challengeId: string | null }) {
+function ResetPasswordForm({ challengeId }: Readonly<{ challengeId: string | null }>) {
   const { t } = useTranslation();
   const valid = challengeId !== null;
   const [saved, setSaved] = useState(false);

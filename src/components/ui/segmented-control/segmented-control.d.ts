@@ -6,4 +6,4 @@ export type SegmentedControlProps = {
 };
 
 // Metro resolves the native implementation; this declaration supplies its shared type.
-export declare function SegmentedControl(props: SegmentedControlProps): React.JSX.Element;
+export declare function SegmentedControl(props: Readonly<SegmentedControlProps>): React.JSX.Element;

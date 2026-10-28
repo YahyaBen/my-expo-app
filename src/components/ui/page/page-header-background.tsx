@@ -12,11 +12,11 @@ export function PageHeaderBackground({
   blurTarget,
   colorScheme,
   height = 0,
-}: {
+}: Readonly<{
   blurTarget: RefObject<ViewInstance | null>;
   colorScheme?: 'light' | 'dark';
   height?: number;
-}) {
+}>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const wave = useContext(PageWaveContext);

@@ -20,7 +20,7 @@ export default function LoadingScreen() {
 }
 
 /** Local presentation state only; retries never make backend requests. */
-export function QueryRetryPreview({ testID, title }: { testID: string; title: string }) {
+export function QueryRetryPreview({ testID, title }: Readonly<{ testID: string; title: string }>) {
   const { t } = useTranslation();
   const [retries, setRetries] = useState(0);
   const query: ContentQuery<boolean> = {

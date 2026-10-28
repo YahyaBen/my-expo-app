@@ -52,7 +52,7 @@ const getItemType = (item: Row) => item.density;
 const renderNativeItem = ({ item }: { item: Row }) => <PerformanceRow item={item} />;
 
 /** Same native content in both renderers; only scroll/Host ownership differs. */
-function PerformanceRow({ item }: { item: Row }) {
+function PerformanceRow({ item }: Readonly<{ item: Row }>) {
   const colors = useThemeColors();
   return (
     <Column modifiers={nativeFillWidth} spacing={0} testID={item.id}>
@@ -67,7 +67,12 @@ function PerformanceRow({ item }: { item: Row }) {
   );
 }
 
-function PerformanceList({ count, renderer, colorScheme, layoutDirection }: PerformanceListProps) {
+function PerformanceList({
+  count,
+  renderer,
+  colorScheme,
+  layoutDirection,
+}: Readonly<PerformanceListProps>) {
   const colors = useThemeColors(colorScheme);
   const data = datasets[count];
   const renderItem = useCallback<ListRenderItem<Row>>(

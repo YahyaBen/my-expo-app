@@ -29,11 +29,11 @@ function ChartPlot({
   height,
   testID,
   children,
-}: {
+}: Readonly<{
   height: number;
   testID: string;
   children: (width: number) => ReactNode;
-}) {
+}>) {
   const [width, setWidth] = useMeasuredWidth();
 
   return (
@@ -65,11 +65,11 @@ export function TableOrderCharts({
   orders,
   currency,
   testID,
-}: {
+}: Readonly<{
   orders: readonly ChartOrder[];
   currency: Intl.NumberFormat;
   testID: string;
-}) {
+}>) {
   const { t, i18n } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   const isRTL = useHostLayoutDirection() === 'rightToLeft';

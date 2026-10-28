@@ -66,7 +66,7 @@ export function IosHomeGrid({
   borderRadius = radii.card,
   testID = 'ios-home-grid',
   ...props
-}: IosHomeGridProps) {
+}: Readonly<IosHomeGridProps>) {
   const { fontScale } = useWindowDimensions();
   const direction = useHostLayoutDirection();
   const { width, items } = props;
@@ -112,7 +112,7 @@ function PhotoGrid({
   onSelect,
   onClose,
   testID,
-}: GridProps) {
+}: Readonly<GridProps>) {
   const scene = useRef<ViewInstance>(null);
   const mounted = useRef(false);
   const busy = useRef(false);
@@ -251,7 +251,7 @@ function PhotoTile({
   disabled,
   onOpen,
   testID,
-}: {
+}: Readonly<{
   item: PhotoItem;
   index: number;
   size: number;
@@ -259,7 +259,7 @@ function PhotoTile({
   disabled: boolean;
   onOpen: (index: number, rect: Rect, imageSize?: LoadedImageSize) => void;
   testID: string;
-}) {
+}>) {
   const image = useRef<ViewInstance>(null);
   const imageSize = useRef<LoadedImageSize | undefined>(undefined);
   const colors = useThemeColors(useHostColorScheme());
@@ -330,7 +330,7 @@ function ExpandedPhoto({
   onClose,
   onClosed,
   testID,
-}: {
+}: Readonly<{
   item: PhotoItem;
   selection: Selection;
   progress: SharedValue<number>;
@@ -341,7 +341,7 @@ function ExpandedPhoto({
   onClose: () => void;
   onClosed: () => void;
   testID: string;
-}) {
+}>) {
   const motionEnabled = useMotionEnabled();
   const colors = useThemeColors(useHostColorScheme());
   const drag = useSharedValue(0);

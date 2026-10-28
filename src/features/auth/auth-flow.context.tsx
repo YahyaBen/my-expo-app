@@ -40,7 +40,7 @@ interface RegistrationChallengeState {
 const AuthFlowContext = createContext<AuthFlowContextValue | undefined>(undefined);
 
 /** Transient state exists only while the auth route group is mounted. */
-export function AuthFlowProvider({ children }: PropsWithChildren) {
+export function AuthFlowProvider({ children }: Readonly<PropsWithChildren>) {
   const pathname = usePathname();
 
   const [challengeState, setChallengeState] = useState<RegistrationChallengeState | null>(null);

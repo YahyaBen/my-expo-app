@@ -20,7 +20,7 @@ export interface UniversalTextProps extends TextProps {
   colorScheme?: UniversalTextColorScheme;
 }
 
-export function UniversalText({ colorScheme, ...props }: UniversalTextProps) {
+export function UniversalText({ colorScheme, ...props }: Readonly<UniversalTextProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}
@@ -42,7 +42,7 @@ export function UniversalTextContent({
   colorScheme,
   textStyle,
   ...textProps
-}: UniversalTextProps) {
+}: Readonly<UniversalTextProps>) {
   const activeColorScheme = useHostColorScheme(colorScheme);
   const { colors, design } = useAppTheme(activeColorScheme);
   const preset = variant === undefined ? undefined : design.typography[variant];

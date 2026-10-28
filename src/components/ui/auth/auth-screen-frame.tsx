@@ -25,7 +25,7 @@ import { getBrandHeadingFont } from '@/config/brand-assets';
 export function AuthScreenFrame({
   topBar,
   ...props
-}: Parameters<typeof AuthScreenContent>[0] & { topBar?: ReactNode }) {
+}: Readonly<Parameters<typeof AuthScreenContent>[0] & { topBar?: ReactNode }>) {
   return (
     <PageFrame colorScheme={props.colorScheme}>
       {topBar}
@@ -43,16 +43,18 @@ function AuthScreenContent({
   grouped = false,
   onRefresh,
   colorScheme,
-}: PropsWithChildren<{
-  testID: string;
-  title: string;
-  description: string;
-  tab?: boolean;
-  /** Registration keeps its native grouped form as the only scroll container. */
-  grouped?: boolean;
-  onRefresh?: () => Promise<void>;
-  colorScheme?: 'light' | 'dark';
-}>) {
+}: Readonly<
+  PropsWithChildren<{
+    testID: string;
+    title: string;
+    description: string;
+    tab?: boolean;
+    /** Registration keeps its native grouped form as the only scroll container. */
+    grouped?: boolean;
+    onRefresh?: () => Promise<void>;
+    colorScheme?: 'light' | 'dark';
+  }>
+>) {
   const insets = useSafeAreaInsets();
   const { language } = useLanguage();
   const brand = getAppBrand();

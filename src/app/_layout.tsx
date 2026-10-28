@@ -92,7 +92,7 @@ export default function RootLayout() {
   );
 }
 
-function RootLayoutContent({ fontsReady }: { fontsReady: boolean }) {
+function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const {
     colorScheme: appearancePreference,
     appearanceReady,
@@ -199,7 +199,7 @@ function RootLayoutContent({ fontsReady }: { fontsReady: boolean }) {
   );
 }
 
-function RootLayoutNav({ holdLogin }: { holdLogin: boolean }) {
+function RootLayoutNav({ holdLogin }: Readonly<{ holdLogin: boolean }>) {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();

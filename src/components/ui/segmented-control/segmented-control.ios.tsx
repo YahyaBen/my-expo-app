@@ -8,7 +8,7 @@ export function SegmentedControl({
   selectedValue,
   onValueChange,
   label,
-}: SegmentedControlProps) {
+}: Readonly<SegmentedControlProps>) {
   const { t } = useTranslation();
   return (
     <Picker

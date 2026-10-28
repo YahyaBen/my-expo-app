@@ -14,7 +14,7 @@ import { NativeStoryFrame, nativeThemeControls } from '../../components/native-s
 
 const leadingIcon = Icon.select({
   ios: 'star.fill',
-  android: require('@expo/material-symbols/star.xml'),
+  android: 'star',
 });
 
 type DemoProps = UniversalListProps & {
@@ -38,7 +38,7 @@ function ListDemo({
   onRowPress,
   onRefreshRequested,
   ...args
-}: DemoProps) {
+}: Readonly<DemoProps>) {
   const colors = useThemeColors(args.colorScheme);
   const [selected, setSelected] = useState<number | null>(null);
   const [refreshCount, setRefreshCount] = useState(0);
@@ -150,7 +150,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-function CompoundSlotsDemo(args: DemoProps) {
+function CompoundSlotsDemo(args: Readonly<DemoProps>) {
   const [presses, setPresses] = useState(0);
   return (
     <View style={{ gap: 16 }}>

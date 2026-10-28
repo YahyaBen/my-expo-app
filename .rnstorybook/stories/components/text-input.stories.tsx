@@ -15,19 +15,19 @@ import { action } from 'storybook/actions';
 
 const searchIcon = Icon.select({
   ios: 'magnifyingglass',
-  android: require('@expo/material-symbols/search.xml'),
+  android: 'search',
 });
 
 const clearIcon = Icon.select({
   ios: 'xmark.circle.fill',
-  android: require('@expo/material-symbols/cancel.xml'),
+  android: 'cancel',
 });
 
 const selectionNote =
   'Select-all and programmatic selection require iOS 18+; supported on Android. Secure fields ignore selection and multiline props on iOS.';
 
 /** Story-only RN boundary; application fields compose inside their existing Host. */
-function InputPreview(props: TextInputProps) {
+function InputPreview(props: Readonly<TextInputProps>) {
   return (
     <Host
       colorScheme={props.colorScheme}
@@ -173,7 +173,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {};
 
-function IconInputDemo(args: TextInputProps) {
+function IconInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   const [pressCount, setPressCount] = useState(0);
   const [disabled, setDisabled] = useState(args.disabled ?? false);
@@ -240,7 +240,7 @@ const Password: Story = {
   },
 };
 
-function PasswordVisibilityDemo(args: TextInputProps) {
+function PasswordVisibilityDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   const [shown, setShown] = useState(false);
   const [layout, setLayout] = useState({ first: 0, current: 0 });
@@ -267,13 +267,11 @@ function PasswordVisibilityDemo(args: TextInputProps) {
           secureTextEntry={!shown}
           leftIcon={Icon.select({
             ios: 'lock',
-            android: require('@expo/material-symbols/lock.xml'),
+            android: 'lock',
           })}
           rightIcon={Icon.select({
             ios: shown ? 'eye.slash' : 'eye',
-            android: shown
-              ? require('@expo/material-symbols/visibility_off.xml')
-              : require('@expo/material-symbols/visibility.xml'),
+            android: shown ? 'visibility_off' : 'visibility',
           })}
           rightIconAccessibilityLabel={shown ? 'Hide password' : 'Show password'}
           onRightIconPress={() => {
@@ -311,7 +309,7 @@ export const PasswordVisibility: Story = {
   ),
 };
 
-function InputActionsDemo(args: TextInputProps) {
+function InputActionsDemo(args: Readonly<TextInputProps>) {
   const ref = useRef<TextInputRef>(null);
   const [focused, setFocused] = useState(false);
   return (
@@ -385,7 +383,7 @@ export const ImperativeActions: Story = {
   render: (args) => <InputActionsDemo key={args.defaultValue} {...args} />,
 };
 
-function ControlledInputDemo(args: TextInputProps) {
+function ControlledInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   return (
     <View style={{ gap: 20 }}>

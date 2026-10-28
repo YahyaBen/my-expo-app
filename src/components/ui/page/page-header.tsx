@@ -19,11 +19,11 @@ export function PageHeader({
   title,
   onBack,
   colorScheme,
-}: {
+}: Readonly<{
   title?: string;
   onBack?: () => void;
   colorScheme?: 'light' | 'dark';
-}) {
+}>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const { language } = useLanguage();

@@ -5,7 +5,12 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import type { TableActionsProps } from './table-actions';
 
-export function TableActions({ label, accessibilityLabel, actions, testID }: TableActionsProps) {
+export function TableActions({
+  label,
+  accessibilityLabel,
+  actions,
+  testID,
+}: Readonly<TableActionsProps>) {
   const colors = useThemeColors(useHostColorScheme());
   const [expanded, setExpanded] = useState(false);
   const enabled = actions.length > 0;

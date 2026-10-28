@@ -6,11 +6,11 @@ export function ColorSchemeControl({
   testID = 'app-settings-color-scheme-picker',
   onValueChange,
   disabled = false,
-}: {
+}: Readonly<{
   testID?: string;
   onValueChange?: (scheme: ColorSchemePreference) => void;
   disabled?: boolean;
-}) {
+}>) {
   const { t } = useTranslation();
   const { colorScheme, setColorScheme, appearanceReady } = useThemeSettings();
   return (

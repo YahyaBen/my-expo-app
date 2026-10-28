@@ -40,7 +40,7 @@ const screens = {
   loading: LoadingScreen,
 };
 
-export function ComponentScreen({ name }: { name?: string }) {
+export function ComponentScreen({ name }: Readonly<{ name?: string }>) {
   const { t } = useTranslation();
   const Screen =
     name && Object.hasOwn(screens, name) ? screens[name as keyof typeof screens] : undefined;

@@ -18,7 +18,7 @@ type State =
 
 type Props = { state: State; colorScheme: 'light' | 'dark' };
 
-function LoadingDemo({ state: initial, colorScheme }: Props) {
+function LoadingDemo({ state: initial, colorScheme }: Readonly<Props>) {
   const [state, setState] = useState(initial);
   const cached = ['empty', 'ready', 'refreshing', 'refresh-error'].includes(state);
   const fetching = state === 'loading' || state === 'refreshing';

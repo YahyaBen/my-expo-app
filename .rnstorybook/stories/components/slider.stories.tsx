@@ -9,7 +9,7 @@ import { View } from 'react-native';
 import { action } from 'storybook/actions';
 import { NativeStoryFrame, nativeThemeControls } from '../../components/native-story-frame';
 
-function SliderDemo(args: UniversalSliderProps) {
+function SliderDemo(args: Readonly<UniversalSliderProps>) {
   const [value, setValue] = useState(args.value);
   return (
     <View style={{ gap: 16 }}>

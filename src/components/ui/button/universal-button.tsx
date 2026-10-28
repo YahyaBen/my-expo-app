@@ -79,13 +79,17 @@ function useButtonTheme({
 }
 
 /** Native content. Compose inside an existing Host. */
-export function UniversalButtonContent(props: UniversalButtonContentProps) {
+export function UniversalButtonContent(props: Readonly<UniversalButtonContentProps>) {
   const theme = useButtonTheme(props);
   return <NativeButtonContent {...props} {...theme} />;
 }
 
 /** Standalone control. Inside an existing Host, use UniversalButtonContent. */
-export function UniversalButton({ colorScheme, cornerRadii, ...props }: UniversalButtonProps) {
+export function UniversalButton({
+  colorScheme,
+  cornerRadii,
+  ...props
+}: Readonly<UniversalButtonProps>) {
   const theme = useButtonTheme({ ...props, colorScheme });
   return (
     <UniversalHost

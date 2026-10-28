@@ -2,7 +2,12 @@ import { Alert, Button, Spacer, Text } from '@expo/ui/swift-ui';
 import { frame } from '@expo/ui/swift-ui/modifiers';
 import type { NativeAlertProps } from './native-alert';
 
-export function NativeAlert({ title, message, confirmLabel, onDismiss }: NativeAlertProps) {
+export function NativeAlert({
+  title,
+  message,
+  confirmLabel,
+  onDismiss,
+}: Readonly<NativeAlertProps>) {
   return (
     <Alert
       title={title}

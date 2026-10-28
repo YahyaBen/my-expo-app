@@ -1,7 +1,6 @@
 // Public native UI API. Implementations import component files directly to avoid cycles.
 export {
   Column,
-  Icon,
   RNHostView,
   Row,
   ScrollView,
@@ -26,6 +25,7 @@ export * from './form/form-submit';
 export * from './form/form-text-input';
 export * from './host/types';
 export * from './host/universal-host';
+export * from './icon/icon';
 export * from './ios-home-grid/ios-home-grid';
 export * from './launch-screen/launch-screen';
 export * from './list/list';

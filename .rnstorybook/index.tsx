@@ -15,7 +15,10 @@ function isStoryId(value?: string): value is Extract<InitialSelection, string> {
   return typeof value === 'string' && /^[a-z0-9-]+--[a-z0-9-]+$/.test(value);
 }
 
-const StorybookCanvas: NonNullable<Params['CustomUIComponent']> = ({ children, theme }) => {
+const StorybookCanvas: NonNullable<Params['CustomUIComponent']> = ({
+  children,
+  theme,
+}: Readonly<Parameters<NonNullable<Params['CustomUIComponent']>>[0]>) => {
   return (
     <ThemeProvider theme={theme}>
       <View testID="storybook-canvas" style={{ flex: 1 }}>
@@ -28,10 +31,10 @@ const StorybookCanvas: NonNullable<Params['CustomUIComponent']> = ({ children, t
 export default function StorybookUI({
   canvasMode = false,
   initialStoryId,
-}: {
+}: Readonly<{
   canvasMode?: boolean;
   initialStoryId?: string;
-}) {
+}>) {
   // The Router may load this screen after the native URL event has already fired.
   // Seed each mode from its route, retaining the generated component for its lifetime.
   // Storybook's native listener handles later links within the same mode.

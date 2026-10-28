@@ -19,4 +19,6 @@ export interface TextInputIconButtonProps {
   testID?: string;
 }
 
-export declare function TextInputIconButton(props: TextInputIconButtonProps): ReactElement;
+export declare function TextInputIconButton(
+  props: Readonly<TextInputIconButtonProps>,
+): ReactElement;

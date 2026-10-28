@@ -35,6 +35,8 @@ Optional common props: `label`, native `children`, `onPress`, `disabled`,
 
 - Children replace the label when non-nullish. For icon/text content, use native
   `Row`, `Icon`, `Text`; native Text can inherit the button foreground.
+  Shared Icon artwork inherits the resolved button foreground through React
+  context, with an explicit icon color taking precedence.
   `UniversalTextContent` sets its own foreground, so check filled-button contrast.
 - Generic icon-only accessible naming is not exposed: there is no
   `accessibilityLabel` prop, and a label is ignored with children. Use an

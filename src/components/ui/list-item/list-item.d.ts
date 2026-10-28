@@ -4,7 +4,7 @@ import type { ReactElement } from 'react';
 export type ListItemProps = NativeListItemProps & { disabled?: boolean };
 
 export declare const ListItem: {
-  (props: ListItemProps): ReactElement;
+  (props: Readonly<ListItemProps>): ReactElement;
   Leading: typeof NativeListItem.Leading;
   Supporting: typeof NativeListItem.Supporting;
   Trailing: typeof NativeListItem.Trailing;

@@ -28,13 +28,13 @@ function HeaderContent({
   onNavigate,
   navigationLabel = 'Open details',
   colorProbe = false,
-}: {
+}: Readonly<{
   colorScheme?: 'light' | 'dark';
   presses: number;
   onNavigate?: () => void;
   navigationLabel?: string;
   colorProbe?: boolean;
-}) {
+}>) {
   const colors = useThemeColors(colorScheme);
   const headerInset = usePageHeaderInset();
   const insets = useSafeAreaInsets();
@@ -127,11 +127,13 @@ function HeaderDemo({
   shape: _shape,
   colorProbe,
   ...props
-}: Parameters<typeof PageFrame>[0] & {
-  showBack?: boolean;
-  shape?: Parameters<typeof PageMotionOverlay>[0]['shape'];
-  colorProbe?: boolean;
-}) {
+}: Readonly<
+  Parameters<typeof PageFrame>[0] & {
+    showBack?: boolean;
+    shape?: Parameters<typeof PageMotionOverlay>[0]['shape'];
+    colorProbe?: boolean;
+  }
+>) {
   const [presses, setPresses] = useState(0);
   return (
     <PageFrame {...props} onBack={showBack ? () => setPresses((value) => value + 1) : undefined}>
@@ -222,7 +224,7 @@ export const Home: Story = {
   args: { title: 'Accueil', showBack: false, scrollsBehindHeader: true },
 };
 
-function NavigationHeaderDemo({ colorScheme }: { colorScheme?: 'light' | 'dark' }) {
+function NavigationHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [details, setDetails] = useState(false);
   const [returns, setReturns] = useState(0);
   return (
@@ -262,7 +264,7 @@ export const NavigationContinuity: Story = {
   },
 };
 
-function NativeBackReturnHeaderDemo({ colorScheme }: { colorScheme?: 'light' | 'dark' }) {
+function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [presses, setPresses] = useState(0);
   return (
     <PageFrame
@@ -318,7 +320,7 @@ export const ExpandedLogin: Story = {
   parameters: { expandedWaves: true },
 };
 
-function HeaderStyleSwitchDemo({ colorScheme }: { colorScheme?: 'light' | 'dark' }) {
+function HeaderStyleSwitchDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [plain, setPlain] = useState(false);
   const [presses, setPresses] = useState(0);
   return (

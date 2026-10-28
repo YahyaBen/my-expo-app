@@ -13,7 +13,7 @@ const routeNames = {
   more: 'settings',
 } as const;
 
-export function AppTabBar({ state, emitter, navigateToTab, insets }: BottomTabBarProps) {
+export function AppTabBar({ state, emitter, navigateToTab, insets }: Readonly<BottomTabBarProps>) {
   const { t } = useTranslation();
   const focusedRoute = state.routes[state.index];
   const [actionRouteKey, setActionRouteKey] = useState<string | null>(null);

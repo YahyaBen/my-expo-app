@@ -16,11 +16,11 @@ import type { SampleDestination } from './sample-destinations';
 const transportIcons = {
   train: Icon.select({
     ios: 'tram.fill',
-    android: require('@expo/material-symbols/train.xml'),
+    android: 'train',
   }),
   bus: Icon.select({
     ios: 'bus.fill',
-    android: require('@expo/material-symbols/directions_bus.xml'),
+    android: 'directions_bus',
   }),
 };
 
@@ -41,7 +41,7 @@ function formatTime(minutes: number, formatter: Intl.DateTimeFormat) {
 }
 
 /** Recycled directly in the sheet's native list, without a Host per row. */
-export function DestinationRow({ destination }: { destination: SampleDestination }) {
+export function DestinationRow({ destination }: Readonly<{ destination: SampleDestination }>) {
   const { t, i18n } = useTranslation();
   const { colors } = useAppTheme(useHostColorScheme());
   const language = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language) ?? LANGUAGE_FALLBACK;

@@ -8,4 +8,4 @@ export type ListItemActionProps = {
 };
 
 /** Native row action content. Compose inside an existing Host and list/form row. */
-export declare function ListItemAction(props: ListItemActionProps): ReactElement;
+export declare function ListItemAction(props: Readonly<ListItemActionProps>): ReactElement;

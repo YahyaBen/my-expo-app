@@ -5,7 +5,7 @@ import { NativeStoryFrame } from '../../components/native-story-frame';
 
 type TableStoryProps = TableDemoProps & Pick<UniversalThemeProps, 'colorScheme'>;
 
-function TableStory({ colorScheme = 'light', ...props }: TableStoryProps) {
+function TableStory({ colorScheme = 'light', ...props }: Readonly<TableStoryProps>) {
   return (
     <NativeStoryFrame colorScheme={colorScheme} testID="table-story">
       <UniversalHost colorScheme={colorScheme}>

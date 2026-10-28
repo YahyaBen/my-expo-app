@@ -18,7 +18,7 @@ export function NativeFloatingActionButton({
   onPress,
   disabled,
   testID,
-}: NativeFloatingActionButtonProps) {
+}: Readonly<NativeFloatingActionButtonProps>) {
   return (
     <Button
       testID={testID}

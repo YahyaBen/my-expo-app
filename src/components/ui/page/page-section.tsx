@@ -20,10 +20,12 @@ export function PageSection({
   alignment = 'start',
   style,
   testID,
-}: Pick<ColumnProps, 'children' | 'spacing' | 'alignment' | 'style' | 'testID'> & {
-  /** Full-width rails and tinted sections supply their own horizontal insets. */
-  inset?: boolean;
-}) {
+}: Readonly<
+  Pick<ColumnProps, 'children' | 'spacing' | 'alignment' | 'style' | 'testID'> & {
+    /** Full-width rails and tinted sections supply their own horizontal insets. */
+    inset?: boolean;
+  }
+>) {
   return (
     <Column
       spacing={itemSpacing}

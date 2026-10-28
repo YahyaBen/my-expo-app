@@ -1,5 +1,5 @@
 import { useThemeColors } from '@/hooks/use-theme';
-import { Icon, type IconName } from '@expo/ui';
+import { Icon, type IconName } from '../icon/icon';
 import * as Haptics from 'expo-haptics';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { NativeFloatingActionButton } from './floating-action-button';
@@ -18,26 +18,26 @@ export type FloatingActionButtonProps = {
 
 const filters = Icon.select({
   ios: 'slider.horizontal.3',
-  android: require('@expo/material-symbols/tune.xml'),
+  android: 'tune',
 });
 
 const floatingActionIcons = {
   create: Icon.select({
     ios: 'fork.knife',
-    android: require('@expo/material-symbols/fork_spoon.xml'),
+    android: 'fork_spoon',
   }),
-  continue: Icon.select({ ios: 'plus', android: require('@expo/material-symbols/add.xml') }),
+  continue: Icon.select({ ios: 'plus', android: 'add' }),
   filters,
   'active-filters': filters,
   liked: Icon.select({
     ios: 'heart.fill',
-    android: require('@expo/material-symbols/favorite.xml'),
+    android: 'favorite',
   }),
   profile: Icon.select({
     ios: 'fork.knife',
-    android: require('@expo/material-symbols/chef_hat.xml'),
+    android: 'chef_hat',
   }),
-  submit: Icon.select({ ios: 'checkmark', android: require('@expo/material-symbols/check.xml') }),
+  submit: Icon.select({ ios: 'checkmark', android: 'check' }),
 } satisfies Record<FloatingActionKind, IconName>;
 
 /** Circular native content; reuse the existing Host. */
@@ -48,7 +48,7 @@ export function FloatingActionButton({
   disabled,
   colorScheme,
   testID = 'tab-context-action',
-}: FloatingActionButtonProps) {
+}: Readonly<FloatingActionButtonProps>) {
   const colors = useThemeColors(useHostColorScheme(colorScheme));
   return (
     <NativeFloatingActionButton
@@ -78,7 +78,7 @@ export function FloatingActionButton({
 }
 
 /** Standalone circle for a React Native boundary. */
-export function FloatingAction(props: FloatingActionButtonProps) {
+export function FloatingAction(props: Readonly<FloatingActionButtonProps>) {
   return (
     <UniversalHost
       colorScheme={props.colorScheme}

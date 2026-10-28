@@ -16,7 +16,7 @@ const deviceDirection: LayoutDirection = I18nManager.isRTL ? 'rtl' : 'ltr';
 export function LayoutDirectionProvider({
   children,
   initialDirection = deviceDirection,
-}: PropsWithChildren<{ initialDirection?: LayoutDirection }>) {
+}: Readonly<PropsWithChildren<{ initialDirection?: LayoutDirection }>>) {
   const [direction, setDirection] = useState(initialDirection);
   const value = useMemo(() => ({ direction, setDirection }), [direction]);
 

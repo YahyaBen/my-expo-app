@@ -17,7 +17,7 @@ export function OtpInputLayout({
   input,
   accessibilityLabel: label,
   height,
-}: OtpInputLayoutProps) {
+}: Readonly<OtpInputLayoutProps>) {
   return (
     <ZStack modifiers={[frame({ height }), frame({ maxWidth: Infinity })]}>
       <Row

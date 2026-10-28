@@ -7,7 +7,7 @@ export function UniversalList({
   seedColor,
   viewportHeight = 400,
   ...props
-}: UniversalListProps) {
+}: Readonly<UniversalListProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

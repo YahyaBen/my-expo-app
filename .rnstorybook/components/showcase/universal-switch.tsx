@@ -2,7 +2,11 @@ import { Switch, type SwitchProps, UniversalHost, type UniversalThemeProps } fro
 
 export type UniversalSwitchProps = SwitchProps & UniversalThemeProps;
 
-export function UniversalSwitch({ colorScheme, seedColor, ...props }: UniversalSwitchProps) {
+export function UniversalSwitch({
+  colorScheme,
+  seedColor,
+  ...props
+}: Readonly<UniversalSwitchProps>) {
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}

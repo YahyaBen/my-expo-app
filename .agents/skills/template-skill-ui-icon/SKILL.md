@@ -1,26 +1,35 @@
 ---
 name: template-skill-ui-icon
-description: Select native SF Symbols and Material XML icons through the public Icon export.
+description: Render Expo Symbols artwork through the public Icon export in native UI trees.
 ---
 
 # Icon
 
-Import `Icon` from `@components/ui`. Select an SF Symbol on iOS and a literal,
-synchronous `require()` of an installed Material XML asset on Android.
+Import `Icon` from `@components/ui`. It renders `expo-symbols` artwork through
+`RNHostView` inside the existing native Host. Supply typed SF Symbol and Material
+Symbol names for iOS and Android.
 
 ```tsx
 const starIcon = Icon.select({
   ios: 'star.fill',
-  android: require('@expo/material-symbols/star.xml'),
+  android: 'star',
 });
+
+<Icon name={starIcon} size={24} />;
 ```
 
-- Dynamic `import()` through the project re-export stays a Promise: Expo's
-  Babel plugin recognizes imports from `@expo/ui` only.
-- Verify XML paths exist; TypeScript does not validate `require()` paths.
+- `Icon.select` keeps both names for `SymbolView`; a plain `{ ios, android }`
+  object is also supported. Do not use XML assets or `@expo/ui`'s `Icon`.
+- `size` defaults to 24. `color` overrides the native button foreground, then
+  the owning Host's themed text color.
+  Native `style`, `modifiers`, disabled state and test selectors stay on the
+  native wrapper; `type` selects iOS symbol rendering.
 - An icon supplies artwork. Use an existing named native action control for
-  interaction, and preserve its accessible name.
-- Read installed types before choosing accessibility or sizing props.
+  interaction, and preserve its accessible name. Artwork is decorative unless
+  `accessibilityLabel` is provided.
+- Android uses the bundled regular Material Symbols font loaded by `SymbolView`.
+  Verify first-render artwork and dynamic names on matching native builds.
 
-Source: [public export](../../../src/components/ui/index.ts) and installed
-[Icon types](../../../node_modules/@expo/ui/src/universal/Icon/).
+Source: [public export](../../../src/components/ui/index.ts),
+[implementation](../../../src/components/ui/icon/icon.tsx) and installed
+[SymbolView types](../../../node_modules/expo-symbols/src/SymbolModule.types.ts).

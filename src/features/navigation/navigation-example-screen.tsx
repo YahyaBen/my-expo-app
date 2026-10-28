@@ -11,7 +11,7 @@ export function RecipesExampleScreen() {
   return <NavigationExampleScreen />;
 }
 
-function NavigationExampleScreen({ search = false }: { search?: boolean }) {
+function NavigationExampleScreen({ search = false }: Readonly<{ search?: boolean }>) {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const matches = sampleRecipes.filter((recipe) =>

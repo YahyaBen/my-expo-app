@@ -177,7 +177,11 @@ function TokenControlPreview() {
   );
 }
 
-function TokenValue({ name, value, testID }: { name: string; value: string; testID?: string }) {
+function TokenValue({
+  name,
+  value,
+  testID,
+}: Readonly<{ name: string; value: string; testID?: string }>) {
   return (
     <Row spacing={spacing.md} alignment="center" modifiers={nativeFillWidth} testID={testID}>
       <Column modifiers={nativeRowWeight}>

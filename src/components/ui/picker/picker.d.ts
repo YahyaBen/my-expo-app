@@ -1,6 +1,6 @@
 import type { PickerItemValue, PickerProps } from '@expo/ui';
 export declare function Picker<T extends PickerItemValue>(
-  props: PickerProps<T>,
+  props: Readonly<PickerProps<T>>,
 ): import('react').ReactElement;
 export declare namespace Picker {
   const Item: typeof import('@expo/ui').Picker.Item;

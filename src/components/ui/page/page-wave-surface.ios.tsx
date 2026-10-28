@@ -25,7 +25,7 @@ export function PageWaveSurface({
   colorScheme,
   backgroundColor,
   reduceTransparency,
-}: PageWaveSurfaceProps) {
+}: Readonly<PageWaveSurfaceProps>) {
   const { fit, backDrift, frontDrift } = wave;
   // Serialize only where SVG is rendered; Android and launch edges keep numeric paths.
   const frontPathProps = useAnimatedProps<PathProps>(() => ({
