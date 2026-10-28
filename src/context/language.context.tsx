@@ -38,7 +38,9 @@ export function LanguageProvider({ children }: PropsWithChildren) {
       z.config(z.locales[language]());
     }
     i18n.on('languageChanged', applyLanguage);
-    void AsyncStorage.getItem(STORAGE_KEY)
+    // A remounted root must restore the latest queued selection, just like appearance.
+    void persistence
+      .then(() => AsyncStorage.getItem(STORAGE_KEY))
       .then(async (stored) => {
         if (!active) return;
         await i18n.changeLanguage(normalizeLanguage(stored) ?? LANGUAGE_FALLBACK);
