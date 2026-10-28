@@ -6,7 +6,9 @@ outside `src/app/`; read the [architecture](architecture.md) and [UI guide](ui.m
 ## Run and check
 
 Use a supported Node release (22.18+, 24.3+ or 26+) and `npm ci`, then `npm start`. Configure `EXPO_PUBLIC_API_URL`
-in `.env.local` for your backend. Retain the npm lockfile and use `npx expo install`
+in `.env.local` for your backend. `package-lock.json` is the canonical lockfile;
+use npm so the existing `package.json` overrides apply locally and in CI.
+Retain that lockfile and use `npx expo install`
 when explicitly adding a dependency. Installed packages are intentionally retained,
 including packages for future features; unused packages are not a reason to remove them.
 
@@ -81,8 +83,8 @@ mode. `config/brand.js` validates and resolves the
 selected manifest for `app.config.js`. Register a new manifest in its small
 registry; do not copy identity fields into screens or the shared app config.
 
-`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. Both current
-brands retain Dunes; a saved Settings choice overrides the configured initial
+`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. The template
+selects Dunes and Likan selects Default; a saved Settings choice overrides the configured initial
 style. Default uses the rectangular native header, and all three animated choices
 remain available. `presentation.launch` accepts `minimal` (the neutral template)
 or `branded` (Likan). Minimal adds no artificial startup wait; branded keeps its
@@ -119,10 +121,16 @@ identity and matching integrations if side-by-side installation is required.
 The existing EAS build profiles explicitly select `likan` and their matching
 variant. For a new client, add its manifest and set the intended brand in the
 relevant profile. Production requires an explicit brand, its own EAS owner and
-project ID, and a configured API URL. The production variant of the unlinked
-template is rejected. Asset existence and Android Firebase package matching
+project ID, and an HTTPS API URL. It rejects either developer catalog or Storybook
+flag set to exact `true`; use a development or preview variant for those tools.
+The unlinked template is rejected for production. Asset existence and Android Firebase package matching
 are checked during config resolution. These checks do not verify cloud access or
 whether the backend is reachable.
+
+The `development-device` profile extends `development` for a physical iOS device;
+`development` itself retains its simulator target. The starter's dormant native
+permissions, Firebase defaults, push gaps and OTA requirements are described in
+[integration readiness](eas-development-builds.md#integration-readiness).
 
 Select the same brand/variant for Metro, configuration, builds and any later
 submission/update command. EAS build-profile variables do not automatically apply

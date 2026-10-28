@@ -31,6 +31,8 @@ Current guides are listed first. Component contracts belong to independent skill
 
 - [EAS development builds](eas-development-builds.md)
 - [Native performance](performance.md)
+- [White-label readiness review — 2026-10-27](white-label-readiness-2026-10-27.md)
+- [P1/P2 implementation report — 2026-10-28](white-label-implementation-2026-10-28.md)
 - [White-label implementation plan](white-label-template-plan.md) — retains unfinished work.
 - [Local SonarQube analysis](sonarqube.md)
 

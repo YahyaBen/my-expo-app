@@ -17,7 +17,11 @@ the entire raised button's touch bounds in normal layout. Screen content owns
 the shared header and side insets. The center action opens a translated example
 sheet; route changes close it and the dock hides while typing. Search filters
 24 local example recipes; Home and My Recipes show the same scrollable sample
-rows. The dock and sample rows use flat edges, without rounded panels or shadows.
+rows. Home also composes the interactive native gallery from
+`src/features/home/home-components.tsx`, including photo carousels, a local code
+entry demonstration, appearance artwork and a photo grid. These public starter
+examples remain visible independently of the developer catalog flag. The dock
+and sample rows use flat edges, without rounded panels or shadows.
 
 | Responsibility                           | Owner                                                                        |
 | ---------------------------------------- | ---------------------------------------------------------------------------- |
