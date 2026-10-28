@@ -27,7 +27,7 @@ const routes: readonly SampleRoute[] = [
 
 /** Illustrative journeys for the destination sheet, not live transport schedules. */
 export const sampleDestinations: readonly SampleDestination[] = Array.from(
-  { length: 100 },
+  { length: 10 },
   (_, index) => {
     const route = routes[index % routes.length];
     const startMinutes = 6 * 60 + Math.floor(index / routes.length) * 60 + (index % 3) * 10;

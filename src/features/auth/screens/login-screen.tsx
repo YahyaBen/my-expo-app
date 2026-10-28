@@ -1,24 +1,23 @@
 import { spacing } from '@/constants/layout';
-import { useTranslation } from 'react-i18next';
 import {
-  Column,
-  nativeFillWidth,
-  nativeFillWidthEnd,
-  UniversalButtonContent,
   AuthScreenFrame,
+  Column,
   FormSubmit,
   FormTextInput,
   Icon,
+  nativeFillWidth,
+  nativeFillWidthEnd,
+  UniversalButtonContent,
 } from '@components/ui';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
-import { useAuthForm } from '../hooks/use-auth-form';
-import { useAuthFlow } from '../auth-flow.context';
-import { LoginPreferences } from '../login-preferences';
+import { LoginTransitionContext } from '@/context/login-transition.context';
 import { loginResolver } from '@/validation/resolvers/auth';
 import type { LoginFormValues } from '@/validation/schemas/auth';
-import { LoginTransitionContext } from '@/context/login-transition.context';
 import { useContext } from 'react';
+import { useAuthFlow } from '../auth-flow.context';
+import { useAuthForm } from '../hooks/use-auth-form';
 
 export function LoginScreen() {
   const { t } = useTranslation();
@@ -35,7 +34,6 @@ export function LoginScreen() {
       testID="auth-login"
       title={t('auth.welcomeBack')}
       description={t('auth.loginDescription')}
-      topBar={<LoginPreferences />}
     >
       <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
         <FormTextInput

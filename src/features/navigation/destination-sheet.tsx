@@ -1,20 +1,23 @@
 import { spacing } from '@/constants/layout';
+import { useAppTheme } from '@/hooks/use-theme';
 import {
   BottomSheet,
   Column,
+  List,
+  ListForEach,
   RNHostView,
   UniversalButtonContent,
   UniversalHost,
   UniversalTextContent,
   nativeFillWidth,
+  useHostColorScheme,
 } from '@components/ui';
-import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { DestinationRow } from './destination-row';
 import { sampleDestinations, type SampleDestination } from './sample-destinations';
 
-function renderDestination({ item }: ListRenderItemInfo<SampleDestination>) {
+function renderDestination({ item }: { item: SampleDestination }) {
   return <DestinationRow destination={item} />;
 }
 
@@ -30,8 +33,18 @@ export function DestinationSheet({
   onDismiss: () => void;
 }) {
   const { t } = useTranslation();
-  const { height } = useWindowDimensions();
+  const { height, fontScale } = useWindowDimensions();
+  const { design } = useAppTheme(useHostColorScheme());
   const contentHeight = Math.min(640, height * 0.72);
+  const estimatedRowHeight =
+    spacing.lg * 2 +
+    spacing.md +
+    spacing.xs * 3 +
+    1 +
+    fontScale *
+      (design.typography.label.fontSize +
+        design.typography.caption.fontSize * 3 +
+        design.typography.subtitle.fontSize);
 
   return (
     <UniversalHost inline ignoreSafeArea="all" style={{ position: 'absolute' }}>
@@ -43,7 +56,8 @@ export function DestinationSheet({
       >
         {/* The bounded native parent supplies the sheet's actual width, including on tablets. */}
         <RNHostView>
-          <View style={{ flex: 1 }}>
+          {/* Give Yoga a height before native measurement so the list starts bounded. */}
+          <View style={{ height: contentHeight }}>
             <UniversalHost>
               <Column
                 spacing={spacing.xs}
@@ -58,17 +72,18 @@ export function DestinationSheet({
                 </UniversalTextContent>
               </Column>
             </UniversalHost>
-            <FlashList
-              data={sampleDestinations}
-              renderItem={renderDestination}
-              // Bound spare native Hosts while keeping recycling enabled.
-              maxItemsInRecyclePool={3}
-              keyExtractor={destinationKey}
-              style={{ flex: 1 }}
-              contentContainerStyle={{ paddingBottom: spacing.sm }}
-              contentInsetAdjustmentBehavior="never"
-              testID="tab-destinations-list"
-            />
+            <UniversalHost matchContents={false} style={{ flex: 1 }}>
+              <List testID="tab-destinations-list">
+                <ListForEach
+                  data={sampleDestinations}
+                  keyExtractor={destinationKey}
+                  estimatedItemSize={estimatedRowHeight}
+                  overscanCount={2}
+                >
+                  {renderDestination}
+                </ListForEach>
+              </List>
+            </UniversalHost>
             <UniversalHost>
               <Column modifiers={nativeFillWidth} style={{ paddingVertical: spacing.md }}>
                 <UniversalButtonContent

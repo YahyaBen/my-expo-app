@@ -6,4 +6,4 @@ export function List({ onRefresh, ...props }: ListProps) {
   return <NativeList {...props} onRefresh={onRefresh ? refresh : undefined} />;
 }
 
-export type { ListProps } from '@expo/ui';
+export { ListForEach, type ListForEachProps, type ListProps } from '@expo/ui';

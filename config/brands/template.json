@@ -7,7 +7,7 @@
   "presentation": {
     "palette": "ux",
     "header": "default",
-    "launch": "minimal",
+    "launch": "branded",
     "headingFont": "system",
     "launchArtwork": "bluePepe"
   },

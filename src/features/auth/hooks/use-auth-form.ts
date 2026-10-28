@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { Keyboard } from 'react-native';
 import { useForm, type DefaultValues, type FieldValues, type Resolver } from 'react-hook-form';
+import { Keyboard } from 'react-native';
 
 export function useAuthForm<T extends FieldValues>(
   resolver: Resolver<T>,
@@ -15,7 +15,7 @@ export function useAuthForm<T extends FieldValues>(
     mode: 'onTouched',
     reValidateMode: 'onChange',
   });
-  // Fail promptly offline instead of queueing credentials for later.
+
   const mutation = useMutation({ mutationFn: action, networkMode: 'always', retry: 0 });
   const onSubmit = async (values: T) => {
     if (submitting.current) return;
@@ -24,7 +24,6 @@ export function useAuthForm<T extends FieldValues>(
     try {
       await mutation.mutateAsync(values);
     } catch {
-      // The global MutationCache reports the error; retain the form for retry.
     } finally {
       submitting.current = false;
     }

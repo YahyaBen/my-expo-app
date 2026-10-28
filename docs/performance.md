@@ -123,21 +123,31 @@ its own scrolling composition and a benchmark of recycling, native Host costs,
 row geometry and pagination. Check the actual source before treating a sample
 dataset or an installed list package as an implemented production feed.
 
-The tab destination sheet displays ten illustrative journeys in a single-column
-FlashList, which remains its only scrolling container. Its intrinsic native
-cell Hosts have an RN minimum height derived from the row's
-spacing and scaled text sizes, so a pending native measurement cannot report a
-zero-height cell and make the list progressively mount the whole dataset. The
-minimum is a floor; native wrapping can still make a row taller. Time formatters
-are reused per supported language, and only rendered cells format their times.
+The tab destination sheet displays 100 illustrative journeys in a native `List`
+with `ListForEach` recycling. Rows share one bounded Host, removing the per-row
+RN/native intrinsic-height round trip from the former FlashList composition.
+The RN container receives the same explicit height as the native sheet content
+before opening; the list fills the space between the intrinsic header and Close
+action. Row-height estimates use spacing and scaled theme typography, while
+native wrapping can increase actual heights. Only rendered rows format times,
+using a shared formatter per supported language.
 
-The destination list caps `maxItemsInRecyclePool` at 3 spare native cells. This
-bounds the spare recycle pool; it does not cap visible/buffered cells, total
-mounted cells or the first visible batch. Recycling remains enabled. The cap's
-performance and memory effects still need comparison on devices.
+`overscanCount={2}` prepares two extra rows on each side of the visible range.
+It does not cap visible rows or the retained pool's high-water mark. The
+`NativeRecycled200`, `NativeRecycled1000`, `NativeRecycledRtl` and
+`NativeRecycledDark` performance stories exercise this single-Host renderer with
+the same mixed-height data as the existing FlashList and eager-scroll fixtures.
 
-Android development-build timings, release performance and scrolling/large-text
-checks remain pending on devices.
+For opening latency, compare the first tap after launch and repeated close/open
+cycles in baseline and changed preview builds on the same device. Record time to
+the shell, first visible journeys, slow frames and peak mounted rows separately.
+Scroll to journey 100, dismiss by Close, backdrop and Android Back, then reopen.
+Repeat with large text, Arabic/RTL and both appearances. Preview/release timings
+and the full iOS/Android interaction matrix remain pending. On 2026-10-28, the
+connected Xiaomi 21091116AG on Android 13 displayed the destination sheet, its
+100-journey count and initial journeys in the development client. This is an
+opening smoke check, without a controlled baseline or latency measurement; it
+and the added fixtures do not establish a measured speedup.
 
 Profile repeated parsing, translated search text and broad subscriptions where
 they affect the scenario. Preserve the existing query/session safeguards. For

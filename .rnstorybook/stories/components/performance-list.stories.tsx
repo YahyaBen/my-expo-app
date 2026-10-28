@@ -1,5 +1,7 @@
 import {
   Column,
+  List,
+  ListForEach,
   ScrollView,
   UniversalHost,
   UniversalTextContent,
@@ -21,7 +23,7 @@ type Row = {
 
 type PerformanceListProps = {
   count: 24 | 200 | 1000;
-  renderer: 'native-scroll' | 'flash-list';
+  renderer: 'native-scroll' | 'flash-list' | 'native-list';
   colorScheme: 'light' | 'dark';
   layoutDirection: 'leftToRight' | 'rightToLeft';
 };
@@ -47,6 +49,7 @@ const datasets = {
 };
 const keyExtractor = (item: Row) => item.id;
 const getItemType = (item: Row) => item.density;
+const renderNativeItem = ({ item }: { item: Row }) => <PerformanceRow item={item} />;
 
 /** Same native content in both renderers; only scroll/Host ownership differs. */
 function PerformanceRow({ item }: { item: Row }) {
@@ -105,6 +108,24 @@ function PerformanceList({ count, renderer, colorScheme, layoutDirection }: Perf
             </Column>
           </ScrollView>
         </UniversalHost>
+      ) : renderer === 'native-list' ? (
+        <UniversalHost
+          colorScheme={colorScheme}
+          layoutDirection={layoutDirection}
+          matchContents={false}
+          style={{ flex: 1 }}
+        >
+          <List testID="performance-list-native-recycled">
+            <ListForEach
+              data={data}
+              keyExtractor={keyExtractor}
+              overscanCount={2}
+              estimatedItemSize={160}
+            >
+              {renderNativeItem}
+            </ListForEach>
+          </List>
+        </UniversalHost>
       ) : (
         <FlashList
           data={data}
@@ -130,7 +151,7 @@ const meta = {
   },
   argTypes: {
     count: { control: 'radio', options: [24, 200, 1000] },
-    renderer: { control: 'radio', options: ['native-scroll', 'flash-list'] },
+    renderer: { control: 'radio', options: ['native-scroll', 'flash-list', 'native-list'] },
     colorScheme: { control: 'radio', options: ['light', 'dark'] },
     layoutDirection: { control: 'radio', options: ['leftToRight', 'rightToLeft'] },
   },
@@ -150,4 +171,12 @@ export const RecycledRtl: Story = {
 };
 export const RecycledDark: Story = {
   args: { renderer: 'flash-list', count: 200, colorScheme: 'dark' },
+};
+export const NativeRecycled200: Story = { args: { renderer: 'native-list', count: 200 } };
+export const NativeRecycled1000: Story = { args: { renderer: 'native-list', count: 1000 } };
+export const NativeRecycledRtl: Story = {
+  args: { renderer: 'native-list', count: 200, layoutDirection: 'rightToLeft' },
+};
+export const NativeRecycledDark: Story = {
+  args: { renderer: 'native-list', count: 200, colorScheme: 'dark' },
 };

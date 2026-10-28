@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { TabNavigationBar, type TabNavigationItemId } from '@components/ui';
 import { useFocusEffect } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, Platform } from 'react-native';
-import { TabNavigationBar, type TabNavigationItemId } from '@components/ui';
 import { DestinationSheet } from './destination-sheet';
 
 const routeNames = {
