@@ -263,6 +263,12 @@ export function createAxiosInstance(
       const originalConfig = axiosFailure?.config as RetryableAxiosRequestConfig | undefined;
       const isUnauthorized = axiosFailure?.response?.status === 401;
 
+      // Late failures belong to the departing account just like late successes.
+      // Classify them before refresh or shared error feedback can affect a new login.
+      if (includeAuth && originalConfig?._authVersion !== undefined) {
+        assertSessionVersion(originalConfig._authVersion);
+      }
+
       if (!skipInterceptor && includeAuth && isUnauthorized && originalConfig) {
         try {
           const version = originalConfig._authVersion;
