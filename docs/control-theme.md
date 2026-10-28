@@ -5,10 +5,11 @@ including error/success/warning feedback, in both appearances. Dark primary
 actions use a white fill with dark content. Status labels/icons retain meaning
 without colored accents. The flat UX header suppresses decorative waves.
 
-Android `UniversalHost` supplies explicit grayscale Material color roles because
-a black/white seed can still generate chromatic native controls. The two role
-maps are created once and reused. Explicit caller seeds keep their native
-derivation; other palettes are unchanged. iOS uses the existing neutral tint.
+Every palette uses the same `UniversalHost` seed flow: an explicit `seedColor`
+takes precedence, otherwise the Host uses the active theme's `tint`. Android
+derives Material controls from that seed; iOS applies the native tint. UX owns
+its grayscale app tokens in `src/constants/themes/ux.ts`. Native derived tones
+follow the platform rather than a separate wireframe color-role map.
 
 Buttons use semantic colors in every theme when both color props are omitted.
 Primary, secondary, tertiary, link and status variants resolve their respective

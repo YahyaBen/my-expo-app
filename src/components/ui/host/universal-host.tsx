@@ -1,11 +1,10 @@
 import { Host } from '@expo/ui';
 import { createContext, useContext, type ComponentProps, type Ref } from 'react';
-import { Platform, type ColorSchemeName, type ViewInstance } from 'react-native';
+import type { ColorSchemeName, ViewInstance } from 'react-native';
 
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useAppTheme } from '@/hooks/use-theme';
-import { wireframeHostTheme } from './wireframe-colors';
+import { useThemeColors } from '@/hooks/use-theme';
 
 const HostColorSchemeContext = createContext<'light' | 'dark' | undefined>(undefined);
 type HostLayoutDirection = NonNullable<ComponentProps<typeof Host>['layoutDirection']>;
@@ -53,7 +52,7 @@ export function UniversalHost({
   ...props
 }: Props) {
   const scheme = useHostColorScheme(colorScheme);
-  const { colors, themeId } = useAppTheme(scheme);
+  const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection(layoutDirection);
 
   return (
@@ -61,9 +60,6 @@ export function UniversalHost({
       <HostLayoutDirectionContext.Provider value={direction}>
         <Host
           {...props}
-          {...(Platform.OS === 'android' && themeId === 'ux' && seedColor === undefined
-            ? wireframeHostTheme[scheme]
-            : {})}
           collapsable={false}
           colorScheme={scheme}
           layoutDirection={direction}

@@ -36,10 +36,9 @@ request centering in native layout.
   then app preferences. Preserve state when these values change.
 - `useHostColorScheme`/`useHostLayoutDirection` read resolved values.
   Read them in a descendant to inspect a newly created Host's overrides.
-- `seedColor` defaults to theme tint and seeds native controls.
-- UX also supplies grayscale Android Material color roles through `colorOverrides`;
-  seed derivation alone can introduce color. Explicit `seedColor` keeps its native
-  derivation, and other palettes retain their existing native behavior.
+- `seedColor` defaults to the active theme tint for every palette, including UX.
+  Explicit seeds keep priority; Android derives Material controls and iOS applies
+  native tint. Keep brand color choices in theme tokens, outside Host branches.
 - Pass direction through the Host prop. Leave safe-area ownership to the page.
 
 Check intrinsic/bounded sizes, retained state, touch bounds and RTL using the

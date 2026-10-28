@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         story:
-          'Production theme tokens and native controls. Enabled actions increment the count; the disabled action does not. The square button explicitly overrides the theme radius with zero. Edit and reset the local input draft, then inspect typography, shapes, shared spacing and semantic colors.',
+          'Production theme tokens and native controls. Every palette supplies the native Host seed through its tint; UX keeps grayscale app tokens while native tones follow the platform. Enabled actions increment the count; the disabled action does not. The square button explicitly overrides the theme radius with zero. Edit and reset the local input draft, then inspect typography, shapes, shared spacing and semantic colors.',
       },
     },
   },

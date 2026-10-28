@@ -1,7 +1,7 @@
 import { createColorTokens, type SemanticColors, type ThemePalette } from './tokens';
 
 // Every app-owned color, including feedback, stays on the neutral wireframe scale.
-export const uxColors = {
+const uxColors = {
   light: {
     primary: '#000000',
     primaryPressed: '#333333',

@@ -26,8 +26,8 @@
   Read current source values before changing a palette; do not introduce a new
   palette as part of a structural refactor.
 - UX is the default grayscale wireframe in both appearances, including feedback
-  tokens. Its header artwork is disabled. Android Hosts map all Material color
-  roles to those neutral tokens unless the caller explicitly supplies a seed.
+  tokens. Its header artwork is disabled. It follows the common native seed/tint
+  flow; no palette-specific color-role mapping belongs in the Host.
 - `design.header.artwork` controls colored waves, not header blur or launch
   artwork. Preserve title clearance, safe areas and touch shielding when artwork
   is absent. `headerBlur={false}` remains an explicit opt-out.
