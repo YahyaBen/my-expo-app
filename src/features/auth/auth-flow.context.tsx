@@ -1,6 +1,7 @@
 import { establishSession } from '@/services/auth/auth.lifecycle';
 import * as authApi from '@/services/auth/auth.api';
 import { getSessionVersion, subscribeAuthSession } from '@/services/auth/auth.session';
+import { SessionChangedError } from '@/services/auth/auth.errors';
 import { getDeviceMetadata } from '@/services/auth/device-installation';
 import type {
   AuthFlowResponse,
@@ -86,8 +87,14 @@ export function AuthFlowProvider({ children }: PropsWithChildren) {
       const id = ++sequence.current;
       const version = getSessionVersion();
       const isCurrent = () => mounted.current && sequence.current === id;
-      const response = await request();
-      if (!isCurrent() || version !== getSessionVersion()) return;
+      let response: AuthFlowResponse | TokenResponse;
+      try {
+        response = await request();
+      } catch (error) {
+        if (!isCurrent() || version !== getSessionVersion()) throw new SessionChangedError();
+        throw error;
+      }
+      if (!isCurrent() || version !== getSessionVersion()) throw new SessionChangedError();
 
       let token: TokenResponse;
       if ('isOtpValidated' in response) {
