@@ -1,7 +1,7 @@
 import { createColorTokens, type SemanticColors, type ThemePalette } from './tokens';
 
-// Neutral wireframe foundations with restrained, explicit semantic feedback colors.
-const wireframeColors = {
+// Every app-owned color, including feedback, stays on the neutral wireframe scale.
+export const uxColors = {
   light: {
     primary: '#000000',
     primaryPressed: '#333333',
@@ -24,14 +24,14 @@ const wireframeColors = {
     selection: '#E5E5E5',
     overlay: '#00000099',
     shadow: '#000000',
-    error: '#B53B3B',
-    errorContainer: '#FBEDED',
+    error: '#333333',
+    errorContainer: '#E5E5E5',
     onError: '#FFFFFF',
-    success: '#2F6F4E',
-    successContainer: '#EDF5EF',
+    success: '#333333',
+    successContainer: '#F0F0F0',
     onSuccess: '#FFFFFF',
-    warning: '#8A640F',
-    warningContainer: '#FAF3E3',
+    warning: '#4D4D4D',
+    warningContainer: '#E5E5E5',
     onWarning: '#FFFFFF',
     info: '#666666',
     infoContainer: '#F5F5F5',
@@ -39,10 +39,10 @@ const wireframeColors = {
     actionGradientEnd: '#000000',
   },
   dark: {
-    primary: '#000000',
-    primaryPressed: '#333333',
+    primary: '#FFFFFF',
+    primaryPressed: '#D9D9D9',
     primaryContainer: '#333333',
-    onPrimary: '#FFFFFF',
+    onPrimary: '#111111',
     onPrimaryContainer: '#FFFFFF',
     secondary: '#CCCCCC',
     secondaryContainer: '#292929',
@@ -50,7 +50,7 @@ const wireframeColors = {
     onSecondaryContainer: '#FFFFFF',
     background: '#111111',
     surface: '#1F1F1F',
-    surfaceRaised: '#111111',
+    surfaceRaised: '#262626',
     surfaceVariant: '#333333',
     text: '#FFFFFF',
     muted: '#B3B3B3',
@@ -60,23 +60,23 @@ const wireframeColors = {
     selection: '#333333',
     overlay: '#000000B3',
     shadow: '#000000',
-    error: '#F08A8A',
-    errorContainer: '#352222',
+    error: '#E5E5E5',
+    errorContainer: '#333333',
     onError: '#111111',
-    success: '#8CC6A3',
-    successContainer: '#1E3025',
+    success: '#D9D9D9',
+    successContainer: '#292929',
     onSuccess: '#111111',
-    warning: '#D9B66F',
-    warningContainer: '#332C1E',
+    warning: '#CCCCCC',
+    warningContainer: '#333333',
     onWarning: '#111111',
     info: '#B3B3B3',
     infoContainer: '#262626',
-    onInfo: '#000000',
-    actionGradientEnd: '#000000',
+    onInfo: '#111111',
+    actionGradientEnd: '#FFFFFF',
   },
-} satisfies Record<'light' | 'dark', SemanticColors>;
+} as const satisfies Record<'light' | 'dark', SemanticColors>;
 
 export const uxTheme: ThemePalette = {
-  light: createColorTokens(wireframeColors.light),
-  dark: createColorTokens(wireframeColors.dark),
+  light: createColorTokens(uxColors.light),
+  dark: createColorTokens(uxColors.dark),
 };

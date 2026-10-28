@@ -25,6 +25,9 @@
   ramp, 24-point button radius, 6-point field radius and disabled header artwork.
   Read current source values before changing a palette; do not introduce a new
   palette as part of a structural refactor.
+- UX is the default grayscale wireframe in both appearances, including feedback
+  tokens. Its header artwork is disabled. Android Hosts map all Material color
+  roles to those neutral tokens unless the caller explicitly supplies a seed.
 - `design.header.artwork` controls colored waves, not header blur or launch
   artwork. Preserve title clearance, safe areas and touch shielding when artwork
   is absent. `headerBlur={false}` remains an explicit opt-out.

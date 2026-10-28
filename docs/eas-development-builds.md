@@ -2,7 +2,10 @@
 
 The source now targets SDK 58; see the
 [current SDK baseline](development.md#sdk-and-native-verification-baseline).
-Likan is linked to `@hyrkul/likan`, project
+The standard profiles now select the unlinked default template and its grayscale
+UX wireframe. Link that brand to its own EAS project before a cloud build.
+The build records below describe Likan's earlier configuration.
+Likan remains linked to `@hyrkul/likan`, project
 `7263b456-2908-484f-891e-7279db6b447e`; select `APP_BRAND=likan` for EAS commands.
 SDK 58 Android development-build validation is recorded below. The later
 historical sections describe SDK 57 binaries and configuration. Device behavior

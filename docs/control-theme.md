@@ -1,5 +1,15 @@
 # Native control themes
 
+The default UX wireframe uses only white, black and gray semantic colors,
+including error/success/warning feedback, in both appearances. Dark primary
+actions use a white fill with dark content. Status labels/icons retain meaning
+without colored accents. The flat UX header suppresses decorative waves.
+
+Android `UniversalHost` supplies explicit grayscale Material color roles because
+a black/white seed can still generate chromatic native controls. The two role
+maps are created once and reused. Explicit caller seeds keep their native
+derivation; other palettes are unchanged. iOS uses the existing neutral tint.
+
 Buttons use semantic colors in every theme when both color props are omitted.
 Primary, secondary, tertiary, link and status variants resolve their respective
 theme tokens rather than all inheriting the Host's primary accent. Explicit
@@ -12,7 +22,7 @@ remain platform-owned. See the
 [button skill](../.agents/skills/template-skill-ui-button/SKILL.md) for shape precedence.
 
 Text's primary tone uses `tint`, preserving readable UX dark foregrounds while
-the primary button fill stays black. The configured app palette stays fixed;
+filled actions use their paired primary/onPrimary tokens. The configured app palette stays fixed;
 saved appearance and isolated palette previews follow the
 [appearance guide](appearance-themes.md).
 

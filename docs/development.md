@@ -83,9 +83,10 @@ mode. `config/brand.js` validates and resolves the
 selected manifest for `app.config.js`. Register a new manifest in its small
 registry; do not copy identity fields into screens or the shared app config.
 
-`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. The template
-selects Dunes and Likan selects Default; a saved Settings choice overrides the configured initial
-style. Default uses the rectangular native header, and all three animated choices
+`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. Both manifests
+select Default. The template's UX wireframe disables decorative header artwork,
+including previously saved effects, while preserving those saved values.
+Default uses the rectangular native header, and all three animated choices
 remain available. `presentation.launch` accepts `minimal` (the neutral template)
 or `branded` (Likan). Minimal adds no artificial startup wait; branded keeps its
 artwork and exit. Restart Metro after changing these public metadata fields.
@@ -118,9 +119,10 @@ the installed Likan development clients and Firebase package mapping; they repla
 one another rather than installing side by side. Add a separately registered
 identity and matching integrations if side-by-side installation is required.
 
-The existing EAS build profiles explicitly select `likan` and their matching
-variant. For a new client, add its manifest and set the intended brand in the
-relevant profile. Production requires an explicit brand, its own EAS owner and
+The standard EAS build profiles explicitly select `template` and their matching
+variant. Link that manifest to its own EAS project before cloud builds; it does
+not inherit Likan's project or Firebase configuration. Other clients require
+explicit brand selection in a dedicated profile. Production requires an explicit brand, its own EAS owner and
 project ID, and an HTTPS API URL. It rejects either developer catalog or Storybook
 flag set to exact `true`; use a development or preview variant for those tools.
 The unlinked template is rejected for production. Asset existence and Android Firebase package matching
@@ -138,7 +140,7 @@ to an independent local command. Keep API values in the selected EAS environment
 do not use `NODE_ENV` as an environment selector. For example, in PowerShell:
 
 ```powershell
-$env:APP_BRAND = 'likan'
+$env:APP_BRAND = 'template'
 $env:APP_VARIANT = 'development'
 npm start
 ```

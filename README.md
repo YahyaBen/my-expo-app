@@ -4,7 +4,8 @@ An iOS and Android bootstrap application built with Expo SDK 58, Expo Router and
 Expo UI.
 
 Home, native component showcase, authentication, Account and Settings form the
-starting point. UX Template and Instagram themes are included. All installed
+starting point. The default template uses white, black and gray UX tokens in
+light/dark appearance, native typography and a flat header. All installed
 packages are retained for future features.
 
 ## Get started
@@ -19,8 +20,10 @@ npm start
 ```
 
 Copy `.env.example` to `.env.local` and select `APP_BRAND` and `APP_VARIANT`.
-The local default is the unlinked `template` brand. Use `APP_BRAND=likan` with a
-matching SDK 58 Likan development build. Set `EXPO_PUBLIC_API_URL` for the real backend.
+The default local and EAS-profile brand is the unlinked `template`.
+Other client manifests remain available through explicit selection. Set
+`EXPO_PUBLIC_API_URL` for the real backend. Link the template to its own EAS
+project before cloud builds; production also requires its HTTPS API origin.
 Restart Metro after changing brand or variant selection. See
 [brand configuration](docs/development.md#brand-and-environment-configuration).
 Use `npx expo install <package>` for SDK-compatible dependencies.

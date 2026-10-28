@@ -9,7 +9,7 @@
       "distribution": "internal",
       "environment": "development",
       "env": {
-        "APP_BRAND": "likan",
+        "APP_BRAND": "template",
         "APP_VARIANT": "development",
         "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "true",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
@@ -35,7 +35,7 @@
         "image": "macos-tahoe-26.6-xcode-27.1"
       },
       "env": {
-        "APP_BRAND": "likan",
+        "APP_BRAND": "template",
         "APP_VARIANT": "preview",
         "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "true",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
@@ -48,7 +48,7 @@
         "image": "macos-tahoe-26.6-xcode-27.1"
       },
       "env": {
-        "APP_BRAND": "likan",
+        "APP_BRAND": "template",
         "APP_VARIANT": "production",
         "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "false",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"

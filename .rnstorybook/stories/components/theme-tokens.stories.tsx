@@ -5,7 +5,7 @@ import type { StoryThemeProps } from '../../components/story-theme';
 const meta = {
   title: 'Components/Theme Tokens',
   component: TokensScreen,
-  args: { themeId: 'altarea', colorScheme: 'light' },
+  args: { themeId: 'ux', colorScheme: 'light' },
   render: () => <TokensScreen />,
   parameters: {
     docs: {
@@ -20,7 +20,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const AltareaLight: Story = {};
-export const AltareaDark: Story = { args: { colorScheme: 'dark' } };
-export const UXLight: Story = { args: { themeId: 'ux' } };
-export const UXDark: Story = { args: { themeId: 'ux', colorScheme: 'dark' } };
+export const UXLight: Story = {};
+export const UXDark: Story = { args: { colorScheme: 'dark' } };
+export const AltareaLight: Story = { args: { themeId: 'altarea' } };
+export const AltareaDark: Story = { args: { themeId: 'altarea', colorScheme: 'dark' } };
