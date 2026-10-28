@@ -9,21 +9,18 @@ import {
   StackedCarousel,
   StoryList,
   Switch,
-  ThemeCanvas,
   UniversalTextContent,
   VerificationCodeFace,
   nativeFillWidth,
-  useHostColorScheme,
   type PhotoItem,
   type VerificationCodeFaceStatus,
 } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
-import { useThemeSettings } from '@/context/theme.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 
 const photoIds = [1018, 1015, 1016, 1025, 1039, 1043, 1011, 1020, 1024, 1035, 1040, 1042];
 
-/** Demo content and app preferences stay here; the UI components receive plain props. */
+/** Demo content and validation stay here; the UI components receive plain props. */
 export function HomeComponents() {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
@@ -34,8 +31,6 @@ export function HomeComponents() {
   );
   const [scaleEnabled, setScaleEnabled] = useState(false);
   const reducedMotion = useAppReducedMotion();
-  const { appearanceReady, setColorScheme } = useThemeSettings();
-  const colorScheme = useHostColorScheme();
   const [code, setCode] = useState('');
   const [codeStatus, setCodeStatus] = useState<VerificationCodeFaceStatus>('default');
   const photos: PhotoItem[] = photoIds.map((id, index) => ({
@@ -119,15 +114,6 @@ export function HomeComponents() {
           accessibilityLabel={t('starter.circularCarouselTitle')}
           getPositionLabel={positionLabel}
           testID="home-circular-carousel"
-        />
-      </ComponentSection>
-      <ComponentSection title={t('starter.themeCanvasTitle')} hint={t('starter.themeCanvasHint')}>
-        <ThemeCanvas
-          colorScheme={colorScheme}
-          onColorSchemeChange={setColorScheme}
-          label={t('common.darkMode')}
-          disabled={!appearanceReady}
-          testID="home-theme-canvas"
         />
       </ComponentSection>
       <ComponentSection title={t('starter.homeGridTitle')} hint={t('starter.homeGridHint')}>

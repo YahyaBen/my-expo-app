@@ -55,7 +55,4 @@ export * from './table/table';
 export * from './table/table-actions';
 export * from './text/universal-text';
 export * from './text-input/text-input';
-export * from './theme-canvas/theme-canvas';
-export * from './theme-canvas/color-scheme-canvas';
-export * from './theme-canvas/color-scheme-transition';
 export * from './verification-code-face/verification-code-face';

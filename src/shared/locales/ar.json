@@ -793,8 +793,6 @@
     "stackedCarouselTitle": "عارض البطاقات المتراصة",
     "circularCarouselTitle": "عارض الصور الدائري",
     "circularCarouselScale": "تكبير الصور",
-    "themeCanvasTitle": "الوضع الفاتح والداكن",
-    "themeCanvasHint": "بدّل التطبيق بين الوضع الفاتح والداكن.",
     "homeGridTitle": "شبكة الشاشة الرئيسية لـ iOS",
     "homeGridHint": "اضغط على صورة لتكبيرها. اسحب للأسفل أو اضغط على إغلاق للعودة.",
     "homeGridPhoto": "الصورة {{number}}",

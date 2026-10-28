@@ -7,8 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomSheet,
   Column,
-  ColorSchemeTransition,
-  ColorSchemeTransitionControl,
+  ColorSchemeControl,
   FieldGroup,
   Icon,
   ListItem,
@@ -95,186 +94,181 @@ export function SettingsPage({
     />
   );
   return (
-    <ColorSchemeTransition
-      testID="app-settings-theme-transition"
-      revealTestID="app-settings-theme-reveal"
-    >
-      <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
-        <SettingsViewport tab={tab}>
-          <UniversalHost
-            // Recreate only this iOS form host when direction flips; reused native cells mirror text.
-            key={Platform.OS === 'ios' ? direction : undefined}
-            matchContents={false}
-            ignoreSafeArea="all"
-            style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
-            testID="app-settings-content"
+    <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
+      <SettingsViewport tab={tab}>
+        <UniversalHost
+          // Recreate only this iOS form host when direction flips; reused native cells mirror text.
+          key={Platform.OS === 'ios' ? direction : undefined}
+          matchContents={false}
+          ignoreSafeArea="all"
+          style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
+          testID="app-settings-content"
+        >
+          <FieldGroup
+            modifiers={pageFormModifiers}
+            style={{ backgroundColor: 'transparent' }}
+            testID="app-settings-groups"
           >
-            <FieldGroup
-              modifiers={pageFormModifiers}
-              style={{ backgroundColor: 'transparent' }}
-              testID="app-settings-groups"
-            >
-              <FieldGroup.Section title={t('common.account')} titleUppercase>
-                <FieldGroup.SectionHeader>
-                  <SettingsSectionHeading label={t('common.account')} language={language} first />
-                </FieldGroup.SectionHeader>
-                <ListItem
-                  testID="app-settings-account"
-                  onPress={() => router.push(authenticated ? '/account' : '/login')}
-                  trailing={chevron}
-                >
-                  <Text>{t(authenticated ? 'common.account' : 'auth.signIn')}</Text>
-                </ListItem>
-              </FieldGroup.Section>
-              <FieldGroup.Section
-                title={t('settings.appearance')}
-                titleUppercase
-                testID="app-settings-appearance"
+            <FieldGroup.Section title={t('common.account')} titleUppercase>
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('common.account')} language={language} first />
+              </FieldGroup.SectionHeader>
+              <ListItem
+                testID="app-settings-account"
+                onPress={() => router.push(authenticated ? '/account' : '/login')}
+                trailing={chevron}
               >
-                <FieldGroup.SectionHeader>
-                  <SettingsSectionHeading label={t('settings.appearance')} language={language} />
-                </FieldGroup.SectionHeader>
+                <Text>{t(authenticated ? 'common.account' : 'auth.signIn')}</Text>
+              </ListItem>
+            </FieldGroup.Section>
+            <FieldGroup.Section
+              title={t('settings.appearance')}
+              titleUppercase
+              testID="app-settings-appearance"
+            >
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('settings.appearance')} language={language} />
+              </FieldGroup.SectionHeader>
+              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
+                <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
+                  <Text>{t('common.colorScheme')}</Text>
+                </Column>
+                <ColorSchemeControl testID="app-settings-color-scheme-picker" />
+              </Row>
+              {design.header.artwork ? (
                 <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
                   <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
-                    <Text>{t('common.colorScheme')}</Text>
+                    <Text>{t('settings.headerMotion')}</Text>
                   </Column>
-                  <ColorSchemeTransitionControl testID="app-settings-color-scheme-picker" />
+                  <HeaderMotionPicker />
                 </Row>
-                {design.header.artwork ? (
-                  <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
-                    <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
-                      <Text>{t('settings.headerMotion')}</Text>
-                    </Column>
-                    <HeaderMotionPicker />
+              ) : null}
+              <Switch
+                label={t('settings.reduceMotion')}
+                value={reducedMotion}
+                onValueChange={setReducedMotion}
+                disabled={!headerMotionReady}
+                modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
+                testID="app-settings-reduce-motion"
+              />
+              <ListItem
+                testID="app-settings-language"
+                disabled={!languageReady || !onLanguageChange}
+                onPress={() => {
+                  if (languageReady && onLanguageChange) setLanguageOpen(true);
+                }}
+                trailing={
+                  <Row alignment="center" spacing={spacing.sm}>
+                    <Text textStyle={{ color: colors.muted }}>{languageLabel(language)}</Text>
+                    {chevron}
                   </Row>
-                ) : null}
-                <Switch
-                  label={t('settings.reduceMotion')}
-                  value={reducedMotion}
-                  onValueChange={setReducedMotion}
-                  disabled={!headerMotionReady}
-                  modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
-                  testID="app-settings-reduce-motion"
-                />
-                <ListItem
-                  testID="app-settings-language"
-                  disabled={!languageReady || !onLanguageChange}
-                  onPress={() => {
-                    if (languageReady && onLanguageChange) setLanguageOpen(true);
-                  }}
-                  trailing={
-                    <Row alignment="center" spacing={spacing.sm}>
-                      <Text textStyle={{ color: colors.muted }}>{languageLabel(language)}</Text>
-                      {chevron}
-                    </Row>
-                  }
-                >
-                  <Text>{t('common.language')}</Text>
-                </ListItem>
-              </FieldGroup.Section>
-              {developerScreensEnabled && (
-                <FieldGroup.Section title={t('settings.components')} titleUppercase>
-                  <FieldGroup.SectionHeader>
-                    <SettingsSectionHeading label={t('settings.components')} language={language} />
-                  </FieldGroup.SectionHeader>
-                  <ListItem
-                    testID="app-settings-component-list"
-                    onPress={() => router.push('/ui')}
-                    trailing={chevron}
-                  >
-                    <Text>{t('settings.componentList')}</Text>
-                  </ListItem>
-                </FieldGroup.Section>
-              )}
-              <FieldGroup.Section title={t('settings.about')} titleUppercase>
+                }
+              >
+                <Text>{t('common.language')}</Text>
+              </ListItem>
+            </FieldGroup.Section>
+            {developerScreensEnabled && (
+              <FieldGroup.Section title={t('settings.components')} titleUppercase>
                 <FieldGroup.SectionHeader>
-                  <SettingsSectionHeading label={t('settings.about')} language={language} />
+                  <SettingsSectionHeading label={t('settings.components')} language={language} />
                 </FieldGroup.SectionHeader>
                 <ListItem
-                  supportingText={
-                    <Text fontSize={14} tone="muted">
-                      {appVersion}
-                    </Text>
-                  }
+                  testID="app-settings-component-list"
+                  onPress={() => router.push('/ui')}
+                  trailing={chevron}
                 >
-                  <Text>{t('settings.appVersion')}</Text>
+                  <Text>{t('settings.componentList')}</Text>
                 </ListItem>
-                {tab ? (
-                  <FieldGroup.SectionFooter>
-                    <Spacer size={tabBarRaisedHeight} />
-                  </FieldGroup.SectionFooter>
-                ) : null}
               </FieldGroup.Section>
-            </FieldGroup>
-          </UniversalHost>
-          {/* A sheet owns a Host; isolate its presentation from the form's native hit-testing tree. */}
-          <UniversalHost
-            style={{ position: 'absolute' }}
-            pointerEvents="box-none"
-            testID="app-settings-language-presentation"
+            )}
+            <FieldGroup.Section title={t('settings.about')} titleUppercase>
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('settings.about')} language={language} />
+              </FieldGroup.SectionHeader>
+              <ListItem
+                supportingText={
+                  <Text fontSize={14} tone="muted">
+                    {appVersion}
+                  </Text>
+                }
+              >
+                <Text>{t('settings.appVersion')}</Text>
+              </ListItem>
+              {tab ? (
+                <FieldGroup.SectionFooter>
+                  <Spacer size={tabBarRaisedHeight} />
+                </FieldGroup.SectionFooter>
+              ) : null}
+            </FieldGroup.Section>
+          </FieldGroup>
+        </UniversalHost>
+        {/* A sheet owns a Host; isolate its presentation from the form's native hit-testing tree. */}
+        <UniversalHost
+          style={{ position: 'absolute' }}
+          pointerEvents="box-none"
+          testID="app-settings-language-presentation"
+        >
+          <BottomSheet
+            isPresented={languageOpen}
+            onDismiss={() => setLanguageOpen(false)}
+            testID="app-settings-language-sheet"
           >
-            <BottomSheet
-              isPresented={languageOpen}
-              onDismiss={() => setLanguageOpen(false)}
-              testID="app-settings-language-sheet"
-            >
-              <PageSection>
-                <Text
-                  variant="title"
-                  tone="primary"
-                  textStyle={{ fontFamily: getBrandHeadingFont(language) }}
-                  testID="app-settings-language-title"
+            <PageSection>
+              <Text
+                variant="title"
+                tone="primary"
+                textStyle={{ fontFamily: getBrandHeadingFont(language) }}
+                testID="app-settings-language-title"
+              >
+                {t('common.language')}
+              </Text>
+              <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
+                <FieldGroup
+                  modifiers={pageFormModifiers}
+                  style={{ backgroundColor: 'transparent' }}
+                  testID="app-settings-language-options"
                 >
-                  {t('common.language')}
-                </Text>
-                <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
-                  <FieldGroup
-                    modifiers={pageFormModifiers}
-                    style={{ backgroundColor: 'transparent' }}
-                    testID="app-settings-language-options"
-                  >
-                    <FieldGroup.Section>
-                      {SUPPORTED_LANGUAGES.map((value) => (
-                        <ListItem
-                          key={value}
-                          testID={`app-settings-language-${value}`}
-                          disabled={!languageReady || !onLanguageChange}
-                          onPress={() => {
-                            if (!languageReady || !onLanguageChange) return;
-                            onLanguageChange(value);
-                            setLanguageOpen(false);
-                          }}
-                          trailing={
-                            language === value ? (
-                              <Icon
-                                name={Icon.select({
-                                  ios: 'checkmark',
-                                  android: require('@expo/material-symbols/check.xml'),
-                                })}
-                                size={20}
-                                color={colors.tint}
-                              />
-                            ) : undefined
-                          }
-                        >
-                          <Text>{languageLabel(value)}</Text>
-                        </ListItem>
-                      ))}
-                    </FieldGroup.Section>
-                  </FieldGroup>
-                </Column>
-                <UniversalButtonContent
-                  variant="link"
-                  label={t('common.close')}
-                  testID="app-settings-language-close"
-                  onPress={() => setLanguageOpen(false)}
-                />
-              </PageSection>
-            </BottomSheet>
-          </UniversalHost>
-        </SettingsViewport>
-      </PageFrame>
-    </ColorSchemeTransition>
+                  <FieldGroup.Section>
+                    {SUPPORTED_LANGUAGES.map((value) => (
+                      <ListItem
+                        key={value}
+                        testID={`app-settings-language-${value}`}
+                        disabled={!languageReady || !onLanguageChange}
+                        onPress={() => {
+                          if (!languageReady || !onLanguageChange) return;
+                          onLanguageChange(value);
+                          setLanguageOpen(false);
+                        }}
+                        trailing={
+                          language === value ? (
+                            <Icon
+                              name={Icon.select({
+                                ios: 'checkmark',
+                                android: require('@expo/material-symbols/check.xml'),
+                              })}
+                              size={20}
+                              color={colors.tint}
+                            />
+                          ) : undefined
+                        }
+                      >
+                        <Text>{languageLabel(value)}</Text>
+                      </ListItem>
+                    ))}
+                  </FieldGroup.Section>
+                </FieldGroup>
+              </Column>
+              <UniversalButtonContent
+                variant="link"
+                label={t('common.close')}
+                testID="app-settings-language-close"
+                onPress={() => setLanguageOpen(false)}
+              />
+            </PageSection>
+          </BottomSheet>
+        </UniversalHost>
+      </SettingsViewport>
+    </PageFrame>
   );
 }
 

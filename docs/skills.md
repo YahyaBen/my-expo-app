@@ -48,7 +48,6 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | [template-skill-ui-stacked-carousel](../.agents/skills/template-skill-ui-stacked-carousel/SKILL.md)             | Stacked-card carousel gestures and presentation |
 | [template-skill-ui-ios-home-grid](../.agents/skills/template-skill-ui-ios-home-grid/SKILL.md)                   | Native iOS home grid and Android presentation   |
 | [template-skill-ui-story-list](../.agents/skills/template-skill-ui-story-list/SKILL.md)                         | Horizontal story collection                     |
-| [template-skill-ui-theme-canvas](../.agents/skills/template-skill-ui-theme-canvas/SKILL.md)                     | Appearance artwork and captured-page reveal     |
 | [template-skill-ui-verification-code-face](../.agents/skills/template-skill-ui-verification-code-face/SKILL.md) | Animated decorative verification face           |
 
 ## Controls and forms

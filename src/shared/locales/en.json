@@ -793,8 +793,6 @@
     "stackedCarouselTitle": "Stacked carousel",
     "circularCarouselTitle": "Circular carousel",
     "circularCarouselScale": "Scale photos",
-    "themeCanvasTitle": "Light & dark mode",
-    "themeCanvasHint": "Switch the app between light and dark mode.",
     "homeGridTitle": "iOS home grid",
     "homeGridHint": "Tap a photo to expand it. Drag down or tap Close to return.",
     "homeGridPhoto": "Photo {{number}}",

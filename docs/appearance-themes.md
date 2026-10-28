@@ -42,19 +42,10 @@ Placeholder account, notification, support and legal controls have been removed.
 Settings owns its [header-effect picker](../src/features/settings/header-motion-picker.tsx). The
 shared [color-scheme control](../src/components/ui/appearance/color-scheme-control.tsx)
 serves Settings and login.
-Settings applies the circular reveal to its actual page, including the header
-and native form. Its System/Light/Dark picker uses the existing saved preference.
-The shared [transition wrapper](../src/components/ui/theme-canvas/color-scheme-transition.tsx)
-briefly captures the old page with `react-native-view-shot`, then reveals the
-live page in its new appearance. Capture failure and Reduce Motion apply the
-preference immediately. The native capture package requires a new development
-build; screenshot coverage and transition timing remain device-verification work.
-Home retains the smaller
-[appearance canvas](../src/components/ui/theme-canvas/color-scheme-canvas.tsx)
-inside the shared [ThemeCanvas](../src/components/ui/theme-canvas/theme-canvas.tsx)
-component. Home passes its resolved appearance and existing preference setter;
-the reusable switch owns no saved state or demo labels. Its reveal and composition contract lives in the
-[theme-canvas skill](../.agents/skills/template-skill-ui-theme-canvas/SKILL.md).
+Its System/Light/Dark picker applies appearance changes immediately through the
+existing saved preference provider. System follows the device; explicit Light or
+Dark remains selected until the user chooses another option. Controls wait for
+appearance restoration before accepting changes.
 
 The configured root palette stays fixed. A user chooses appearance, not another
 client's identity or demo palette. The Text showcase at `/ui-component/text` has
@@ -136,8 +127,8 @@ primary button. Existing text selectors remain; new preview controls and samples
 have stable selectors. No automated suite was added.
 
 On both native platforms, check saved Light/Dark after restart, live System
-changes, invalid/unavailable storage fallback, rapid appearance changes, first
-reveal, local preview isolation and unchanged action counts. These device checks
+changes, invalid/unavailable storage fallback, rapid appearance changes, initial
+appearance, local preview isolation and unchanged action counts. These device checks
 remain pending; static checks and Hermes exports do not verify them.
 
 The canonical control and persistence contract lives in the

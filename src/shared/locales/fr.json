@@ -793,8 +793,6 @@
     "stackedCarouselTitle": "Carrousel empilé",
     "circularCarouselTitle": "Carrousel circulaire",
     "circularCarouselScale": "Agrandir les photos",
-    "themeCanvasTitle": "Mode clair et sombre",
-    "themeCanvasHint": "Passez l’application du mode clair au mode sombre.",
     "homeGridTitle": "Grille d’accueil iOS",
     "homeGridHint": "Touchez une photo pour l’agrandir. Glissez vers le bas ou touchez Fermer pour revenir.",
     "homeGridPhoto": "Photo {{number}}",
