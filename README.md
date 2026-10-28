@@ -9,7 +9,9 @@ packages are retained for future features.
 
 ## Get started
 
-Use a supported Node release (22.18+, 24.3+ or 26+) and the committed npm lockfile.
+Use a supported Node release (22.18+, 24.3+ or 26+) and the committed
+`package-lock.json`. npm is the package manager for this project; it applies the
+dependency overrides in `package.json`.
 
 ```sh
 npm ci
