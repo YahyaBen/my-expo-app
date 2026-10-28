@@ -1,6 +1,7 @@
-import { create } from 'axios';
-import type { TokenResponse } from '@/types/auth.types';
+import { create, type AxiosResponse } from 'axios';
 import { DEFAULT_API_TIMEOUT_MS, getApiBaseUrl } from '../api.config';
+import { ApiResponseValidationError } from '../api.error';
+import { tokenResponseSchema } from '@/validation/schemas/api/auth';
 import { isSessionInvalid } from './auth.errors';
 import {
   assertSessionVersion,
@@ -27,14 +28,13 @@ async function rotateToken(version: number) {
     throw new Error('No refresh token available.');
   }
 
-  let token: TokenResponse;
+  let response: AxiosResponse<unknown>;
   try {
-    const response = await refreshClient.post<TokenResponse>(
+    response = await refreshClient.post<unknown>(
       '/api/auth/token/refresh',
       { refreshToken: session.refreshToken },
       { baseURL: getApiBaseUrl() },
     );
-    token = response.data;
   } catch (error) {
     assertSessionVersion(version);
     if (isSessionInvalid(error)) await clearAuthSession(version);
@@ -43,7 +43,9 @@ async function rotateToken(version: number) {
 
   assertSessionVersion(version);
   try {
-    await persistAuthSession(token, version);
+    const token = tokenResponseSchema.safeParse(response.data);
+    if (!token.success) throw new ApiResponseValidationError(response.status);
+    await persistAuthSession(token.data, version);
   } catch (error) {
     assertSessionVersion(version);
     // Rotation consumes the old refresh token; discard it if saving fails.
