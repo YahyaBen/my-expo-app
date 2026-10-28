@@ -378,30 +378,4 @@ export function createApiClient({
   };
 }
 
-/**
- * Generic helper to build sanitized API query parameters from a raw query object.
- * Trims strings, removes undefined/null/empty strings, and retains booleans, numbers, and strings.
- */
-export function buildListParams<T extends object>(
-  query: T,
-  defaults?: Partial<T>,
-): Record<string, boolean | number | string> {
-  const params: Record<string, boolean | number | string> = {};
-  const mergedQuery = { ...defaults, ...query };
-
-  for (const [key, val] of Object.entries(mergedQuery)) {
-    if (val === undefined || val === null) continue;
-    if (typeof val === 'string') {
-      const trimmed = val.trim();
-      if (trimmed !== '') {
-        params[key] = trimmed;
-      }
-    } else if (typeof val === 'boolean' || typeof val === 'number') {
-      params[key] = val;
-    }
-  }
-
-  return params;
-}
-
 export const apiClient = createApiClient();

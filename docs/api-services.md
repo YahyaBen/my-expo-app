@@ -22,6 +22,10 @@ identifiers exist. Empty/whitespace identifiers and an empty detail identifier
 tuple cannot start a request through manual refetch. Normalize identifiers once
 for both the query key and the readiness check.
 
+`request-utils.ts` owns primitive parameter normalization and identifier paths.
+Its API types are imported as types only, so using these helpers does not load
+the HTTP client, secure session storage or initialized query cache.
+
 Transport modules may use the existing `.api.ts` or `.service.ts` convention;
 both have the same enforced import boundary. Keep React/navigation and cache
 effects in consumers or query/mutation modules, and schemas/mappers free of

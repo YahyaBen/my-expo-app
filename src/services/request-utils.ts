@@ -1,7 +1,30 @@
-import { buildListParams, type ApiQueryParams, type ApiRequestOptions } from './api';
+import type { ApiQueryParams, ApiRequestOptions } from './api';
 
 export type ApiReadOptions = Pick<ApiRequestOptions, 'signal' | 'timeoutMs'>;
 export type PaginationQuery = { page?: number; pageSize?: number };
+
+/** Trim primitive parameters without loading transport or native session state. */
+export function buildListParams<T extends object>(
+  query: T,
+  defaults?: Partial<T>,
+): Record<string, boolean | number | string> {
+  const params: Record<string, boolean | number | string> = {};
+  const mergedQuery = { ...defaults, ...query };
+
+  for (const [key, val] of Object.entries(mergedQuery)) {
+    if (val === undefined || val === null) continue;
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (trimmed !== '') {
+        params[key] = trimmed;
+      }
+    } else if (typeof val === 'boolean' || typeof val === 'number') {
+      params[key] = val;
+    }
+  }
+
+  return params;
+}
 
 /** Snapshot normalized primitive parameters for the cache key and HTTP request. */
 export function normalizeListQuery<T extends PaginationQuery>(
