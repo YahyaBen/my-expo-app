@@ -11,9 +11,10 @@ const observer: typeof import('expo-observe') | undefined = hasNativeMetrics
     require('expo-observe')
   : undefined;
 
-const useNoopObserver: typeof import('expo-observe').useObserve = () => ({
+const noopObserver: ReturnType<typeof import('expo-observe').useObserve> = {
   markInteractive: () => {},
-});
+};
+const useNoopObserver: typeof import('expo-observe').useObserve = () => noopObserver;
 
 export const PerformanceRoot = observer?.ObserveRoot ?? Fragment;
 // Native availability is fixed for this JS runtime, so hook selection cannot
@@ -21,12 +22,16 @@ export const PerformanceRoot = observer?.ObserveRoot ?? Fragment;
 export const usePerformanceObserver = observer?.useObserve ?? useNoopObserver;
 
 export function configurePerformance(environment: string) {
-  observer?.Observe.configure({
-    environment,
-    integrations: {
-      'expo-router': { filteredParams: ['challengeId', 'token', 'code', 'email'] },
-    },
-  });
+  try {
+    observer?.Observe.configure({
+      environment,
+      integrations: {
+        'expo-router': { filteredParams: ['challengeId', 'token', 'code', 'email'] },
+      },
+    });
+  } catch {
+    // Optional native telemetry configuration must not block startup or recovery.
+  }
 }
 
 type StartupMilestone =

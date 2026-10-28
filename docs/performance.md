@@ -63,6 +63,12 @@ to a Fragment. Expo Go and older development clients remain usable without
 Observe events. Use a matching native build to verify telemetry. Release builds
 keep Observe's default dispatch behavior; debug event dispatch is not enabled.
 
+Configuration, startup-event reporting and page markers are best effort: a
+telemetry exception must not prevent app startup or recovery. The native-module
+fallback reuses a stable marker callback, avoiding effect rescheduling from a
+new callback on every render. These source changes do not establish device timing
+or frame-rate improvements.
+
 The adapter records these once-per-JS-runtime events. Their `elapsedMs`
 attribute starts when the performance module is evaluated, **not at native
 process creation**. `getStartupTimings()` returns a bounded snapshot even when
