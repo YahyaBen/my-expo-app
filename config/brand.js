@@ -24,6 +24,7 @@ const brandSchema = z.strictObject({
     launchArtwork: z.string().refine((id) => Object.hasOwn(assets.launchArtworks, id)),
   }),
   ios: z.strictObject({
+    icon: asset.optional(),
     bundleIdentifier: z.string().regex(/^[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/),
   }),
   android: z.strictObject({
@@ -32,8 +33,8 @@ const brandSchema = z.strictObject({
     adaptiveIcon: z.strictObject({
       backgroundColor: color,
       foregroundImage: asset,
-      backgroundImage: asset,
-      monochromeImage: asset,
+      backgroundImage: asset.optional(),
+      monochromeImage: asset.optional(),
     }),
   }),
   splash: z.strictObject({
@@ -94,13 +95,20 @@ function resolveBrand(env = process.env) {
   if (brand.id !== id) throw new Error(`Brand manifest ID must match its registry key: ${id}.`);
 
   requireAsset(brand.icon, 'icon');
+  if (brand.ios.icon) {
+    const iconFile = brand.ios.icon.endsWith('.icon')
+      ? `${brand.ios.icon}/icon.json`
+      : brand.ios.icon;
+    requireAsset(iconFile, 'ios.icon');
+  }
   requireAsset(brand.splash.image, 'splash.image');
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
   const launchArtwork = assets.launchArtworks[brand.presentation.launchArtwork];
   if (headingFont.file) requireAsset(headingFont.file, 'presentation.headingFont');
   requireAsset(launchArtwork.file, 'presentation.launchArtwork');
   for (const field of ['foregroundImage', 'backgroundImage', 'monochromeImage']) {
-    requireAsset(brand.android.adaptiveIcon[field], `android.adaptiveIcon.${field}`);
+    const image = brand.android.adaptiveIcon[field];
+    if (image) requireAsset(image, `android.adaptiveIcon.${field}`);
   }
   if (brand.android.googleServicesFile) {
     const file = requireAsset(brand.android.googleServicesFile, 'android.googleServicesFile');

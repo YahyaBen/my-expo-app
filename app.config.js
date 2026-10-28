@@ -15,7 +15,7 @@ module.exports = ({ config }) => {
     owner: brand.eas?.owner,
     ios: {
       ...config.ios,
-      icon: brand.icon,
+      icon: brand.ios.icon ?? brand.icon,
       bundleIdentifier: brand.ios.bundleIdentifier,
     },
     android: {

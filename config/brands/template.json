@@ -3,24 +3,23 @@
   "name": "Mobile Template",
   "slug": "expo-mobile-template",
   "scheme": "expomobiletemplate",
-  "icon": "./assets/images/icon.png",
+  "icon": "./assets/AppIcon.icon/Assets/icon.png",
   "presentation": {
     "palette": "ux",
     "header": "default",
     "launch": "minimal",
     "headingFont": "system",
-    "launchArtwork": "templateIcon"
+    "launchArtwork": "bluePepe"
   },
   "ios": {
-    "bundleIdentifier": "com.example.mobiletemplate"
+    "icon": "./assets/AppIcon.icon",
+    "bundleIdentifier": "com.hyrkul.mobiletemplate"
   },
   "android": {
-    "package": "com.example.mobiletemplate",
+    "package": "com.hyrkul.mobiletemplate",
     "adaptiveIcon": {
-      "backgroundColor": "#FFFFFF",
-      "foregroundImage": "./assets/images/android-icon-foreground.png",
-      "backgroundImage": "./assets/images/android-icon-background.png",
-      "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      "backgroundColor": "#ffffff",
+      "foregroundImage": "./assets/adaptive-foreground.png"
     }
   },
   "splash": {
@@ -29,6 +28,6 @@
     "darkBackgroundColor": "#111111"
   },
   "eas": {
-    "projectId": ""
+    "projectId": "c8cca991-ec77-476f-b759-3ea8bd075309"
   }
 }
