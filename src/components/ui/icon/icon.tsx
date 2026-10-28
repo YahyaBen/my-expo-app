@@ -2,6 +2,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { RNHostView, Row, type RowProps } from '@expo/ui';
 import { SymbolView, type AndroidSymbol, type SFSymbol, type SymbolViewProps } from 'expo-symbols';
 import { useContext } from 'react';
+import { View } from 'react-native';
 import { useHostColorScheme } from '../host/universal-host';
 import { IconColorContext } from './icon-color-context';
 
@@ -30,15 +31,18 @@ export function Icon({
   return (
     <Row {...props} alignment="center" spacing={0}>
       <RNHostView matchContents>
-        <SymbolView
-          name={name}
-          size={size}
-          tintColor={color ?? inheritedColor ?? colors.text}
-          type={type}
-          accessible={Boolean(accessibilityLabel)}
-          accessibilityLabel={accessibilityLabel}
-          pointerEvents="none"
-        />
+        {/* Keep a real RN container: the entire hosted subtree must leave taps to the native action. */}
+        <View collapsable={false} pointerEvents="none" style={{ width: size, height: size }}>
+          <SymbolView
+            name={name}
+            size={size}
+            tintColor={color ?? inheritedColor ?? colors.text}
+            type={type}
+            accessible={Boolean(accessibilityLabel)}
+            accessibilityLabel={accessibilityLabel}
+            pointerEvents="none"
+          />
+        </View>
       </RNHostView>
     </Row>
   );

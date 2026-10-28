@@ -1,10 +1,12 @@
 import {
   Column,
+  FloatingActionButton,
   Icon,
   Row,
   UniversalButtonContent,
   UniversalHost,
   Text,
+  TextInput,
   type IconProps,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
@@ -99,4 +101,79 @@ export const ButtonForegrounds: Story = {
       </Column>
     </UniversalHost>
   ),
+};
+
+function ParentButtonTaps({
+  colorScheme,
+  disabled,
+}: Readonly<{
+  colorScheme?: 'light' | 'dark';
+  disabled?: boolean;
+}>) {
+  const [presses, setPresses] = useState({
+    primary: 0,
+    secondary: 0,
+    link: 0,
+    floating: 0,
+    input: 0,
+  });
+  const [value, setValue] = useState('Clear with the icon');
+  const recordPress = (kind: keyof typeof presses) => {
+    setPresses((current) => ({ ...current, [kind]: current[kind] + 1 }));
+  };
+
+  return (
+    <UniversalHost colorScheme={colorScheme}>
+      <Column spacing={16}>
+        <Text>Tap directly on each icon, then its label or padding. Each tap counts once.</Text>
+        {(['primary', 'secondary', 'link'] as const).map((variant) => (
+          <Column key={variant} spacing={4}>
+            <UniversalButtonContent
+              variant={variant}
+              disabled={disabled}
+              testID={`icon-parent-${variant}`}
+              onPress={() => recordPress(variant)}
+            >
+              <Row alignment="center" spacing={8}>
+                <Icon name={star} testID={`icon-parent-${variant}-artwork`} />
+                <Text>{variant}</Text>
+              </Row>
+            </UniversalButtonContent>
+            <Text testID={`icon-parent-${variant}-count`}>{`${variant}: ${presses[variant]}`}</Text>
+          </Column>
+        ))}
+        <FloatingActionButton
+          kind="continue"
+          label="Count floating icon taps"
+          testID="icon-parent-floating"
+          disabled={disabled}
+          onPress={() => recordPress('floating')}
+        />
+        <Text testID="icon-parent-floating-count">{`floating: ${presses.floating}`}</Text>
+        <TextInput
+          value={value}
+          onChangeText={setValue}
+          label="Input icon action"
+          rightIcon={Icon.select({ ios: 'xmark.circle.fill', android: 'cancel' })}
+          rightIconAccessibilityLabel="Clear text and count icon tap"
+          disabled={disabled}
+          testID="icon-parent-input"
+          onRightIconPress={() => {
+            setValue('');
+            recordPress('input');
+          }}
+        />
+        <Text testID="icon-parent-input-count">{`input: ${presses.input}`}</Text>
+      </Column>
+    </UniversalHost>
+  );
+}
+
+export const ParentTapTargets: Story = {
+  render: (args) => <ParentButtonTaps {...args} />,
+};
+
+export const DisabledParentTapTargets: Story = {
+  args: { disabled: true },
+  render: (args) => <ParentButtonTaps {...args} />,
 };

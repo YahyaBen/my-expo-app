@@ -18,8 +18,10 @@ import ListScreen from './list-screen';
 import TableScreen from './table-screen';
 import TokensScreen from './tokens-screen';
 import LoadingScreen from './loading-screen';
+import CameraScreen from './camera-screen';
 
 const screens = {
+  camera: CameraScreen,
   switch: SwitchScreen,
   buttons: ButtonsScreen,
   'bottom-sheet': BottomSheetScreen,

@@ -1,4 +1,5 @@
 export const componentPages = [
+  { name: 'camera', label: 'media.title', testID: 'page-action-camera' },
   { name: 'switch', label: 'showcase.switch', testID: 'page-action-switch' },
   { name: 'buttons', label: 'showcase.buttons', testID: 'page-action-buttons' },
   { name: 'bottom-sheet', label: 'showcase.bottomSheet', testID: 'page-action-bottom-sheet' },

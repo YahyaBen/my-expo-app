@@ -1,6 +1,7 @@
 import { Column, Row } from '@expo/ui';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from '../icon/icon';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 import {
@@ -94,11 +95,15 @@ export function TabNavigationBar({
         backgroundColor: 'transparent',
       }}
     >
-      <View
+      <LinearGradient
         testID="tab-dock-surface"
         pointerEvents="none"
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
+        colors={[colors.tabBarGradientStart, colors.tabBarBackground, colors.tabBarGradientEnd]}
+        locations={[0, 0.55, 1]}
+        start={{ x: direction === 'rightToLeft' ? 1 : 0, y: 0 }}
+        end={{ x: direction === 'rightToLeft' ? 0 : 1, y: 1 }}
         style={{
           position: 'absolute',
           top: tabBarRaisedHeight,
@@ -106,10 +111,30 @@ export function TabNavigationBar({
           right,
           bottom: 0,
           backgroundColor: colors.tabBarBackground,
-          borderTopWidth: 1,
+          borderTopWidth: StyleSheet.hairlineWidth,
           borderColor: colors.tabBarBorder,
         }}
-      />
+      >
+        <LinearGradient
+          testID="tab-dock-highlight"
+          pointerEvents="none"
+          colors={[
+            colors.tabBarHighlightClear,
+            colors.tabBarHighlight,
+            colors.tabBarHighlightClear,
+          ]}
+          locations={[0, 0.5, 1]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 1,
+          }}
+        />
+      </LinearGradient>
       <View
         testID="tab-dock-controls"
         style={{

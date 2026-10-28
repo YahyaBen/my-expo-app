@@ -36,6 +36,7 @@ import { version as appVersion } from '../../../package.json';
 import { HeaderMotionPicker } from './header-motion-picker';
 import { developerScreensEnabled } from '@/config/developer-tools';
 import { getBrandHeadingFont } from '@/config/brand-assets';
+import { useDeviceLocation } from './use-device-location';
 
 const languageKeys: Record<Language, string> = {
   fr: 'common.french',
@@ -82,6 +83,17 @@ export function SettingsPage({
   const { height: windowHeight } = useWindowDimensions();
   const languageListHeight = Math.min(320, windowHeight * 0.45);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const location = useDeviceLocation();
+  const locationBlocked =
+    location.permission?.canAskAgain === false && !location.permission.granted;
+  const locationStatus =
+    location.servicesEnabled === false
+      ? 'servicesOff'
+      : location.permission?.granted
+        ? 'allowed'
+        : location.permission?.status === 'denied'
+          ? 'denied'
+          : 'notRequested';
   const back = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   const chevron = (
     <Icon
@@ -166,6 +178,59 @@ export function SettingsPage({
               >
                 <Text>{t('common.language')}</Text>
               </ListItem>
+            </FieldGroup.Section>
+            <FieldGroup.Section title={t('settings.location.title')} titleUppercase>
+              <FieldGroup.SectionHeader>
+                <SettingsSectionHeading label={t('settings.location.title')} language={language} />
+              </FieldGroup.SectionHeader>
+              <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
+                <Text testID="app-settings-location-status">
+                  {t(`settings.location.${locationStatus}`)}
+                </Text>
+                <Text tone="muted">{t('settings.location.hint')}</Text>
+                {location.error ? (
+                  <Text tone="error" testID="app-settings-location-error">
+                    {t(`settings.location.${location.error}`)}
+                  </Text>
+                ) : null}
+                {location.position ? (
+                  <>
+                    <Text testID="app-settings-location-latitude">
+                      {t('settings.location.latitude', {
+                        value: location.position.coords.latitude.toFixed(5),
+                      })}
+                    </Text>
+                    <Text testID="app-settings-location-longitude">
+                      {t('settings.location.longitude', {
+                        value: location.position.coords.longitude.toFixed(5),
+                      })}
+                    </Text>
+                    {location.position.coords.accuracy !== null ? (
+                      <Text tone="muted">
+                        {t('settings.location.accuracy', {
+                          value: Math.round(location.position.coords.accuracy),
+                        })}
+                      </Text>
+                    ) : null}
+                  </>
+                ) : null}
+              </Column>
+              <UniversalButtonContent
+                variant="secondary"
+                label={t(
+                  location.pending ? 'settings.location.locating' : 'settings.location.getLocation',
+                )}
+                disabled={location.pending || locationBlocked}
+                onPress={() => void location.requestLocation()}
+                testID="app-settings-get-location"
+              />
+              <UniversalButtonContent
+                variant="link"
+                label={t('settings.location.openSettings')}
+                disabled={location.pending}
+                onPress={() => void location.openSettings()}
+                testID="app-settings-location-open-settings"
+              />
             </FieldGroup.Section>
             {developerScreensEnabled && (
               <FieldGroup.Section title={t('settings.components')} titleUppercase>

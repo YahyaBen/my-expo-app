@@ -8,10 +8,11 @@ import {
   type TabNavigationItemId,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import { useState } from 'react';
+import { useState, type ComponentProps } from 'react';
 import { View } from 'react-native';
 import { LayoutDirectionProvider } from '@/context/layout-direction.context';
 import { useThemeColors } from '@/hooks/use-theme';
+import type { StoryThemeProps } from '../../components/story-theme';
 
 function NavigationDemo({
   colorScheme = 'light',
@@ -100,15 +101,17 @@ function NavigationDemo({
 const meta = {
   title: 'Components/Navigation',
   component: NavigationDemo,
+  render: (args) => <NavigationDemo {...args} />,
   parameters: {
     docs: {
       description: {
         component:
-          'The selected tab has a rounded highlight behind its icon. Tap each of the four destinations: the highlight must move to the selected icon and clear the previous one. Check Light, Dark and RightToLeft; the label stays outside the highlight.',
+          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX, Instagram and Altarea in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it.',
       },
     },
   },
   args: {
+    themeId: 'ux',
     colorScheme: 'light',
     direction: 'ltr',
     bottomInset: 24,
@@ -122,13 +125,19 @@ const meta = {
     disabled: { control: 'boolean' },
     longContent: { control: 'boolean' },
   },
-} satisfies Meta<typeof NavigationDemo>;
+} satisfies Meta<ComponentProps<typeof NavigationDemo> & StoryThemeProps>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Light: Story = {};
 export const Dark: Story = { args: { colorScheme: 'dark' } };
+export const InstagramLight: Story = { args: { themeId: 'instagram' } };
+export const InstagramDark: Story = { args: { themeId: 'instagram', colorScheme: 'dark' } };
+export const AltareaLight: Story = { args: { themeId: 'altarea' } };
+export const AltareaDark: Story = { args: { themeId: 'altarea', colorScheme: 'dark' } };
 export const RightToLeft: Story = { args: { direction: 'rtl' } };
+export const DarkRightToLeft: Story = { args: { colorScheme: 'dark', direction: 'rtl' } };
+export const ZeroBottomInset: Story = { args: { bottomInset: 0 } };
 export const DisabledAction: Story = { args: { disabled: true } };
 export const LongContent: Story = {
   args: { longContent: true },
