@@ -75,6 +75,12 @@ function resolveBrand(env = process.env) {
   if (variant === 'production' && !selected) {
     throw new Error('Production requires an explicit APP_BRAND.');
   }
+  if (
+    variant === 'production' &&
+    [env.EXPO_PUBLIC_ENABLE_DEV_SCREENS, env.EXPO_PUBLIC_STORYBOOK_ENABLED].includes('true')
+  ) {
+    throw new Error('Production requires developer catalog and Storybook flags to be disabled.');
+  }
   const id = selected || 'template';
   if (!Object.hasOwn(brands, id)) {
     throw new Error(`Unknown APP_BRAND. Registered brands: ${Object.keys(brands).join(', ')}.`);
@@ -118,7 +124,10 @@ function resolveBrand(env = process.env) {
     throw new Error('Production requires this brand to define its own EAS owner and projectId.');
   }
   if (env.EXPO_PUBLIC_API_URL?.trim() || variant === 'production') {
-    resolveApiBaseUrl(env.EXPO_PUBLIC_API_URL);
+    const apiBaseUrl = resolveApiBaseUrl(env.EXPO_PUBLIC_API_URL);
+    if (variant === 'production' && new URL(apiBaseUrl).protocol !== 'https:') {
+      throw new Error('Production requires an HTTPS EXPO_PUBLIC_API_URL.');
+    }
   }
   return { brand, variant };
 }
