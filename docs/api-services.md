@@ -54,7 +54,8 @@ protocols are rejected without including the supplied URL in diagnostics.
 Keep refresh interceptor-free. Do not import `api.ts` from `auth.refresh.ts` to
 reuse its authenticated client: the reverse dependency already exists and refresh
 must not recurse. Missing configuration does not prevent the public local starter
-from opening; production configuration requires the API URL before distribution.
+from opening or building in any variant. Authentication needs a real API URL;
+when supplied in production, that URL must use HTTPS.
 See [environment selection](development.md#brand-and-environment-configuration).
 
 ## Session model and logout

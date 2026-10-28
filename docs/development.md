@@ -110,8 +110,16 @@ APP_VARIANT=development
 | `EXPO_PUBLIC_ENABLE_DEV_SCREENS` | Exact `true` enables catalog links/routes; absent or other values disable them             |
 | `EXPO_PUBLIC_STORYBOOK_ENABLED`  | Exact `true` opts into the Storybook route in development mode only                        |
 
+For a fresh clone, fill the existing `eas.projectId` string in
+`config/brands/template.json` with your own EAS project UUID. Use an EAS project
+whose slug matches `expo-mobile-template`, the manifest's configured slug.
+Then run `npx eas-cli@latest build --platform android --profile development`
+while signed in to an account with access to that project. No owner, API URL or
+Firebase configuration needs to be added for the starter build. The same project
+ID serves the other standard profiles; normal platform signing still applies.
+
 `template` uses `com.example.mobiletemplate` / `expomobiletemplate`, generic
-existing Expo artwork, and no EAS owner/project or Firebase file. `likan` retains
+existing Expo artwork, an empty EAS project-ID slot and no Firebase file. `likan` retains
 `com.hyrkul.likan`, `myappexpo`, its existing EAS link and Android Firebase file.
 Its native display name is now `Likan`. These brands have different installation
 identities. Variants within a brand deliberately share its identity, preserving
@@ -122,10 +130,13 @@ identity and matching integrations if side-by-side installation is required.
 The standard EAS build profiles explicitly select `template` and their matching
 variant. Link that manifest to its own EAS project before cloud builds; it does
 not inherit Likan's project or Firebase configuration. Other clients require
-explicit brand selection in a dedicated profile. Production requires an explicit brand, its own EAS owner and
-project ID, and an HTTPS API URL. It rejects either developer catalog or Storybook
+explicit brand selection in a dedicated profile. The template remains the default
+when `APP_BRAND` is absent, including production. Production requires the selected
+brand's project ID and rejects either developer catalog or Storybook
 flag set to exact `true`; use a development or preview variant for those tools.
-The unlinked template is rejected for production. Asset existence and Android Firebase package matching
+The owner is optional. A backend URL is optional for building and public screens;
+when supplied in production it must use HTTPS. An empty project ID is omitted
+from public config and rejected for production. Asset existence and Android Firebase package matching
 are checked during config resolution. These checks do not verify cloud access or
 whether the backend is reachable.
 

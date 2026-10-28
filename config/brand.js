@@ -44,8 +44,12 @@ const brandSchema = z.strictObject({
   }),
   eas: z
     .strictObject({
-      owner: z.string().regex(/^[a-zA-Z0-9_-]+$/),
-      projectId: z.uuid(),
+      owner: z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]+$/)
+        .optional(),
+      // The starter keeps a visible empty slot until a clone links its own project.
+      projectId: z.uuid().or(z.literal('')),
     })
     .optional(),
 });
@@ -72,9 +76,6 @@ function resolveBrand(env = process.env) {
     throw new Error(`APP_VARIANT must be one of: ${variants.join(', ')}.`);
   }
   const selected = env.APP_BRAND?.trim();
-  if (variant === 'production' && !selected) {
-    throw new Error('Production requires an explicit APP_BRAND.');
-  }
   if (
     variant === 'production' &&
     [env.EXPO_PUBLIC_ENABLE_DEV_SCREENS, env.EXPO_PUBLIC_STORYBOOK_ENABLED].includes('true')
@@ -120,10 +121,10 @@ function resolveBrand(env = process.env) {
       throw new Error('Brand Firebase configuration does not match android.package.');
     }
   }
-  if (variant === 'production' && !brand.eas) {
-    throw new Error('Production requires this brand to define its own EAS owner and projectId.');
+  if (variant === 'production' && !brand.eas?.projectId) {
+    throw new Error(`Set eas.projectId in config/brands/${id}.json before building production.`);
   }
-  if (env.EXPO_PUBLIC_API_URL?.trim() || variant === 'production') {
+  if (env.EXPO_PUBLIC_API_URL?.trim()) {
     const apiBaseUrl = resolveApiBaseUrl(env.EXPO_PUBLIC_API_URL);
     if (variant === 'production' && new URL(apiBaseUrl).protocol !== 'https:') {
       throw new Error('Production requires an HTTPS EXPO_PUBLIC_API_URL.');

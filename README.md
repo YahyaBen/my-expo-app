@@ -19,11 +19,10 @@ npm ci
 npm start
 ```
 
-Copy `.env.example` to `.env.local` and select `APP_BRAND` and `APP_VARIANT`.
-The default local and EAS-profile brand is the unlinked `template`.
-Other client manifests remain available through explicit selection. Set
-`EXPO_PUBLIC_API_URL` for the real backend. Link the template to its own EAS
-project before cloud builds; production also requires its HTTPS API origin.
+The starter runs without `.env.local`; local and EAS profiles default to the
+`template` brand. Copy `.env.example` only when overriding the brand/variant or
+connecting a backend. `EXPO_PUBLIC_API_URL` is optional for builds and public
+screens; authentication needs a real backend. Production URLs must use HTTPS.
 Restart Metro after changing brand or variant selection. See
 [brand configuration](docs/development.md#brand-and-environment-configuration).
 Use `npx expo install <package>` for SDK-compatible dependencies.
@@ -32,6 +31,24 @@ Run `npm run typecheck` and `npm run lint` before finishing a change.
 Enable `EXPO_PUBLIC_ENABLE_DEV_SCREENS=true` to browse the native catalog, or use
 `npm run storybook:dev` for the development-only fixture browser and Controls.
 See [component previews](docs/storybook.md) for matching build/brand setup.
+
+## Build your clone
+
+Set the existing `eas.projectId` field in
+[config/brands/template.json](config/brands/template.json) to your own EAS project
+UUID. Use a project with slug `expo-mobile-template` to match the default
+manifest. That is the only required repository setting for a starter build;
+the EAS owner is optional and no backend or Firebase setup is required.
+
+After signing in to your Expo account, run:
+
+```sh
+npx eas-cli@latest build --platform android --profile development
+```
+
+The existing `preview`, `production`, and iOS profiles use the same project ID.
+EAS handles the usual account access and signing setup. For another brand,
+select its manifest explicitly and supply its own project ID there.
 
 ## Find the guidance
 

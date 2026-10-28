@@ -3,7 +3,10 @@
 The source now targets SDK 58; see the
 [current SDK baseline](development.md#sdk-and-native-verification-baseline).
 The standard profiles now select the unlinked default template and its grayscale
-UX wireframe. Link that brand to its own EAS project before a cloud build.
+UX wireframe. Fill only `eas.projectId` in `config/brands/template.json` to link
+your clone to its own project. The EAS slug must match `expo-mobile-template`.
+The owner and backend URL are optional for a starter build; EAS account access
+and normal platform signing still apply.
 The build records below describe Likan's earlier configuration.
 Likan remains linked to `@hyrkul/likan`, project
 `7263b456-2908-484f-891e-7279db6b447e`; select `APP_BRAND=likan` for EAS commands.

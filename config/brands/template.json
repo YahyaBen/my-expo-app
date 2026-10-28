@@ -27,5 +27,8 @@
     "image": "./assets/images/splash-icon.png",
     "backgroundColor": "#FFFFFF",
     "darkBackgroundColor": "#111111"
+  },
+  "eas": {
+    "projectId": ""
   }
 }

@@ -15,9 +15,12 @@ for operator commands. Keep configuration in these existing owners:
 - `APP_BRAND` selects identity; `APP_VARIANT` selects development, preview or
   production. Preserve existing identifiers and Firebase mappings. Variants do
   not automatically suffix IDs; a side-by-side app needs its own identity.
-- Local and standard build profiles default to the unlinked template. Production
-  requires explicit brand, EAS references and API configuration. Client profiles
-  select their own manifest explicitly; never fall back to another client's project.
+- Local and standard build profiles default to the template in every variant.
+  A clone fills its existing `eas.projectId` slot; `eas.owner` is optional.
+  Keep an empty slot usable locally and omit it from public EAS metadata.
+  Production requires a project ID and disabled developer flags. A backend URL
+  is optional for building; when supplied, production requires HTTPS. Client
+  profiles select their own manifest explicitly; never reuse another client's project.
 - Native modules read only public metadata. Do not import Node resolution,
   filesystem, full manifests or private environment values into the app.
 - Presentation selects registered palette, heading font, launch artwork, initial
