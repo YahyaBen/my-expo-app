@@ -46,6 +46,25 @@ cover direction and appearance. The count and renderer controls let a single
 fixture reproduce each workload. Story registration is development-only, so
 these fixtures establish reproducible stress cases rather than release timings.
 
+## Settings
+
+Settings keeps one bounded native FieldGroup as its scroll owner. Read-only
+permission refreshes wait for a visible, foreground canvas. The location hook
+owns location reads; the general permission refresh excludes it. When location
+is disabled in app preferences, automatic location/service reads stop.
+
+Unchanged permission snapshots retain their references so returning to Settings
+does not rebuild the full form for equivalent native results. Location refresh
+dependencies use the permission flags, not response-object identity. Explicit
+requests retain their pending/duplicate guards and returning from system Settings
+still refreshes status. The first section reserves the measured header inset so
+its controls do not begin beneath the header's touch shield.
+
+Use **Wireframes/Preferences** to check scrolling while permissions settle,
+repeated foreground returns, language-sheet dismissal, live RTL, large text and
+location enable/disable. Confirm permission prompts and coordinates on a device;
+static checks do not establish Settings frame times.
+
 ## Carousel scroll work
 
 Story List, Stacked Carousel and Circular Carousel capture interpolation ranges,

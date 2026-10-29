@@ -104,7 +104,12 @@ export function SettingsPage({
     />
   );
   return (
-    <PageFrame title={t('settings.title')} onBack={tab ? undefined : back} scrollsBehindHeader>
+    <PageFrame
+      title={t('settings.title')}
+      onBack={tab ? undefined : back}
+      headerOverlay={false}
+      scrollsBehindHeader
+    >
       <SettingsViewport tab={tab}>
         <UniversalHost
           // Recreate only this iOS form host when direction flips; reused native cells mirror text.
@@ -125,7 +130,11 @@ export function SettingsPage({
               testID="app-settings-appearance"
             >
               <FieldGroup.SectionHeader>
-                <SettingsSectionHeading label={t('settings.appearance')} language={language} />
+                <SettingsSectionHeading
+                  label={t('settings.appearance')}
+                  language={language}
+                  first
+                />
               </FieldGroup.SectionHeader>
               <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
                 <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>

@@ -1,8 +1,9 @@
 import * as Location from 'expo-location';
 import { useIsFocused } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Linking } from 'react-native';
 import { useAppActive } from '@/hooks/use-motion-enabled';
+import { PerformanceReadyContext } from '@/context/performance-ready.context';
 import { openLocationServicesSettings, requestLocationServices } from './location-services';
 import { isDeviceFeatureEnabled, useDevicePreferences } from '@/lib/device-preferences';
 import type { DevicePermission } from '@/lib/device-permissions';
@@ -13,6 +14,8 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
   const enabled = preferences.ready && preferences.enabled.location;
   const focused = useIsFocused();
   const active = useAppActive();
+  const ready = useContext(PerformanceReadyContext);
+  const visible = focused && active && ready !== false;
   const mounted = useRef(false);
   const busy = useRef(false);
   const [permission, setPermission] = useState<Location.LocationPermissionResponse | null>(null);
@@ -31,12 +34,12 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
   }, []);
 
   useEffect(() => {
-    if (!focused || !active || pending) return;
+    if (!visible || !enabled || pending) return;
     let disposed = false;
     void Promise.all([Location.getForegroundPermissionsAsync(), Location.hasServicesEnabledAsync()])
       .then(([nextPermission, enabled]) => {
         if (disposed) return;
-        setPermission(nextPermission);
+        setPermission((current) => retainPermission(current, nextPermission));
         setServicesEnabled(enabled);
         if (!nextPermission.granted || !enabled) setPosition(null);
       })
@@ -46,10 +49,10 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
     return () => {
       disposed = true;
     };
-  }, [active, focused, pending, permissionChanged]);
+  }, [visible, enabled, pending, permissionChanged?.granted, permissionChanged?.canAskAgain]);
 
   async function requestLocation() {
-    if (busy.current || !mounted.current || !focused || !active || !enabled) return;
+    if (busy.current || !mounted.current || !visible || !enabled) return;
     busy.current = true;
     setPending(true);
     setError(null);
@@ -58,7 +61,7 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
       let nextPermission = await Location.getForegroundPermissionsAsync();
       if (!mounted.current) return;
       if (!nextPermission.granted && !nextPermission.canAskAgain) {
-        setPermission(nextPermission);
+        setPermission((current) => retainPermission(current, nextPermission));
         await openSettings(nextPermission);
         return;
       }
@@ -66,7 +69,7 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
         nextPermission = await Location.requestForegroundPermissionsAsync();
       }
       if (!mounted.current) return;
-      setPermission(nextPermission);
+      setPermission((current) => retainPermission(current, nextPermission));
       if (!nextPermission.granted || !isDeviceFeatureEnabled('location')) return;
       let enabled = await Location.hasServicesEnabledAsync();
       if (!mounted.current) return;
@@ -113,4 +116,21 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
     requestLocation,
     openSettings,
   };
+}
+
+/** Preserve native form identity when a refresh returns the same small OS snapshot. */
+function retainPermission(
+  current: Location.LocationPermissionResponse | null,
+  next: Location.LocationPermissionResponse,
+) {
+  const unchanged =
+    current !== null &&
+    current.status === next.status &&
+    current.expires === next.expires &&
+    current.granted === next.granted &&
+    current.canAskAgain === next.canAskAgain &&
+    current.ios?.scope === next.ios?.scope &&
+    current.ios?.accuracy === next.ios?.accuracy &&
+    current.android?.accuracy === next.android?.accuracy;
+  return unchanged ? current : next;
 }
