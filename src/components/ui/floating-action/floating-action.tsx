@@ -1,6 +1,6 @@
 import { useThemeColors } from '@/hooks/use-theme';
 import { Icon, type IconName } from '../icon/icon';
-import * as Haptics from 'expo-haptics';
+import { triggerHaptic } from '@/lib/haptics';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { NativeFloatingActionButton } from './floating-action-button';
 
@@ -56,13 +56,7 @@ export function FloatingActionButton({
       label={label}
       onPress={() => {
         if (disabled) return;
-        if (process.env.EXPO_OS === 'android') {
-          void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Context_Click).catch(
-            () => {},
-          );
-        } else {
-          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-        }
+        triggerHaptic('action');
         onPress();
       }}
       disabled={disabled}

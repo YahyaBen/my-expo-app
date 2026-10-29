@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
@@ -20,6 +20,11 @@ import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
+
+const opacityInput = [-3, -2, 0, 1] as const;
+const opacityOutput = [0, 1, 1, 1] as const;
+const scaleOutput = [0.88, 0.94, 1, 1] as const;
+const reducedOpacityOutput = [0, 1, 0] as const;
 
 export type StoryListProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -195,16 +200,20 @@ function PhotoCard({
 }>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset;
+  // Stable captures avoid both per-frame arrays and mapper restarts after selection changes.
+  const { range, reducedRange, translateXOutput } = useMemo(
+    () => ({
+      range: [index - 2, index - 1, index, index + 1],
+      reducedRange: [index - 1, index, index + 1],
+      translateXOutput: [inset * 4, inset * 2, 0, -width - inset * 2],
+    }),
+    [index, inset, width],
+  );
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
     if (reducedMotion) {
       return {
-        opacity: interpolate(
-          position,
-          [index - 1, index, index + 1],
-          [0, 1, 0],
-          Extrapolation.CLAMP,
-        ),
+        opacity: interpolate(position, reducedRange, reducedOpacityOutput, Extrapolation.CLAMP),
         transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
       };
     }
@@ -212,16 +221,13 @@ function PhotoCard({
     // new native transforms on every scroll frame.
     const distance = position - index;
     if (distance <= -3 || distance >= 1) return { opacity: 0 };
-    const range = [index - 2, index - 1, index, index + 1];
     return {
-      opacity: interpolatePhotoMotion(distance, [-3, -2, 0, 1], [0, 1, 1, 1]),
+      opacity: interpolatePhotoMotion(distance, opacityInput, opacityOutput),
       transform: [
         {
-          translateX:
-            interpolatePhotoMotion(position, range, [inset * 4, inset * 2, 0, -width - inset * 2]) *
-            (rtl ? -1 : 1),
+          translateX: interpolatePhotoMotion(position, range, translateXOutput) * (rtl ? -1 : 1),
         },
-        { scale: interpolatePhotoMotion(position, range, [0.88, 0.94, 1, 1]) },
+        { scale: interpolatePhotoMotion(position, range, scaleOutput) },
       ],
     };
   });

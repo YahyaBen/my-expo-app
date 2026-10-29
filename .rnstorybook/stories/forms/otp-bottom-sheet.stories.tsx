@@ -67,6 +67,14 @@ function OtpDemo({
 const meta = {
   title: 'Forms/OTP',
   component: OtpDemo,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Verify 123456 for success feedback; any other complete code gives error feedback. Successful resend confirms once; failed requests give error feedback. Incomplete input, pending/duplicate submissions and cooldown taps stay silent. Dismiss during a request to check late completion stays silent. Reopening and typing digits must not request haptics.',
+      },
+    },
+  },
   args: { colorScheme: 'light', resendCooldownSeconds: 0 },
   argTypes: {
     resendCooldownSeconds: { control: 'number' },
@@ -91,3 +99,5 @@ type Story = StoryObj<typeof meta>;
 export const Light: Story = {};
 
 export const RequestFailure: Story = { args: { requestFailure: true } };
+export const ResendFailure: Story = { args: { resendFailure: true } };
+export const Cooldown: Story = { args: { resendCooldownSeconds: 5 } };

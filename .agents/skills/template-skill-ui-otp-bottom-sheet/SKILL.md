@@ -49,7 +49,7 @@ Source: [otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
 - Feedback uses existing declarative Reanimated CSS keyframes and respects
   activity/reduced motion. Preserve verification/resend guards independently.
 
-The [showcase](../../../src/features/ui-showcase/bottom-sheet-screen.tsx)
+The [showcase](../../../.rnstorybook/components/catalog/bottom-sheet-preview.tsx)
 uses local simulation: only `123456` succeeds and resend sends no message.
 Verify reopening, native autofill/keyboard, incomplete/duplicate submissions,
 request failure, cooldown expiry across backgrounding and late completions.

@@ -20,6 +20,6 @@ Source: [segmented-control/](../../../src/components/ui/segmented-control/).
   surfaces without a custom glass layer.
 - The public declaration owns props; both platform adapters import it directly.
 
-Use the [showcase](../../../src/features/ui-showcase/segments-screen.tsx)
-at `/ui-component/segments`. Verify selection, option names/IDs, light/dark,
+Use the [showcase](../../../.rnstorybook/components/catalog/segments-preview.tsx)
+in **Wireframes/Component Gallery**. Verify selection, option names/IDs, light/dark,
 RTL, large text and actual touch behavior on both platforms.

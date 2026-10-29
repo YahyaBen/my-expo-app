@@ -4,16 +4,28 @@
     "platforms": ["ios", "android"],
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
+    "locales": {
+      "en": "./config/locales/en.json",
+      "fr": "./config/locales/fr.json",
+      "ar": "./config/locales/ar.json"
+    },
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "predictiveBackGestureEnabled": false,
-      "blockedPermissions": [
+      "permissions": [
+        "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_MEDIA_IMAGES",
@@ -29,11 +41,18 @@
       "expo-sharing",
       "expo-web-browser",
       [
+        "expo-notifications",
+        {
+          "defaultChannel": "default",
+          "enableBackgroundRemoteNotifications": false
+        }
+      ],
+      [
         "expo-camera",
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to take photos when you use the camera.",
-          "microphonePermission": false,
-          "recordAudioAndroid": false
+          "microphonePermission": "Allow $(PRODUCT_NAME) to record audio when you use video recording.",
+          "recordAudioAndroid": true
         }
       ],
       [
@@ -41,7 +60,7 @@
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to select a photo from your library.",
           "cameraPermission": "Allow $(PRODUCT_NAME) to take photos when you use the camera.",
-          "microphonePermission": false
+          "microphonePermission": "Allow $(PRODUCT_NAME) to record audio when you use video recording."
         }
       ],
       [
@@ -54,7 +73,8 @@
           "locationFullAccuracyPermission": false
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "./config/with-android-permissions"
     ],
     "experiments": {
       "typedRoutes": true

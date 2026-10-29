@@ -20,6 +20,6 @@ The wrapper re-exports Expo props and guards disabled callbacks.
 - There are no `checked`, `onChange`, RN `style`, `color` or children props.
   Persistence and validation stay in the feature/form owner.
 
-Use the [showcase](../../../src/features/ui-showcase/checkbox-screen.tsx)
-at `/ui-component/checkbox` to verify independent choices, reset, disabled
+Use the [showcase](../../../.rnstorybook/components/catalog/checkbox-preview.tsx)
+in **Wireframes/Component Gallery** to verify independent choices, reset, disabled
 checked/unchecked values, long labels, RTL and native accessibility.

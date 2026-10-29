@@ -1,7 +1,7 @@
 import { DarkTheme, DefaultTheme } from 'expo-router';
-import Colors, { type AppColorScheme, type ColorTokens } from './colors';
+import type { AppColorScheme, ColorTokens } from './themes/tokens';
 
-export function navigationTheme(scheme: AppColorScheme, colors: ColorTokens = Colors[scheme]) {
+export function navigationTheme(scheme: AppColorScheme, colors: ColorTokens) {
   const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
   return {
     ...base,

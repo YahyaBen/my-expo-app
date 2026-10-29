@@ -2,7 +2,7 @@
 
 [Documentation index](index.md) · [Performance skill](../.agents/skills/template-skill-performance/SKILL.md)
 
-Use this guide to make Foodiya performance investigations repeatable. The
+Use this guide to make template performance investigations repeatable. The
 [implementation skill](../.agents/skills/template-skill-implementation/SKILL.md) owns
 architecture and verification rules; component skills own native composition.
 Source inspection and passing static checks do not establish device performance.
@@ -23,15 +23,15 @@ budgets from those observations instead of adopting Discord's percentages.
 
 ## Scenarios
 
-| Scenario             | Procedure                                                                           | Observe                                                                    |
-| -------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Cold and warm launch | Open Home signed out and with a cached session; record launch conditions explicitly | Native startup, JS loading, technical readiness and visible interactivity  |
-| Session recovery     | Repeat offline, expired-session and restoration-error paths                         | Usable recovery, duplicate work, retry latency and retained cached content |
-| Retained tabs        | Visit every tab, then repeat the same idle and scroll recording                     | UI/render work, CPU, memory and growth after repeated navigation           |
-| Search               | Type and clear the same query against fixed datasets                                | Input latency, expensive commits and derived-data work                     |
-| Motion               | Compare Default/Dunes/Rain, then background/resume and navigate Back                | Decorative activity, blur correctness, slow frames and native hit targets  |
-| Collections          | Scroll fixed 24/200/1,000-row fixtures with mixed heights and long text             | Mounted rows, blank gaps, frame deadlines and memory settling              |
-| Future media feeds   | Repeat with realistic thumbnails, cache hits/misses and failed loads                | Decode/request cost, stable row geometry and retained image memory         |
+| Scenario             | Procedure                                                                          | Observe                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Cold and warm launch | Open the neutral wireframe in a release build; record launch conditions explicitly | Native startup, JS loading, technical readiness and visible interactivity  |
+| Session recovery     | When adding auth, repeat offline and restoration-error paths                       | Usable recovery, duplicate work, retry latency and retained cached content |
+| Retained tabs        | When adding tabs, repeat the same idle and scroll recording                        | UI/render work, CPU, memory and growth after repeated navigation           |
+| Search               | Type and clear the same query against fixed datasets                               | Input latency, expensive commits and derived-data work                     |
+| Motion               | Compare Default/Dunes/Rain, then background/resume and navigate Back               | Decorative activity, blur correctness, slow frames and native hit targets  |
+| Collections          | Scroll fixed 24/200/1,000-row fixtures with mixed heights and long text            | Mounted rows, blank gaps, frame deadlines and memory settling              |
+| Future media feeds   | Repeat with realistic thumbnails, cache hits/misses and failed loads               | Decode/request cost, stable row geometry and retained image memory         |
 
 Repeat affected scenarios with Arabic/RTL, large text and reduced motion. Verify
 keyboard, safe-area and touch behavior when page geometry or native ownership
@@ -46,14 +46,47 @@ cover direction and appearance. The count and renderer controls let a single
 fixture reproduce each workload. Story registration is development-only, so
 these fixtures establish reproducible stress cases rather than release timings.
 
+## Carousel scroll work
+
+Story List, Stacked Carousel and Circular Carousel capture interpolation ranges,
+output values and fixed geometry outside their per-frame style worklets. The
+scroll path still updates shared values on the UI runtime; React handles selection
+changes rather than scroll frames. Geometry-dependent arrays keep stable identities
+until their geometry changes, avoiding mapper restarts on selection updates. Keep temporary curve arrays out
+of that hot path when changing the motion.
+
+The allocation change preserves the existing curve values, culling, snap points,
+RTL mirroring and reduced-motion branches. Compare the existing Light, RTL and
+Compact stories with slow drags, fast flicks, edge cards, scale changes and rotation.
+Numerical style comparisons establish equivalent math, not device frame rates.
+
 ## Startup interpretation
 
-The [root layout](../src/app/_layout.tsx) owns fonts, saved preferences, session
-restoration, initial page layout and launch completion. The
+The [root layout](../src/app/_layout.tsx) owns fonts, saved preferences, language,
+initial page layout and launch completion; starter startup has no auth restoration. The
 [launch-screen skill](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) owns the
 configured presentation lifecycle. Record readiness and presentation separately:
 the branded hold and slide are intentional product timing, not evidence of slow
 storage or rendering.
+
+The branded hold counts visible foreground time from its first native layout,
+overlapping preference/page preparation. The exit still waits for both readiness
+and that hold. It does not add a fresh two-second wait after preparation completes.
+Background time does not count; the existing slide and reduced-motion behavior remain.
+
+The existing readiness context also gates content motion underneath the launch
+overlay. Story canvases combine it with native route focus, so retained canvases
+stop their shared animation clocks when covered by another route. The branded
+overlay sits outside this content gate and keeps its own foreground guards.
+Standalone previews remain animated unless an explicit gate disables them.
+
+Home's code entry and circular scale control own local state in their respective
+previews. Editing them does not update the gallery parent or its sibling images.
+Use **Motion/Transitions/PausedContent** to pause visible header/skeleton motion
+without losing the input draft. Use **Components/Launch Screen/Waiting**, wait
+for the visible hold, then set its `waiting` Control to false to inspect the overlap. These
+fixtures do not establish native frame times; check launch, rapid Back round trips,
+background/resume and reduced motion on a matching iPhone and Android build.
 
 [The performance adapter](../src/lib/performance.ts) uses the installed SDK's
 [Expo Observe API](https://docs.expo.dev/versions/v58.0.0/sdk/observe/).
@@ -74,21 +107,18 @@ attribute starts when the performance module is evaluated, **not at native
 process creation**. `getStartupTimings()` returns a bounded snapshot even when
 the native metrics modules are absent.
 
-| Event                              | Milestone                                                                                          |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `app.startup.fonts_ready`          | Heading fonts resolved, including the fallback on load error                                       |
-| `app.startup.preferences_ready`    | Appearance, language and header preferences hydrated                                               |
-| `app.startup.session_ready`        | Authentication restoration resolved without a restoration error                                    |
-| `app.startup.page_layout_ready`    | The initial page or recovery frame reported native layout                                          |
-| `app.startup.content_ready`        | Fonts, preferences, successful session resolution and initial layout are ready beneath the overlay |
-| `app.startup.interactive`          | Successful startup is laid out, the launch overlay has exited and the app is active                |
-| `app.startup.recovery_interactive` | A recovery frame is laid out, the launch overlay has exited and the app is active                  |
+| Event                           | Milestone                                                                           |
+| ------------------------------- | ----------------------------------------------------------------------------------- |
+| `app.startup.fonts_ready`       | Heading fonts resolved, including the fallback on load error                        |
+| `app.startup.preferences_ready` | Appearance, language and header preferences hydrated                                |
+| `app.startup.page_layout_ready` | The initial usable page reported native layout                                      |
+| `app.startup.content_ready`     | Fonts, preferences and initial layout are ready beneath the overlay                 |
+| `app.startup.interactive`       | Successful startup is laid out, the launch overlay has exited and the app is active |
 
-Preference/session hydration runs concurrently with font loading. Native content
+Preference/language hydration runs concurrently with font loading. Native content
 still waits for fonts or their fallback. Keep the once-per-runtime milestones
-separate from navigation metrics and repeat launches in a fresh runtime. Recovery
-may later succeed after a retry; its initial event does not claim a successful
-session.
+separate from navigation metrics and repeat launches in a fresh runtime. Optional
+auth workflows should add their own session/recovery measurements when introduced.
 
 [PageFrame](../src/components/ui/page/page-frame.tsx) uses
 [the page performance hook](../src/hooks/use-page-performance.ts) to mark an

@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { View } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import LoadingScreen from '@/features/ui-showcase/loading-screen';
+import LoadingScreen from '../../components/catalog/loading-preview';
 
 type State =
   'loading' | 'offline' | 'disabled' | 'error' | 'empty' | 'ready' | 'refreshing' | 'refresh-error';

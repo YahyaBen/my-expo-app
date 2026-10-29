@@ -3,15 +3,14 @@
 Use [the documentation index](index.md) for guides and [the skill index](skills.md)
 for task selection. Keep one maintained owner for each topic.
 
-| Material                                           | Owner                                              |
-| -------------------------------------------------- | -------------------------------------------------- |
-| Introduction and quick start                       | Root `README.md`                                   |
-| Project-wide constraints and verification          | `AGENTS.md`                                        |
-| Skill discovery                                    | `docs/skills.md`                                   |
-| Human setup, architecture and operations           | Focused guides in `docs/`                          |
-| Agent workflow or component contract               | Its `.agents/skills/<name>/SKILL.md`               |
-| Substantial detail needed only for a specific task | That skill's own `references/`                     |
-| Dated observations                                 | Historical reports, clearly separated in the index |
+| Material                                           | Owner                                |
+| -------------------------------------------------- | ------------------------------------ |
+| Introduction and quick start                       | Root `README.md`                     |
+| Project-wide constraints and verification          | `AGENTS.md`                          |
+| Skill discovery                                    | `docs/skills.md`                     |
+| Human setup, architecture and operations           | Focused guides in `docs/`            |
+| Agent workflow or component contract               | Its `.agents/skills/<name>/SKILL.md` |
+| Substantial detail needed only for a specific task | That skill's own `references/`       |
 
 ## Independent skills
 
@@ -35,6 +34,12 @@ generic advice, repeated project rules, exhaustive examples and historical logs.
 Do not duplicate component contracts in human guides or source-folder READMEs.
 Keep references only when they contain useful detail that does not belong in the
 entry point.
+
+Direct upstream exports share the native layout skill; do not create a separate
+skill for each alias. Keep distinct skills for controls with project-owned
+behavior or platform adaptations. Maintain current guidance rather than dated
+audit reports: move unresolved work and useful regression scenarios into the
+owning guide before removing a superseded document. Git retains the history.
 
 ## Verification
 

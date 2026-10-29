@@ -1,6 +1,7 @@
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dismissAlert, getAlert, subscribeAlerts, type AlertOptions } from '@/lib/alerts';
+import { triggerHaptic } from '@/lib/haptics';
 import { UniversalHost } from '../host/universal-host';
 import { NativeAlert } from './native-alert';
 
@@ -21,6 +22,9 @@ const titleKeys = {
 /** Mount while visible; Expo UI owns the native modal and its accessibility. */
 export function Alert({ variant, title, message, onDismiss, colorScheme }: Readonly<AlertProps>) {
   const { t } = useTranslation();
+  useEffect(() => {
+    if (variant !== 'info') triggerHaptic(variant);
+  }, [variant]);
   return (
     <UniversalHost
       colorScheme={colorScheme}

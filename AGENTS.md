@@ -1,6 +1,17 @@
 This is an Expo/React Native application for iOS and Android. Prioritize native
 behavior, performance and compatibility across both platforms.
 
+## Simplicity and performance
+
+- Keep it simple: use the smallest clear implementation and reuse existing owners.
+  Add abstractions, providers, dependencies or persisted state only for a current need.
+- Treat startup, responsiveness, memory and idle work as acceptance criteria.
+  Keep unused integrations out of startup and developer tooling out of releases.
+- Preserve native behavior, accessibility and stable `testID` props. Keep this
+  template free of automated test suites; use static checks and native verification.
+- Measure before optimizing. Do not add speculative memoization or caching, or
+  claim device performance gains from source inspection or bundle size alone.
+
 ## Skills and documentation
 
 - Find the skill matching the task in [the skill index](docs/skills.md).

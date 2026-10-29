@@ -44,7 +44,7 @@ There are no style, snap-point, padding, ref, modifier or dismissal-lock props.
   Native appearance follows root app appearance. An isolated React Host
   override does not prove that the entire native modal or live RTL is updated.
 
-Use the [in-app showcase](../../../src/features/ui-showcase/bottom-sheet-screen.tsx)
-at `/ui-component/bottom-sheet` for details, transactional drafts and scrolling.
+Use the [in-app showcase](../../../.rnstorybook/components/catalog/bottom-sheet-preview.tsx)
+in **Wireframes/Component Gallery** for details, transactional drafts and scrolling.
 Verify reopening, draft discard, Android Back/backdrop, final-action reachability,
 keyboard focus and native appearance on both platforms.

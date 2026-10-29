@@ -27,5 +27,5 @@ Source: [list-item/](../../../src/components/ui/list-item/).
 
 Use translated text and the owning Host's theme. Check padding-edge taps,
 first/middle/last corners, compound slots, disabled state and RTL on both platforms.
-Examples: [List showcase](../../../src/features/ui-showcase/list-screen.tsx)
-and [FieldGroup showcase](../../../src/features/ui-showcase/field-group-screen.tsx).
+Examples: [List showcase](../../../.rnstorybook/components/catalog/list-preview.tsx)
+and [FieldGroup showcase](../../../.rnstorybook/components/catalog/field-group-preview.tsx).

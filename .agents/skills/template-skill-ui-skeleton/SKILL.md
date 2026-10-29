@@ -33,4 +33,4 @@ use explicit error/empty presentation after resolution.
 
 Check shape bounds, theme colors, decorative accessibility, reduced motion and
 background/focus transitions with the
-[Skeleton showcase](../../../src/features/ui-showcase/skeleton-screen.tsx).
+[Skeleton showcase](../../../.rnstorybook/components/catalog/skeleton-preview.tsx).

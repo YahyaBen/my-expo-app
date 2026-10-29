@@ -1,4 +1,4 @@
-import { useEffect, type PropsWithChildren } from 'react';
+import { useContext, useEffect, type PropsWithChildren } from 'react';
 import { Appearance, View } from 'react-native';
 import { useIsFocused } from 'expo-router';
 
@@ -10,6 +10,7 @@ import {
   type ColorSchemePreference,
 } from '@/context/theme.context';
 import { useThemeColors } from '@/hooks/use-theme';
+import { PerformanceReadyContext } from '@/context/performance-ready.context';
 
 export type StoryThemeProps = {
   themeId?: ThemeId;
@@ -42,6 +43,7 @@ function StoryCanvas({
   const { colorScheme } = useThemeSettings();
   const colors = useThemeColors();
   const focused = useIsFocused();
+  const ready = useContext(PerformanceReadyContext);
   // Native presentations also need the selected appearance outside a Host.
   useEffect(() => {
     if (!focused) return;
@@ -51,5 +53,9 @@ function StoryCanvas({
         restoreColorScheme === 'system' ? 'unspecified' : restoreColorScheme,
       );
   }, [colorScheme, restoreColorScheme, focused]);
-  return <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>;
+  return (
+    <PerformanceReadyContext.Provider value={ready !== false && focused}>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
+    </PerformanceReadyContext.Provider>
+  );
 }

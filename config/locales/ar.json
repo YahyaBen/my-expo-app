@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "NSCameraUsageDescription": "اسمح لـ $(PRODUCT_NAME) بالتقاط الصور عند استخدام الكاميرا.",
+    "NSPhotoLibraryUsageDescription": "اسمح لـ $(PRODUCT_NAME) باختيار صورة من مكتبتك.",
+    "NSLocationWhenInUseUsageDescription": "اسمح لـ $(PRODUCT_NAME) بعرض موقعك الحالي في الإعدادات.",
+    "NSMicrophoneUsageDescription": "اسمح لـ $(PRODUCT_NAME) بتسجيل الصوت عند استخدام تسجيل الفيديو."
+  }
+}

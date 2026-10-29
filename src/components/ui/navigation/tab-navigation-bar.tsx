@@ -4,6 +4,7 @@ import { Icon } from '../icon/icon';
 import { StyleSheet, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
+import { triggerHaptic } from '@/lib/haptics';
 import {
   FloatingActionButton,
   type FloatingActionButtonProps,
@@ -76,7 +77,10 @@ export function TabNavigationBar({
           color={selected ? colors.tabBarActive : colors.tabBarInactive}
           selectedBackgroundColor={colors.tabBarSelectedBackground}
           testID={item.testID ?? `tab-${item.id}`}
-          onPress={() => onSelect(item.id)}
+          onPress={() => {
+            if (!selected) triggerHaptic('selection');
+            onSelect(item.id);
+          }}
         />
       </Column>
     );

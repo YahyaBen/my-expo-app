@@ -1,255 +1,94 @@
 # Development
 
-This iOS/Android starter uses Expo SDK 58 and native Expo UI. Keep non-route code
-outside `src/app/`; read the [architecture](architecture.md) and [UI guide](ui.md).
-
-## Run and check
-
-Use a supported Node release (22.18+, 24.3+ or 26+) and `npm ci`, then `npm start`. Configure `EXPO_PUBLIC_API_URL`
-in `.env.local` for your backend. `package-lock.json` is the canonical lockfile;
-use npm so the existing `package.json` overrides apply locally and in CI.
-Retain that lockfile and use `npx expo install`
-when explicitly adding a dependency. Installed packages are intentionally retained,
-including packages for future features; unused packages are not a reason to remove them.
-
-Dependencies use their published source without postinstall patches. Keep native
-UI adaptations in the existing TypeScript component adapters and use supported
-Expo APIs instead of rewriting installed packages.
-
-- `npm run typecheck` checks application and retained native story sources.
-- `npm run lint` checks with zero warnings allowed.
-- `npm run check` additionally checks formatting.
-- `npm run format:check` checks maintained source, docs, skills, configuration and
-  native stories. `npm run format` writes formatting to the same scopes. Both
-  avoid traversing generated folders such as `.expo/`; keep their scopes aligned
-  when adding a new source root. New files inside these scopes are included even
-  before they are tracked by Git. Existing `.prettierignore` exclusions still apply.
-- `npm run storybook:generate` updates native story registration.
-
-The GitHub quality workflow runs the same `npm run check` after installing locked
-dependencies and generating native story registration. Automated suites and
-Maestro flows are absent. Keep stable native selectors and verify changed
-interactions through the existing native examples; do not restore historical
-test commands as part of normal feature work.
-
 ## SDK and native verification baseline
 
-The SDK 58 upgrade resolves Expo 58.0.19, `@expo/ui` 58.0.23, Expo Router 58.0.26,
-React 19.3.0 and React Native 0.88.0. Keep Expo packages,
-`@expo/ui`, Expo Router and native dependencies aligned through
-`npx expo install --fix --npm` and the committed npm lockfile. The SDK 57 UI/Router pins and their
-install exclusions have been replaced by this compatible dependency set.
-Skia is intentionally pinned to 2.15.2 through the npm alias
-`@shopify/react-native-skia: npm:react-native-skia@2.15.2`, retaining existing
-imports while using the published package name. Its `expo.install.exclude`
-entry keeps Expo's SDK 58 recommendation of 2.14.0 from replacing this explicit
-version. Create a new development build after changing this native dependency.
-The [earlier numeric-width failure](build-verification.md#expo-ui-version) remains
-historical evidence; repeat its Host/button/input cases on the new native builds.
+This starter uses Expo SDK 58, React Native 0.88, React 19.3, Expo Router and
+`@expo/ui`. Inspect `package.json`, the lockfile and installed types before changes.
+Use [SDK 58 documentation](https://docs.expo.dev/versions/v58.0.0/) and
+`npx expo install <package>` for SDK-compatible dependencies. Keep the intentional
+Skia package alias and dependency overrides.
 
-Create matching SDK 58 development builds for iOS and Android before connecting
-them to Metro. Existing SDK 57 clients do not acquire the new native runtime from
-a JavaScript reload or EAS Update. SDK 58 generates the iOS scene lifecycle by
-default; the old `enableSceneSupport` opt-in is no longer needed.
+Use Node 22.18+, 24.3+ or 26+ with npm. `npm ci` installs the committed dependency
+graph. Native package/config changes require a matching EAS development build;
+Metro reloads and OTA updates cannot add native modules. Expo Go is insufficient
+for the complete catalog. Generated `ios/` and `android/` projects stay untracked;
+configure native behavior through app configuration and plugins.
 
-The migration follows the [SDK 58 release notes](https://expo.dev/changelog/sdk-58)
-and [Router migration guide](https://docs.expo.dev/router/migrate/sdk-57-to-58/).
-The app uses React Native's strict public types. Native compilation, interaction
-and performance checks remain pending until the new binaries run on devices.
+## Commands
 
-Local upgrade verification on 2026-10-26 passed typecheck, zero-warning lint,
-formatting, all 20 Expo Doctor checks, configuration introspection for both brands,
-and production iOS/Android Hermes bundle exports. These checks do not establish
-native compilation or device behavior.
+| Command                           | Purpose                                       |
+| --------------------------------- | --------------------------------------------- |
+| `npm start`                       | Open Storybook in a native development client |
+| `npm run storybook:dev`           | Same development catalog                      |
+| `npm run start:app`               | Open the neutral wireframe instead            |
+| `npm run android` / `npm run ios` | Local native run with installed toolchains    |
+| `npm run storybook:generate`      | Refresh story registration                    |
+| `npm run check`                   | Typecheck, lint and formatting                |
+| `npx expo-doctor`                 | Check Expo configuration/dependency health    |
 
-Development iOS/Android exports with the native Storybook catalog enabled also
-passed on the same date, covering the fixture dependencies excluded from release
-bundles. Cloud compilation still requires an accessible EAS project for the
-selected brand.
-
-Before changing startup or header motion, record the existing behavior on the
-same release-like native builds/devices used for the comparison. Record device,
-OS, configuration and sample count. Static checks and exports establish neither
-frame rates nor native interaction. If devices are unavailable, leave that
-comparison pending in the [implementation plan](white-label-template-plan.md).
+No automated tests or test scripts are included. Preserve `testID` props and
+explicit selectors in stories for later device inspection. See
+[Storybook](storybook.md) for the catalog and release bundle checks.
 
 ## Brand and environment configuration
 
-`app.json` owns shared native settings. `config/brands/*.json` owns each brand's
-name, slug, URL scheme, bundle/application IDs, app/adaptive icons, native splash
-and optional integration references. Its presentation IDs select the fixed
-palette, heading fonts, in-app launch artwork, initial header style and launch
-mode. `config/brand.js` validates and resolves the
-selected manifest for `app.config.js`. Register a new manifest in its small
-registry; do not copy identity fields into screens or the shared app config.
+The default brand is `template`. Its name, native identity, assets, EAS project ID
+and initial presentation live in `config/brands/template.json`. `config/brand.js`
+validates that manifest and `app.config.js` projects it into Expo configuration.
+The app reads only public metadata through `src/config/brand.ts`.
 
-`presentation.header` accepts `default`, `dunes`, `ribbon` or `rain`. The template
-selects Default. Its UX wireframe disables decorative header artwork,
-including previously saved effects, while preserving those saved values.
-Default uses the rectangular native header, and all three animated choices
-remain available. `presentation.launch` accepts `minimal` (the default)
-or `branded`. Minimal adds no artificial startup wait; branded keeps its
-artwork and exit. Restart Metro after changing these public metadata fields.
-See the [page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
-[launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) contracts for native
-behavior and readiness. Saved header choices use the existing storage key.
+For a starter EAS build, fill only the manifest's `eas.projectId` using a project
+with slug `expo-mobile-template`. The empty slot works for local development.
+Production configuration requires a project ID. Account access and signing are
+still handled by EAS. See [build profiles](eas-development-builds.md).
 
-Set these selectors in `.env.local` for local Expo commands:
+| Variable                        | Meaning                                                                             |
+| ------------------------------- | ----------------------------------------------------------------------------------- |
+| `APP_BRAND`                     | Registered manifest; defaults to `template`                                         |
+| `APP_VARIANT`                   | `development` (default), `preview` or `production`                                  |
+| `EXPO_PUBLIC_STORYBOOK_ENABLED` | Development defaults to enabled; exact `false` disables it; release always disabled |
+| `EXPO_PUBLIC_API_URL`           | Optional backend for retained API helpers; production requires HTTPS when set       |
+| `GOOGLE_MAPS_ANDROID_API_KEY`   | Optional package-restricted Maps key                                                |
 
-```dotenv
-APP_BRAND=template
-APP_VARIANT=development
-```
+No `.env.local` is required. The launch scripts override only their own child
+process's preview flags and development variant. EAS profiles select their own
+variant/flag. Public variables are bundled and must not contain secrets.
+`EXPO_PUBLIC_ENABLE_DEV_SCREENS` is obsolete and unused.
 
-| Setting                          | Values and behavior                                                                        |
-| -------------------------------- | ------------------------------------------------------------------------------------------ |
-| `APP_BRAND`                      | `template` (the registered default); unknown IDs fail configuration                        |
-| `APP_VARIANT`                    | `development` (default), `preview` or `production`; independent of brand and `NODE_ENV`    |
-| `EXPO_PUBLIC_API_URL`            | Absolute HTTP(S) backend base URL; omit locally to browse public screens without a backend |
-| `GOOGLE_MAPS_ANDROID_API_KEY`    | Optional key restricted to the selected brand's Android package                            |
-| `EXPO_PUBLIC_ENABLE_DEV_SCREENS` | Exact `true` enables catalog links/routes; absent or other values disable them             |
-| `EXPO_PUBLIC_STORYBOOK_ENABLED`  | Exact `true` opts into the Storybook route in development mode only                        |
+For a different product, change the manifest's name, slug, scheme, native IDs and
+assets as needed. Variants do not suffix native identities. The retained Google
+configuration files stay unchanged and inactive for the neutral identity; enable
+Firebase only with files matching the chosen package/bundle ID. No backend,
+auth restoration, permission prompt or store-update check blocks starter startup.
 
-For a fresh clone, fill the existing `eas.projectId` string in
-`config/brands/template.json` with your own EAS project UUID. Use an EAS project
-whose slug matches `expo-mobile-template`, the manifest's configured slug.
-Then run `npx eas-cli@latest build --platform android --profile development`
-while signed in to an account with access to that project. No owner, API URL or
-Firebase configuration needs to be added for the starter build. The same project
-ID serves the other standard profiles; normal platform signing still applies.
+## App and catalog ownership
 
-`template` owns the native IDs, scheme and artwork in its manifest, with an EAS
-project-ID slot and no Firebase file. It is the only registered brand.
-Variants within a brand deliberately share its identity; they replace one
-another rather than installing side by side. Add a separately registered
-identity and matching integrations if side-by-side installation is required.
+`src/app/index.tsx` selects the wireframe or redirects to Storybook. The root owns
+fonts, preference/language hydration, launch readiness, native navigation motion
+and feedback hosting. It mounts no authentication or query provider. Helpers for
+HTTP, auth, forms and session-safe queries remain available for future features,
+with no live backend configured by default.
 
-The standard EAS build profiles explicitly select `template` and their matching
-variant. Link that manifest to its own EAS project before cloud builds; it does
-not inherit another client's project or Firebase configuration. Other clients require
-explicit brand selection in a dedicated profile. The template remains the default
-when `APP_BRAND` is absent, including production. Production requires the selected
-brand's project ID and rejects either developer catalog or Storybook
-flag set to exact `true`; use a development or preview variant for those tools.
-The owner is optional. A backend URL is optional for building and public screens;
-when supplied in production it must use HTTPS. An empty project ID is omitted
-from public config and rejected for production. Asset existence and Android Firebase package matching
-are checked during config resolution. These checks do not verify cloud access or
-whether the backend is reachable.
+Reusable native UI lives in `src/components/ui/`. All example compositions,
+including Home sections and device preferences, live in `.rnstorybook/components/`.
+Use native stories to browse and interact. Components receive data and callbacks;
+future routes/screens stay in `src/app/` and `src/features/` respectively.
 
-The `development-device` profile extends `development` for a physical iOS device;
-`development` itself retains its simulator target. The starter's dormant native
-permissions, Firebase defaults, push gaps and OTA requirements are described in
-[integration readiness](eas-development-builds.md#integration-readiness).
+## Verification
 
-Select the same brand/variant for Metro, configuration, builds and any later
-submission/update command. EAS build-profile variables do not automatically apply
-to an independent local command. Keep API values in the selected EAS environment;
-do not use `NODE_ENV` as an environment selector. For example, in PowerShell:
+Run lint, typecheck, formatting and story generation for edits. Check both native
+release graphs after tooling-entry changes. Keep static results separate from
+device results and live-backend results. Manual device checks include cold start,
+safe areas, dark mode, RTL, large text, keyboard, native Back, gestures, reduced
+motion and background/resume. Builds/registration do not prove those behaviors.
 
-```powershell
-$env:APP_BRAND = 'template'
-$env:APP_VARIANT = 'development'
-npm start
-```
+## Dependency audit follow-up
 
-Commands such as `npx eas-cli@latest build:run` resolve the project from the
-selected manifest. For the default template on Windows PowerShell:
-
-```powershell
-$env:APP_BRAND = 'template'
-$env:APP_VARIANT = 'development'
-npx eas-cli@latest build:run --platform android --profile development --latest
-```
-
-Its project ID belongs in `config/brands/template.json`.
-`build:run` installs an existing development build; its profile filter
-does not select the brand, load that build profile's environment or create a new
-build. Use the current CLI because `eas.json` specifies a minimum version that an
-older global `eas` installation may not satisfy.
-
-Changing native identity, icons, native splash or embedded fonts requires a matching
-native build. The local template can resolve and export without API credentials;
-auth actions require a real backend and show safe configuration feedback otherwise.
-
-Only `{ id, name, variant, presentation }` is projected to `extra.brand` for native consumers.
-Read it through `src/config/brand.ts`; do not import Node config/manifests into
-native application modules. Do not put credentials into this public metadata or
-`EXPO_PUBLIC_` values. The common API normalizer is intentionally native-safe.
-
-App-owned translated messages interpolate the public name; auth and launch use
-the selected heading font and artwork. Public asset metadata and literal native
-imports have separate small owners described in [bundled assets](assets.md).
-Restart Metro after selecting a brand, and use a native build with the matching
-embedded fonts. Arabic retains native fallback. The configured palette stays
-fixed; user System/Light/Dark appearance is saved by the existing provider.
-Component previews can select palettes locally without changing app preferences.
-See [appearance setup and verification](appearance-themes.md), the
-[launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) and
-[preview capabilities](storybook.md). These preview flags are build/update choices,
-not persisted user settings. EAS development/preview enable the catalog; production
-disables it. All profiles disable Storybook in their embedded bundles.
-
-References: [Expo dynamic configuration](https://docs.expo.dev/workflow/configuration/)
-and [app variants](https://docs.expo.dev/tutorial/eas/multiple-app-variants/).
-
-## Starter screens
-
-Home (`/`) and Settings (`/settings`) are public. UI showcase (`/ui` and
-`/ui-component/[name]`) requires the catalog flag; disabled direct URLs fall back
-to Home. Account (`/account`) requires a real authenticated session. Login,
-registration, verification and password recovery retain their real backend flows.
-The admin/admin shortcut and development guest authentication have been removed.
-
-The tab dock's center + action opens Destinations, a native bottom sheet with
-100 local sample journeys rendered by FlashList. Each row shows its origin,
-destination, departure and arrival times, and transport icon. These examples are
-illustrative and do not use live timetables.
-
-Home links to the enabled previews, Settings and Account/sign-in. Settings exposes working
-preferences and the app version. There are no recipe, onboarding, map, Skia,
-device-information, health-check or development-directory screens.
-
-The in-app catalog is the ordinary component browser. `npm run storybook:dev` starts
-Metro with an explicit development-only `/storybook` entry and Home link for the
-retained Controls/fixtures. See [component previews](storybook.md) for exact launch
-commands and native verification. Protected catalog routes retain their source
-modules in client bundles; Storybook integration is excluded from release graphs.
-
-## Source layout
-
-`src/features/home`, `auth`, `settings`, `ui-showcase` and `pages` own screen
-presentation. Shared controls live in `src/components/ui`. `src/services/auth`
-owns authentication; generic HTTP, query, pagination and mutation helpers remain
-for future backend features. Recipe-specific services, DTOs and workflows are gone.
-
-Before native testing, use an SDK-compatible development build. Static checks and
-JavaScript exports do not establish native interaction, timing or live backend behavior.
-
-## Client setup checklist
-
-1. Add and register the client's manifest through the existing
-   [brand configuration](#brand-and-environment-configuration). Set its own native
-   identifiers, scheme, assets and integration references; keep existing client
-   identities intact. Select that brand/variant consistently in local commands
-   and the intended EAS profile/environment.
-2. Register required palette/font/artwork IDs with their existing owners. Follow
-   [asset setup](assets.md) and [appearance policy](appearance-themes.md); verify
-   Arabic fallback and saved System/Light/Dark preferences. Native asset/font or
-   identity changes require a matching native build.
-3. Copy `.env.example` to `.env.local`, select the brand/variant and configure the
-   device-reachable API origin and any required integration key. Keep secrets out
-   of public environment values/metadata. Use your client's EAS owner/project and
-   environment for production; the default template is deliberately unlinked.
-4. Resolve `npx expo config --type public` with the intended selectors. Review
-   identity, assets and public metadata before building; this read-only check
-   does not prove backend access, signing or installed native behavior.
-5. Leave preview flags false for the client bundle, or explicitly enable the
-   catalog/Storybook for maintenance using the [preview guide](storybook.md).
-   Clear Metro's cache when switching flags and verify release source graphs
-   and compiled flag values as documented there.
-6. Run `npm run check`, then exercise auth, preferences, keyboard/RTL,
-   accessibility and retained animations on matching iOS/Android builds. Keep
-   native and live-backend results separate from static/export checks. For any
-   SDK/Expo UI change, follow the [adapter upgrade checklist](ui.md#adapter-responsibilities-and-upgrade-review)
-   and review the UI/Router pins together.
+The SDK-aligned dependency graph passes Expo Doctor. `npm audit` still reports
+three high-severity entries through Expo CLI's Zod 3 dependency, plus seven low
+entries. The app's direct Zod dependency is patched at 4.6.7. The collection
+validation issue is tracked in
+[GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
+The current CLI requires Zod 3; replacing it with Zod 4 needs an upstream
+compatibility change. npm's proposed force fix downgrades Expo to SDK 51, so it
+has not been applied. Review this tooling dependency when Expo ships a fix.

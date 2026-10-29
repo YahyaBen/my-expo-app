@@ -13,7 +13,7 @@ const normalizedStories = [
     files: "*.stories.?(ts|tsx|js|jsx)",
     importPathMatcher: /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/,
     req: require.context(
-      './stories/components',
+      '../.rnstorybook/stories/components',
       false,
       /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/
     ),
@@ -24,7 +24,18 @@ const normalizedStories = [
     files: "*.stories.?(ts|tsx|js|jsx)",
     importPathMatcher: /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/,
     req: require.context(
-      './stories/forms',
+      '../.rnstorybook/stories/forms',
+      false,
+      /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/
+    ),
+  },
+  {
+    titlePrefix: "",
+    directory: "./.rnstorybook/stories/wireframes",
+    files: "*.stories.?(ts|tsx|js|jsx)",
+    importPathMatcher: /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/,
+    req: require.context(
+      '../.rnstorybook/stories/wireframes',
       false,
       /^\.[\\/](?:(?!\.)(?=.)[^\\/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/
     ),

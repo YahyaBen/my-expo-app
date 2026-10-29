@@ -35,13 +35,7 @@ export function configurePerformance(environment: string) {
 }
 
 type StartupMilestone =
-  | 'fonts_ready'
-  | 'preferences_ready'
-  | 'session_ready'
-  | 'page_layout_ready'
-  | 'content_ready'
-  | 'interactive'
-  | 'recovery_interactive';
+  'fonts_ready' | 'preferences_ready' | 'page_layout_ready' | 'content_ready' | 'interactive';
 
 const startedAt = performance.now();
 const startupTimings: Partial<Record<StartupMilestone, number>> = {};

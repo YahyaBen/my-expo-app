@@ -1,137 +1,72 @@
 # Application architecture
 
-The starter keeps thin Expo Router files and native shared presentation. Home and
-Settings are public; the component catalog requires its build-time flag. Account is protected by the real
-session predicate; unauthenticated routes contain the existing auth workflow.
-There is no development guest session or local credential bypass.
+The template has one release wireframe and a development-only Storybook entry.
+`/` redirects to `/storybook` in development unless explicitly disabled.
+`/?preview=true` lets transition stories push the real wireframe and return using
+native Back. Preview/production always show the wireframe. Unknown URLs use the
+existing not-found fallback. The old auth, account, tab and showcase routes are gone.
 
-The public `(tabs)` group uses Expo Router Tabs with the shared Expo UI dock:
-Home, Search, the raised + action, My Recipes and More. Four destinations surround
-the center button. More opens the existing Settings screen. `/`, `/search`,
-`/recipes` and `/settings` retain ordinary URL navigation; authentication,
-Account and developer screens stay on the guarded root stack.
+| Responsibility                         | Owner                                                                           |
+| -------------------------------------- | ------------------------------------------------------------------------------- |
+| Routes and native stack                | `src/app/`                                                                      |
+| Release wireframe                      | `src/features/template/`                                                        |
+| Development entry and flag             | `src/features/storybook/`, `src/config/developer-tools.ts`                      |
+| Stories and demonstration compositions | `.rnstorybook/`                                                                 |
+| Shared native presentation             | `src/components/ui/`                                                            |
+| Preferences, language and direction    | Existing contexts, hooks and storage owners                                     |
+| Optional auth/form workflow kit        | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
+| HTTP, queries and session lifecycle    | `src/services/`, `src/lib/api-query-keys.ts`                                    |
+| Validation and DTOs                    | `src/validation/`, `src/types/`                                                 |
+| Build-time identity                    | `config/brand.js`, `config/brands/`, `app.config.js`                            |
+| Public brand/asset metadata            | `src/config/brand.ts`, `src/config/brand-assets.ts`, `config/brand-assets.json` |
 
-`src/features/navigation/app-tab-bar.tsx` maps route state and cancellable tab
-presses to `TabNavigationBar`. The bar owns bottom/side device insets and reserves
-the entire raised button's touch bounds in normal layout. Screen content owns
-the shared header and side insets. The center action opens a translated example
-sheet; route changes close it and the dock hides while typing. Search filters
-24 local example recipes; Home and My Recipes show the same scrollable sample
-rows. Home also composes the interactive native gallery from
-`src/features/home/home-components.tsx`, including photo carousels, a local code
-entry demonstration, appearance artwork and a photo grid. These public starter
-examples remain visible independently of the developer catalog flag. The dock
-and sample rows use flat edges, without rounded panels or shadows.
+## Startup
 
-| Responsibility                           | Owner                                                                        |
-| ---------------------------------------- | ---------------------------------------------------------------------------- |
-| Routes and access                        | `src/app/`, `src/guards/auth-guards.ts`                                      |
-| Auth workflow and forms                  | `src/features/auth/`                                                         |
-| Starter presentation                     | `src/features/home/`, `settings/`, `ui-showcase/`, `pages/`                  |
-| HTTP and session lifecycle               | `src/services/api.ts`, `src/services/auth/`                                  |
-| Response validation                      | `src/validation/schemas/api/`                                                |
-| Frontend session validation/mapping      | `src/validation/schemas/auth-session.ts`, `src/services/auth/auth.mapper.ts` |
-| Query/cache helpers                      | `src/services/query-*.ts`, `src/lib/api-query-keys.ts`                       |
-| Shared native presentation               | `src/components/ui/`                                                         |
-| Preferences                              | Existing theme, language and layout-direction contexts                       |
-| Build-time brand identity                | `config/brand.js`, `config/brands/`, `app.config.js`                         |
-| Native public brand metadata             | `src/config/brand.ts`                                                        |
-| Preview flags and fixture entry          | `src/config/developer-tools.ts`, `src/features/storybook/`, `.rnstorybook/`  |
-| Public asset metadata and native sources | `config/brand-assets.json`, `src/config/brand-assets.ts`                     |
-| Shared API configuration                 | `config/api.js`, `src/services/api.config.ts`                                |
+The root restores fonts, appearance, header/motion preferences, language and device
+feature preferences. It waits for the initial usable page layout before completing
+the configured minimal/branded launch. `app-ready` follows resource readiness,
+layout and overlay exit. It does not restore an auth session, contact a backend,
+request permissions or check store updates. Reduced motion and activity state
+remain shared native capabilities. Native stack transitions use the existing
+platform options.
 
-Routes compose screens; screen workflows call services and query options. Services
-never import UI or feature modules. Screens use the public `@components/ui` API;
-UI implementations import concrete siblings to avoid barrel cycles. Retain
-cancellation, validated responses, serialized secure storage, session generations,
-token rotation, cache clearing and duplicate-submission safeguards.
+Notification presentation is configured by Storybook, which owns the device
+examples. The release shell does not load camera/location/notification helpers.
 
-Recipe flows, product-specific entity services, their schemas/DTOs, onboarding,
-Aurora and development routes have been removed. Generic backend helpers remain
-without adding another transport, repository or dependency-injection layer.
-All installed packages are retained. Native fixtures have an explicit development
-entry, isolated from ordinary feature and shared UI imports. Metro disables
-Storybook in release mode; its sources are absent from the inspected native
-release graphs. Catalog route guards control access while retaining showcase
-modules. See [preview launch and bundle boundaries](storybook.md).
-
-Brand manifests are selected at build/config time. The Node resolver validates
-native assets and integration references; application modules read only the
-selected public projection through the native configuration accessor. Public
-asset metadata and the literal Metro registry supply heading fonts and launch
-artwork without importing full manifests. The shared
-API configuration module has no filesystem/native imports, so both Node validation
-and native transports use the same URL normalization and timeout. Refresh retains
-its independent interceptor-free transport. See
-[brand setup](development.md#brand-and-environment-configuration).
-
-The root palette comes from the selected brand and stays fixed. The existing
-theme provider restores user appearance independently from header/motion, queues
-scalar preference writes and exposes reveal readiness. Component previews use
-the same provider with persistence disabled. See [appearance policy](appearance-themes.md).
+Optional auth/query/service helpers are retained for future features and are not
+mounted by the starter. A consuming auth flow supplies its own verification
+navigation callback. Add providers only when building an actual backend feature.
+Shared UI receives data and callbacks, and never imports services or fixtures.
 
 ## Enforced import boundaries
 
-`eslint.config.js` composes each scoped import policy with the shared native-control,
-route-file and Storybook restrictions. ESLint flat-config rule options replace
-earlier options, so new scopes must use the existing `restrictImports` helper.
-The narrow Storybook exception keeps native-control and route restrictions.
+`eslint.config.js` composes scoped policies with `restrictImports`; flat-config
+rule replacement must preserve the shared restrictions.
 
-| Scope                                                                        | Enforced responsibility                                                                                                                         |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Application routes and feature screens                                       | No low-level HTTP/configuration, session storage, Axios, SecureStore or AsyncStorage imports; no showcase fixtures in product presentation      |
-| All services                                                                 | No feature presentation, shared UI or UI context dependencies                                                                                   |
-| Service `.api.ts` / `.service.ts` modules                                    | No React/native rendering, navigation or query/cache policy imports; use the shared transport and contracts                                     |
-| Schemas, DTOs, `.mapper.ts` modules, API query keys and native preview flags | No rendering, cache, transport, initialized feedback/translation, native brand accessors or storage imports                                     |
-| Shared UI implementations                                                    | No feature workflows, service/HTTP/storage imports, route files or their own public barrel; import concrete siblings and receive callbacks/data |
-| Raw auth refresh                                                             | No authenticated `api.ts`, auth endpoint or lifecycle import; preserve its independent transport                                                |
+- Routes/features consume the public `@components/ui` API and do not own raw HTTP,
+  secure storage or query transport configuration.
+- Services do not depend on feature presentation, UI components or UI contexts.
+- Endpoint transports do not own React rendering, navigation or cache policy.
+- Schemas, DTOs, mappers, query keys and preview flags remain pure.
+- UI implementations import concrete siblings, avoiding their own public barrel.
+- Auth refresh keeps its raw transport independent of authenticated interceptors.
+- Storybook imports stay in `.rnstorybook/` and its narrow feature entry. Native
+  control restrictions cover both stories and supporting preview compositions.
 
-Screen scopes cover `src/app/`, feature filenames containing `screen`, and feature
-`screens/` folders. Catalog routes, showcase compositions, the catalog page and the
-Storybook entry deliberately compose examples and have explicit exceptions. They
-retain the shared native-control and route-file policies. The Storybook feature
-alone may import Storybook packages/registration; its thin route imports that
-feature. These exceptions do not grant access to client builds; the
-[preview capability guards](storybook.md) own navigation access.
+Every example formerly mounted as a showcase screen now lives inside Storybook.
+The runtime guard, Metro integration and conditional registration import keep it
+out of releases. Verify both native graphs after entry/Metro changes; see
+[the catalog boundary](storybook.md#release-boundary).
 
-Endpoint functions and query options are valid screen dependencies. A small
-form can pass a documented endpoint call to `useAuthForm` and keep its local
-confirmation state beside the view. Recovery already does this; reset keeps its
-challenge-keyed form and mounted completion guard. Do not add another hook that
-only forwards that call. Put multi-step session/challenge coordination in the
-existing auth flow or a real feature workflow. Screens must not create clients,
-write credentials or reproduce transport/cache policy.
+## Brand and services
 
-Native `src/config/brand.ts` and `brand-assets.ts` intentionally use Expo/native
-APIs; they are not pure configuration. The Node brand resolver intentionally reads
-files. `config/api.js` remains a small native-safe URL/timeout helper, reviewed
-separately from those native and Node owners. Do not apply one blanket purity
-rule to every configuration file.
+The Node brand resolver validates assets and native references; app modules read
+only its public projection. Static asset registries keep Metro imports literal.
+The root palette comes from the manifest; preview theme providers are isolated.
+Language/device switches in the Preferences story can persist actual settings.
 
-These are static import/re-export checks using explicit source scopes and module
-names, not a complete dependency-cycle, dynamic-import or side-effect analyzer.
-Review indirect dependencies and extend the relevant scope when adding a new
-module category. Verify config changes with allowed and forbidden import probes;
-do not persist a new architecture test runner as part of ordinary feature work.
-
-## Add a feature
-
-Follow the existing responsibility chain:
-
-```text
-route → feature screen → workflow when needed → query/mutation options → endpoint
-                   ↓                 ↓
-               shared UI        pure rules/schema
-```
-
-Start with the real request/response contract, validate it at transport, then add
-only the query/mutation policy the feature needs. Keep transient form state local,
-render through `@components/ui`, and preserve stable actionable `testID` values.
-The [implementation skill](../.agents/skills/template-skill-implementation/SKILL.md)
-and [API skill](../.agents/skills/expo-api-services/SKILL.md) own detailed conventions.
-No repository, DI container or base-component hierarchy is required by this path.
-
-For component contracts use the [UI guide](ui.md); for adding real endpoints use
-[API services](api-services.md). Current checks are lint, typecheck, formatting and
-native JavaScript exports. Older reports that mention test scripts or entity
-inventories describe historical versions of the app.
+API helpers retain validated contracts, request cancellation, secure session
+storage, generation guards, token rotation and cache maintenance. Backend URLs
+are optional for the starter. Do not bypass those owners when adding real features.
+See [API services](api-services.md), [auth kit](auth-forms.md),
+[appearance](appearance-themes.md) and [brand setup](development.md#brand-and-environment-configuration).

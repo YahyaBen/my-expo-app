@@ -2,12 +2,6 @@
 
 The project uses SonarQube Community Build locally at
 [localhost:9000](http://localhost:9000/dashboard?id=my-app-expo).
-See the [2026-10-11 analysis report](sonarqube-report-2026-10-11.md) for findings.
-The [HIGH-impact fix report](sonarqube-high-impact-fixes-2026-10-11.md) records the
-first remediation pass. The [MEDIUM-impact fix report](sonarqube-medium-impact-fixes-2026-10-11.md)
-records the severity fixes. The [duplication cleanup report](sonarqube-duplication-fixes-2026-10-11.md)
-records the duplication pass. The latest session-restoration follow-up below
-retains 0.0% duplication and zero open BLOCKER, HIGH and MEDIUM findings.
 The Docker container is named `my-app-expo-sonarqube` and publishes its web port
 only on `127.0.0.1`. Its data, logs, and extensions use dedicated Docker volumes.
 This is a local evaluation instance with an embedded database.
@@ -17,24 +11,6 @@ GitHub workflows, and app/build configuration. Automated tests and their helpers
 have been removed. Generated `storybook.requires.ts` is excluded.
 Dependencies, native build output, assets, and documentation are outside the
 configured source roots. Scanner output and local credentials are Git-ignored.
-
-## Session restoration follow-up — 2026-10-11 UTC
-
-`restoreSession` in `src/services/auth/auth.lifecycle.ts` now returns its session
-snapshot once. Matching the session generation gates background refresh, and a
-named validity check preserves the treatment of expired or missing expiry dates.
-Cached identity remains available while refresh runs; failures keep the existing
-toast handling. A regression verifies that a generation change during loading
-does not schedule refresh and still returns the original snapshot.
-
-Sonar marks `S3516` and the related negated-comparison finding `S1940` **FIXED**.
-All **423 tests** passed, as did lint, typecheck and formatting. The completed
-analysis has no new issues, 118 remaining LOW findings and 0.0% duplication.
-Compute task `fb052873-f38d-4066-92dc-a1607a410686` completed with **SUCCESS** at
-**09:39:25 UTC**; analysis ID `867b26a0-d093-4cf8-882a-b501ad31eaa7`.
-The quality gate still fails solely on missing new-code coverage (0.0% against
-80%). Evidence is saved under the Git-ignored `.sonarqube-local/restore-session-*`
-files. This follow-up adds no native dependency and does not require another build.
 
 ## Start and stop
 
@@ -100,17 +76,15 @@ default.
 
 ## Interpretation limits
 
-No instrumented coverage report is configured. Passing tests does not establish
-a coverage percentage; any missing or zero SonarQube coverage is not a measured
-execution result. If a valid LCOV report is added later, provide its path with
+This checkout has no automated test suite or instrumented coverage report.
+Missing or zero SonarQube coverage is not a measured execution result. If a valid
+LCOV report is added later, provide its path with
 `-Dsonar.javascript.lcov.reportPaths=coverage/lcov.info`.
 
-The project uses TypeScript 6.0.3. Sonar's language documentation lists support
-through TypeScript 5.9.3. The analyzer created a TypeScript 6.0.3 program and
-successfully analyzed every selected JavaScript/TypeScript file; no parsing errors
-were reported. Consider the documentation discrepancy when using newer syntax.
-This analysis also does not verify native rendering or device behavior, and
-dependency vulnerability analysis was skipped.
+Check the scanner's TypeScript support against the installed compiler when
+upgrading. Inspect the current scan's diagnostics and quality gate instead of
+reusing an old issue count. Static analysis does not verify native rendering,
+device behavior or live-backend correctness.
 
 References: [official Docker image](https://hub.docker.com/_/sonarqube),
 [NPM scanner configuration](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/scanners/npm/configuring),

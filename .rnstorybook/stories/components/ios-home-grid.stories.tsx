@@ -2,26 +2,13 @@ import { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import {
-  Column,
-  IosHomeGrid,
-  UniversalButtonContent,
-  UniversalTextContent,
-  type PhotoItem,
-} from '@components/ui';
+import { Column, IosHomeGrid, UniversalButtonContent, UniversalTextContent } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import {
   AnimatedComponentPreview,
   type AnimatedComponentPreviewProps,
 } from '../../components/animated-component-preview';
-
-const photos: readonly PhotoItem[] = [
-  1018, 1015, 1016, 1025, 1039, 1043, 1011, 1020, 1024, 1035, 1040, 1042,
-].map((id, index) => ({
-  id: String(id),
-  source: `https://picsum.photos/id/${id}/600/600`,
-  label: `Photo ${index + 1}`,
-}));
+import { photoFixtures as photos } from '../../components/photo-fixtures';
 
 type GridDemoProps = AnimatedComponentPreviewProps & {
   columns: number;

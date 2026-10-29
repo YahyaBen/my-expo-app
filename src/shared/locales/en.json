@@ -236,7 +236,41 @@
       "ribbon": "Ribbon",
       "rain": "Rain"
     },
-    "reduceMotion": "Reduce motion"
+    "reduceMotion": "Reduce motion",
+    "location": {
+      "title": "Location",
+      "hint": "Request your location only when needed. Coordinates stay on this screen and are not uploaded.",
+      "allowed": "Location access allowed while using the app.",
+      "denied": "Location access denied. You can change this in device settings.",
+      "notRequested": "Location access has not been requested.",
+      "servicesOff": "Location services are off. Enable them in device settings.",
+      "servicesOffIOS": "On iPhone or iPad, go to Settings > Privacy & Security > Location Services and turn on Location Services, then return here.",
+      "enableLocation": "Enable location",
+      "getLocation": "Get current location",
+      "locating": "Finding your location…",
+      "openSettings": "Open device settings",
+      "latitude": "Latitude: {{value}}",
+      "longitude": "Longitude: {{value}}",
+      "accuracy": "Approximate accuracy: {{value}} m",
+      "requestFailed": "Unable to get your location. Check location services and try again.",
+      "settingsFailed": "Unable to open device settings. Open them manually to manage location access.",
+      "disabledInApp": "Location is disabled in this app. Turn on Use location above to enable it."
+    },
+    "permissions": {
+      "title": "Permissions",
+      "notifications": "Notifications",
+      "camera": "Camera",
+      "microphone": "Microphone",
+      "photos": "Photos",
+      "location": "Use location",
+      "haptics": "Haptic feedback",
+      "notificationsHint": "Use device settings to turn off notifications or revoke system access.",
+      "requestFailed": "Unable to update permission. Check device settings and try again.",
+      "settingsFailed": "Unable to open device settings. Open them manually to change permissions.",
+      "saveFailed": "Device preferences could not be restored or saved. Changes may not survive an app restart.",
+      "systemSettings": "Device settings",
+      "notificationChannel": "Notifications"
+    }
   },
   "appearance": {
     "dark": "Dark",
@@ -823,5 +857,38 @@
     "journey": "Journey {{number}}",
     "train": "Train",
     "bus": "Bus"
+  },
+  "media": {
+    "title": "Camera & photos",
+    "description": "Take a photo or choose one from your library. Photos stay in this local preview and are not uploaded.",
+    "camera": "Camera",
+    "cameraHint": "Open the camera to take a photo. The preview stops when you leave this screen or background the app.",
+    "permissionHint": "Camera access is requested only when you open the camera.",
+    "permissionBlocked": "Camera access is denied. Allow access in device settings to take a photo.",
+    "openSettings": "Open device settings",
+    "openCamera": "Open camera",
+    "takePhoto": "Take photo",
+    "capturing": "Taking photo…",
+    "flipCamera": "Switch camera",
+    "closeCamera": "Close camera",
+    "livePreview": "Live camera preview",
+    "photoPreview": "Selected photo preview",
+    "photoLibrary": "Photo library",
+    "photoHint": "Use the system picker to select one photo. Canceling keeps your current preview.",
+    "choosePhoto": "Choose a photo",
+    "choosing": "Choosing photo…",
+    "photoSize": "{{width}} × {{height}} pixels",
+    "permissionFailed": "Unable to access the camera. Check permission in device settings and try again.",
+    "cameraFailed": "The camera could not start. Try again on a device with a camera.",
+    "captureFailed": "The photo could not be taken. Try again.",
+    "pickerFailed": "The photo picker could not open. Please try again.",
+    "settingsFailed": "Unable to open device settings. Open them manually to manage camera access.",
+    "previewFailed": "The photo could not be displayed. Choose another photo or take a new one.",
+    "cameraDisabled": "Camera is disabled in App Settings. Enable it there to take photos.",
+    "photosDisabled": "Photo selection is disabled in App Settings. Enable it there to choose a photo."
+  },
+  "template": {
+    "title": "Your next app starts here",
+    "description": "A neutral wireframe ready for your screens and content."
   }
 }

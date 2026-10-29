@@ -42,4 +42,4 @@ request centering in native layout.
 - Pass direction through the Host prop. Leave safe-area ownership to the page.
 
 Check intrinsic/bounded sizes, retained state, touch bounds and RTL using the
-[Host showcase](../../../src/features/ui-showcase/host-screen.tsx).
+[Host showcase](../../../.rnstorybook/components/catalog/host-preview.tsx).

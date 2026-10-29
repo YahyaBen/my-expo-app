@@ -1,4 +1,4 @@
-import { TableDemo, type TableDemoProps } from '@/features/ui-showcase/table-screen';
+import { TableDemo, type TableDemoProps } from '../../components/catalog/table-preview';
 import { UniversalHost, type UniversalThemeProps } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { NativeStoryFrame } from '../../components/native-story-frame';

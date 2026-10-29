@@ -131,14 +131,7 @@ module.exports = defineConfig([
   {
     files: screenFiles,
     // These entry points intentionally compose the developer catalog/fixtures.
-    ignores: [
-      'src/app/ui.tsx',
-      'src/app/ui-component/**',
-      'src/app/storybook.tsx',
-      'src/features/ui-showcase/**',
-      'src/features/pages/screens.tsx',
-      'src/features/storybook/**',
-    ],
+    ignores: ['src/app/storybook.tsx', 'src/features/storybook/**'],
     rules: {
       'no-restricted-imports': restrictImports([
         {
@@ -153,12 +146,7 @@ module.exports = defineConfig([
             'Screens do not own HTTP clients or persisted storage. Use the existing workflow or preference owner.',
         },
         {
-          group: [
-            '@/features/ui-showcase/**',
-            '**/ui-showcase/**',
-            '@/features/storybook/**',
-            '**/features/storybook/**',
-          ],
+          group: ['@/features/storybook/**', '**/features/storybook/**'],
           message:
             'Keep developer examples in their catalog/Storybook entries; product screens render real data.',
         },
@@ -293,7 +281,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['.rnstorybook/stories/**/*.{ts,tsx}'],
+    files: ['.rnstorybook/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': ['error', { paths: nativeControlImports }],
       'no-restricted-syntax': ['error', expoSymbolIcons],

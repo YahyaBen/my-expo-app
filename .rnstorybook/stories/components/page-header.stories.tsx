@@ -277,8 +277,8 @@ function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'l
         colorScheme={colorScheme}
         presses={presses}
         colorProbe
-        navigationLabel="Open app settings"
-        onNavigate={() => router.push('/settings')}
+        navigationLabel="Open wireframe"
+        onNavigate={() => router.push({ pathname: '/', params: { preview: 'true' } })}
       />
     </PageFrame>
   );
@@ -297,7 +297,7 @@ export const NativeBackReturn: Story = {
     docs: {
       description: {
         story:
-          'Run inside the app Storybook route. Type a draft, count a content action, and open app settings. Use the actual Settings header Back or Android system Back to pop to this retained Storybook screen; the fixture Back only increments its local count. Repeat and scroll purple/magenta cards under the title before and after returning: native blur must continue updating, and the draft, content count and scroll state must survive. This exercises a native route push/pop without remounting the fixture.',
+          'Run inside the app Storybook route. Type a draft, count a content action, and open the wireframe. Use the actual wireframe header Back or Android system Back to pop to this retained Storybook screen; the fixture Back only increments its local count. Repeat and scroll purple/magenta cards under the title before and after returning: native blur must continue updating, and the draft, content count and scroll state must survive. This exercises a native route push/pop without remounting the fixture.',
       },
     },
   },

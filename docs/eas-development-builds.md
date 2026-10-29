@@ -1,58 +1,70 @@
-# EAS development builds
+# EAS builds
 
-The source now targets SDK 58; see the
-[current SDK baseline](development.md#sdk-and-native-verification-baseline).
-The standard profiles now select the unlinked default template and its grayscale
-UX wireframe. Fill only `eas.projectId` in `config/brands/template.json` to link
-your clone to its own project. The EAS slug must match `expo-mobile-template`.
-The owner and backend URL are optional for a starter build; EAS account access
-and normal platform signing still apply.
-Earlier SDK 57/58 build records describe retired client configurations. They
-are historical evidence and do not validate the current template binary.
+## Link a clone
 
-## Integration readiness
+Set `eas.projectId` in `config/brands/template.json` to an EAS project UUID owned
+by an account you can access. Use slug `expo-mobile-template` for that project
+to match the starter. No other repository setting is needed for the unchanged
+template. An empty ID is allowed locally; production validation rejects it.
 
-`development` keeps its existing iOS simulator target. `development-device`
-inherits the same brand, environment and development client with
-`ios.simulator: false` for a signed physical-device build. Select the same
-`APP_BRAND` before any EAS command and use the intended profile; neither profile
-creates notification registration by itself. See
-[EAS profile inheritance](https://docs.expo.dev/build/eas-json/#sharing-configuration-between-profiles).
+```sh
+npm ci
+npx eas-cli@latest login
+npx eas-cli@latest build --platform android --profile development
+```
 
-Push notifications are not implemented in this starter. Installed Expo
-Notifications and Firebase Messaging packages do not provide permission flow,
-token registration/rotation, backend association, logout cleanup or notification
-tap routing. iOS still excludes Firebase from autolinking and has no notification
-plugin configured. A future push feature needs one message/tap owner, each client's
-native credentials and an agreed backend device-token contract. Follow the
-[SDK 58 notification guidance](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/)
-for channel, permissions and response APIs.
+Install the resulting development client, then run `npm start`. It opens on-device
+Storybook automatically. The retained native modules require that matching binary.
+Use the [EAS build configuration reference](https://docs.expo.dev/eas/json/) for
+profile options and [signing setup](https://docs.expo.dev/app-signing/app-credentials/)
+for platform credentials.
 
-`firebase.json` disables Firebase's default data collection and Messaging token
-auto-initialization while these native dependencies are dormant. Enable them
-deliberately when implementing the selected notification transport; see
-[Firebase initialization](https://rnfirebase.io/messaging/usage#auto-initialization).
-`app.json` blocks Android camera, microphone, location and media/storage
-permissions that retained packages can otherwise merge into the binary. Add a
-real feature's permission flow and purpose strings before unblocking its required
-permissions. Notification permission remains available for future integration.
-These native defaults require a new binary; Metro and OTA do not alter an
-already installed app's permissions or Firebase metadata.
+## Profiles
 
-EAS Update delivery is also unconfigured: there is no update URL, runtime version
-policy or build channel. The existing Android Google Play update hook is separate.
-Before adopting OTA, isolate each client's project and channel and define native
-compatibility through a
-[runtime version policy](https://docs.expo.dev/eas-update/runtime-versions/).
+| Profile              | Result                                                | Storybook                       |
+| -------------------- | ----------------------------------------------------- | ------------------------------- |
+| `development`        | Android debug APK or iOS Simulator development client | Enabled by Metro in development |
+| `development-device` | Development client for physical iOS devices           | Enabled by Metro in development |
+| `preview`            | Internal release APK / signed iOS internal build      | Disabled; neutral wireframe     |
+| `production`         | Store binaries with remote version increment          | Disabled; neutral wireframe     |
 
-## Android development build limits
+```sh
+npx eas-cli@latest build --platform ios --profile development
+npx eas-cli@latest build --platform ios --profile development-device
+npx eas-cli@latest build --platform all --profile preview
+npx eas-cli@latest build --platform all --profile production
+```
 
-The development profile keeps one Gradle worker and disables parallel project
-execution. Its init script, `config/android-build-memory.gradle`, limits native
-CMake/Ninja concurrency for retained modules, including Skia. The installed Skia
-alias and existing ABI settings are unchanged.
+EAS chooses the SDK-compatible iOS image through `image: auto`. Development Android
+keeps its memory-constrained Gradle command/init script. Preview explicitly creates
+an installable APK. Production creates the store Android app bundle by default.
+Build profiles share the manifest's project ID. No backend URL is required.
 
-Earlier compilation results and SDK migration observations are retained as
-[historical native build evidence](archive/native-build-evidence.md). They belong
-to retired client binaries; create a matching template build for current native
-behavior.
+The development client can connect to `npm run start:app` to inspect the wireframe.
+The flag is a Metro/bundle choice; changing it requires restarting Metro with a
+cleared cache. `__DEV__` always prevents Storybook in release JavaScript.
+
+## Native identity and integrations
+
+EAS project UUIDs identify Expo projects, not store apps. Account access, Android
+signing, Apple credentials and device provisioning are still required where
+applicable. Separate products need unique app IDs, display names and assets in the
+brand manifest. Keeping an existing package ID updates/replaces that installed app.
+
+The root `google-services.json`, `GoogleService-Info.plist` and `firebase.json` are
+preserved byte-for-byte. The neutral template does not reference those Firebase
+apps. `android.googleServicesFile` is optional and validated against the selected
+package when enabled. iOS Firebase autolinking remains intentionally excluded.
+Enabling Firebase later needs the matching config/plugins and a new native build.
+
+EAS Update is not provisioned by this template. Configure its URL, runtime policy
+and channels deliberately before shipping updates. Build/sign/submit and updates
+run through EAS; no build or store submission is performed by cloning the repo.
+
+## Verification scope
+
+Resolved config, lint/typecheck, dependency checks and local native JS exports
+are static validation. A successful EAS build additionally checks native
+compilation and signing; installing it is required to verify actual UI behavior.
+Keep [Storybook release graph checks](storybook.md#release-boundary), iOS/Android
+device results and live-backend verification separate.

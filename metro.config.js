@@ -6,5 +6,5 @@ config.resolver.assetExts.push('lottie');
 
 module.exports = withStorybook(config, {
   enabled:
-    process.env.NODE_ENV !== 'production' && process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === 'true',
+    process.env.NODE_ENV !== 'production' && process.env.EXPO_PUBLIC_STORYBOOK_ENABLED !== 'false',
 });

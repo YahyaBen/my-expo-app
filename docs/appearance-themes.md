@@ -29,16 +29,49 @@ factor. iOS ultra-thin system materials retain their native color treatment. See
 shared blur policy and capture-background requirements.
 Page titles and Home branding use the configured font and theme foreground.
 
-The native Tokens page (`/ui-component/tokens`) displays the active palette,
+The **Components/Theme Tokens** story displays the active palette,
 type ramp, shapes, shared spacing, working button states and an editable field.
 `Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
 
 Settings offers system/light/dark appearance, supported header effects,
-Reduce Motion, language, Account/sign-in navigation,
-the component catalog and app version.
-Placeholder account, notification, support and legal controls have been removed.
+Reduce Motion, language, Account/sign-in navigation, device permissions,
+haptic feedback, the component catalog, device location and app version.
+Placeholder support and legal controls have been removed.
 
-Settings owns its [header-effect picker](../src/features/settings/header-motion-picker.tsx). The
+## Device permissions
+
+The Settings example has switches for notifications, camera, microphone, photos
+and haptics, plus **Use location** in its Location section. Camera, microphone,
+location, photo selection and haptics respect saved app preferences. Enabling a
+capability requests OS approval when needed. **Device settings** manages system
+grants; turning notifications off opens that same screen. Permission state
+refreshes automatically on return.
+
+Photos use the system picker without full-library access. The camera example
+captures still photos; microphone permission is available for video audio.
+Background location and exact-alarm access are unused. Notification setup creates
+the Android channel before requesting permission. Remote push still needs
+FCM/APNs credentials, token registration and a backend.
+
+Preferences use `appDevicePreferences` in AsyncStorage and restore before
+interactive content. New camera, microphone and location consumers must use the
+shared device-access gate. Native permission or system-prompt changes require a
+new development build on each platform.
+
+With **Use location** enabled, Settings > Location offers **Enable location** until foreground permission and
+device location services are enabled, then **Get current location**. Android
+offers the native location-services dialog when needed; dismissing it leaves
+services off and the action available for another attempt. **Open device settings**
+opens the app's permission settings, or Android's location settings when permission
+is already granted and services are off. iOS also shows the manual path through
+Settings > Privacy & Security > Location Services for the device-wide switch.
+Blocked permission opens app settings from the main action. Returning to the app
+refreshes permission and service status; request a location again after changing
+settings. Coordinates stay in screen state and are acquired only on request.
+The existing `expo-location` native module and foreground permission configuration
+must be present in the installed development build.
+
+The Preferences story owns its [header-effect picker](../.rnstorybook/components/device/header-motion-picker.tsx). The
 shared [color-scheme control](../src/components/ui/appearance/color-scheme-control.tsx)
 serves Settings and login.
 Its System/Light/Dark picker applies appearance changes immediately through the
@@ -47,13 +80,15 @@ Dark remains selected until the user chooses another option. Controls wait for
 appearance restoration before accepting changes.
 
 The configured root palette stays fixed. A user chooses appearance, not another
-client's identity or demo palette. The Text showcase at `/ui-component/text` has
-an isolated [theme picker](../src/features/ui-showcase/theme-picker.tsx) and
+client's identity or demo palette. The Text showcase in **Wireframes/Component Gallery** has
+an isolated [theme picker](../.rnstorybook/components/catalog/theme-picker.tsx) and
 appearance control; these changes stay in memory and leave saved app preferences
 untouched. Leaving and reopening that page starts from the app's current choices.
 The color-sample area has its own explicit-scheme Host after the RN bridge;
 page chrome and the other text examples keep the app appearance. The retained
 native Storybook controls also operate on isolated providers.
+
+The release wireframe has no Settings screen. Preferences in Storybook uses an isolated appearance provider, so its theme controls do not persist app appearance. The root still supports saved appearance for future screens. Language and device switches in that story use their real saved settings.
 
 ## Saved appearance
 
@@ -72,7 +107,7 @@ selection. A remounted root reads after earlier queued writes have finished.
 
 The root waits for appearance restoration before mounting its custom launch
 overlay. That overlay's first native layout hides the native splash; language,
-header/motion, session resolution and the initial page frame's native layout
+header/motion and the initial page frame's native layout
 govern its exit. This gates the first
 app presentation; the OS's initial native splash appearance remains native.
 Explicit component and Host scheme overrides retain their existing priority.
@@ -93,9 +128,9 @@ Android uses Expo's default strength, while iOS retains its existing native
 material behavior.
 
 The [launch contract](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) defines
-minimal/branded presentation, optional-font fallback, foreground timing and the
-separate successful `app-ready` and failed-restoration `app-recovery` selectors.
-Recovery skips the branding delay. Source checks do not establish native startup
+minimal/branded presentation, optional-font fallback, foreground timing and
+`app-ready` after resource readiness, layout and overlay exit. Starter startup
+does not restore an auth session. Source checks do not establish native startup
 timing or frame rates.
 
 ## Text foregrounds and verification

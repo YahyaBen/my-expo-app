@@ -1,64 +1,73 @@
-# Expo mobile starter
+# Expo white-label template
 
-An iOS and Android bootstrap application built with Expo SDK 58, Expo Router and native
-Expo UI.
+iOS and Android starter using Expo SDK 58, Expo Router and native Expo UI.
+Development opens the on-device Storybook catalog. Preview and production builds
+open a single neutral UX wireframe. Product, auth, account, settings and tab screens
+have been removed; shared components and optional service/workflow helpers remain.
 
-Home, native component showcase, authentication, Account and Settings form the
-starting point. The default template uses white, black and gray UX tokens in
-light/dark appearance, native typography and a flat header. All installed
-packages are retained for future features.
+Keep it simple. Native performance is a primary requirement: load only what the
+active feature needs, preserve idle/motion guards and measure before optimizing.
 
-## Get started
+## Clone and run
 
-Use a supported Node release (22.18+, 24.3+ or 26+) and the committed
-`package-lock.json`. npm is the package manager for this project; it applies the
-dependency overrides in `package.json`.
+Use Node 22.18+, 24.3+ or 26+ and npm with the committed `package-lock.json`.
 
 ```sh
 npm ci
 npm start
 ```
 
-The starter runs without `.env.local`; local and EAS profiles default to the
-`template` brand. Copy `.env.example` only when overriding the brand/variant or
-connecting a backend. `EXPO_PUBLIC_API_URL` is optional for builds and public
-screens; authentication needs a real backend. Production URLs must use HTTPS.
-Restart Metro after changing brand or variant selection. See
-[brand configuration](docs/development.md#brand-and-environment-configuration).
-Use `npx expo install <package>` for SDK-compatible dependencies.
-Run `npm run typecheck` and `npm run lint` before finishing a change.
-
-Enable `EXPO_PUBLIC_ENABLE_DEV_SCREENS=true` to browse the native catalog, or use
-`npm run storybook:dev` for the development-only fixture browser and Controls.
-See [component previews](docs/storybook.md) for matching build/brand setup.
-
-## Build your clone
-
-Set the existing `eas.projectId` field in
-[config/brands/template.json](config/brands/template.json) to your own EAS project
-UUID. Use a project with slug `expo-mobile-template` to match the default
-manifest. That is the only required repository setting for a starter build;
-the EAS owner is optional and no backend or Firebase setup is required.
-
-After signing in to your Expo account, run:
+Install a matching development build first; Expo Go does not contain all the native
+modules. Storybook opens automatically with its sidebar and Controls. Start with
+**Wireframes → Home Sections → Cards** for the former Home compositions and stable
+`home-*` selectors. Demo artwork works offline. No backend or `.env.local` is needed.
 
 ```sh
-npx eas-cli@latest build --platform android --profile development
+npm run start:app           # View the release wireframe in development
+npm run storybook:dev       # Alias for the default development catalog
+npm run storybook:generate  # After adding or moving stories
+npm run check              # Typecheck, lint and formatting; no automated tests
 ```
 
-The existing `preview`, `production`, and iOS profiles use the same project ID.
-EAS handles the usual account access and signing setup. For another brand,
-select its manifest explicitly and supply its own project ID there.
+Keep `testID` props on components and interactive stories. This template has no
+test runner or test suites.
 
-## Find the guidance
+## Build your clone with EAS
 
-- [Documentation index](docs/index.md): setup, architecture, UI, releases and reports.
-- [Development](docs/development.md): commands, retained component fixtures and environment.
-- [Architecture](docs/architecture.md): routes, features, services and shared boundaries.
-- [Native UI](docs/ui.md): component selection and canonical skill links.
-- [Documentation ownership](docs/documentation.md): where to maintain each kind of guidance.
-- [Agent rules](AGENTS.md) and [skill index](docs/skills.md): project constraints and task-specific guidance.
+Change only `eas.projectId` in [config/brands/template.json](config/brands/template.json)
+from the empty string to your own EAS project UUID. Create that EAS project with
+slug `expo-mobile-template` to match this starter. The empty slot keeps local
+Storybook usable without linking someone else's project.
 
-Component contracts live in their existing `.agents/skills/template-skill-ui-*` skills,
-with detailed references only where needed. Source folders hold code; avoid
-reintroducing per-component READMEs.
+```sh
+npx eas-cli@latest login
+npx eas-cli@latest build --platform android --profile development
+# Install the development build, then:
+npm start
+```
+
+Use `development` for Android devices/iOS Simulator, `development-device` for an
+iOS device, `preview` for an internal release, and `production` for store binaries.
+EAS still needs account access and platform signing credentials. No cloud build is
+triggered by local setup.
+
+The existing `google-services.json`, `GoogleService-Info.plist` and `firebase.json`
+are preserved. They are not attached to the neutral template identity. A distinct
+store app needs unique native identifiers, branding and matching Firebase files
+if Firebase is enabled. Those optional identity changes live in the same brand
+manifest; changing an EAS UUID cannot change an app's native identity.
+
+Animations, gestures, sheets, launch transitions and reduced-motion handling remain
+available through the shared UI and Storybook. **Motion → Transitions** demonstrates
+native push/Back using the template wireframe. Theme, dark-mode and RTL stories are
+included. See [Storybook](docs/storybook.md) and [EAS setup](docs/eas-development-builds.md).
+
+## Project guidance
+
+- [Documentation index](docs/index.md) and [development](docs/development.md)
+- [Architecture](docs/architecture.md) and [native UI](docs/ui.md)
+- [Agent rules](AGENTS.md), [skill index](docs/skills.md) and [documentation ownership](docs/documentation.md)
+
+Install SDK-compatible packages with `npx expo install <package>`. Installed
+dependencies remain available for future features. Component contracts belong
+in their matching `.agents/skills/` files; implementation belongs in source.

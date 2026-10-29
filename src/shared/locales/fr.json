@@ -236,7 +236,41 @@
       "ribbon": "Ruban",
       "rain": "Pluie"
     },
-    "reduceMotion": "Réduire les animations"
+    "reduceMotion": "Réduire les animations",
+    "location": {
+      "title": "Localisation",
+      "hint": "Demandez votre position uniquement lorsque vous en avez besoin. Les coordonnées restent sur cet écran et ne sont pas envoyées.",
+      "allowed": "Localisation autorisée pendant l’utilisation de l’application.",
+      "denied": "Localisation refusée. Vous pouvez modifier cette autorisation dans les réglages de l’appareil.",
+      "notRequested": "L’accès à la localisation n’a pas encore été demandé.",
+      "servicesOff": "Les services de localisation sont désactivés. Activez-les dans les réglages de l’appareil.",
+      "servicesOffIOS": "Sur iPhone ou iPad, ouvrez Réglages > Confidentialité et sécurité > Service de localisation, activez-le, puis revenez ici.",
+      "enableLocation": "Activer la localisation",
+      "getLocation": "Obtenir ma position",
+      "locating": "Recherche de votre position…",
+      "openSettings": "Ouvrir les réglages de l’appareil",
+      "latitude": "Latitude : {{value}}",
+      "longitude": "Longitude : {{value}}",
+      "accuracy": "Précision approximative : {{value}} m",
+      "requestFailed": "Impossible d’obtenir votre position. Vérifiez les services de localisation et réessayez.",
+      "settingsFailed": "Impossible d’ouvrir les réglages. Ouvrez-les manuellement pour gérer la localisation.",
+      "disabledInApp": "La localisation est désactivée dans cette app. Activez Utiliser la localisation ci-dessus."
+    },
+    "permissions": {
+      "title": "Autorisations",
+      "notifications": "Notifications",
+      "camera": "Appareil photo",
+      "microphone": "Microphone",
+      "photos": "Photos",
+      "location": "Utiliser la localisation",
+      "haptics": "Retour haptique",
+      "notificationsHint": "Utilisez les réglages du téléphone pour désactiver les notifications ou retirer les autorisations système.",
+      "requestFailed": "Impossible de modifier l’autorisation. Vérifiez les réglages du téléphone et réessayez.",
+      "settingsFailed": "Impossible d’ouvrir les réglages du téléphone. Ouvrez-les manuellement pour modifier les autorisations.",
+      "saveFailed": "Impossible de restaurer ou d’enregistrer les préférences du téléphone. Les modifications risquent d’être perdues au redémarrage.",
+      "systemSettings": "Réglages du téléphone",
+      "notificationChannel": "Notifications"
+    }
   },
   "appearance": {
     "dark": "Sombre",
@@ -823,5 +857,38 @@
     "journey": "Trajet {{number}}",
     "train": "Train",
     "bus": "Bus"
+  },
+  "media": {
+    "title": "Appareil photo et photos",
+    "description": "Prenez une photo ou choisissez-en une dans votre bibliothèque. Les photos restent dans cet aperçu local et ne sont pas envoyées.",
+    "camera": "Appareil photo",
+    "cameraHint": "Ouvrez l’appareil photo pour prendre une photo. L’aperçu s’arrête lorsque vous quittez cet écran ou mettez l’application en arrière-plan.",
+    "permissionHint": "L’accès à l’appareil photo est demandé uniquement lorsque vous l’ouvrez.",
+    "permissionBlocked": "L’accès à l’appareil photo est refusé. Autorisez-le dans les réglages de l’appareil pour prendre une photo.",
+    "openSettings": "Ouvrir les réglages de l’appareil",
+    "openCamera": "Ouvrir l’appareil photo",
+    "takePhoto": "Prendre une photo",
+    "capturing": "Prise de la photo…",
+    "flipCamera": "Changer de caméra",
+    "closeCamera": "Fermer l’appareil photo",
+    "livePreview": "Aperçu de l’appareil photo en direct",
+    "photoPreview": "Aperçu de la photo sélectionnée",
+    "photoLibrary": "Photothèque",
+    "photoHint": "Sélectionnez une photo avec le sélecteur système. Annuler conserve votre aperçu actuel.",
+    "choosePhoto": "Choisir une photo",
+    "choosing": "Sélection d’une photo…",
+    "photoSize": "{{width}} × {{height}} pixels",
+    "permissionFailed": "Impossible d’accéder à l’appareil photo. Vérifiez l’autorisation dans les réglages et réessayez.",
+    "cameraFailed": "L’appareil photo n’a pas pu démarrer. Réessayez sur un appareil équipé d’une caméra.",
+    "captureFailed": "La photo n’a pas pu être prise. Réessayez.",
+    "pickerFailed": "Le sélecteur de photos n’a pas pu s’ouvrir. Réessayez.",
+    "settingsFailed": "Impossible d’ouvrir les réglages. Ouvrez-les manuellement pour gérer l’accès à l’appareil photo.",
+    "previewFailed": "La photo n’a pas pu être affichée. Choisissez une autre photo ou prenez-en une nouvelle.",
+    "cameraDisabled": "L’appareil photo est désactivé dans les paramètres de l’app. Activez-le pour prendre des photos.",
+    "photosDisabled": "La sélection de photos est désactivée dans les paramètres de l’app. Activez-la pour choisir une photo."
+  },
+  "template": {
+    "title": "Votre prochaine application commence ici",
+    "description": "Une maquette neutre prête pour vos écrans et votre contenu."
   }
 }

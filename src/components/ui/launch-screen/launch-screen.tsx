@@ -87,6 +87,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   );
   const offsetY = useSharedValue(0);
   const remainingHold = useRef(2_000);
+  const [laidOut, setLaidOut] = useState(false);
   const [holdComplete, setHoldComplete] = useState(false);
   const completed = useRef(false);
   const finish = useCallback(() => {
@@ -101,19 +102,19 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   }, [animate, launchArtwork.source]);
 
   useEffect(() => {
-    if (!exiting || !active || holdComplete) return;
+    if (!laidOut || !active || holdComplete) return;
 
-    // Count foreground time only; the branded hold still applies with Reduce Motion.
-    const startedAt = Date.now();
+    // Overlap the visible branded hold with page preparation; count foreground time only.
+    const startedAt = performance.now();
     const hold = setTimeout(() => {
       remainingHold.current = 0;
       setHoldComplete(true);
     }, remainingHold.current);
     return () => {
       clearTimeout(hold);
-      remainingHold.current = Math.max(0, remainingHold.current - (Date.now() - startedAt));
+      remainingHold.current = Math.max(0, remainingHold.current - (performance.now() - startedAt));
     };
-  }, [exiting, active, holdComplete]);
+  }, [laidOut, active, holdComplete]);
 
   useEffect(() => {
     if (!exiting || !active || !holdComplete) return;
@@ -146,7 +147,10 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   return (
     <Animated.View
       testID="app-brand-screen"
-      onLayout={onReady}
+      onLayout={() => {
+        setLaidOut(true);
+        onReady?.();
+      }}
       accessible
       accessibilityLabel={t('launch.loading', { brandName: brand.name })}
       pointerEvents="auto"

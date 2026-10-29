@@ -31,9 +31,10 @@ for operator commands. Keep configuration in these existing owners:
 - Use literal asset imports, never a dynamic `require` from a manifest path.
   Verify native font names and scripts. Arabic and failed/unloaded optional fonts
   use native fallback; brand fonts apply to headings rather than every control.
-- Keep developer flags outside saved preferences and manifests. Storybook requires
-  explicit opt-in plus `__DEV__`; Metro integration is disabled in releases.
-  Route guards alone do not remove showcase code from bundles.
+- Keep developer flags outside saved preferences and manifests. Storybook defaults
+  to enabled in development; exact `false` opts out. Require `__DEV__` and disable
+  Metro integration in releases. All showcase compositions live in `.rnstorybook/`;
+  inspect both release graphs to verify exclusion.
 - Keep refresh transport independent of the authenticated client. Production
   validation enforces release requirements without blocking local public previews.
 

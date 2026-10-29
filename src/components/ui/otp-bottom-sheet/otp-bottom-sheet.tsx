@@ -17,6 +17,7 @@ import { onGeometryChange } from '@expo/ui/swift-ui/modifiers';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useMeasuredWidth } from '@/hooks/use-measured-width';
+import { triggerHaptic } from '@/lib/haptics';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { UniversalButtonContent } from '../button/universal-button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
@@ -170,11 +171,13 @@ function OtpForm({
       if (session.current !== currentSession) return;
       setStatus(accepted ? 'success' : 'error');
       setError(accepted ? null : 'invalid');
+      triggerHaptic(accepted ? 'success' : 'error');
       AccessibilityInfo.announceForAccessibility(t(accepted ? 'otp.successTitle' : 'otp.invalid'));
     } catch {
       if (session.current !== currentSession) return;
       setStatus('error');
       setError('verifyFailed');
+      triggerHaptic('error');
       AccessibilityInfo.announceForAccessibility(t('otp.verifyFailed'));
     } finally {
       if (session.current === currentSession) pending.current = false;
@@ -195,11 +198,13 @@ function OtpForm({
       setResent(true);
       setStatus('idle');
       inputRef.current?.focus();
+      triggerHaptic('success');
       AccessibilityInfo.announceForAccessibility(t('otp.resent'));
     } catch {
       if (session.current !== currentSession) return;
       setStatus('error');
       setError('resendFailed');
+      triggerHaptic('error');
       AccessibilityInfo.announceForAccessibility(t('otp.resendFailed'));
     } finally {
       if (session.current === currentSession) pending.current = false;

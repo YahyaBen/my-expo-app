@@ -15,4 +15,9 @@ Arabic selects RTL through the existing layout direction provider. Changes prese
 
 Custom validation messages store translation keys and translate when displayed. Zod's built-in messages use its current locale. API requests send the selected `Accept-Language`; app-owned failures use the dictionaries. Server responses and user-authored content remain the server's responsibility.
 
+Native iOS camera, microphone, photo-library and foreground-location permission messages live
+in `config/locales/en.json`, `fr.json` and `ar.json`, registered through `app.json`.
+These system dialogs follow the device's app-language settings. The in-app language
+picker changes app content; native permission-message changes require a new build.
+
 Run `npm run check` for TypeScript, lint and formatting. Automated suites have been removed; existing test IDs remain for future tests. Check language switching, persistence, RTL, draft preservation and request language manually. Verify French, English and Arabic on iOS and Android, then restore the desired language.

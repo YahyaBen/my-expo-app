@@ -1,3 +1,6 @@
+import { StartupLayoutContext } from '@/context/startup-layout.context';
+import { usePagePerformance } from '@/hooks/use-page-performance';
+import { useThemeColors } from '@/hooks/use-theme';
 import { BlurTargetView } from 'expo-blur';
 import { useFocusEffect } from 'expo-router';
 import {
@@ -12,16 +15,13 @@ import {
 } from 'react';
 import { View, type ViewInstance } from 'react-native';
 import { SafeAreaInsetsContext, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useHostColorScheme } from '../host/universal-host';
 import { PageHeader } from './page-header';
-import { PAGE_HEADER_MIN_HEIGHT } from './page-header-layout';
 import { PageHeaderBackground } from './page-header-background';
+import { PAGE_HEADER_MIN_HEIGHT } from './page-header-layout';
 import { PageHeaderTouchShield } from './page-header-touch-shield';
 import { PageWaveContext } from './page-wave-context';
 import { usePageBlurKey } from './use-page-blur-key';
-import { useThemeColors } from '@/hooks/use-theme';
-import { useHostColorScheme } from '../host/universal-host';
-import { StartupLayoutContext } from '@/context/startup-layout.context';
-import { usePagePerformance } from '@/hooks/use-page-performance';
 
 const PageHeaderInsetContext = createContext(0);
 
@@ -36,9 +36,9 @@ export function PageFrame({
   title,
   onBack,
   colorScheme,
-  headerOverlay = false,
+  headerOverlay = true,
   headerBlur = true,
-  scrollsBehindHeader = false,
+  scrollsBehindHeader = true,
 }: Readonly<
   PropsWithChildren<{
     title?: string;

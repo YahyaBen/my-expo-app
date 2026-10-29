@@ -9,7 +9,7 @@ import type {
   RegisterRequest,
   TokenResponse,
 } from '@/types/auth.types';
-import { router, usePathname } from 'expo-router';
+import { usePathname } from 'expo-router';
 import {
   createContext,
   useCallback,
@@ -39,8 +39,11 @@ interface RegistrationChallengeState {
 
 const AuthFlowContext = createContext<AuthFlowContextValue | undefined>(undefined);
 
-/** Transient state exists only while the auth route group is mounted. */
-export function AuthFlowProvider({ children }: Readonly<PropsWithChildren>) {
+/** Optional workflow kit. The consuming app owns its verification route. */
+export function AuthFlowProvider({
+  children,
+  onVerificationRequired,
+}: Readonly<PropsWithChildren<{ onVerificationRequired: () => void }>>) {
   const pathname = usePathname();
 
   const [challengeState, setChallengeState] = useState<RegistrationChallengeState | null>(null);
@@ -100,7 +103,7 @@ export function AuthFlowProvider({ children }: Readonly<PropsWithChildren>) {
       if ('isOtpValidated' in response) {
         if (!response.isOtpValidated && response.challengeId) {
           setChallengeState({ response, email: challengeEmail });
-          router.navigate('/(auth)/verify-email');
+          onVerificationRequired();
           return;
         }
         if (!response.isOtpValidated || !response.loginResponse) {
@@ -123,7 +126,7 @@ export function AuthFlowProvider({ children }: Readonly<PropsWithChildren>) {
         committingSession.current = false;
       }
     },
-    [],
+    [onVerificationRequired],
   );
 
   const registrationChallenge = challengeState?.response ?? null;

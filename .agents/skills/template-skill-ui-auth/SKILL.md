@@ -1,13 +1,12 @@
 ---
 name: template-skill-ui-auth
-description: Compose native authentication frames and login preference controls.
+description: Compose native authentication frames with shared hosting and keyboard layout.
 ---
 
 # Authentication frames
 
 Import `AuthScreenFrame` from `@components/ui`.
 Source: [auth/](../../../src/components/ui/auth/).
-[LoginPreferences](../../../src/features/auth/login-preferences.tsx) is feature-local.
 
 - The frame owns safe areas, keyboard layout, scrolling and one full-width
   native Host. Compose native content controls inside it.
@@ -24,12 +23,6 @@ Source: [auth/](../../../src/components/ui/auth/).
   Title/description use themed heading/body presets. Use
   `getBrandHeadingFont` with native Arabic/system fallbacks and root-loaded fonts.
   Preserve `${testID}-brand` and `${testID}-title`.
-- Login's top-bar Host intentionally uses LTR: language stays physically left,
-  appearance physically right. The language sheet is outside that Host and
-  uses native sheet defaults without a content Host or added shell styling.
-- Disable language/appearance changes until their restoration is ready.
-  Keep the existing providers; language selection closes its sheet, and
-  System/Light/Dark edits the app appearance preference.
 - Keep copy neutral across English, French and Arabic. Account logout retains
   `auth-logout`, persistent `auth-logout-error` and retry on storage deletion
   failure; background revocation must not keep local sign-out pending.

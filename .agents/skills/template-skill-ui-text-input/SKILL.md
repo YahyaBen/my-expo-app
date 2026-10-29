@@ -60,7 +60,7 @@ The wrapper owns a native observable but accepts a plain string `value`.
 - Keep helper/errors understandable without color and allow wrapping. Check
   duplicate label stops, secure reveal, native focus and RTL on devices.
 
-Use the [showcase](../../../src/features/ui-showcase/input-screen.tsx)
-at `/ui-component/input` for reset/ref, feedback, password, read-only and
+Use the [showcase](../../../.rnstorybook/components/catalog/input-preview.tsx)
+in **Wireframes/Component Gallery** for reset/ref, feedback, password, read-only and
 multiline examples. Verify keyboard reachability and native cursor behavior
 separately from lint/typecheck.

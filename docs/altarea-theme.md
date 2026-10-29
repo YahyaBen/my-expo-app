@@ -147,7 +147,7 @@ of the palette. Existing screens keep their layout and semantic token choices.
 
 ## Preview and verification
 
-Use the native Tokens page at `/ui-component/tokens` for palette swatches,
+Use the native Tokens page in **Wireframes/Component Gallery** for palette swatches,
 typography, shapes, shared spacing, counted enabled/disabled buttons, an explicit
 square-corner override and an editable/resettable field. Native Storybook's
 `Components/Theme Tokens` includes Altarea Light/Dark and UX Light/Dark. The Text

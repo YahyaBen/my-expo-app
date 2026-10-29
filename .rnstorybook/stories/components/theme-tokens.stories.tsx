@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
-import TokensScreen from '@/features/ui-showcase/tokens-screen';
+import TokensScreen from '../../components/catalog/tokens-preview';
 import type { StoryThemeProps } from '../../components/story-theme';
 
 const meta = {

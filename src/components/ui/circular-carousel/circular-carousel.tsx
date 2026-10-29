@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
@@ -16,9 +16,14 @@ import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-ho
 import { radii, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
+import { triggerHaptic } from '@/lib/haptics';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
+
+const motionInput = [-2, -1, 0, 1, 2] as const;
+const scaleOutput = [0.5, 0.9, 1.2, 0.9, 0.5] as const;
+const opacityOutput = [0.5, 1, 1, 1, 0.5] as const;
 
 export type CircularCarouselProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -89,6 +94,7 @@ function CircularCarouselContent({
     if (nextIndex === selectedIndex.current) return;
     selectedIndex.current = nextIndex;
     setActiveIndex(nextIndex);
+    triggerHaptic('selection');
     onIndexChange?.(nextIndex, items[nextIndex]);
   }
 
@@ -209,27 +215,27 @@ function PhotoCard({
 }>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset + spacing.sm;
+  const diameter = Math.max(1, width - spacing.lg);
+  const left = rtl ? sceneWidth - insetX - diameter : insetX;
+  const radius = diameter * 0.6;
+  const translateYOutput = useMemo(() => [0, -width / 3, -width / 2, -width / 3, 0], [width]);
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
     const distance = position - index;
     const translateX = -distance * width * (rtl ? -1 : 1);
-    const diameter = Math.max(1, width - spacing.lg);
-    const left = rtl ? sceneWidth - insetX - diameter : insetX;
     // Include the largest possible scale so a card is never hidden while any
     // of its artwork can still enter the viewport.
     const centerX = left + diameter / 2 + translateX;
-    const radius = diameter * 0.6;
     if (centerX + radius <= 0 || centerX - radius >= sceneWidth) return { opacity: 0 };
-    const range = [-2, -1, 0, 1, 2];
-    const scale = interpolatePhotoMotion(distance, range, [0.5, 0.9, 1.2, 0.9, 0.5]);
+    const scale = interpolatePhotoMotion(distance, motionInput, scaleOutput);
     return {
-      opacity: reducedMotion ? 1 : interpolatePhotoMotion(distance, range, [0.5, 1, 1, 1, 0.5]),
+      opacity: reducedMotion ? 1 : interpolatePhotoMotion(distance, motionInput, opacityOutput),
       transform: [
         { translateX },
         {
           translateY: reducedMotion
             ? 0
-            : interpolatePhotoMotion(distance, range, [0, -width / 3, -width / 2, -width / 3, 0]),
+            : interpolatePhotoMotion(distance, motionInput, translateYOutput),
         },
         { scale: 1 + (scale - 1) * scaleProgress.get() },
       ],

@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to take photos when you use the camera.",
+    "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to select a photo from your library.",
+    "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to show your current location in Settings.",
+    "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to record audio when you use video recording."
+  }
+}

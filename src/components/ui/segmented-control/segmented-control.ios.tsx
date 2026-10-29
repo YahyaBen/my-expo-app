@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Picker, Text } from '@expo/ui/swift-ui';
 import { pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
+import { triggerHaptic } from '@/lib/haptics';
 import type { SegmentedControlProps } from './segmented-control';
 
 export function SegmentedControl({
@@ -15,7 +16,9 @@ export function SegmentedControl({
       label={label ?? t('common.options')}
       selection={selectedValue}
       onSelectionChange={(value) => {
-        if (value !== null) onValueChange(value);
+        if (value === null) return;
+        if (value !== selectedValue) triggerHaptic('selection');
+        onValueChange(value);
       }}
       modifiers={[pickerStyle('segmented')]}
     >

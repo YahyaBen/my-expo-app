@@ -1,7 +1,8 @@
-import { useSyncExternalStore } from 'react';
+import { useContext, useSyncExternalStore } from 'react';
 import { AccessibilityInfo, AppState } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import { useThemePreferences } from '@/context/theme.context';
+import { PerformanceReadyContext } from '@/context/performance-ready.context';
 
 type MotionState = { active: boolean; reducedMotion: boolean | undefined };
 let snapshot: MotionState = {
@@ -87,6 +88,8 @@ export function useAppActive() {
 }
 
 export function useMotionEnabled(visible = true) {
-  const state = useMotionState(visible);
-  return visible && state.ready && state.active && !state.reducedMotion;
+  const ready = useContext(PerformanceReadyContext);
+  const canAnimate = visible && ready !== false;
+  const state = useMotionState(canAnimate);
+  return canAnimate && state.ready && state.active && !state.reducedMotion;
 }

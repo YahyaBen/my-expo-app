@@ -80,7 +80,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Caller-owned images, labels and dimensions. Swipe or use accessibility actions, resize, replace/clear data and watch the callback count. Check live RTL and Reduce motion on native devices.',
+          'Caller-owned images, labels and dimensions. Swipe or use accessibility actions: each changed settled selection gives one subtle tick. Initial render, resizing, data replacement and selecting the current photo stay silent. Replace/clear data and watch the callback count. Check live RTL and Reduce motion on native devices.',
       },
     },
   },

@@ -24,7 +24,7 @@ contracts; this skill does not prescribe their props or feature workflows.
   production components, explicit preview state and stable selectors on actual
   controls. Compound slots can use a focused composition story.
 - Keep Storybook imports in `.rnstorybook/` and `src/features/storybook/`.
-  Catalog flags control route access; they do not strip showcase modules. Follow
+  The development entry, runtime guard and Metro integration exclude fixtures from releases. Follow
   the existing [preview workflow](../../../docs/storybook.md).
 - On SDK/UI upgrades, inspect installed types and both platform adapters. Remove
   a workaround only after reproducing its original case on matching native builds.

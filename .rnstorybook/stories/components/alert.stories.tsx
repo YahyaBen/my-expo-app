@@ -56,6 +56,14 @@ function AlertDemo({
 const meta = {
   title: 'Components/Alert',
   component: AlertDemo,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Showing a success, warning or error alert requests matching outcome feedback once. Info and acknowledgment stay silent. Rerendering the same visible alert must not repeat feedback.',
+      },
+    },
+  },
   args: {
     variant: 'error',
     message: 'The email, username, or password is incorrect.',

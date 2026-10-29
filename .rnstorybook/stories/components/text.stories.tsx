@@ -1,7 +1,7 @@
 import { UniversalText } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { NativeStoryFrame } from '../../components/native-story-frame';
-import TextScreen from '@/features/ui-showcase/text-screen';
+import TextScreen from '../../components/catalog/text-preview';
 
 const meta = {
   title: 'Components/Text',

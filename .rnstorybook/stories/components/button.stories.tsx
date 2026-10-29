@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { action } from 'storybook/actions';
 import { NativeStoryFrame } from '../../components/native-story-frame';
 import type { StoryThemeProps } from '../../components/story-theme';
-import { StandaloneButtonPreview } from '@/features/ui-showcase/buttons-screen';
+import { StandaloneButtonPreview } from '../../components/catalog/buttons-preview';
 import {
   LayoutDirectionProvider,
   useLayoutDirectionSettings,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView, Row } from '@expo/ui';
@@ -17,9 +17,17 @@ import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-ho
 import { radii, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
+import { triggerHaptic } from '@/lib/haptics';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
+
+const motionInput = [-2, -1, 0, 1] as const;
+const opacityInput = [-3, -2, -1, 0, 1] as const;
+const opacityOutput = [0, 0.2, 0.8, 1, 0] as const;
+const scaleOutput = [0.86, 0.93, 1, 1.12] as const;
+const rotationOutput = [32, 16, 0, 0] as const;
+const reducedOpacityOutput = [0, 1, 0] as const;
 
 export type StackedCarouselProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -91,6 +99,7 @@ function StackedCarouselContent({
     if (nextIndex === selectedIndex.current) return;
     selectedIndex.current = nextIndex;
     setActiveIndex(nextIndex);
+    triggerHaptic('selection');
     onIndexChange?.(nextIndex, items[nextIndex]);
   }
 
@@ -220,16 +229,18 @@ function PhotoCard({
 }>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset;
+  const { reducedRange, translateYOutput } = useMemo(
+    () => ({
+      reducedRange: [index - 1, index, index + 1],
+      translateYOutput: [65, 35, 0, -height * 0.2],
+    }),
+    [height, index],
+  );
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
     if (reducedMotion) {
       return {
-        opacity: interpolate(
-          position,
-          [index - 1, index, index + 1],
-          [0, 1, 0],
-          Extrapolation.CLAMP,
-        ),
+        opacity: interpolate(position, reducedRange, reducedOpacityOutput, Extrapolation.CLAMP),
         transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
       };
     }
@@ -237,18 +248,17 @@ function PhotoCard({
     // Hidden cards must settle to a constant style rather than keep committing
     // transforms while the visible cards move.
     if (distance <= -3 || distance >= 1) return { opacity: 0 };
-    const range = [-2, -1, 0, 1];
     return {
       // Fade throughout the outgoing step; negative opacity targets made the
       // front card disappear halfway through a swipe.
-      opacity: interpolatePhotoMotion(distance, [-3, -2, -1, 0, 1], [0, 0.2, 0.8, 1, 0]),
+      opacity: interpolatePhotoMotion(distance, opacityInput, opacityOutput),
       transform: [
         { perspective: 600 },
         {
-          translateY: interpolatePhotoMotion(distance, range, [65, 35, 0, -height * 0.2]),
+          translateY: interpolatePhotoMotion(distance, motionInput, translateYOutput),
         },
-        { scale: interpolatePhotoMotion(distance, range, [0.86, 0.93, 1, 1.12]) },
-        { rotateX: `${interpolatePhotoMotion(distance, range, [32, 16, 0, 0])}deg` },
+        { scale: interpolatePhotoMotion(distance, motionInput, scaleOutput) },
+        { rotateX: `${interpolatePhotoMotion(distance, motionInput, rotationOutput)}deg` },
       ],
     };
   });

@@ -7,7 +7,7 @@ description: Compose grouped native settings forms with one bounded scroll owner
 
 Import `FieldGroup` from `@components/ui`.
 Sources: [field-group/](../../../src/components/ui/field-group/) and
-[Settings example](../../../src/features/settings/settings-screen.tsx).
+[Settings example](../../../.rnstorybook/components/device/settings-preview.tsx).
 
 ## Structure
 
@@ -40,6 +40,6 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
 - Form state, validation and preference persistence belong to existing owners.
   Showcase controls use local values and an isolated appearance.
 
-Use the [showcase](../../../src/features/ui-showcase/field-group-screen.tsx)
-at `/ui-component/field-group`. Verify final-row reachability, header scrolling,
+Use the [showcase](../../../.rnstorybook/components/catalog/field-group-preview.tsx)
+in **Wireframes/Component Gallery**. Verify final-row reachability, header scrolling,
 keyboard access, grouping, control names and live RTL on both platforms.

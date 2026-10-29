@@ -11,14 +11,13 @@
       "env": {
         "APP_BRAND": "template",
         "APP_VARIANT": "development",
-        "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "true",
-        "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
+        "EXPO_PUBLIC_STORYBOOK_ENABLED": "true"
       },
       "android": {
         "gradleCommand": ":app:assembleDebug --max-workers=1 --no-parallel --init-script ../config/android-build-memory.gradle"
       },
       "ios": {
-        "image": "macos-tahoe-26.6-xcode-27.1",
+        "image": "auto",
         "simulator": true
       }
     },
@@ -32,25 +31,26 @@
       "distribution": "internal",
       "environment": "preview",
       "ios": {
-        "image": "macos-tahoe-26.6-xcode-27.1"
+        "image": "auto"
       },
       "env": {
         "APP_BRAND": "template",
         "APP_VARIANT": "preview",
-        "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "true",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
+      },
+      "android": {
+        "buildType": "apk"
       }
     },
     "production": {
       "autoIncrement": true,
       "environment": "production",
       "ios": {
-        "image": "macos-tahoe-26.6-xcode-27.1"
+        "image": "auto"
       },
       "env": {
         "APP_BRAND": "template",
         "APP_VARIANT": "production",
-        "EXPO_PUBLIC_ENABLE_DEV_SCREENS": "false",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
       }
     }

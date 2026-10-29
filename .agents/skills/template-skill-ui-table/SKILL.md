@@ -37,4 +37,4 @@ Given a testID, Table derives `-scroll`, `-header`, `-row-{key}`,
 `-row-{key}-cell-{columnId}` and `-empty`. Actions derive `-action-{id}`.
 Check horizontal scrolling, RTL, large text, empty/filter reset, spoken row names
 and disabled menus with the
-[Table showcase](../../../src/features/ui-showcase/table-screen.tsx).
+[Table showcase](../../../.rnstorybook/components/catalog/table-preview.tsx).

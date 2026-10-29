@@ -3,8 +3,11 @@ import type { InitialSelection, Params } from '@storybook/react-native';
 import { ThemeProvider } from '@storybook/react-native-theming';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { configureNotificationPresentation } from '@/lib/device-permissions';
 
 import { view } from './storybook.requires';
+
+configureNotificationPresentation();
 
 const storage = {
   getItem: AsyncStorage.getItem,
@@ -44,7 +47,7 @@ export default function StorybookUI({
         ? initialStoryId
         : canvasMode
           ? 'components-button--primary'
-          : undefined,
+          : 'wireframes-home-sections--cards',
       // The built-in UI-less canvas groups iOS descendants into one accessible
       // element. A custom canvas retains each control's native test target.
       onDeviceUI: true,

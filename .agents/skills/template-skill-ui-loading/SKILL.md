@@ -32,4 +32,4 @@ Without a prefix, preserve `query-error`, `query-retry`, `query-offline`,
 
 Check initial error, cached error, offline/disabled states, pending retry
 suppression and independent activation using the
-[Loading showcase](../../../src/features/ui-showcase/loading-screen.tsx).
+[Loading showcase](../../../.rnstorybook/components/catalog/loading-preview.tsx).

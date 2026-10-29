@@ -1,0 +1,8 @@
+{
+  "ios": {
+    "NSCameraUsageDescription": "Autorisez $(PRODUCT_NAME) à prendre des photos lorsque vous utilisez l’appareil photo.",
+    "NSPhotoLibraryUsageDescription": "Autorisez $(PRODUCT_NAME) à sélectionner une photo dans votre bibliothèque.",
+    "NSLocationWhenInUseUsageDescription": "Autorisez $(PRODUCT_NAME) à afficher votre position actuelle dans les paramètres.",
+    "NSMicrophoneUsageDescription": "Autorisez $(PRODUCT_NAME) à enregistrer le son lorsque vous utilisez l’enregistrement vidéo."
+  }
+}

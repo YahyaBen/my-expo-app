@@ -106,7 +106,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX, Instagram and Altarea in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it.',
+          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX, Instagram and Altarea in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it. Changing tabs gives a subtle tick; reselecting the active tab stays silent. The center action uses stronger feedback. DisabledAction stays silent and does not increment its count.',
       },
     },
   },
