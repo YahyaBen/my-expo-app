@@ -56,7 +56,11 @@ is disabled in app preferences, automatic location/service reads stop.
 Unchanged permission snapshots retain their references so returning to Settings
 does not rebuild the full form for equivalent native results. Location refresh
 dependencies use the permission flags, not response-object identity. Explicit
-requests retain their pending/duplicate guards and returning from system Settings
+preference writes skip unchanged values; successful saves do not emit identical
+global snapshots. Failed saves remain retryable.
+
+The root subscribes only to hydration readiness, so device-feature toggles do not
+rerender the root navigator. Requests retain their pending/duplicate guards, and returning from system Settings
 still refreshes status. The first section reserves the measured header inset so
 its controls do not begin beneath the header's touch shield.
 

@@ -19,6 +19,12 @@ export function getDevicePreferences() {
 }
 
 function publish(next: typeof snapshot) {
+  if (
+    snapshot.ready === next.ready &&
+    snapshot.saveFailed === next.saveFailed &&
+    DEVICE_FEATURES.every((feature) => snapshot.enabled[feature] === next.enabled[feature])
+  )
+    return;
   snapshot = next;
   listeners.forEach((listener) => listener());
 }
@@ -60,7 +66,7 @@ export function restoreDevicePreferences() {
 
 /** App preferences never grant or revoke the operating system's permissions. */
 export function setDeviceFeatureEnabled(feature: DeviceFeature, enabled: boolean) {
-  if (!snapshot.ready) return;
+  if (!snapshot.ready || (snapshot.enabled[feature] === enabled && !snapshot.saveFailed)) return;
   const next = { ...snapshot.enabled, [feature]: enabled };
   publish({ ...snapshot, enabled: next, saveFailed: false });
   persistence = persistence
@@ -78,4 +84,14 @@ export function useDevicePreferences() {
     void restoreDevicePreferences();
   }, []);
   return useSyncExternalStore(subscribe, getDevicePreferences, getDevicePreferences);
+}
+
+const getReadySnapshot = () => snapshot.ready;
+
+/** Startup needs hydration readiness, not a rerender for every Settings toggle. */
+export function useDevicePreferencesReady() {
+  useEffect(() => {
+    void restoreDevicePreferences();
+  }, []);
+  return useSyncExternalStore(subscribe, getReadySnapshot, getReadySnapshot);
 }

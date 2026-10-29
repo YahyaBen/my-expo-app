@@ -67,10 +67,10 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to show your current location in Settings.",
-          "locationAlwaysPermission": false,
-          "locationAlwaysAndWhenInUsePermission": false,
-          "motionUsagePermission": false,
-          "locationFullAccuracyPermission": false
+          "locationAlwaysPermission": true,
+          "locationAlwaysAndWhenInUsePermission": true,
+          "motionUsagePermission": true,
+          "locationFullAccuracyPermission": true
         }
       ],
       "@react-native-community/datetimepicker",

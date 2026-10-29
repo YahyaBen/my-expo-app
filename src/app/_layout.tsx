@@ -19,7 +19,7 @@ import { ThemePreferencesProvider, useThemeSettings } from '@/context/theme.cont
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAppActive, useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
-import { useDevicePreferences } from '@/lib/device-preferences';
+import { useDevicePreferencesReady } from '@/lib/device-preferences';
 import { configurePerformance, markStartupMilestone, PerformanceRoot } from '@/lib/performance';
 
 export { ErrorBoundary } from 'expo-router';
@@ -58,7 +58,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
-  const { ready: devicePreferencesReady } = useDevicePreferences();
+  const devicePreferencesReady = useDevicePreferencesReady();
   const {
     colorScheme: appearance,
     appearanceReady,
