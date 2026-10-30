@@ -92,5 +92,24 @@ export const Light: Story = {};
 export const Dark: Story = { args: { colorScheme: 'dark' } };
 export const RTL: Story = { args: { rtl: true } };
 export const Compact: Story = { args: { width: 220, height: 180 } };
+export const OpaqueCardLayers: Story = {
+  args: {
+    items: ['#e11d48', '#2563eb', '#15803d', '#7e22ce'].map((color, index) => ({
+      id: `opaque-card-${index}`,
+      label: `Card ${index + 1}`,
+      source: `data:image/svg+xml;utf8,${encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect width="600" height="400" fill="${color}"/><text x="300" y="250" text-anchor="middle" font-size="160" font-weight="bold" fill="white">${index + 1}</text></svg>`,
+      )}`,
+    })),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Drag slowly forward and backward, pausing halfway: colors and numbers must stay solid, with the next card visible only outside the outgoing card. Repeat with Reduce motion, RTL and the compact size.',
+      },
+    },
+  },
+};
 export const Empty: Story = { args: { items: [] } };
 export const SinglePhoto: Story = { args: { items: photoFixtures.slice(0, 1) } };

@@ -3,10 +3,12 @@ import {
   buttonBorderShape,
   buttonStyle,
   clipShape,
+  contentShape,
   foregroundStyle,
   frame,
   disabled as nativeDisabled,
   padding,
+  shapes,
   tint,
 } from '@expo/ui/swift-ui/modifiers';
 import type { UniversalButtonContentProps } from './universal-button';
@@ -54,6 +56,8 @@ export function NativeButtonContent({
           ...(fullWidth ? [frame({ maxWidth: Infinity })] : []),
           ...(labelColor === undefined ? [] : [foregroundStyle(labelColor)]),
           ...(contentPadding === undefined ? [] : [padding({ all: contentPadding })]),
+          // Include empty artwork slots and spacing in the native button's tap area.
+          contentShape(shapes.rectangle()),
         ]}
       >
         <IconColorContext.Provider value={labelColor}>

@@ -3,8 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView, Row } from '@expo/ui';
 import Animated, {
-  Extrapolation,
-  interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -24,10 +22,9 @@ import { interpolatePhotoMotion } from '../photo-motion';
 
 const motionInput = [-2, -1, 0, 1] as const;
 const opacityInput = [-3, -2, -1, 0, 1] as const;
-const opacityOutput = [0, 0.2, 0.8, 1, 0] as const;
+const opacityOutput = [0, 1, 1, 1, 1] as const;
 const scaleOutput = [0.86, 0.93, 1, 1.12] as const;
 const rotationOutput = [32, 16, 0, 0] as const;
-const reducedOpacityOutput = [0, 1, 0] as const;
 
 export type StackedCarouselProps = {
   /** Unique, stable IDs; an empty list renders nothing. */
@@ -229,18 +226,16 @@ function PhotoCard({
 }>) {
   const colors = useThemeColors(useHostColorScheme());
   const insetX = inset;
-  const { reducedRange, translateYOutput } = useMemo(
-    () => ({
-      reducedRange: [index - 1, index, index + 1],
-      translateYOutput: [65, 35, 0, -height * 0.2],
-    }),
-    [height, index],
+  const translateYOutput = useMemo(
+    // Clear the viewport before hiding the outgoing card, including its scaled edge.
+    () => [65, 35, 0, -height * scaleOutput[3] - spacing.xl],
+    [height],
   );
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
     if (reducedMotion) {
       return {
-        opacity: interpolate(position, reducedRange, reducedOpacityOutput, Extrapolation.CLAMP),
+        opacity: index === Math.round(position) ? 1 : 0,
         transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
       };
     }
@@ -249,8 +244,8 @@ function PhotoCard({
     // transforms while the visible cards move.
     if (distance <= -3 || distance >= 1) return { opacity: 0 };
     return {
-      // Fade throughout the outgoing step; negative opacity targets made the
-      // front card disappear halfway through a swipe.
+      // Only fade the farthest card into the stack. Overlapping cards stay
+      // opaque so the outgoing photo conceals the next one until it moves away.
       opacity: interpolatePhotoMotion(distance, opacityInput, opacityOutput),
       transform: [
         { perspective: 600 },
