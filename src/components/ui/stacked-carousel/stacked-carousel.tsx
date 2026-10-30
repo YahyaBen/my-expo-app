@@ -258,34 +258,41 @@ function PhotoCard({
     };
   });
   return (
-    <Animated.View
-      style={[
-        {
-          position: 'absolute',
-          top: spacing.xl,
-          left: rtl ? undefined : insetX,
-          right: rtl ? insetX : undefined,
-          width: width,
-          height: height,
-          zIndex: count - index,
-          borderRadius: radii.card,
-          borderWidth: 0,
-          borderColor: colors.background,
-          overflow: 'hidden',
-          backgroundColor: colors.surfaceVariant,
-        },
-        animatedStyle,
-      ]}
+    // Keep the stacking planes flat. Tilting these siblings directly lets their
+    // 3D surfaces intersect on iOS, drawing rear artwork over the front card.
+    <View
+      collapsable={false}
+      style={{
+        position: 'absolute',
+        top: spacing.xl,
+        left: rtl ? undefined : insetX,
+        right: rtl ? insetX : undefined,
+        width,
+        height,
+        zIndex: count - index,
+      }}
     >
-      <Image
-        source={item.source}
-        contentFit="cover"
-        cachePolicy="memory-disk"
-        accessible={false}
-        style={StyleSheet.absoluteFill}
-        testID={testID}
-      />
-    </Animated.View>
+      <Animated.View
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            borderRadius: radii.card,
+            overflow: 'hidden',
+            backgroundColor: colors.surfaceVariant,
+          },
+          animatedStyle,
+        ]}
+      >
+        <Image
+          source={item.source}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          accessible={false}
+          style={StyleSheet.absoluteFill}
+          testID={testID}
+        />
+      </Animated.View>
+    </View>
   );
 }
 

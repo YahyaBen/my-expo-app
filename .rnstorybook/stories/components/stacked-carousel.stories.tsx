@@ -106,7 +106,7 @@ export const OpaqueCardLayers: Story = {
     docs: {
       description: {
         story:
-          'Drag slowly forward and backward, pausing halfway: colors and numbers must stay solid, with the next card visible only outside the outgoing card. Repeat with Reduce motion, RTL and the compact size.',
+          'Before swiping and after each settled selection, the front card must stay fully visible; tilted rear cards may only peek out below it. Drag slowly forward and backward, pausing halfway: colors and numbers must stay solid, with the next card visible only outside the outgoing card. Repeat with Reduce motion, RTL and the compact size.',
       },
     },
   },
