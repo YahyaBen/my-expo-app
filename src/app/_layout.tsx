@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { Appearance, Platform, View } from 'react-native';
 import { ReducedMotionConfig, ReduceMotion } from 'react-native-reanimated';
 import { getAppBrand } from '@/config/brand';
@@ -15,7 +15,12 @@ import { LanguageProvider, useLanguage } from '@/context/language.context';
 import { LayoutDirectionProvider, useLayoutDirection } from '@/context/layout-direction.context';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
 import { StartupLayoutContext } from '@/context/startup-layout.context';
-import { ThemePreferencesProvider, useThemeSettings } from '@/context/theme.context';
+import {
+  ThemePreferencesProvider,
+  useAppearanceSettings,
+  useHeaderMotionReady,
+  useHeaderSettings,
+} from '@/context/theme.context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAppActive, useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
@@ -59,17 +64,11 @@ export default function RootLayout() {
 
 function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const devicePreferencesReady = useDevicePreferencesReady();
-  const {
-    colorScheme: appearance,
-    appearanceReady,
-    headerShape,
-    headerMotionReady,
-  } = useThemeSettings();
+  const { colorScheme: appearance, appearanceReady } = useAppearanceSettings();
+  const headerMotionReady = useHeaderMotionReady();
   const { ready: languageReady } = useLanguage();
   const colorScheme = useColorScheme();
   const { colors } = useAppTheme(colorScheme);
-  const direction = useLayoutDirection();
-  const reducedMotion = useAppReducedMotion();
   const active = useAppActive();
   const [showLaunchScreen, setShowLaunchScreen] = useState(true);
   const [initialLayoutReady, setInitialLayoutReady] = useState(false);
@@ -100,32 +99,14 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
       collapsable={false}
       style={{ flex: 1, backgroundColor: colors.background }}
     >
-      <ReducedMotionConfig mode={reducedMotion ? ReduceMotion.Always : ReduceMotion.Never} />
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <PageMotionOverlay shape={headerShape} animate={!showLaunchScreen}>
+      <AppPageMotionOverlay animate={!showLaunchScreen}>
         <PerformanceReadyContext.Provider value={interactive}>
           <StartupLayoutContext.Provider value={onInitialLayout}>
-            {resourcesReady ? (
-              <ThemeProvider value={navigationTheme(colorScheme, colors)}>
-                <Stack
-                  activityEnabled={Platform.OS === 'android' ? 1 : false}
-                  screenOptions={{
-                    ...stackMotionOptions(reducedMotion),
-                    contentStyle: { backgroundColor: colors.background, direction },
-                    headerShown: false,
-                  }}
-                >
-                  <Stack.Screen name="index" />
-                  <Stack.Protected guard={storybookEnabled}>
-                    <Stack.Screen name="storybook" />
-                  </Stack.Protected>
-                  <Stack.Screen name="+not-found" />
-                </Stack>
-              </ThemeProvider>
-            ) : null}
+            <AppNavigator ready={resourcesReady} />
           </StartupLayoutContext.Provider>
         </PerformanceReadyContext.Provider>
-      </PageMotionOverlay>
+      </AppPageMotionOverlay>
       {showLaunchScreen && appearanceReady ? (
         <LaunchScreen
           mode={brand.presentation.launch}
@@ -136,5 +117,50 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
       ) : null}
       {!showLaunchScreen && <AlertHost />}
     </View>
+  );
+}
+
+/** Header choices update decoration without rebuilding the navigation children. */
+function AppPageMotionOverlay({
+  children,
+  animate,
+}: Readonly<PropsWithChildren<{ animate: boolean }>>) {
+  const { headerShape } = useHeaderSettings();
+  return (
+    <PageMotionOverlay shape={headerShape} animate={animate}>
+      {children}
+    </PageMotionOverlay>
+  );
+}
+
+/** Motion preferences belong to the native transition owner, below startup layout. */
+function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
+  const colorScheme = useColorScheme();
+  const { colors } = useAppTheme(colorScheme);
+  const direction = useLayoutDirection();
+  const reducedMotion = useAppReducedMotion();
+  const theme = useMemo(() => navigationTheme(colorScheme, colors), [colorScheme, colors]);
+  return (
+    <>
+      <ReducedMotionConfig mode={reducedMotion ? ReduceMotion.Always : ReduceMotion.Never} />
+      {ready ? (
+        <ThemeProvider value={theme}>
+          <Stack
+            activityEnabled={Platform.OS === 'android' ? 1 : false}
+            screenOptions={{
+              ...stackMotionOptions(reducedMotion),
+              contentStyle: { backgroundColor: colors.background, direction },
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Protected guard={storybookEnabled}>
+              <Stack.Screen name="storybook" />
+            </Stack.Protected>
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </ThemeProvider>
+      ) : null}
+    </>
   );
 }

@@ -2,7 +2,11 @@ import { LaunchScreen, PageMotionOverlay, UniversalButton, UniversalText } from 
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { ThemePreferencesProvider, useThemePreferences } from '@/context/theme.context';
+import {
+  ThemePreferencesProvider,
+  useAppearancePreferences,
+  useThemePalette,
+} from '@/context/theme.context';
 import { getAppBrand } from '@/config/brand';
 import { useThemeColors } from '@/hooks/use-theme';
 
@@ -33,13 +37,14 @@ function LaunchDemo({
 }>) {
   const [presented, setPresented] = useState(true);
   const brand = getAppBrand();
-  const preferences = useThemePreferences();
+  const palette = useThemePalette();
+  const appearance = useAppearancePreferences();
   const finish = useCallback(() => setPresented(false), []);
   return (
     <ThemePreferencesProvider
       key={String(reducedMotion)}
-      initialTheme={preferences?.themeId}
-      initialColorScheme={preferences?.colorScheme ?? 'light'}
+      initialTheme={palette?.themeId}
+      initialColorScheme={appearance?.colorScheme ?? 'light'}
       initialReducedMotion={reducedMotion}
     >
       <View style={{ flex: 1 }}>

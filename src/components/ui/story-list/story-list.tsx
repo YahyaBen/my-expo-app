@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useMemo, useRef, useState } from 'react';
+import { StyleSheet, View, type FlatList } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
 import Animated, {
@@ -20,6 +20,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
+import { PhotoScrollView, photoScrollOffset } from '../photo-scroll-view';
 
 const opacityInput = [-3, -2, 0, 1] as const;
 const opacityOutput = [0, 1, 1, 1] as const;
@@ -67,21 +68,14 @@ function StoryListContent({
   const cardWidth = Math.max(1, Math.min(width, requestedItemWidth ?? width * 0.78));
   const height = Math.max(1, requestedHeight ?? Math.min(width * 1.05, 420));
   const cardHeight = height;
-  const scrollRef = useRef<Animated.ScrollView>(null);
+  const scrollRef = useRef<FlatList<PhotoItem>>(null);
   const selectedIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollOffset = useSharedValue(0);
 
   const onScroll = useAnimatedScrollHandler((event) => {
-    scrollOffset.set(event.contentOffset.x);
+    scrollOffset.set(photoScrollOffset(event));
   });
-
-  useEffect(() => {
-    // Keep the selected photo when rotating or changing the app's direction.
-    const x = selectedIndex.current * cardWidth;
-    scrollRef.current?.scrollTo({ x, animated: false });
-    scrollOffset.set(x);
-  }, [cardWidth, rtl, scrollOffset]);
 
   function updateSelection(index: number) {
     const nextIndex = Math.max(0, Math.min(index, items.length - 1));
@@ -94,7 +88,7 @@ function StoryListContent({
   function selectPhoto(index: number) {
     const nextIndex = Math.max(0, Math.min(index, items.length - 1));
     updateSelection(nextIndex);
-    scrollRef.current?.scrollTo({ x: nextIndex * cardWidth, animated: !reducedMotion });
+    scrollRef.current?.scrollToOffset({ offset: nextIndex * cardWidth, animated: !reducedMotion });
   }
   const positionLabel = getPositionLabel?.(activeIndex, items.length);
 
@@ -119,38 +113,22 @@ function StoryListContent({
           }}
           testID={`${testID}-cards`}
         >
-          {/* Expo UI's ScrollView has no offset/snap API; this boundary only drives the artwork. */}
-          <Animated.ScrollView
+          <PhotoScrollView
             ref={scrollRef}
-            horizontal
-            scrollEnabled={items.length > 1}
-            accessible={false}
+            items={items}
+            width={width}
+            height={height}
+            itemWidth={cardWidth}
+            rtl={rtl}
+            selectedIndex={selectedIndex}
+            scrollOffset={scrollOffset}
             onScroll={onScroll}
-            onMomentumScrollEnd={({ nativeEvent }) => {
-              const index = Math.max(
-                0,
-                Math.min(Math.round(nativeEvent.contentOffset.x / cardWidth), items.length - 1),
-              );
-              updateSelection(index);
-            }}
-            snapToInterval={cardWidth}
-            decelerationRate="fast"
-            directionalLockEnabled
-            bounces={false}
-            overScrollMode="never"
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            style={[styles.scroll, rtl && styles.mirrored]}
-            testID={`${testID}-scroll`}
-          >
-            <View style={{ width: cardWidth * (items.length - 1) + width, height }} />
-          </Animated.ScrollView>
-          <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-            {items.map((item, index) => (
+            onMomentumScrollEnd={({ nativeEvent }) =>
+              updateSelection(Math.round(photoScrollOffset(nativeEvent) / cardWidth))
+            }
+            renderItem={({ item, index }) => (
               <PhotoCard
-                key={item.id}
                 item={item}
-                count={items.length}
                 index={index}
                 width={cardWidth}
                 height={cardHeight}
@@ -160,8 +138,9 @@ function StoryListContent({
                 reducedMotion={reducedMotion}
                 testID={`${testID}-photo-${item.id}`}
               />
-            ))}
-          </View>
+            )}
+            testID={`${testID}-scroll`}
+          />
         </View>
       </RNHostView>
 
@@ -176,7 +155,6 @@ function StoryListContent({
 
 function PhotoCard({
   item,
-  count,
   index,
   width,
   height,
@@ -187,7 +165,6 @@ function PhotoCard({
   testID,
 }: Readonly<{
   item: PhotoItem;
-  count: number;
   index: number;
   width: number;
   height: number;
@@ -211,21 +188,28 @@ function PhotoCard({
   );
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
+    const distance = position - index;
     if (reducedMotion) {
       return {
         opacity: interpolate(position, reducedRange, reducedOpacityOutput, Extrapolation.CLAMP),
-        transform: [{ translateX: 0 }, { translateY: 0 }, { scale: 1 }, { rotateX: '0deg' }],
+        transform: [
+          { translateX: distance * width * (rtl ? -1 : 1) },
+          { translateY: 0 },
+          { scale: 1 },
+          { rotateX: '0deg' },
+        ],
       };
     }
     // Cards outside the visible stack keep a constant style instead of receiving
     // new native transforms on every scroll frame.
-    const distance = position - index;
     if (distance <= -3 || distance >= 1) return { opacity: 0 };
     return {
       opacity: interpolatePhotoMotion(distance, opacityInput, opacityOutput),
       transform: [
         {
-          translateX: interpolatePhotoMotion(position, range, translateXOutput) * (rtl ? -1 : 1),
+          translateX:
+            (distance * width + interpolatePhotoMotion(position, range, translateXOutput)) *
+            (rtl ? -1 : 1),
         },
         { scale: interpolatePhotoMotion(position, range, scaleOutput) },
       ],
@@ -241,7 +225,6 @@ function PhotoCard({
           right: rtl ? insetX : undefined,
           width: width,
           height: height,
-          zIndex: count - index,
           borderRadius: radii.card,
           borderWidth: 0,
           borderColor: colors.background,
@@ -262,8 +245,3 @@ function PhotoCard({
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  scroll: { flex: 1, direction: 'ltr' },
-  mirrored: { transform: [{ scaleX: -1 }] },
-});

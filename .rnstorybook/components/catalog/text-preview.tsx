@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, type PropsWithChildren } from 'react';
 import {
   ColorSchemeControl,
   Column,
@@ -45,7 +45,6 @@ const tones = [
 
 export default function TextScreen() {
   const { t } = useTranslation();
-  const preferences = useThemeSettings();
   const { colors } = useAppTheme();
   return (
     <PageScreen
@@ -64,15 +63,9 @@ export default function TextScreen() {
         hint={t('showcase.gallery.previewAppearanceHint')}
       >
         <HostedPreview>
-          <ThemePreferencesProvider
-            initialTheme={preferences.themeId}
-            initialColorScheme={preferences.colorScheme}
-            initialHeaderShape={preferences.headerShape}
-            initialReducedMotion={preferences.reducedMotion}
-            allowThemeSelection
-          >
+          <TextPreviewTheme>
             <TextColorPreview />
-          </ThemePreferencesProvider>
+          </TextPreviewTheme>
         </HostedPreview>
       </DemoSection>
       <DemoSection title={t('showcase.gallery.wrap')}>
@@ -108,6 +101,22 @@ export default function TextScreen() {
         </HostedPreview>
       </DemoSection>
     </PageScreen>
+  );
+}
+
+/** Only this boundary needs the full snapshot to seed the isolated provider. */
+function TextPreviewTheme({ children }: Readonly<PropsWithChildren>) {
+  const preferences = useThemeSettings();
+  return (
+    <ThemePreferencesProvider
+      initialTheme={preferences.themeId}
+      initialColorScheme={preferences.colorScheme}
+      initialHeaderShape={preferences.headerShape}
+      initialReducedMotion={preferences.reducedMotion}
+      allowThemeSelection
+    >
+      {children}
+    </ThemePreferencesProvider>
   );
 }
 

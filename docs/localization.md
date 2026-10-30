@@ -1,23 +1,35 @@
 # Localization
 
-App translations live in `src/shared/locales/fr.json`, `en.json`, and `ar.json`. They preserve the keys and translations from `reference/shared/locales`, with additional namespaces for this app's screens and controls. Use `useTranslation().t()` in rendered components. Keep route names, form field names, enum values, brands, and test selectors independent of the language.
+App translations live in src/shared/locales/fr.json, en.json and ar.json. Use
+useTranslation().t() for app-owned text and keep the same keys and interpolation
+parameters in all three dictionaries. Route names, form fields, enums, brand
+identity and test selectors stay independent of language. Keys for removed
+product screens are not part of the template dictionary.
 
-French is the default. Login's top-left language icon opens a native sheet with Français, English, and العربية. The language picker is also available in Settings. Both use the existing language provider and save the choice under the reference-compatible `appLanguage` storage key. Startup waits for that preference before dismissing the launch overlay. Failed storage reads use French; failed writes leave the selected language usable for the current session.
+French is the default. The Preferences story and shared auth language control use
+the existing language provider and appLanguage storage key. Startup waits for
+restoration; failed reads use French and failed writes leave the current selection
+usable for the session. The release wireframe has no Settings or login route.
 
-The selected brand name comes from public app configuration, not a translation
-namespace. `account.signedIn` and `launch.loading` interpolate `{{brandName}}` in
-all three dictionaries. Pass the current name explicitly when rendering those
-messages; keep interpolation parameters aligned. Auth wordmarks and launch names
-use the configured name directly. Heading fonts follow the selected asset's
-language support; see [bundled assets](assets.md).
+Arabic selects RTL through the existing direction provider; French and English
+select LTR. Language changes preserve mounted drafts and navigation. Storybook's
+explicit direction controls support isolated layout previews. See
+[live direction](layout-direction.md).
 
-Arabic selects RTL through the existing layout direction provider. Changes preserve navigation, query caches, and drafts. French and English select LTR. The separate direction switch is available in native Storybook for layout previews. Arabic authentication headings use the system font for script support. No app reload or new dependency is required.
+Brand names come from public app configuration. launch.loading interpolates
+brandName; pass that value when rendering it. Auth wordmarks use the configured
+name directly. Heading fonts follow the selected asset's supported scripts; see
+[bundled assets](assets.md).
 
-Custom validation messages store translation keys and translate when displayed. Zod's built-in messages use its current locale. API requests send the selected `Accept-Language`; app-owned failures use the dictionaries. Server responses and user-authored content remain the server's responsibility.
+Custom validation messages store translation keys and translate at display time.
+Zod's built-in messages use its current locale. API requests send the selected
+Accept-Language; server responses and user-authored content stay with the server.
+Keep dynamically composed translation keys when pruning dictionaries.
 
-Native iOS camera, microphone, photo-library and foreground-location permission messages live
-in `config/locales/en.json`, `fr.json` and `ar.json`, registered through `app.json`.
-These system dialogs follow the device's app-language settings. The in-app language
-picker changes app content; native permission-message changes require a new build.
+Native iOS permission messages live in config/locales/en.json, fr.json and
+ar.json, registered through app.json. System dialogs follow device app-language
+settings. The in-app picker changes content; native prompt edits require a build.
 
-Run `npm run check` for TypeScript, lint and formatting. Automated suites have been removed; existing test IDs remain for future tests. Check language switching, persistence, RTL, draft preservation and request language manually. Verify French, English and Arabic on iOS and Android, then restore the desired language.
+Run npm run check after edits. Check language persistence, RTL, draft preservation
+and request language on matching iOS/Android builds; report backend verification
+separately when a real API is configured.

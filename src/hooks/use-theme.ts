@@ -1,9 +1,9 @@
 import { themes } from '@/constants/themes/index';
-import { useThemePreferences } from '@/context/theme.context';
+import { useThemePalette } from '@/context/theme.context';
 import { useColorScheme } from './use-color-scheme';
 
 export function useAppTheme(preferredScheme?: 'light' | 'dark') {
-  const preferences = useThemePreferences();
+  const preferences = useThemePalette();
   const scheme = useColorScheme(preferredScheme);
   const themeId = preferences?.themeId ?? 'ux';
   const theme = themes[themeId];

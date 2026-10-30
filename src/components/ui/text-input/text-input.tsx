@@ -100,7 +100,7 @@ export function TextInput({
       {...inputProps}
       value={nativeValue}
       onChangeText={(text) => {
-        if (value !== undefined) setEditRevision((revision) => revision + 1);
+        if (value !== undefined && text !== value) setEditRevision((revision) => revision + 1);
         onChangeText?.(text);
       }}
       modifiers={[

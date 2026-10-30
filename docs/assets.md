@@ -11,7 +11,7 @@ or full brand manifests.
 
 | Brand      | Heading font             | Registered launch artwork | Launch mode |
 | ---------- | ------------------------ | ------------------------- | ----------- |
-| `template` | Native system typography | `assets/images/icon.png`  | Minimal     |
+| `template` | Native system typography | `bluePepe`                | Branded     |
 
 `assets/animations/blue-pepe.lottie` remains bundled and registered as `bluePepe`.
 Branded Lottie launch support is retained: a manifest can select
@@ -81,11 +81,9 @@ Metro can bundle all statically registered sources, even when only one is
 selected. This registry does not promise per-brand asset removal or runtime
 tenant switching.
 
-Header paths for Dunes, Ribbon and Rain remain in the shared page geometry.
-`assets/images/header-motion/rain.svg` is a static snapshot; production builds its
-animated paths and native blur mask from numeric commands. Removed Smoke and
-Water SVGs are no longer bundled. Dunes, Ribbon, Rain and the iOS SVG material
-mask are retained. The branded launch edge keeps cached paths and its drift;
+Header paths for Dunes, Ribbon and Rain are generated in the shared page geometry;
+they need no bundled SVG snapshots. The iOS SVG material mask remains in source.
+The branded launch edge keeps cached paths and its drift;
 minimal launch does not mount artwork or that edge. The existing
 [page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
 [launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) skills own these

@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import TokensScreen from '../../components/catalog/tokens-preview';
+import { ThemeSubscriptionPreview } from '../../components/catalog/theme-subscription-preview';
 import type { StoryThemeProps } from '../../components/story-theme';
 
 const meta = {
   title: 'Components/Theme Tokens',
   component: TokensScreen,
-  args: { themeId: 'ux', colorScheme: 'light' },
-  render: () => <TokensScreen />,
+  args: { themeId: 'ux', colorScheme: 'light', example: 'tokens' },
+  argTypes: { example: { control: 'select', options: ['tokens', 'subscriptions'] } },
+  render: ({ example }) =>
+    example === 'subscriptions' ? <ThemeSubscriptionPreview /> : <TokensScreen />,
   parameters: {
     docs: {
       description: {
@@ -15,7 +18,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<StoryThemeProps>;
+} satisfies Meta<StoryThemeProps & { example: 'tokens' | 'subscriptions' }>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

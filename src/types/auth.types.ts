@@ -76,43 +76,4 @@ export type ResetPasswordRequest = {
   newPassword: string;
 };
 
-export type ChallengeResponse = {
-  challengeId: string;
-  expiresAtUtc: string;
-};
-
 export type CurrentIdentityResponse = z.infer<typeof currentIdentityResponseSchema>;
-
-export type DeviceResponse = {
-  id: string;
-  platform: string | null;
-  deviceName: string | null;
-  firstSeenAtUtc: string;
-  lastSeenAtUtc: string;
-  verifiedAtUtc: string | null;
-  revokedAtUtc: string | null;
-  isCurrent: boolean;
-  hasPushRegistration: boolean;
-};
-
-export type DeviceListResponse = {
-  items: DeviceResponse[];
-  skip: number;
-  take: number;
-};
-
-export type SessionResponse = {
-  id: string;
-  deviceId: string;
-  createdAtUtc: string;
-  expiresAtUtc: string;
-  revokedAtUtc: string | null;
-  isActive: boolean;
-  isCurrent: boolean;
-};
-
-export type SessionListResponse = {
-  items: SessionResponse[];
-  skip: number;
-  take: number;
-};

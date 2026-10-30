@@ -12,7 +12,7 @@ import {
   AnimatedComponentPreview,
   type AnimatedComponentPreviewProps,
 } from '../../components/animated-component-preview';
-import { photoFixtures } from '../../components/photo-fixtures';
+import { photoFixtures, photoDatasets } from '../../components/photo-fixtures';
 import { svgImageSource } from '../../components/svg-image-source';
 
 const opaqueCards = ['#e11d48', '#2563eb', '#15803d', '#7e22ce'].map((color, index) => ({
@@ -28,7 +28,7 @@ type Props = AnimatedComponentPreviewProps & {
   width: number;
   height?: number;
   itemWidth?: number;
-  dataset?: 'photos' | 'opaque-cards';
+  dataset?: keyof typeof photoDatasets | 'opaque-cards';
 };
 
 function StackedCarouselDemo({
@@ -42,7 +42,13 @@ function StackedCarouselDemo({
   const { width: screenWidth } = useWindowDimensions();
   const width = Math.max(1, Math.min(requestedWidth, screenWidth - spacing.lg * 2));
   const [replacement, setReplacement] = useState<readonly PhotoItem[] | null>(null);
-  const items = replacement ?? (dataset === 'opaque-cards' ? opaqueCards : initialItems);
+  const items =
+    replacement ??
+    (dataset === 'opaque-cards'
+      ? opaqueCards
+      : dataset === 'photos'
+        ? initialItems
+        : photoDatasets[dataset]);
   const [selection, setSelection] = useState('No selection callback yet');
   const [events, setEvents] = useState(0);
   return (
@@ -95,13 +101,13 @@ const meta = {
     items: { control: 'object' },
     height: { control: { type: 'number', min: 1 } },
     itemWidth: { control: { type: 'number', min: 1 } },
-    dataset: { control: 'select', options: ['photos', 'opaque-cards'] },
+    dataset: { control: 'select', options: ['photos', 'opaque-cards', 'large-200', 'large-1000'] },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Caller-owned images, labels and dimensions. Swipe or use accessibility actions: each changed settled selection gives one subtle tick. Initial render, resizing, data replacement and selecting the current photo stay silent. Replace/clear data and watch the callback count. Check live RTL and Reduce motion on native devices.',
+          'Caller-owned images, labels and dimensions. Swipe or use accessibility actions: each changed settled selection gives one subtle tick. Initial render, resizing, data replacement and selecting the current photo stay silent. Replace/clear data and watch the callback count. Select large-200 or large-1000 and inspect mounted photo selectors while swiping to later items and back. Offline payloads repeat; unique image decoding needs separate measurement. Check live RTL and Reduce motion on native devices.',
       },
     },
   },

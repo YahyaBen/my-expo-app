@@ -13,3 +13,17 @@ export const photoFixtures: readonly PhotoItem[] = photoIds.map((id, index) => {
     label: `Photo ${index + 1}`,
   };
 });
+
+/** Repeated offline payloads isolate mounted-view cost from network variability. */
+export const largePhotoFixtures: readonly PhotoItem[] = Array.from({ length: 1000 }, (_, index) => {
+  const original = photoFixtures[index % photoFixtures.length];
+  return index < photoFixtures.length
+    ? original
+    : { ...original, id: `${original.id}-${index}`, label: `Photo ${index + 1}` };
+});
+
+export const photoDatasets = {
+  photos: photoFixtures,
+  'large-200': largePhotoFixtures.slice(0, 200),
+  'large-1000': largePhotoFixtures,
+};

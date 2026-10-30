@@ -10,14 +10,22 @@ response envelope before adding an operation. Use the supplied contract or exist
 reference material; do not invent CRUD capabilities. Extend `src/services/` helpers
 and the current auth lifecycle rather than creating a second transport.
 
-| Owner                                    | Responsibility                                           |
-| ---------------------------------------- | -------------------------------------------------------- |
-| `src/validation/schemas/api/<entity>.ts` | Runtime response schema; infer response DTOs from it     |
-| `src/types/<entity>.types.ts`            | Query, result and supported write types                  |
-| `src/lib/api-query-keys.ts`              | Pure normalized key factories                            |
-| Entity `.api.ts` / `.service.ts`         | HTTP through `apiClient`; no React, UI or cache effects  |
-| Entity `.queries.ts` / `.mutations.ts`   | Read options and supported writes with cache maintenance |
-| Entity `.hooks.ts`                       | React consumption, callback composition and invalidation |
+- Keep a feature-specific contract and named repository object together in the
+  entity's `.repository.ts` file. Migrate its consumers together and keep one data
+  access owner per entity. Query caching, navigation and durable sessions stay
+  with their current owners.
+- Implement only operations supported by the real backend contract. Keep the
+  repository small; avoid a generic base repository, dependency-injection
+  container or forwarding API layer.
+
+| Owner                                    | Responsibility                                                       |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| `src/validation/schemas/api/<entity>.ts` | Runtime response schema; infer response DTOs from it                 |
+| `src/types/<entity>.types.ts`            | Query, result and supported write types                              |
+| `src/lib/api-query-keys.ts`              | Pure normalized key factories                                        |
+| Entity `.repository.ts`                  | Typed data access through `apiClient`; no React, UI or cache effects |
+| Entity `.queries.ts` / `.mutations.ts`   | Read options and supported writes with cache maintenance             |
+| Entity `.hooks.ts`                       | React consumption, callback composition and invalidation             |
 
 ## Response and session boundaries
 
@@ -64,7 +72,7 @@ and the current auth lifecycle rather than creating a second transport.
   not discard maintenance. Keep navigation in consumers. Distinguish server-write
   failures from callback/refetch failures before offering a repeated POST.
 
-Search DTO, method, key and hook consumers before changing contracts. Update
+Search repository, DTO, method, key and hook consumers before changing contracts. Update
 schemas, request normalization, keys and invalidation together. Use installed
 types and current official TanStack/Axios documentation for API syntax.
 

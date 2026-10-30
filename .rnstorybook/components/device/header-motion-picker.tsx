@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { HEADER_STYLES, type PageHeaderStyle } from '@/constants/header-motion';
-import { useThemeSettings } from '@/context/theme.context';
+import { useHeaderSettings } from '@/context/theme.context';
 import { Picker } from '@components/ui';
 
 export function HeaderMotionPicker() {
   const { t } = useTranslation();
-  const { headerShape, setHeaderShape, headerMotionReady } = useThemeSettings();
+  const { headerShape, setHeaderShape, headerMotionReady } = useHeaderSettings();
   return (
     <Picker<PageHeaderStyle>
       selectedValue={headerShape}

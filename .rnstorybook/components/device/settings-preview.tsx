@@ -1,7 +1,6 @@
-import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { router } from 'expo-router';
 import { Platform, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -17,7 +16,6 @@ import {
   PageSection,
   pageFormModifiers,
   Row,
-  Spacer,
   Switch,
   UniversalButtonContent,
   UniversalHost,
@@ -26,7 +24,7 @@ import {
 } from '@components/ui';
 import { useLanguage } from '@/context/language.context';
 import { useLayoutDirection } from '@/context/layout-direction.context';
-import { useThemeSettings } from '@/context/theme.context';
+import { useMotionSettings } from '@/context/theme.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
@@ -57,24 +55,20 @@ export default function SettingsPreview() {
 }
 
 /** Explicit preferences also let native stories run without changing saved app settings. */
-export function SettingsPage({
+function SettingsPage({
   language,
   onLanguageChange,
-  languageReady = true,
-  tab = false,
+  languageReady,
   onBack,
 }: Readonly<{
   language: Language;
   onLanguageChange?: (language: Language) => void;
-  languageReady?: boolean;
-  tab?: boolean;
-  onBack?: () => void;
+  languageReady: boolean;
+  onBack: () => void;
 }>) {
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors, design } = useAppTheme();
-  const { setReducedMotion, headerMotionReady } = useThemeSettings();
-  const reducedMotion = useAppReducedMotion();
   const { height: windowHeight } = useWindowDimensions();
   const languageListHeight = Math.min(320, windowHeight * 0.45);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -92,7 +86,6 @@ export function SettingsPage({
         : location.permission?.status === 'denied'
           ? 'denied'
           : 'notRequested';
-  const back = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   const chevron = (
     <Icon
       name={Icon.select({
@@ -106,11 +99,11 @@ export function SettingsPage({
   return (
     <PageFrame
       title={t('settings.title')}
-      onBack={tab ? undefined : back}
+      onBack={onBack}
       headerOverlay={false}
       scrollsBehindHeader
     >
-      <SettingsViewport tab={tab}>
+      <SettingsViewport>
         <UniversalHost
           // Recreate only this iOS form host when direction flips; reused native cells mirror text.
           key={Platform.OS === 'ios' ? direction : undefined}
@@ -150,14 +143,7 @@ export function SettingsPage({
                   <HeaderMotionPicker />
                 </Row>
               ) : null}
-              <Switch
-                label={t('settings.reduceMotion')}
-                value={reducedMotion}
-                onValueChange={setReducedMotion}
-                disabled={!headerMotionReady}
-                modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
-                testID="app-settings-reduce-motion"
-              />
+              <ReducedMotionControl />
               <ListItem
                 testID="app-settings-language"
                 disabled={!languageReady || !onLanguageChange}
@@ -306,11 +292,6 @@ export function SettingsPage({
               >
                 <Text>{t('settings.appVersion')}</Text>
               </ListItem>
-              {tab ? (
-                <FieldGroup.SectionFooter>
-                  <Spacer size={tabBarRaisedHeight} />
-                </FieldGroup.SectionFooter>
-              ) : null}
             </FieldGroup.Section>
           </FieldGroup>
         </UniversalHost>
@@ -384,6 +365,23 @@ export function SettingsPage({
   );
 }
 
+/** Motion changes update this control without rebuilding the settings form. */
+function ReducedMotionControl() {
+  const { t } = useTranslation();
+  const { setReducedMotion, headerMotionReady } = useMotionSettings();
+  const reducedMotion = useAppReducedMotion();
+  return (
+    <Switch
+      label={t('settings.reduceMotion')}
+      value={reducedMotion}
+      onValueChange={setReducedMotion}
+      disabled={!headerMotionReady}
+      modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
+      testID="app-settings-reduce-motion"
+    />
+  );
+}
+
 /** Only the first section reserves clearance; all headings share the brand foreground. */
 function SettingsSectionHeading({
   label,
@@ -414,13 +412,13 @@ function SettingsSectionHeading({
 }
 
 // FieldGroup owns scrolling; the RN boundary supplies a bounded native viewport and safe areas.
-function SettingsViewport({ children, tab }: Readonly<{ children: ReactNode; tab: boolean }>) {
+function SettingsViewport({ children }: Readonly<{ children: ReactNode }>) {
   const insets = useSafeAreaInsets();
   return (
     <View
       testID="app-settings-viewport"
       collapsable={false}
-      style={{ flex: 1, overflow: 'hidden', ...screenInsets(insets, { tabBarShown: tab }) }}
+      style={{ flex: 1, overflow: 'hidden', ...screenInsets(insets) }}
     >
       {children}
     </View>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, useWindowDimensions, type ViewInstance } from 'react-native';
+import { FlatList, StyleSheet, View, useWindowDimensions, type ViewInstance } from 'react-native';
 import { Image } from 'expo-image';
 import {
   GestureDetector,
@@ -30,6 +30,8 @@ export type IosHomeGridProps = {
   items: readonly PhotoItem[];
   /** Available content width in points/dp; the caller owns page padding and safe areas. */
   width: number;
+  /** Bounded, virtualized grid viewport. Omit for a small inline grid in a parent scroll. */
+  viewportHeight?: number;
   closeLabel: string;
   /** Maximum columns; narrow containers reduce the count to keep native targets usable. */
   columns?: number;
@@ -69,8 +71,10 @@ export function IosHomeGrid({
 }: Readonly<IosHomeGridProps>) {
   const { fontScale } = useWindowDimensions();
   const direction = useHostLayoutDirection();
-  const { width, items } = props;
+  const { width, viewportHeight, items } = props;
   if (!Number.isFinite(width) || width <= 0 || items.length === 0) return null;
+  if (viewportHeight !== undefined && (!Number.isFinite(viewportHeight) || viewportHeight <= 0))
+    return null;
 
   const requestedGap = Number.isFinite(gap) ? Math.max(0, gap) : spacing.sm;
   const requestedColumns = Number.isFinite(columns) ? Math.max(1, Math.floor(columns)) : 4;
@@ -81,6 +85,7 @@ export function IosHomeGrid({
   // Labels can change row height; discard measured geometry when data or layout changes.
   const layoutKey = JSON.stringify([
     width,
+    viewportHeight,
     fontScale,
     direction,
     columnCount,
@@ -104,6 +109,7 @@ export function IosHomeGrid({
 function PhotoGrid({
   items,
   width,
+  viewportHeight,
   columns,
   gap,
   borderRadius,
@@ -173,6 +179,31 @@ function PhotoGrid({
     });
   }
 
+  function renderRow(row: readonly PhotoItem[], rowIndex: number) {
+    return (
+      <Row key={row[0].id} spacing={gap} modifiers={nativeFillWidth}>
+        {Array.from({ length: columns }, (_, columnIndex) => {
+          const item = row[columnIndex];
+          return (
+            <Column key={item?.id ?? `empty-${columnIndex}`} modifiers={nativeRowWeight}>
+              {item ? (
+                <PhotoTile
+                  item={item}
+                  index={rowIndex * columns + columnIndex}
+                  size={tileSize}
+                  borderRadius={borderRadius}
+                  disabled={selection !== null}
+                  onOpen={open}
+                  testID={`${testID}-photo-${item.id}`}
+                />
+              ) : null}
+            </Column>
+          );
+        })}
+      </Row>
+    );
+  }
+
   return (
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
@@ -185,35 +216,28 @@ function PhotoGrid({
               accessibilityElementsHidden={selection !== null}
               importantForAccessibility={selection ? 'no-hide-descendants' : 'auto'}
             >
-              <UniversalHost>
-                <Column spacing={gap} modifiers={nativeFillWidth}>
-                  {rows.map((row, rowIndex) => (
-                    <Row key={rowIndex} spacing={gap} modifiers={nativeFillWidth}>
-                      {Array.from({ length: columns }, (_, columnIndex) => {
-                        const item = row[columnIndex];
-                        return (
-                          <Column
-                            key={item?.id ?? `empty-${columnIndex}`}
-                            modifiers={nativeRowWeight}
-                          >
-                            {item ? (
-                              <PhotoTile
-                                item={item}
-                                index={rowIndex * columns + columnIndex}
-                                size={tileSize}
-                                borderRadius={borderRadius}
-                                disabled={selection !== null}
-                                onOpen={open}
-                                testID={`${testID}-photo-${item.id}`}
-                              />
-                            ) : null}
-                          </Column>
-                        );
-                      })}
-                    </Row>
-                  ))}
-                </Column>
-              </UniversalHost>
+              {viewportHeight === undefined ? (
+                <UniversalHost>
+                  <Column spacing={gap} modifiers={nativeFillWidth}>
+                    {rows.map(renderRow)}
+                  </Column>
+                </UniversalHost>
+              ) : (
+                <FlatList
+                  data={rows}
+                  keyExtractor={(row) => row[0].id}
+                  renderItem={({ item, index }) => (
+                    <UniversalHost>{renderRow(item, index)}</UniversalHost>
+                  )}
+                  ItemSeparatorComponent={<View style={{ height: gap }} />}
+                  initialNumToRender={Math.ceil(viewportHeight / tileSize)}
+                  windowSize={5}
+                  removeClippedSubviews={false}
+                  scrollEnabled={selection === null}
+                  style={{ width, height: viewportHeight }}
+                  testID={`${testID}-scroll`}
+                />
+              )}
             </Animated.View>
             {selection && selectedItem ? (
               <ExpandedPhoto
@@ -275,9 +299,10 @@ function PhotoTile({
           disabled={disabled}
           testID={testID}
           onPress={() =>
-            image.current?.measureInWindow((x, y, width, height) =>
-              onOpen(index, { x, y, width, height }, imageSize.current),
-            )
+            image.current?.measureInWindow((x, y, width, height) => {
+              if (image.current && width > 0 && height > 0)
+                onOpen(index, { x, y, width, height }, imageSize.current);
+            })
           }
         >
           <Column spacing={spacing.xs} alignment="center">

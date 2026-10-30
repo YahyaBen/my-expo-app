@@ -1,5 +1,5 @@
 import { establishSession } from '@/services/auth/auth.lifecycle';
-import * as authApi from '@/services/auth/auth.api';
+import { authRepository } from '@/services/auth/auth.repository';
 import { getSessionVersion, subscribeAuthSession } from '@/services/auth/auth.session';
 import { SessionChangedError } from '@/services/auth/auth.errors';
 import { getDeviceMetadata } from '@/services/auth/device-installation';
@@ -139,7 +139,7 @@ export function AuthFlowProvider({
       const login = request.login.trim();
       await run(
         async () =>
-          authApi.login({
+          authRepository.login({
             ...request,
             login,
             ...(await getDeviceMetadata()),
@@ -151,7 +151,7 @@ export function AuthFlowProvider({
   );
 
   const register = useCallback(
-    (request: RegisterRequest) => run(() => authApi.register(request), request.email.trim()),
+    (request: RegisterRequest) => run(() => authRepository.register(request), request.email.trim()),
     [run],
   );
 
@@ -161,7 +161,7 @@ export function AuthFlowProvider({
         if (!challengeId) {
           throw new Error('Missing verification challenge.');
         }
-        return authApi.confirmRegistration({
+        return authRepository.confirmRegistration({
           challengeId,
           code: code.trim(),
           ...(await getDeviceMetadata()),
@@ -172,7 +172,7 @@ export function AuthFlowProvider({
 
   const resendRegistration = useCallback(async () => {
     if (!challengeEmail) throw new Error('Missing registration email.');
-    await run(() => authApi.resendRegistration({ email: challengeEmail }), challengeEmail);
+    await run(() => authRepository.resendRegistration({ email: challengeEmail }), challengeEmail);
   }, [challengeEmail, run]);
 
   const value = useMemo<AuthFlowContextValue>(

@@ -28,4 +28,3 @@ Maintained guides are listed below. Component contracts belong to independent sk
 
 - [EAS development builds](eas-development-builds.md)
 - [Native performance](performance.md)
-- [Local SonarQube analysis](sonarqube.md)

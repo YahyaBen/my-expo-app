@@ -14,7 +14,7 @@ import type { Meta, StoryObj } from '@storybook/react-native';
 import { router } from 'expo-router';
 import { useContext, useState } from 'react';
 import { HEADER_STYLES, type PageHeaderStyle } from '@/constants/header-motion';
-import { useThemeSettings } from '@/context/theme.context';
+import { useMotionSettings } from '@/context/theme.context';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import type { StoryThemeProps } from '../../components/story-theme';
@@ -24,7 +24,7 @@ function Transitions() {
   const [presses, setPresses] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [shape, setShape] = useState<PageHeaderStyle>('dunes');
-  const { setReducedMotion } = useThemeSettings();
+  const { setReducedMotion } = useMotionSettings();
   const reducedMotion = useAppReducedMotion();
   return (
     <PageMotionOverlay shape={shape} expanded={expanded}>

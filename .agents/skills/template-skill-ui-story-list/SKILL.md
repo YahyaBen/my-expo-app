@@ -29,14 +29,16 @@ presentation; the caller owns images, translated labels, data and surrounding la
   direction changes keep the current photo aligned.
 - The parent supplies available content width in points/dp after padding/safe
   areas. The component makes no screen-width assumptions and adds no headings.
-- This is for small visual collections; all images render. Continuous offset
-  and transforms stay on the UI runtime; React handles settled selection only.
-- Preserve snap scrolling, physical LTR scroll coordinates with explicit RTL
+- Photo cells use a shared virtualized horizontal viewport with fixed layouts;
+  distant images unmount. Keep native clipping off for transformed overlap and
+  descending cell stacking order. Continuous artwork motion stays on the UI
+  runtime; React handles settled selection and the native list owns its window.
+- Preserve snap scrolling, native-direction scroll metrics normalized to logical offsets, paired RTL
   mirroring, adjustable accessibility actions, theme and reduced-motion behavior.
 - Keep native text/controls around the RN artwork boundary. UI files contain no
   Picsum fixtures, translations, feature state, navigation or public-barrel imports.
 
 [Native stories](../../../.rnstorybook/stories/components/story-list.stories.tsx)
 exercise caller data, sizes, selection callbacks, replacement/empty/single-item
-data, RTL and reduced motion. Verify scrolling, spoken selection and resizing
+data, 200/1,000-item windows, RTL and reduced motion. Verify scrolling, spoken selection and resizing
 on both native platforms; registration is not device verification.

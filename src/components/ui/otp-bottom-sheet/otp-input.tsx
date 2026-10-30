@@ -86,7 +86,7 @@ export function OtpInput({
                 ref,
                 value: nativeValue,
                 onChangeText: (text) => {
-                  setEditRevision((revision) => revision + 1);
+                  if (text !== code) setEditRevision((revision) => revision + 1);
                   if (disabled) return;
                   const next = normalizeOtpCode(text);
                   if (next !== text) nativeValue.set(next);

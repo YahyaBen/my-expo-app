@@ -41,6 +41,19 @@ interface ThemeSettings {
 }
 
 const ThemeContext = createContext<ThemeSettings | undefined>(undefined);
+const PaletteContext = createContext<Pick<ThemeSettings, 'themeId' | 'setThemeId'> | undefined>(
+  undefined,
+);
+const AppearanceContext = createContext<
+  Pick<ThemeSettings, 'colorScheme' | 'setColorScheme' | 'appearanceReady'> | undefined
+>(undefined);
+const HeaderContext = createContext<
+  Pick<ThemeSettings, 'headerShape' | 'setHeaderShape' | 'headerMotionReady'> | undefined
+>(undefined);
+const MotionContext = createContext<
+  Pick<ThemeSettings, 'reducedMotion' | 'setReducedMotion' | 'headerMotionReady'> | undefined
+>(undefined);
+const HeaderMotionReadyContext = createContext(true);
 
 /** Preferences belong to the app; each page only renders its own controls. */
 export function ThemePreferencesProvider({
@@ -189,9 +202,38 @@ export function ThemePreferencesProvider({
       setReducedMotion,
     ],
   );
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  // Each subscription changes only with the preference group it renders.
+  const palette = useMemo(() => ({ themeId, setThemeId }), [themeId, setThemeId]);
+  const appearance = useMemo(
+    () => ({ colorScheme, setColorScheme, appearanceReady }),
+    [colorScheme, setColorScheme, appearanceReady],
+  );
+  const header = useMemo(
+    () => ({ headerShape, setHeaderShape, headerMotionReady }),
+    [headerShape, setHeaderShape, headerMotionReady],
+  );
+  const motion = useMemo(
+    () => ({ reducedMotion, setReducedMotion, headerMotionReady }),
+    [reducedMotion, setReducedMotion, headerMotionReady],
+  );
+  return (
+    <ThemeContext.Provider value={value}>
+      <PaletteContext.Provider value={palette}>
+        <AppearanceContext.Provider value={appearance}>
+          <HeaderContext.Provider value={header}>
+            <MotionContext.Provider value={motion}>
+              <HeaderMotionReadyContext.Provider value={headerMotionReady}>
+                {children}
+              </HeaderMotionReadyContext.Provider>
+            </MotionContext.Provider>
+          </HeaderContext.Provider>
+        </AppearanceContext.Provider>
+      </PaletteContext.Provider>
+    </ThemeContext.Provider>
+  );
 }
 
+/** Full snapshots are for preview seeding; rendering hooks subscribe to a group below. */
 export function useThemePreferences() {
   return useContext(ThemeContext);
 }
@@ -200,4 +242,44 @@ export function useThemeSettings() {
   const settings = useThemePreferences();
   if (!settings) throw new Error('Theme controls require ThemePreferencesProvider.');
   return settings;
+}
+
+export function useThemePalette() {
+  return useContext(PaletteContext);
+}
+
+export function usePaletteSettings() {
+  const settings = useThemePalette();
+  if (!settings) throw new Error('Theme controls require ThemePreferencesProvider.');
+  return settings;
+}
+
+export function useAppearancePreferences() {
+  return useContext(AppearanceContext);
+}
+
+export function useAppearanceSettings() {
+  const settings = useAppearancePreferences();
+  if (!settings) throw new Error('Theme controls require ThemePreferencesProvider.');
+  return settings;
+}
+
+export function useHeaderSettings() {
+  const settings = useContext(HeaderContext);
+  if (!settings) throw new Error('Theme controls require ThemePreferencesProvider.');
+  return settings;
+}
+
+export function useMotionPreferences() {
+  return useContext(MotionContext);
+}
+
+export function useMotionSettings() {
+  const settings = useMotionPreferences();
+  if (!settings) throw new Error('Theme controls require ThemePreferencesProvider.');
+  return settings;
+}
+
+export function useHeaderMotionReady() {
+  return useContext(HeaderMotionReadyContext);
 }

@@ -8,35 +8,40 @@ import {
   AnimatedComponentPreview,
   type AnimatedComponentPreviewProps,
 } from '../../components/animated-component-preview';
-import { photoFixtures as photos } from '../../components/photo-fixtures';
+import { photoFixtures as photos, largePhotoFixtures } from '../../components/photo-fixtures';
 
 type GridDemoProps = AnimatedComponentPreviewProps & {
   columns: number;
   itemCount: number;
   contentWidth?: number;
+  viewportHeight?: number;
 };
 
 function IosHomeGridDemo({
   columns,
   itemCount,
   contentWidth,
+  viewportHeight,
   ...preview
 }: Readonly<GridDemoProps>) {
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const availableWidth =
     Math.min(windowWidth - insets.left - insets.right, screenContentMaxWidth) - spacing.lg * 2;
   const width = Math.max(1, Math.min(availableWidth, contentWidth ?? availableWidth));
   const [replaced, setReplaced] = useState(false);
   const [event, setEvent] = useState('No selection yet');
-  const items = (replaced ? photos.slice(4) : photos).slice(0, Math.max(0, itemCount));
+  const items = (replaced ? photos.slice(4) : largePhotoFixtures).slice(0, Math.max(0, itemCount));
+  const boundedHeight =
+    viewportHeight ?? (itemCount > photos.length ? Math.min(320, windowHeight * 0.4) : undefined);
 
   return (
-    <AnimatedComponentPreview {...preview}>
+    <AnimatedComponentPreview {...preview} scrollable={boundedHeight === undefined}>
       <Column spacing={spacing.md}>
         <IosHomeGrid
           items={items}
           width={width}
+          viewportHeight={boundedHeight}
           columns={columns}
           closeLabel="Close photo"
           dismissHint="Drag down or use Close photo to return."
@@ -63,14 +68,15 @@ const meta = {
   argTypes: {
     rtl: { control: 'boolean' },
     columns: { control: { type: 'number', min: 1, max: 6, step: 1 } },
-    itemCount: { control: { type: 'number', min: 0, max: 12, step: 1 } },
+    itemCount: { control: 'select', options: [0, 1, 11, 12, 200, 1000] },
     contentWidth: { control: 'number' },
+    viewportHeight: { control: { type: 'number', min: 1 } },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Caller-owned photos, labels, width and columns. On first and repeated opens, the thumbnail stays visible until the expanded image displays, then zooms. Check slow/failed image loads and Close before display, then replace the dataset while expanded. Verify callbacks, partial rows, empty/one-item data, native photo/label edge taps, RTL, large text and Reduce motion on devices.',
+          'Caller-owned photos, labels, width and columns. Counts 200/1000 use a bounded virtualized viewport with no surrounding vertical scroll. Inspect mounted photo selectors while scrolling, open a later row and return, then replace data while expanded. The thumbnail stays visible until the expanded image displays. Also check slow/failed loads, Close before display, callbacks, partial rows, edge taps, RTL, large text and Reduce motion. Offline payloads repeat, so this measures view lifetime rather than unique image decoding.',
       },
     },
   },

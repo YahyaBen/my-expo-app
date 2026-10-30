@@ -10,19 +10,22 @@ remain available for a future application.
 Configure a reachable `EXPO_PUBLIC_API_URL`, add your Router screens, and mount the
 existing query/session providers where needed. `AuthFlowProvider` requires an
 `onVerificationRequired` callback; the consuming app owns its verification route.
-A changed pathname invalidates pending form responses. Keep auth requests behind
-the existing endpoint, lifecycle and session owners.
+A changed pathname invalidates pending form responses. The workflow calls
+`authRepository` for remote operations and the lifecycle/session owners for
+durable session changes.
 
 Use `useAuthForm` for local drafts, schema validation and guarded submissions.
 It disables mutation retries and keeps credentials from being queued offline.
 Multi-step registration/challenge state stays in `AuthFlowProvider`; small
-recovery forms can call documented endpoints directly through that form helper.
+recovery forms can call `authRepository.forgotPassword` and
+`authRepository.resetPassword` through that form helper.
 Add actual route protection using the retained auth predicates when introducing
 authenticated screens.
 
 `src/services/api.ts` owns bearer metadata, typed API errors and shared token
-rotation. `src/services/auth/` owns endpoint contracts, installation metadata,
-SecureStore, restoration and logout. Tokens are stored together; passwords and
+rotation. `auth.repository.ts` owns the typed remote-operation contract;
+`src/services/auth/` retains installation metadata, SecureStore, restoration and
+local logout. Tokens are stored together; passwords and
 codes are not persisted. Session generations prevent old requests from committing
 after account changes. Preserve cancellation, serialized storage and cache cleanup.
 See [API/session ownership](api-services.md#session-model-and-logout).

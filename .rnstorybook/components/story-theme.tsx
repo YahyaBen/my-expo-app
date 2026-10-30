@@ -5,8 +5,8 @@ import { useIsFocused } from 'expo-router';
 import type { ThemeId } from '@/constants/themes/index';
 import {
   ThemePreferencesProvider,
-  useThemePreferences,
-  useThemeSettings,
+  useAppearancePreferences,
+  useAppearanceSettings,
   type ColorSchemePreference,
 } from '@/context/theme.context';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -23,7 +23,7 @@ export function StoryTheme({
   themeId = 'ux',
   colorScheme = 'light',
 }: Readonly<PropsWithChildren<StoryThemeProps>>) {
-  const appColorScheme = useThemePreferences()?.colorScheme ?? 'system';
+  const appColorScheme = useAppearancePreferences()?.colorScheme ?? 'system';
   return (
     <ThemePreferencesProvider
       key={`${themeId}-${colorScheme}`}
@@ -40,7 +40,7 @@ function StoryCanvas({
   children,
   restoreColorScheme,
 }: Readonly<PropsWithChildren<{ restoreColorScheme: ColorSchemePreference }>>) {
-  const { colorScheme } = useThemeSettings();
+  const { colorScheme } = useAppearanceSettings();
   const colors = useThemeColors();
   const focused = useIsFocused();
   const ready = useContext(PerformanceReadyContext);

@@ -15,6 +15,7 @@ existing not-found fallback. The old auth, account, tab and showcase routes are 
 | Shared native presentation             | `src/components/ui/`                                                            |
 | Preferences, language and direction    | Existing contexts, hooks and storage owners                                     |
 | Optional auth/form workflow kit        | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
+| Entity data access                     | `src/services/<entity>/<entity>.repository.ts`                                  |
 | HTTP, queries and session lifecycle    | `src/services/`, `src/lib/api-query-keys.ts`                                    |
 | Validation and DTOs                    | `src/validation/`, `src/types/`                                                 |
 | Build-time identity                    | `config/brand.js`, `config/brands/`, `app.config.js`                            |
@@ -38,6 +39,13 @@ mounted by the starter. A consuming auth flow supplies its own verification
 navigation callback. Add providers only when building an actual backend feature.
 Shared UI receives data and callbacks, and never imports services or fixtures.
 
+Feature workflows and query options call a feature-specific repository. The
+repository exposes typed data operations through the existing HTTP client;
+TanStack Query owns cache state and the auth lifecycle owns session state.
+`authRepository` is the current implementation. Repository contracts are colocated
+with their implementation; new entities add only their supported operations.
+See [repository boundaries](api-services.md#repository-boundaries).
+
 ## Enforced import boundaries
 
 `eslint.config.js` composes scoped policies with `restrictImports`; flat-config
@@ -46,10 +54,10 @@ rule replacement must preserve the shared restrictions.
 - Routes/features consume the public `@components/ui` API and do not own raw HTTP,
   secure storage or query transport configuration.
 - Services do not depend on feature presentation, UI components or UI contexts.
-- Endpoint transports do not own React rendering, navigation or cache policy.
+- Entity repositories do not own React rendering, navigation, cache policy or native storage.
 - Schemas, DTOs, mappers, query keys and preview flags remain pure.
 - UI implementations import concrete siblings, avoiding their own public barrel.
-- Auth refresh keeps its raw transport independent of authenticated interceptors.
+- Auth refresh keeps its raw transport independent of authenticated interceptors and the auth repository.
 - Storybook imports stay in `.rnstorybook/` and its narrow feature entry. Native
   control restrictions cover both stories and supporting preview compositions.
 

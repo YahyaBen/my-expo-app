@@ -1,7 +1,7 @@
 import { isCancelledError } from '@tanstack/react-query';
 import { isAxiosError, isCancel } from 'axios';
 import { SessionChangedError } from '@/services/auth/auth.errors';
-import { getAuthErrorMessage } from '@/services/auth/auth.service';
+import { getAuthErrorMessage } from '@/services/auth/auth.error-message';
 import i18n from '@/lib/i18n';
 import { showAlert } from './alerts';
 

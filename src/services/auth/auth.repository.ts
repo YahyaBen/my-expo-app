@@ -23,21 +23,32 @@ const authClient = createApiClient({
   skipInterceptor: true,
 });
 
-export function login(request: LoginRequest): Promise<AuthFlowResponse> {
+/** Remote operations only; queries and session lifecycle remain with their owners. */
+export interface AuthRepository {
+  login(request: LoginRequest): Promise<AuthFlowResponse>;
+  register(request: RegisterRequest): Promise<AuthFlowResponse>;
+  confirmRegistration(request: ConfirmRegistrationRequest): Promise<AuthFlowResponse>;
+  resendRegistration(request: { email: string }): Promise<AuthFlowResponse>;
+  googleSignIn(request: GoogleSignInRequest): Promise<TokenResponse>;
+  forgotPassword(request: { email: string }): Promise<{ message: string }>;
+  resetPassword(request: ResetPasswordRequest): Promise<void>;
+  getCurrentIdentity(options?: ApiReadOptions): Promise<CurrentIdentityResponse>;
+  logout(accessToken: string): Promise<void>;
+}
+
+function login(request: LoginRequest): Promise<AuthFlowResponse> {
   return authClient.post<AuthFlowResponse, LoginRequest>('/api/auth/login', request, {
     responseSchema: authFlowResponseSchema,
   });
 }
 
-export function register(request: RegisterRequest): Promise<AuthFlowResponse> {
+function register(request: RegisterRequest): Promise<AuthFlowResponse> {
   return authClient.post<AuthFlowResponse, RegisterRequest>('/api/auth/register', request, {
     responseSchema: authFlowResponseSchema,
   });
 }
 
-export function confirmRegistration(
-  request: ConfirmRegistrationRequest,
-): Promise<AuthFlowResponse> {
+function confirmRegistration(request: ConfirmRegistrationRequest): Promise<AuthFlowResponse> {
   return authClient.post<AuthFlowResponse, ConfirmRegistrationRequest>(
     '/api/auth/register/confirm',
     request,
@@ -46,19 +57,19 @@ export function confirmRegistration(
 }
 
 // The supplied contract names no DTOs for these inline request/response bodies.
-export function resendRegistration(request: { email: string }): Promise<AuthFlowResponse> {
+function resendRegistration(request: { email: string }): Promise<AuthFlowResponse> {
   return authClient.post<AuthFlowResponse, typeof request>('/api/auth/register/resend', request, {
     responseSchema: authFlowResponseSchema,
   });
 }
 
-export function googleSignIn(request: GoogleSignInRequest): Promise<TokenResponse> {
+function googleSignIn(request: GoogleSignInRequest): Promise<TokenResponse> {
   return authClient.post<TokenResponse, GoogleSignInRequest>('/api/auth/google', request, {
     responseSchema: tokenResponseSchema,
   });
 }
 
-export function forgotPassword(request: { email: string }): Promise<{ message: string }> {
+function forgotPassword(request: { email: string }): Promise<{ message: string }> {
   return authClient.post<{ message: string }, typeof request>(
     '/api/auth/password/forgot',
     request,
@@ -66,11 +77,11 @@ export function forgotPassword(request: { email: string }): Promise<{ message: s
   );
 }
 
-export async function resetPassword(request: ResetPasswordRequest): Promise<void> {
+async function resetPassword(request: ResetPasswordRequest): Promise<void> {
   await authClient.post<void, ResetPasswordRequest>('/api/auth/password/reset', request);
 }
 
-export function me(options: ApiReadOptions = {}): Promise<CurrentIdentityResponse> {
+function getCurrentIdentity(options: ApiReadOptions = {}): Promise<CurrentIdentityResponse> {
   return apiClient.get<CurrentIdentityResponse>('/api/users/me', {
     ...options,
     responseSchema: currentIdentityResponseSchema,
@@ -78,9 +89,21 @@ export function me(options: ApiReadOptions = {}): Promise<CurrentIdentityRespons
 }
 
 /** Revoke only the captured session; no live credentials, refresh or cache effects. */
-export async function logout(accessToken: string): Promise<void> {
+async function logout(accessToken: string): Promise<void> {
   await authClient.post<void>('/api/auth/logout', undefined, {
     headers: { Authorization: `Bearer ${accessToken}` },
     timeoutMs: DEFAULT_API_TIMEOUT_MS,
   });
 }
+
+export const authRepository: AuthRepository = {
+  login,
+  register,
+  confirmRegistration,
+  resendRegistration,
+  googleSignIn,
+  forgotPassword,
+  resetPassword,
+  getCurrentIdentity,
+  logout,
+};

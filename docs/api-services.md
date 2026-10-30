@@ -1,14 +1,44 @@
-# Backend services
+# Backend repositories
 
 The starter retains the existing Axios client, response validation, auth lifecycle,
 secure session storage and TanStack Query integration. Set `EXPO_PUBLIC_API_URL`
-for the real server; authentication and Account call their actual endpoints.
+for the real server before consuming the optional auth kit's endpoints.
 No guest credentials or mocked production API responses are supplied.
 
-`src/services/auth/auth.api.ts` owns login, registration, registration confirmation
-and resend, password recovery/reset, current identity and logout endpoints.
-`auth.queries.ts` defines the identity query. Consumed auth responses are validated
-by `src/validation/schemas/api/auth.ts`; request/form schemas retain their contracts.
+[`auth.repository.ts`](../src/services/auth/auth.repository.ts) exports the
+`AuthRepository` contract and its `authRepository` implementation. Its operations
+cover login, registration, registration confirmation/resend, Google sign-in,
+password recovery/reset, current identity and remote logout.
+`auth.queries.ts` calls `authRepository.getCurrentIdentity` for the identity query.
+Consumed responses are validated by `src/validation/schemas/api/auth.ts` through
+the existing HTTP client; request/form schemas retain their contracts.
+
+## Repository boundaries
+
+| Owner                  | Responsibility                                                   |
+| ---------------------- | ---------------------------------------------------------------- |
+| Feature workflow       | Drafts, device metadata, navigation and submission coordination  |
+| Query/mutation module  | Query keys, caching, invalidation and callback composition       |
+| Entity repository      | Typed remote operations through the shared validated HTTP client |
+| Auth lifecycle/session | Durable credentials, token rotation, ownership and local logout  |
+
+Keep repositories in `src/services/<entity>/<entity>.repository.ts`. Expose a small
+named object with an explicit feature-specific contract in the same file. The
+implementation uses existing request/response types and only the operations the
+backend actually supports. Replace the former endpoint module when migrating a
+feature, keeping one data-access owner.
+
+Queries call repository methods and forward their `AbortSignal`; workflows may
+call repository writes directly through the existing submission helper. Repository
+errors reject normally so existing query and form feedback can handle them.
+Repositories contain no React hooks, navigation, query-cache effects or native
+storage. They reuse `apiClient` for headers, auth interception and response
+validation; domain mapping stays with pure mapper functions when needed.
+
+Auth uses the existing unauthenticated client for public endpoints and captured-token
+revocation. Its repository never establishes or clears a local session. The raw
+refresh transport remains independent of the repository to avoid interceptor
+cycles. Localized error presentation lives in `auth.error-message.ts`.
 
 Recipe-specific entity services, feature adapters, DTOs and schemas are removed.
 Generic request normalization, pagination schemas, query factories, mutation
@@ -26,18 +56,16 @@ for both the query key and the readiness check.
 Its API types are imported as types only, so using these helpers does not load
 the HTTP client, secure session storage or initialized query cache.
 
-Transport modules may use the existing `.api.ts` or `.service.ts` convention;
-both have the same enforced import boundary. Keep React/navigation and cache
-effects in consumers or query/mutation modules, and schemas/mappers free of
-rendering and I/O. The auth lifecycle, raw refresh, device metadata and session
-storage are distinct existing owners, not entity transport modules. See
+Repository modules have an enforced transport import boundary. Keep
+React/navigation and cache effects in consumers or query/mutation modules, and
+schemas/mappers free of rendering and I/O. The auth lifecycle, raw refresh, device
+metadata and session storage retain their existing owners. See
 [enforced boundaries](architecture.md#enforced-import-boundaries).
 
 See the [API implementation skill](../.agents/skills/expo-api-services/SKILL.md)
 and [architecture](architecture.md). No automated service runner is configured;
 use current package scripts and distinguish native/live-backend verification from
-static checks. Historical reports listing sixteen entity services no longer
-describe the current starter.
+static checks.
 
 ## API configuration
 
@@ -108,10 +136,10 @@ identity during temporary failures, and discards consumed old credentials if
 rotation cannot be saved. Generation checks also classify superseded transport
 or persistence failures before cleanup. Keep its import independent of `api.ts`.
 
-On native iOS/Android with a real session, check `auth-logout` while offline and
+On native iOS/Android with a real session, check the consuming app's logout while offline and
 with slow revocation, account switching, cached identity during temporary refresh
-failure, and recovery after a failed SecureStore deletion. The latter retains
-`auth-logout-error` and the same retry action. Isolated in-memory checks validate
+failure, and recovery after a failed SecureStore deletion. The latter must retain
+the error and retry action. Isolated in-memory checks validate
 JavaScript ordering; they do not verify native storage, focus/navigation or server
 revocation. No service test runner or fake production session is introduced.
 

@@ -65,10 +65,9 @@ function OtpForm({
   const pending = useRef(false);
   const [deadline, setDeadline] = useState(() => (isPresented ? Date.now() + cooldown * 1000 : 0));
   const [code, setCode] = useState('');
-  const [status, setStatus] = useState<'idle' | 'verifying' | 'resending' | 'error' | 'success'>(
-    'idle',
-  );
-  const [error, setError] = useState<'invalid' | 'verifyFailed' | 'resendFailed' | null>(null);
+  const [status, setStatus] = useState<
+    'idle' | 'verifying' | 'resending' | 'invalid' | 'verifyFailed' | 'resendFailed' | 'success'
+  >('idle');
   const [resent, setResent] = useState(false);
   const [presentation, setPresentation] = useState({ isPresented, cooldown });
   if (presentation.isPresented !== isPresented || presentation.cooldown !== cooldown) {
@@ -79,7 +78,6 @@ function OtpForm({
         // Adjust local state before committing the new presentation, retaining the native field.
         setCode('');
         setStatus('idle');
-        setError(null);
         setResent(false);
       }
     }
@@ -101,11 +99,12 @@ function OtpForm({
   const busy = status === 'verifying' || status === 'resending';
   const complete = code.length === OTP_LENGTH;
   const success = status === 'success';
+  const error =
+    status === 'invalid' || status === 'verifyFailed' || status === 'resendFailed' ? status : null;
   function changeCode(next: string) {
     if (pending.current || success) return;
     setCode(next);
     setStatus('idle');
-    setError(null);
     setResent(false);
   }
   function dismiss() {
@@ -119,19 +118,16 @@ function OtpForm({
     const currentSession = session.current;
     pending.current = true;
     setStatus('verifying');
-    setError(null);
     inputRef.current?.blur();
     try {
       const accepted = await onVerify(code);
       if (session.current !== currentSession) return;
-      setStatus(accepted ? 'success' : 'error');
-      setError(accepted ? null : 'invalid');
+      setStatus(accepted ? 'success' : 'invalid');
       triggerHaptic(accepted ? 'success' : 'error');
       AccessibilityInfo.announceForAccessibility(t(accepted ? 'otp.successTitle' : 'otp.invalid'));
     } catch {
       if (session.current !== currentSession) return;
-      setStatus('error');
-      setError('verifyFailed');
+      setStatus('verifyFailed');
       triggerHaptic('error');
       AccessibilityInfo.announceForAccessibility(t('otp.verifyFailed'));
     } finally {
@@ -143,7 +139,6 @@ function OtpForm({
     const currentSession = session.current;
     pending.current = true;
     setStatus('resending');
-    setError(null);
     try {
       await onResend();
       if (session.current !== currentSession) return;
@@ -156,8 +151,7 @@ function OtpForm({
       AccessibilityInfo.announceForAccessibility(t('otp.resent'));
     } catch {
       if (session.current !== currentSession) return;
-      setStatus('error');
-      setError('resendFailed');
+      setStatus('resendFailed');
       triggerHaptic('error');
       AccessibilityInfo.announceForAccessibility(t('otp.resendFailed'));
     } finally {
@@ -183,7 +177,7 @@ function OtpForm({
         </Row>
         <VerificationFace
           progress={code.length / OTP_LENGTH}
-          status={success ? 'success' : status === 'error' ? 'error' : 'default'}
+          status={success ? 'success' : error ? 'error' : 'default'}
           visible={isPresented}
           testID={`${testID}-artwork`}
         />

@@ -7,7 +7,7 @@ import {
   clearAuthSession,
 } from './auth.session';
 import { requestNewToken } from './auth.refresh';
-import { logout } from './auth.api';
+import { authRepository } from './auth.repository';
 import { reportErrorAlert } from '@/lib/error-alerts';
 
 export { establishAuthSession as establishSession };
@@ -19,7 +19,7 @@ async function endSession(version: number) {
   assertSessionVersion(version);
   await clearAuthSession(version);
   if (accessToken) {
-    void logout(accessToken).catch(() => {
+    void authRepository.logout(accessToken).catch(() => {
       // Local sign-out is complete. An old revoke failure must not alert a new account.
     });
   }

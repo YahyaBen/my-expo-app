@@ -8,7 +8,6 @@ import { normalizeListQuery, type ApiReadOptions, type PaginationQuery } from '.
 import type { EntityKeys } from '@/lib/api-query-keys';
 import type { PaginatedResponse } from '@/types/pagination.types';
 
-export type QuerySettings = { enabled?: boolean };
 export type MutationCallbacks<TData, TVariables> = Pick<
   UseMutationOptions<TData, Error, TVariables>,
   'onSuccess' | 'onError' | 'onSettled'

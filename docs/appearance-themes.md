@@ -16,6 +16,24 @@ Its configured splash backgrounds match the page background in each appearance.
 mobile type ramp and native geometry. Native lists, toggles, pickers, padding
 and interaction feedback remain platform-owned.
 
+`ThemePreferencesProvider` remains the single state and persistence owner. Its
+palette, appearance, header and motion subscriptions have independent values:
+`useAppTheme` reads palette and appearance, while animation hooks read motion.
+Header or motion selections do not invalidate color-only subscriptions. Startup
+reads header/motion hydration separately from their selected values; header
+decoration and native transition settings subscribe below the root layout.
+Full `useThemePreferences` / `useThemeSettings` snapshots are reserved for seeding
+isolated previews. Controls use their matching palette, appearance, header or
+motion settings hook.
+
+In **Components/Theme Tokens/Playground**, choose `example: subscriptions` to
+inspect independent preference updates. After startup settles, the development
+console logs `[theme-subscription]` commits for each probe. Header changes should
+commit only the header probe; motion changes commit motion and motion-gate;
+appearance changes commit appearance and colors. The fixed palette probe stays
+unchanged. Probe logs count their component commits, not descendant native style
+updates, and do not establish device frame-rate improvements.
+
 Titled page frames blur the content beneath their headers by default in every
 theme. The title and Back remain sharp above that native backdrop. UX sets
 `design.header.artwork` to false, omitting colored waves even when an older
@@ -38,10 +56,32 @@ UX has light/dark stories. These previews do not
 send backend requests. Native font scaling, RTL, rendered contrast and keyboard
 behavior still require verification on matching iOS and Android builds.
 
-Settings offers system/light/dark appearance, supported header effects,
-Reduce Motion, language, Account/sign-in navigation, device permissions,
-haptic feedback, the component catalog, device location and app version.
-Placeholder support and legal controls have been removed.
+The **Wireframes/Preferences** story offers system/light/dark appearance,
+supported header effects, Reduce Motion, language, device permissions, haptic
+feedback, device location and app version. The release wireframe has no Settings
+or account screen.
+
+## Theme values
+
+Theme values are edited directly in TypeScript:
+
+| Owner                                          | Responsibility                                                   |
+| ---------------------------------------------- | ---------------------------------------------------------------- |
+| [ux.ts](../src/constants/themes/ux.ts)         | Primitive colors and semantic light/dark palettes                |
+| [tokens.ts](../src/constants/themes/tokens.ts) | Typed color contract and derived navigation/control roles        |
+| [layout.ts](../src/constants/layout.ts)        | Shared spacing, radii and content dimensions                     |
+| [design.ts](../src/constants/themes/design.ts) | Typography presets, native shape defaults and header eligibility |
+
+Components keep using the existing useAppTheme() and layout exports. Change a
+primitive color to update the roles sharing it, or change a semantic mapping for
+a particular purpose. Derived component colors follow those semantic roles.
+Run npm run check after edits; there is no generation command or generated theme
+file to maintain.
+
+Use **Components/Theme Tokens/Playground** to inspect colors, typography,
+spacing, surfaces and control states in both appearances. Check affected native
+screens with RTL and large text on iOS and Android. Font loading, language fallback,
+explicit overrides and native control behavior remain with their existing owners.
 
 ## Device permissions
 
@@ -145,23 +185,10 @@ Primary text uses the foreground accent `tint`. Filled primary buttons still use
 label in both appearances. An explicit appearance color overrides a text tone,
 and final `textStyle.color` overrides both.
 
-The 2026-10-23 palette audit calculated contrast for all eight text tones against
-`background`, `surface` and `surfaceRaised`. Minimum ratios across those 24 pairs:
-
-| Palette     | Light  | Dark   |
-| ----------- | ------ | ------ |
-| UX Template | 4.93:1 | 6.83:1 |
-
-The UX dark primary-text/background pair changes from 1.11:1 to 18.88:1; its
-primary button pair remains 21:1. These calculations use the explicit opaque
-palette values and the [W3C contrast formula](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
-They do not establish rendered contrast on native glass, arbitrary caller colors,
-feedback containers or artwork. No palette colors were changed for this repair.
-
-The Text page and retained `Components/Text/ThemeComparison` composition show all
-three surfaces, all registered palettes/appearances, explicit overrides and a counted
-primary button. Existing text selectors remain; new preview controls and samples
-have stable selectors. No automated suite was added.
+Use **Components/Text/Playground** with `example: theme-comparison` to inspect
+the three surfaces, light/dark appearance, explicit foreground overrides and a
+counted primary button. Preserve its stable selectors. Palette calculations alone
+do not establish rendered contrast on native glass, caller colors or artwork.
 
 On both native platforms, check saved Light/Dark after restart, live System
 changes, invalid/unavailable storage fallback, rapid appearance changes, initial
@@ -171,4 +198,4 @@ remain pending; static checks and Hermes exports do not verify them.
 The canonical control and persistence contract lives in the
 [appearance skill](../.agents/skills/template-skill-ui-appearance/SKILL.md).
 Native styles, hit areas, contrast, RTL, large text and live preference changes
-still require device verification. Earlier brand/theme reports describe history.
+still require device verification.

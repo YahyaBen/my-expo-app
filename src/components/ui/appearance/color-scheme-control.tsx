@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useThemeSettings, type ColorSchemePreference } from '@/context/theme.context';
+import { useAppearanceSettings, type ColorSchemePreference } from '@/context/theme.context';
 import { Picker } from '../picker/picker';
 
 export function ColorSchemeControl({
@@ -12,7 +12,7 @@ export function ColorSchemeControl({
   disabled?: boolean;
 }>) {
   const { t } = useTranslation();
-  const { colorScheme, setColorScheme, appearanceReady } = useThemeSettings();
+  const { colorScheme, setColorScheme, appearanceReady } = useAppearanceSettings();
   return (
     <Picker<ColorSchemePreference>
       selectedValue={colorScheme}

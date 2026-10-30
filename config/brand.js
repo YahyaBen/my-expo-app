@@ -48,7 +48,6 @@ const brandSchema = z.strictObject({
         .string()
         .regex(/^[a-zA-Z0-9_-]+$/)
         .optional(),
-      // The starter keeps a visible empty slot until a clone links its own project.
       projectId: z.uuid().or(z.literal('')),
     })
     .optional(),

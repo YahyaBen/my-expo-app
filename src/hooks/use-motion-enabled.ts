@@ -1,7 +1,7 @@
 import { useContext, useSyncExternalStore } from 'react';
 import { AccessibilityInfo, AppState } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
-import { useThemePreferences } from '@/context/theme.context';
+import { useMotionPreferences } from '@/context/theme.context';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
 
 type MotionState = { active: boolean; reducedMotion: boolean | undefined };
@@ -61,6 +61,8 @@ function subscribe(listener: () => void) {
 
 const getSnapshot = () => snapshot;
 const getStaticSnapshot = () => staticSnapshot;
+const getActiveSnapshot = () => snapshot.active;
+const getStaticActiveSnapshot = () => staticSnapshot.active;
 const subscribeStatic = () => () => {};
 
 function useMotionState(visible: boolean) {
@@ -71,7 +73,7 @@ function useMotionState(visible: boolean) {
     visible ? getSnapshot : getStaticSnapshot,
     getStaticSnapshot,
   );
-  const preferences = useThemePreferences();
+  const preferences = useMotionPreferences();
   return {
     active: state.active,
     ready: preferences?.headerMotionReady ?? true,
@@ -84,7 +86,8 @@ export function useAppReducedMotion() {
 }
 
 export function useAppActive() {
-  return useMotionState(true).active;
+  // Foreground-only consumers do not depend on motion or theme preferences.
+  return useSyncExternalStore(subscribe, getActiveSnapshot, getStaticActiveSnapshot);
 }
 
 export function useMotionEnabled(visible = true) {

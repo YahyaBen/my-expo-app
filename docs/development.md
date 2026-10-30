@@ -30,6 +30,10 @@ No automated tests or test scripts are included. Preserve `testID` props and
 explicit selectors in stories for later device inspection. See
 [Storybook](storybook.md) for the catalog and release bundle checks.
 
+Edit app-owned theme values directly in the existing TypeScript theme/layout
+files, then run `npm run check`. See
+[theme values](appearance-themes.md#theme-values) for ownership and previewing.
+
 ## Brand and environment configuration
 
 The default brand is `template`. Its name, native identity, assets, EAS project ID

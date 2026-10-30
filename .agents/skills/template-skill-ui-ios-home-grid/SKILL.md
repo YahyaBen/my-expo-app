@@ -23,9 +23,15 @@ owns presentation on iOS and Android; callers own photo data and translated text
   once when a Close, downward drag or accessibility dismissal is accepted.
   These are action callbacks, never render/effect notifications.
 
+- Optional `viewportHeight` must be positive and finite. It bounds and virtualizes
+  rows for a larger dataset; the grid owns vertical scrolling in this mode. Put
+  it outside another vertical scroll container. Omit it for a small eager inline
+  grid in a parent scroll. Keep native tile buttons, measured expansion and the
+  named Close action in both modes.
+
 ## State and native boundaries
 
-- Ordered item IDs/labels, width, columns, gap, radius, font scale or direction changes
+- Ordered item IDs/labels, width, viewport height, columns, gap, radius, font scale or direction changes
   remount the internal scene and cancel stale expansion. This reset does not emit
   `onClose`. Labels join the key because wrapping can change row height. Source
   updates with unchanged IDs/labels use current data while expanded.
@@ -41,5 +47,5 @@ owns presentation on iOS and Android; callers own photo data and translated text
 
 [Native stories](../../../.rnstorybook/stories/components/ios-home-grid.stories.tsx)
 exercise custom data/labels/width, callbacks, replacement while expanded, empty
-and one-item data, and a partial three-column row. Verify native edge taps,
+and one-item data, a partial three-column row and bounded 200/1,000-item data. Verify native edge taps,
 short/cancelled drags, large text, live RTL and both appearances on devices.

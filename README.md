@@ -26,11 +26,17 @@ modules. Storybook opens automatically with its sidebar and Controls. Start with
 npm run start:app           # View the release wireframe in development
 npm run storybook:dev       # Alias for the default development catalog
 npm run storybook:generate  # After adding or moving stories
-npm run check              # Typecheck, lint and formatting; no automated tests
+npm run check              # Typecheck, lint and formatting
 ```
 
 Keep `testID` props on components and interactive stories. This template has no
 test runner or test suites.
+
+Edit theme colors directly in [ux.ts](src/constants/themes/ux.ts), component color
+roles in [tokens.ts](src/constants/themes/tokens.ts), spacing/radii in
+[layout.ts](src/constants/layout.ts), and typography in
+[design.ts](src/constants/themes/design.ts). See
+[theme values](docs/appearance-themes.md#theme-values) for ownership and previewing.
 
 ## Build your clone with EAS
 

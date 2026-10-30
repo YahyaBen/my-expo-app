@@ -69,17 +69,36 @@ const transportImportPatterns = [
   ...serviceImportPatterns,
   ...cacheImportPatterns,
   {
+    regex: '(^|/)(?:auth\\.(?:session|refresh|lifecycle)|device-installation)(?:\\.[cm]?[jt]sx?)?$',
+    message:
+      'Repositories receive tokens and device metadata from their callers; session storage, refresh and lifecycle belong in their existing owners.',
+  },
+  {
+    group: [
+      '@/lib/i18n',
+      '**/lib/i18n',
+      '@/lib/alerts',
+      '**/lib/alerts',
+      '@/lib/error-alerts',
+      '**/lib/error-alerts',
+    ],
+    message: 'Repositories reject failures; localization and user feedback belong in consumers.',
+  },
+  {
     group: [
       'react',
       'react/**',
       'react-native',
       'react-native/**',
+      'react-i18next',
+      'react-hook-form',
+      '@react-native*/**',
       'expo*',
       '@expo/**',
       '@tanstack/**',
     ],
     message:
-      'Entity transport owns HTTP contracts; React, navigation and cache effects belong in consumers or query/mutation modules.',
+      'Repositories own data access; React, navigation and cache effects belong in consumers or query/mutation modules.',
   },
 ];
 const screenFiles = [
@@ -138,7 +157,7 @@ module.exports = defineConfig([
           regex:
             '(^|/)(?:services/(?:api|api\\.config|request-utils)|auth\\.session)(?:\\.[cm]?[jt]sx?)?$',
           message:
-            'Screens consume endpoint functions and feature workflows; low-level HTTP configuration and session storage belong in their existing owners.',
+            'Screens consume repositories and feature workflows; low-level HTTP configuration and session storage belong in their existing owners.',
         },
         {
           group: ['axios', 'axios/**', 'expo-secure-store', '@react-native-async-storage/**'],
@@ -160,7 +179,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['src/services/**/*.{service,api}.{ts,tsx}'],
+    files: ['src/services/**/*.{repository,service,api}.{ts,tsx}'],
     rules: {
       'no-restricted-imports': restrictImports(transportImportPatterns),
     },
@@ -171,9 +190,9 @@ module.exports = defineConfig([
       'no-restricted-imports': restrictImports([
         ...serviceImportPatterns,
         {
-          regex: '(^|/)(?:api|auth\\.api|auth\\.lifecycle)(?:\\.[cm]?[jt]sx?)?$',
+          regex: '(^|/)(?:api|auth\\.(?:repository|api|lifecycle))(?:\\.[cm]?[jt]sx?)?$',
           message:
-            'Refresh must keep its raw transport independent of the authenticated client, auth endpoints and lifecycle to avoid interceptor cycles.',
+            'Refresh must keep its raw transport independent of the authenticated client, auth repository and lifecycle to avoid interceptor cycles.',
         },
       ]),
     },
@@ -191,7 +210,7 @@ module.exports = defineConfig([
         ...cacheImportPatterns,
         {
           regex:
-            '(^|/)(?:api|api\\.config|auth\\.(?:session|refresh|lifecycle)|device-installation|[^/]+\\.(?:api|service))(?:\\.[cm]?[jt]sx?)?$',
+            '(^|/)(?:api|api\\.config|auth\\.(?:session|refresh|lifecycle)|device-installation|[^/]+\\.(?:repository|api|service|error-message))(?:\\.[cm]?[jt]sx?)?$',
           message:
             'Pure modules must not import transport, native storage or auth lifecycle owners.',
         },

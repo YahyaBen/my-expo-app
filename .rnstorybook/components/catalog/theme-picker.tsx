@@ -1,9 +1,9 @@
 import { themeIds, themes, type ThemeId } from '@/constants/themes/index';
-import { useThemeSettings } from '@/context/theme.context';
+import { usePaletteSettings } from '@/context/theme.context';
 import { Picker } from '@components/ui';
 
 export function ThemePicker() {
-  const { themeId, setThemeId } = useThemeSettings();
+  const { themeId, setThemeId } = usePaletteSettings();
   return (
     <Picker<ThemeId>
       selectedValue={themeId}
