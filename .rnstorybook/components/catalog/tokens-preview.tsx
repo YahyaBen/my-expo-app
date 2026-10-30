@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Column,
+  FormSubmit,
+  Icon,
   PageScreen,
   Row,
   TextInput,
@@ -42,6 +44,18 @@ export default function TokensScreen() {
       >
         <TokenControlPreview />
       </DemoSection>
+      <DemoSection title={t('showcase.tokenGallery.hierarchy')}>
+        <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
+          <Text variant="title">{t('showcase.tokenGallery.hierarchyTitle')}</Text>
+          <Text variant="body">{t('showcase.tokenGallery.hierarchyBody')}</Text>
+          <Text variant="caption" tone="muted">
+            {t('showcase.tokenGallery.hierarchyMeta')}
+          </Text>
+          <Text variant="body" tone="disabled" testID="demo-tokens-text-disabled">
+            {t('showcase.disabledAction')}
+          </Text>
+        </Column>
+      </DemoSection>
       <DemoSection title={t('showcase.gallery.typography')}>
         {typographyVariants.map((variant) => (
           <Column key={variant} spacing={spacing.xs} modifiers={nativeFillWidth}>
@@ -51,11 +65,50 @@ export default function TokensScreen() {
             <Text variant="caption" tone="muted">
               {t('showcase.tokenGallery.typeValue', {
                 size: design.typography[variant].fontSize,
+                lineHeight: design.typography[variant].lineHeight,
                 weight: design.typography[variant].fontWeight,
               })}
             </Text>
           </Column>
         ))}
+      </DemoSection>
+      <DemoSection
+        title={t('showcase.tokenGallery.surfaces')}
+        hint={t('showcase.tokenGallery.surfacesHint')}
+      >
+        {(['background', 'surface', 'surfaceRaised', 'surfaceVariant'] as const).map((surface) => (
+          <Column
+            key={surface}
+            spacing={spacing.sm}
+            modifiers={nativeFillWidth}
+            testID={`demo-tokens-surface-${surface}`}
+            style={{
+              backgroundColor: colors[surface],
+              padding: spacing.lg,
+              borderRadius: radii.card,
+            }}
+          >
+            <Row spacing={spacing.sm} modifiers={nativeFillWidth}>
+              <Icon
+                name={Icon.select({ ios: 'square.stack', android: 'layers' })}
+                color={colors.tint}
+              />
+              <Text variant="label" modifiers={nativeRowWeight}>
+                {surface}
+              </Text>
+            </Row>
+            <Text variant="body">{t('showcase.tokenGallery.hierarchyTitle')}</Text>
+            <Text variant="caption" tone="muted">
+              {t('showcase.tokenGallery.hierarchyMeta')}
+            </Text>
+          </Column>
+        ))}
+      </DemoSection>
+      <DemoSection
+        title={t('showcase.tokenGallery.feedback')}
+        hint={t('showcase.tokenGallery.feedbackHint')}
+      >
+        <TokenFeedbackPreview />
       </DemoSection>
       <DemoSection
         title={t('showcase.tokenGallery.shapes')}
@@ -105,6 +158,33 @@ export default function TokensScreen() {
         ))}
       </DemoSection>
     </PageScreen>
+  );
+}
+
+/** Deterministic error state using the production field and submit feedback. */
+function TokenFeedbackPreview() {
+  const { t } = useTranslation();
+  const [value, setValue] = useState('mia@brainy');
+  const [error, setError] = useState(true);
+  return (
+    <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
+      <TextInput
+        label={t('auth.email')}
+        value={value}
+        onChangeText={setValue}
+        status={error ? 'error' : 'default'}
+        helperText={error ? t('showcase.tokenGallery.fieldError') : undefined}
+        keyboardType="email-address"
+        testID="demo-tokens-error-input"
+      />
+      <FormSubmit
+        testID="demo-tokens-feedback"
+        label={t('showcase.tokenGallery.toggleError')}
+        pending={false}
+        onPress={() => setError((previous) => !previous)}
+        error={error ? t('showcase.tokenGallery.submitError') : undefined}
+      />
+    </Column>
   );
 }
 

@@ -1,7 +1,8 @@
 import { spacing } from '@/constants/layout';
 import { useTranslation } from 'react-i18next';
-import { Column } from '@expo/ui';
-import { nativeFillWidth } from '../native/native-fill-width';
+import { Column, Row } from '@expo/ui';
+import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
+import { Icon } from '../icon/icon';
 import { UniversalButtonContent } from '../button/universal-button';
 import { UniversalTextContent as Text } from '../text/universal-text';
 import { useHostColorScheme } from '../host/universal-host';
@@ -35,12 +36,31 @@ export function FormSubmit({
         onPress={onPress}
       />
       {error ? (
-        <Text testID={`${testID}-error`} textStyle={{ color: colors.error }}>
-          {error}
-        </Text>
+        <Row
+          spacing={spacing.sm}
+          modifiers={nativeFillWidth}
+          style={{
+            backgroundColor: colors.errorContainer,
+            padding: spacing.lg,
+          }}
+        >
+          <Icon
+            name={Icon.select({ ios: 'exclamationmark.circle', android: 'error_outline' })}
+            size={20}
+            color={colors.onErrorContainer}
+          />
+          <Text
+            variant="body"
+            modifiers={nativeRowWeight}
+            testID={`${testID}-error`}
+            textStyle={{ color: colors.onErrorContainer }}
+          >
+            {error}
+          </Text>
+        </Row>
       ) : null}
       {notice ? (
-        <Text testID={`${testID}-status`} textStyle={{ color: colors.success }}>
+        <Text variant="body" testID={`${testID}-status`} textStyle={{ color: colors.success }}>
           {notice}
         </Text>
       ) : null}

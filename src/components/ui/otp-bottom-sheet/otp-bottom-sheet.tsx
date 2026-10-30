@@ -326,7 +326,11 @@ function OtpForm({
                               fontWeight="400"
                               textStyle={{
                                 textAlign: 'center',
-                                color: filled ? colors.text : colors.muted,
+                                color: error
+                                  ? colors.onErrorContainer
+                                  : filled
+                                    ? colors.text
+                                    : colors.muted,
                               }}
                             >
                               {code[index] ?? ''}
@@ -515,7 +519,7 @@ function AnimatedOtpFeedback({
               android: success ? 'verified_user' : error ? 'gpp_maybe' : 'shield_lock',
             })}
             size={36}
-            color={error ? colors.error : colors.success}
+            color={error ? colors.onErrorContainer : colors.success}
           />
         </UniversalHost>
       </Animated.View>

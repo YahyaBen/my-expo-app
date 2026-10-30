@@ -24,8 +24,8 @@
   },
   "splash": {
     "image": "./assets/images/splash-icon.png",
-    "backgroundColor": "#FFFFFF",
-    "darkBackgroundColor": "#111111"
+    "backgroundColor": "#F2F2F7",
+    "darkBackgroundColor": "#121212"
   },
   "eas": {
     "projectId": "c8cca991-ec77-476f-b759-3ea8bd075309"

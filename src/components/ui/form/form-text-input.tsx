@@ -1,9 +1,9 @@
 import { spacing } from '@/constants/layout';
 import { translateValidationMessage } from '@/lib/i18n';
 import { useTranslation } from 'react-i18next';
-import { Column } from '@expo/ui';
+import { Column, Row } from '@expo/ui';
 import { Icon } from '../icon/icon';
-import { nativeFillWidth, nativeFillWidthEnd } from '../native/native-fill-width';
+import { nativeFillWidth, nativeFillWidthEnd, nativeRowWeight } from '../native/native-fill-width';
 import { useEffect, useRef, useState } from 'react';
 import { useController, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
 
@@ -96,13 +96,23 @@ export function FormTextInput<T extends FieldValues>({
         status={invalid ? 'error' : 'default'}
       />
       {message ? (
-        <Text
-          testID={testID ? `${testID}-${messageSuffix}` : undefined}
-          modifiers={nativeFillWidth}
-          textStyle={{ color: invalid ? colors.error : colors.muted, fontSize: 14, lineHeight: 20 }}
-        >
-          {message}
-        </Text>
+        <Row spacing={spacing.sm} modifiers={nativeFillWidth}>
+          {invalid ? (
+            <Icon
+              name={Icon.select({ ios: 'exclamationmark.circle', android: 'error_outline' })}
+              size={18}
+              color={colors.error}
+            />
+          ) : null}
+          <Text
+            variant="caption"
+            testID={testID ? `${testID}-${messageSuffix}` : undefined}
+            modifiers={nativeRowWeight}
+            textStyle={{ color: invalid ? colors.error : colors.muted }}
+          >
+            {message}
+          </Text>
+        </Row>
       ) : null}
       {password && passwordToggle === 'button' ? (
         <Column alignment="end" modifiers={nativeFillWidthEnd}>

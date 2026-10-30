@@ -10,7 +10,7 @@ export interface ThemeDesign {
   };
   typography: Record<
     ThemeTextVariant,
-    { fontSize: number; fontWeight: '400' | '500' | '600' | '700' }
+    { fontSize: number; lineHeight: number; fontWeight: '400' | '500' | '600' | '700' }
   >;
   shape: {
     /** Undefined preserves the native button shape. Explicit caller geometry takes priority. */
@@ -22,12 +22,12 @@ export interface ThemeDesign {
 export const nativeDesign: ThemeDesign = {
   header: { artwork: true },
   typography: {
-    heading: { fontSize: 36, fontWeight: '700' },
-    title: { fontSize: 26, fontWeight: '600' },
-    subtitle: { fontSize: 20, fontWeight: '500' },
-    body: { fontSize: 16, fontWeight: '400' },
-    label: { fontSize: 14, fontWeight: '600' },
-    caption: { fontSize: 13, fontWeight: '400' },
+    heading: { fontSize: 36, lineHeight: 40, fontWeight: '700' },
+    title: { fontSize: 26, lineHeight: 32, fontWeight: '600' },
+    subtitle: { fontSize: 20, lineHeight: 28, fontWeight: '500' },
+    body: { fontSize: 16, lineHeight: 24, fontWeight: '400' },
+    label: { fontSize: 14, lineHeight: 20, fontWeight: '600' },
+    caption: { fontSize: 13, lineHeight: 18, fontWeight: '400' },
   },
   shape: { buttonRadius: undefined, inputRadius: radii.control },
 };

@@ -57,7 +57,8 @@ The wrapper owns a native observable but accepts a plain string `value`.
 - The visible label also names the native editable field. There is no public
   `accessibilityLabel` prop; selectors are not spoken names. Android's upstream
   read-only mapping does not prove a distinct disabled announcement.
-- Keep helper/errors understandable without color and allow wrapping. Check
+- Labels/helpers use semantic type presets; error helpers include an icon and
+  readable words. Allow wrapping. Check
   duplicate label stops, secure reveal, native focus and RTL on devices.
 
 Use the [showcase](../../../.rnstorybook/components/catalog/input-preview.tsx)

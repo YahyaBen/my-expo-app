@@ -7,10 +7,17 @@ The default template selects UX. Palette colors and semantic tokens stay in
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
 
+UX uses the reference palette's neutral surfaces and purple accent: `#F2F2F7`
+and white in light appearance, `#121212` with progressively lighter surfaces in
+dark appearance, and `#6200EE` / `#BB86FC` accents. Normal and supporting text
+use separate readable colors; faint text is reserved for unavailable content.
+Its configured splash backgrounds match the page background in each appearance.
+Existing Instagram and Altarea brand colors remain in place.
+
 Altarea adds purple/magenta accents, warm neutral surfaces, a larger opt-in
 text ramp, 24-point button corners and 6-point field corners. The existing
 `useAppTheme` also exposes `design` for those component owners; UX/Instagram
-retain their previous typography and geometry. Native lists, toggles, pickers,
+use the default mobile type ramp and native geometry. Native lists, toggles, pickers,
 padding and interaction feedback remain platform-owned. See the
 [website extraction and mobile mapping](altarea-theme.md) for exact source
 values, typography, spacing, shapes and adaptation limits.
@@ -29,9 +36,13 @@ factor. iOS ultra-thin system materials retain their native color treatment. See
 shared blur policy and capture-background requirements.
 Page titles and Home branding use the configured font and theme foreground.
 
-The **Components/Theme Tokens** story displays the active palette,
-type ramp, shapes, shared spacing, working button states and an editable field.
-`Components/Theme Tokens` adds Altarea light/dark and UX light/dark stories.
+The **Components/Theme Tokens** story displays the active palette, text hierarchy,
+type ramp with line heights, surface layers, shapes, shared spacing, working
+button states and an editable field. Toggle the local field/submit error example
+to inspect icon-and-text feedback and paired error-container foregrounds.
+UX, Instagram and Altarea each have light/dark stories. These previews do not
+send backend requests. Native font scaling, RTL, rendered contrast and keyboard
+behavior still require verification on matching iOS and Android builds.
 
 Settings offers system/light/dark appearance, supported header effects,
 Reduce Motion, language, Account/sign-in navigation, device permissions,

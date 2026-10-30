@@ -3,7 +3,6 @@ import { useAppTheme } from '@/hooks/use-theme';
 import {
   Column,
   Row,
-  Text,
   TextInput as ExpoTextInput,
   useNativeState,
   type TextInputProps as ExpoTextInputProps,
@@ -11,7 +10,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useHostColorScheme } from '../host/universal-host';
 import { Icon, type IconProps } from '../icon/icon';
-import { nativeFillWidth } from '../native/native-fill-width';
+import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
+import { UniversalTextContent as Text } from '../text/universal-text';
 import {
   inputAccessibilityModifiers,
   inputFieldAppearance,
@@ -140,6 +140,7 @@ export function TextInput({
     >
       {label ? (
         <Text
+          variant="label"
           testID={inputProps.testID ? `${inputProps.testID}-label` : undefined}
           textStyle={{ color: colors.text }}
         >
@@ -185,12 +186,23 @@ export function TextInput({
         ) : null}
       </Row>
       {helperText ? (
-        <Text
-          testID={inputProps.testID ? `${inputProps.testID}-helper` : undefined}
-          textStyle={{ color: semanticColor ?? colors.muted }}
-        >
-          {helperText}
-        </Text>
+        <Row spacing={spacing.sm} modifiers={nativeFillWidth}>
+          {status === 'error' ? (
+            <Icon
+              name={Icon.select({ ios: 'exclamationmark.circle', android: 'error_outline' })}
+              size={18}
+              color={colors.error}
+            />
+          ) : null}
+          <Text
+            variant="caption"
+            modifiers={nativeRowWeight}
+            testID={inputProps.testID ? `${inputProps.testID}-helper` : undefined}
+            textStyle={{ color: semanticColor ?? colors.muted }}
+          >
+            {helperText}
+          </Text>
+        </Row>
       ) : null}
     </Column>
   );

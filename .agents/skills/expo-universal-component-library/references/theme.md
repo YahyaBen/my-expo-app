@@ -25,9 +25,12 @@
   ramp, 24-point button radius, 6-point field radius and disabled header artwork.
   Read current source values before changing a palette; do not introduce a new
   palette as part of a structural refactor.
-- UX is the default grayscale wireframe in both appearances, including feedback
-  tokens. Its header artwork is disabled. It follows the common native seed/tint
+- UX uses neutral light/dark surfaces, purple accents and semantic feedback.
+  Its header artwork stays disabled. It follows the common native seed/tint
   flow; no palette-specific color-role mapping belongs in the Host.
+- Reserve `textDisabled` for unavailable content; `muted` remains readable
+  supporting text. Pair `errorContainer` with `onErrorContainer`, rather than
+  reusing filled-action `onError` or the ordinary page foreground.
 - `design.header.artwork` controls colored waves, not header blur or launch
   artwork. Preserve title clearance, safe areas and touch shielding when artwork
   is absent. `headerBlur={false}` remains an explicit opt-out.

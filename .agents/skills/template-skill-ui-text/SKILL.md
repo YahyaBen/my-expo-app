@@ -19,12 +19,18 @@ Children are strings in the installed contract. Use Row/Column for layout.
 ## Typography and color
 
 - Variants: heading, title, subtitle, body, label, caption. Omit variant/font
-  overrides for native typography. Presets read the active theme's typography.
-- Tones: default, muted, primary, secondary, success, warning, error, info.
-  Default uses text; primary uses tint. Filled-control primary/onPrimary tokens
-  have different contrast duties.
+  overrides for native typography. Presets read size, weight and line height
+  from the active theme. iOS scales opted-in preset sizes/line heights once with
+  the live device font scale; Compose scales its native sp units. Explicit
+  modifiers retain upstream priority. iOS line height remains an approximation.
+- Tones: default, muted, disabled, primary, secondary, success, warning, error, info.
+  Default uses text; primary uses tint; disabled uses textDisabled for unavailable
+  content only. A tone does not disable interaction. Filled-control primary/onPrimary
+  tokens have different contrast duties.
 - Explicit fontSize/fontWeight override presets; final textStyle font fields
-  override both.
+  override both. A size override keeps the preset line-height ratio unless
+  textStyle.lineHeight supplies an explicit value. Preset sizes remain base values
+  before device font scaling.
 - Active lightColor/darkColor overrides tone; final textStyle.color overrides both.
 - Content colorScheme changes resolution; standalone text also sets its Host scheme.
 - Raw Text can inherit a filled button's foreground. The themed wrapper supplies

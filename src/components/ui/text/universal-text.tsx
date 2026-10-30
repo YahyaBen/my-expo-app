@@ -3,10 +3,19 @@ import type { TextProps, UniversalFontWeight } from '@expo/ui';
 import type { ThemeTextVariant } from '@/constants/themes/design';
 import { useAppTheme } from '@/hooks/use-theme';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { useNativeTextStyle } from './text-native';
 
 export type UniversalTextVariant = ThemeTextVariant;
 export type UniversalTextTone =
-  'default' | 'muted' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  | 'default'
+  | 'muted'
+  | 'disabled'
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info';
 export type UniversalTextColorScheme = 'light' | 'dark';
 
 export interface UniversalTextProps extends TextProps {
@@ -46,20 +55,28 @@ export function UniversalTextContent({
   const activeColorScheme = useHostColorScheme(colorScheme);
   const { colors, design } = useAppTheme(activeColorScheme);
   const preset = variant === undefined ? undefined : design.typography[variant];
-  const size = fontSize ?? preset?.fontSize;
+  const size = textStyle?.fontSize ?? fontSize ?? preset?.fontSize;
   const weight = fontWeight ?? preset?.fontWeight;
-
-  return (
-    <Text
-      {...textProps}
-      textStyle={{
-        ...(size === undefined ? {} : { fontSize: size }),
-        ...(weight === undefined ? {} : { fontWeight: weight }),
-        color:
-          (activeColorScheme === 'dark' ? darkColor : lightColor) ??
-          colors[tone === 'default' ? 'text' : tone === 'primary' ? 'tint' : tone],
-        ...textStyle,
-      }}
-    />
+  const colorRole =
+    tone === 'default'
+      ? 'text'
+      : tone === 'primary'
+        ? 'tint'
+        : tone === 'disabled'
+          ? 'textDisabled'
+          : tone;
+  const resolvedTextStyle = useNativeTextStyle(
+    {
+      ...(preset && size !== undefined
+        ? { lineHeight: preset.lineHeight * (size / preset.fontSize) }
+        : {}),
+      ...(size === undefined ? {} : { fontSize: size }),
+      ...(weight === undefined ? {} : { fontWeight: weight }),
+      color: (activeColorScheme === 'dark' ? darkColor : lightColor) ?? colors[colorRole],
+      ...textStyle,
+    },
+    preset !== undefined,
   );
+
+  return <Text {...textProps} textStyle={resolvedTextStyle} />;
 }

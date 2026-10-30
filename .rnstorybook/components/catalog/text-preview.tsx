@@ -34,6 +34,7 @@ const variants = [
 const tones = [
   'default',
   'muted',
+  'disabled',
   'primary',
   'secondary',
   'success',

@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         story:
-          'Production theme tokens and native controls. Every palette supplies the native Host seed through its tint; UX keeps grayscale app tokens while native tones follow the platform. Enabled actions increment the count; the disabled action does not. The square button explicitly overrides the theme radius with zero. Edit and reset the local input draft, then inspect typography, shapes, shared spacing and semantic colors.',
+          'Production theme tokens and native controls. UX uses neutral surfaces with a purple accent; native tones follow the Host seed. Inspect text hierarchy, line heights, disabled text and surface contrast. Toggle field and submit errors to inspect icon-and-text feedback. Enabled actions increment the count; the disabled action does not. Drafts and error state remain local to the preview.',
       },
     },
   },
@@ -22,5 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const UXLight: Story = {};
 export const UXDark: Story = { args: { colorScheme: 'dark' } };
+export const InstagramLight: Story = { args: { themeId: 'instagram' } };
+export const InstagramDark: Story = { args: { themeId: 'instagram', colorScheme: 'dark' } };
 export const AltareaLight: Story = { args: { themeId: 'altarea' } };
 export const AltareaDark: Story = { args: { themeId: 'altarea', colorScheme: 'dark' } };

@@ -18,6 +18,8 @@ export interface SemanticColors {
   surfaceVariant: string;
   text: string;
   muted: string;
+  /** Unavailable content only; ordinary secondary text uses muted. */
+  textDisabled: string;
   border: string;
   divider: string;
   /** Foreground accent for primary text, links and native tint. */
@@ -28,6 +30,7 @@ export interface SemanticColors {
   error: string;
   errorContainer: string;
   onError: string;
+  onErrorContainer: string;
   success: string;
   successContainer: string;
   onSuccess: string;
@@ -63,7 +66,7 @@ export function createColorTokens(colors: SemanticColors) {
     tabBarGlassClear: `${colors.surfaceRaised}00`,
     tabBarShadow: colors.shadow,
     switchTrackOn: colors.tint,
-    switchThumbOn: colors.onSuccess,
+    switchThumbOn: colors.onPrimary,
     switchTrackOff: colors.surfaceVariant,
     switchThumbOff: colors.muted,
     switchBorderOff: colors.muted,
@@ -73,13 +76,13 @@ export function createColorTokens(colors: SemanticColors) {
     switchThumbDisabledOff: `${colors.text}61`,
     switchBorderDisabledOff: `${colors.text}1F`,
     controlActive: colors.tint,
-    controlOnActive: colors.onSuccess,
+    controlOnActive: colors.onPrimary,
     controlSelected: colors.selection,
     controlOnSelected: colors.text,
     controlSurface: colors.surfaceRaised,
     controlTrack: colors.surfaceVariant,
     controlBorder: colors.border,
-    controlDisabledContent: colors.muted,
+    controlDisabledContent: colors.textDisabled,
     controlDisabledSurface: colors.surface,
     controlDisabledActive: `${colors.tint}33`,
   };
@@ -94,6 +97,7 @@ export const feedbackColors = {
     error: '#B3261E',
     errorContainer: '#FDE8E7',
     onError: '#FFFFFF',
+    onErrorContainer: '#410E0B',
     success: '#187A46',
     successContainer: '#E0F4E7',
     onSuccess: '#FFFFFF',
@@ -108,6 +112,7 @@ export const feedbackColors = {
     error: '#F15C6D',
     errorContainer: '#3F2028',
     onError: '#111318',
+    onErrorContainer: '#F9DEDC',
     success: '#6BD99A',
     successContainer: '#143524',
     onSuccess: '#111318',
@@ -120,7 +125,8 @@ export const feedbackColors = {
   },
 };
 
-type BrandColors = Omit<SemanticColors, keyof typeof feedbackColors.light>;
+type BrandColors = Omit<SemanticColors, keyof typeof feedbackColors.light> &
+  Partial<Pick<SemanticColors, keyof typeof feedbackColors.light>>;
 
 /** Brand configuration shares feedback defaults and the derived token mapping. */
 export function createBrandTheme(colors: Record<AppColorScheme, BrandColors>): ThemePalette {
