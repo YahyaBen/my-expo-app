@@ -37,8 +37,8 @@ and initial presentation live in `config/brands/template.json`. `config/brand.js
 validates that manifest and `app.config.js` projects it into Expo configuration.
 The app reads only public metadata through `src/config/brand.ts`.
 
-For a starter EAS build, fill only the manifest's `eas.projectId` using a project
-with slug `expo-mobile-template`. The empty slot works for local development.
+For a cloned starter's EAS build, replace only the manifest's `eas.projectId` using
+a project with slug `expo-mobile-template`. An empty ID works for local development.
 Production configuration requires a project ID. Account access and signing are
 still handled by EAS. See [build profiles](eas-development-builds.md).
 

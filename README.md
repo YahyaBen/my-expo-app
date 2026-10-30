@@ -35,9 +35,9 @@ test runner or test suites.
 ## Build your clone with EAS
 
 Change only `eas.projectId` in [config/brands/template.json](config/brands/template.json)
-from the empty string to your own EAS project UUID. Create that EAS project with
-slug `expo-mobile-template` to match this starter. The empty slot keeps local
-Storybook usable without linking someone else's project.
+to your own EAS project UUID. Create that EAS project with slug
+`expo-mobile-template` to match this starter. You can clear the ID to use local
+Storybook without linking an EAS project.
 
 ```sh
 npx eas-cli@latest login

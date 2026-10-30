@@ -51,9 +51,12 @@ signing, Apple credentials and device provisioning are still required where
 applicable. Separate products need unique app IDs, display names and assets in the
 brand manifest. Keeping an existing package ID updates/replaces that installed app.
 
-The root `google-services.json`, `GoogleService-Info.plist` and `firebase.json` are
-preserved byte-for-byte. The neutral template does not reference those Firebase
-apps. `android.googleServicesFile` is optional and validated against the selected
+The root `google-services.json` and `GoogleService-Info.plist` are preserved unchanged.
+`firebase.json` keeps automatic initialization and data collection disabled. Its
+Android notification channel matches `expo-notifications` (`default`) to avoid
+manifest merge conflicts with React Native Firebase Messaging.
+The neutral template does not reference those Firebase apps.
+`android.googleServicesFile` is optional and validated against the selected
 package when enabled. iOS Firebase autolinking remains intentionally excluded.
 Enabling Firebase later needs the matching config/plugins and a new native build.
 
