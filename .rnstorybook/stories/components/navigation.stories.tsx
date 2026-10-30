@@ -106,7 +106,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX, Instagram and Altarea in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it. Changing tabs gives a subtle tick; reselecting the active tab stays silent. The center action uses stronger feedback. DisabledAction stays silent and does not increment its count.',
+          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it. Changing tabs gives a subtle tick; reselecting the active tab stays silent. The center action uses stronger feedback. The disabled action stays silent and does not increment its count. Enable longContent to check scrolling and the final action clear the raised button, including with zero bottom inset.',
       },
     },
   },
@@ -129,24 +129,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Light: Story = {};
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const InstagramLight: Story = { args: { themeId: 'instagram' } };
-export const InstagramDark: Story = { args: { themeId: 'instagram', colorScheme: 'dark' } };
-export const AltareaLight: Story = { args: { themeId: 'altarea' } };
-export const AltareaDark: Story = { args: { themeId: 'altarea', colorScheme: 'dark' } };
-export const RightToLeft: Story = { args: { direction: 'rtl' } };
-export const DarkRightToLeft: Story = { args: { colorScheme: 'dark', direction: 'rtl' } };
-export const ZeroBottomInset: Story = { args: { bottomInset: 0 } };
-export const DisabledAction: Story = { args: { disabled: true } };
-export const LongContent: Story = {
-  args: { longContent: true },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Scroll the striped rows: content must remain visible on both sides of the raised circle, without an opaque strip. At the end, the final content button must clear the circle and remain tappable, including its lower edge. Each press increments Final actions. Repeat with zero and nonzero bottom insets, dark appearance and RTL.',
-      },
-    },
-  },
-};
+export const Playground: Story = {};

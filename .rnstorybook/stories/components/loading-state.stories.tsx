@@ -74,7 +74,11 @@ function LoadingDemo({ state: initial, colorScheme }: Readonly<Props>) {
 const meta = {
   title: 'Components/Loading State',
   component: LoadingDemo,
-  args: { state: 'loading', colorScheme: 'dark' },
+  args: {
+    state: 'loading',
+    colorScheme: 'dark',
+    example: 'query',
+  },
   argTypes: {
     state: {
       control: 'select',
@@ -89,8 +93,10 @@ const meta = {
         'refresh-error',
       ],
     },
+    example: { control: 'select', options: ['query', 'repeated-queries'] },
   },
-  render: (args) => <LoadingDemo key={args.state} {...args} />,
+  render: ({ example, ...args }) =>
+    example === 'repeated-queries' ? <LoadingScreen /> : <LoadingDemo key={args.state} {...args} />,
   decorators: [
     (Story) => (
       <View style={{ flex: 1 }}>
@@ -98,16 +104,10 @@ const meta = {
       </View>
     ),
   ],
-} satisfies Meta<typeof LoadingDemo>;
+} satisfies Meta<Props & { example: 'query' | 'repeated-queries' }>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Loading: Story = {};
-
-export const ErrorState: Story = { name: 'Error', args: { state: 'error' } };
-
-export const Refreshing: Story = { args: { state: 'refreshing' } };
-
-export const RepeatedQueries: Story = { render: () => <LoadingScreen /> };
+export const Playground: Story = {};

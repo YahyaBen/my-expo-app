@@ -49,6 +49,7 @@ const meta = {
     colorScheme: 'dark',
     disabled: false,
     onPress: action('button pressed'),
+    example: 'button',
   },
   argTypes: {
     label: { control: 'text' },
@@ -74,11 +75,27 @@ const meta = {
     contentColor: { control: 'color' },
     disabled: { control: 'boolean' },
     onPress: { action: 'pressed', control: false },
+    example: {
+      control: 'select',
+      options: ['button', 'interaction', 'semantic-variants', 'standalone-host'],
+    },
   },
-  render: (args) => <ButtonDemo {...args} />,
+  render: ({ example, ...args }) => {
+    switch (example) {
+      case 'interaction':
+        return <InteractionDemo {...args} />;
+      case 'semantic-variants':
+        return <SemanticVariantsDemo colorScheme={args.colorScheme} />;
+      case 'standalone-host':
+        return <StandaloneHostDemo colorScheme={args.colorScheme} />;
+      default:
+        return <ButtonDemo {...args} />;
+    }
+  },
   parameters: {
     controls: {
       include: [
+        'example',
         'label',
         'variant',
         'disabled',
@@ -93,21 +110,16 @@ const meta = {
       ],
     },
   },
-} satisfies Meta<UniversalButtonProps & StoryThemeProps>;
+} satisfies Meta<
+  UniversalButtonProps &
+    StoryThemeProps & {
+      example: 'button' | 'interaction' | 'semantic-variants' | 'standalone-host';
+    }
+>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {};
-export const Secondary: Story = { args: { variant: 'secondary', label: 'Save for later' } };
-export const Tertiary: Story = { args: { variant: 'tertiary', label: 'Maybe later' } };
-export const Link: Story = { args: { variant: 'link', label: 'View details' } };
-export const Success: Story = { args: { variant: 'success', label: 'Confirm' } };
-export const Warning: Story = { args: { variant: 'warning', label: 'Review changes' } };
-export const Destructive: Story = { args: { variant: 'destructive', label: 'Delete recipe' } };
-export const Info: Story = { args: { variant: 'info', label: 'Learn more' } };
-export const Glass: Story = { args: { variant: 'glass', label: 'Open options' } };
 
 function InteractionDemo(args: Readonly<UniversalButtonProps>) {
   const [presses, setPresses] = useState(0);
@@ -143,8 +155,6 @@ function InteractionDemo(args: Readonly<UniversalButtonProps>) {
     </NativeStoryFrame>
   );
 }
-
-export const Interaction: Story = { render: (args) => <InteractionDemo {...args} /> };
 
 /** Use component defaults so a preview cannot hide a missing semantic color mapping. */
 function SemanticVariantsDemo({
@@ -200,16 +210,6 @@ function SemanticVariantsDemo({
   );
 }
 
-export const SemanticVariantsLight: Story = {
-  args: { colorScheme: 'light' },
-  render: (args) => <SemanticVariantsDemo colorScheme={args.colorScheme} />,
-};
-
-export const SemanticVariantsDark: Story = {
-  args: { colorScheme: 'dark' },
-  render: (args) => <SemanticVariantsDemo colorScheme={args.colorScheme} />,
-};
-
 function StandaloneHostDemo({ colorScheme }: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
   return (
     <LayoutDirectionProvider initialDirection="ltr">
@@ -250,12 +250,4 @@ function StandaloneHostContent({
   );
 }
 
-export const StandaloneHostLight: Story = {
-  args: { colorScheme: 'light' },
-  render: (args) => <StandaloneHostDemo colorScheme={args.colorScheme} />,
-};
-
-export const StandaloneHostDark: Story = {
-  args: { colorScheme: 'dark' },
-  render: (args) => <StandaloneHostDemo colorScheme={args.colorScheme} />,
-};
+export const Playground: Story = {};

@@ -46,7 +46,7 @@ export default function StorybookUI({
       initialSelection: isStoryId(initialStoryId)
         ? initialStoryId
         : canvasMode
-          ? 'components-button--primary'
+          ? 'components-button--playground'
           : 'wireframes-home-sections--cards',
       // The built-in UI-less canvas groups iOS descendants into one accessible
       // element. A custom canvas retains each control's native test target.

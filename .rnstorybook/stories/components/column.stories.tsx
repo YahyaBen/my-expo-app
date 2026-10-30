@@ -78,4 +78,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const StartAligned: Story = {};
+export const Playground: Story = {};

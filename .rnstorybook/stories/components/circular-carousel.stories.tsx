@@ -76,6 +76,8 @@ const meta = {
     rtl: { control: 'boolean' },
     width: { control: { type: 'range', min: 160, max: 600, step: 10 } },
     scaleEnabled: { control: 'boolean' },
+    items: { control: 'object' },
+    height: { control: { type: 'number', min: 1 } },
   },
   parameters: {
     docs: {
@@ -85,13 +87,11 @@ const meta = {
       },
     },
   },
+
+  render: (args) => <CircularCarouselDemo key={JSON.stringify(args.items)} {...args} />,
 } satisfies Meta<typeof CircularCarouselDemo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Light: Story = {};
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const RTL: Story = { args: { rtl: true } };
-export const Compact: Story = { args: { width: 220 } };
-export const Empty: Story = { args: { items: [] } };
-export const SinglePhoto: Story = { args: { items: photoFixtures.slice(0, 1) } };
+
+export const Playground: Story = {};

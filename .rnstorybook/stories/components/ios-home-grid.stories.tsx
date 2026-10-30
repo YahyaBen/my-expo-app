@@ -78,9 +78,5 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Light: Story = {};
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const RTL: Story = { args: { rtl: true } };
-export const OneItem: Story = { args: { itemCount: 1 } };
-export const Empty: Story = { args: { itemCount: 0 } };
-export const NarrowThreeColumns: Story = { args: { columns: 3, contentWidth: 240, itemCount: 5 } };
+
+export const Playground: Story = {};

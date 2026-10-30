@@ -23,9 +23,6 @@ const clearIcon = Icon.select({
   android: 'cancel',
 });
 
-const selectionNote =
-  'Select-all and programmatic selection require iOS 18+; supported on Android. Secure fields ignore selection and multiline props on iOS.';
-
 /** Story-only RN boundary; application fields compose inside their existing Host. */
 function InputPreview(props: Readonly<TextInputProps>) {
   return (
@@ -62,6 +59,7 @@ const meta = {
     onSubmitEditing: action('input submitted'),
     onSelectionChange: action('selection changed'),
     onContentSizeChange: action('size changed'),
+    example: 'input',
   },
   argTypes: {
     label: { control: 'text' },
@@ -132,6 +130,10 @@ const meta = {
     onSubmitEditing: { action: 'submitted' },
     onSelectionChange: { action: 'selection changed' },
     onContentSizeChange: { action: 'size changed' },
+    example: {
+      control: 'select',
+      options: ['input', 'controlled', 'filtered', 'clear-icon', 'password', 'imperative'],
+    },
   },
   decorators: [
     (Story, context) => (
@@ -143,38 +145,44 @@ const meta = {
       </View>
     ),
   ],
-  render: (args) => (
-    <InputPreview key={`${args.defaultValue}-${args.autoFocus}-${args.multiline}`} {...args} />
-  ),
+  render: ({ example, ...args }) => {
+    const key = JSON.stringify([args.defaultValue, args.autoFocus, args.multiline]);
+    switch (example) {
+      case 'controlled':
+        return <ControlledInputDemo key={key} {...args} />;
+      case 'filtered':
+        return <FilteredControlledInputDemo key={key} {...args} testID="filtered-input" />;
+      case 'clear-icon':
+        return <IconInputDemo key={`${key}-${args.disabled}`} {...args} />;
+      case 'password':
+        return <PasswordVisibilityDemo key={key} {...args} />;
+      case 'imperative':
+        return <InputActionsDemo key={key} {...args} />;
+      default:
+        return <InputPreview key={key} {...args} />;
+    }
+  },
   parameters: {
-    controls: {
-      include: [
-        'label',
-        'placeholder',
-        'defaultValue',
-        'helperText',
-        'status',
-        'disabled',
-        'readOnly',
-        'autoFocus',
-        'multiline',
-        'secureTextEntry',
-        'keyboardType',
-        'colorScheme',
-        'themeId',
-      ],
+    controls: { exclude: /^(testID|modifiers|children|ref|on[A-Z].*)$/ },
+    docs: {
+      description: {
+        component:
+          'Use example to explore controlled editing, digit filtering, icon actions, password visibility and imperative focus/selection. Programmatic selection requires iOS 18+ and is supported on Android; secure fields ignore selection and multiline on iOS.',
+      },
     },
   },
-} satisfies Meta<typeof TextInput>;
+} satisfies Meta<
+  TextInputProps & {
+    example: 'input' | 'controlled' | 'filtered' | 'clear-icon' | 'password' | 'imperative';
+  }
+>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Empty: Story = {};
-
 function FilteredControlledInputDemo(args: Readonly<TextInputProps>) {
-  const [value, setValue] = useState('123');
+  const [value, setValue] = useState((args.defaultValue ?? '').replace(/[^0-9]/g, ''));
   return (
     <Host colorScheme={args.colorScheme}>
       <Column spacing={16}>
@@ -198,18 +206,6 @@ function FilteredControlledInputDemo(args: Readonly<TextInputProps>) {
   );
 }
 
-export const FilteredControlled: Story = {
-  args: {
-    label: 'Digits only',
-    helperText: 'Type or paste letters repeatedly: only digits should remain visible.',
-    keyboardType: 'default',
-    autoCapitalize: 'none',
-    autoCorrect: false,
-    testID: 'filtered-input',
-  },
-  render: (args) => <FilteredControlledInputDemo {...args} />,
-};
-
 function IconInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   const [pressCount, setPressCount] = useState(0);
@@ -220,6 +216,7 @@ function IconInputDemo(args: Readonly<TextInputProps>) {
         {...args}
         leftIcon={searchIcon}
         rightIcon={clearIcon}
+        rightIconAccessibilityLabel={args.rightIconAccessibilityLabel ?? 'Clear search'}
         value={value}
         onChangeText={(text) => {
           setValue(text);
@@ -252,30 +249,6 @@ function IconInputDemo(args: Readonly<TextInputProps>) {
     </View>
   );
 }
-
-export const ClickableRightIcon: Story = {
-  args: {
-    label: 'Search',
-    placeholder: 'Search recipes',
-    defaultValue: 'Soup',
-    rightIconAccessibilityLabel: 'Clear search',
-    helperText: 'Compact icon action: tap to clear. Disable the field to check action suppression.',
-  },
-  render: (args) => <IconInputDemo key={`${args.defaultValue}-${args.disabled}`} {...args} />,
-};
-
-const Password: Story = {
-  args: {
-    label: 'Password',
-    placeholder: 'Enter password',
-    defaultValue: 'Example123!',
-    secureTextEntry: true,
-    autoComplete: 'current-password',
-    autoCapitalize: 'none',
-    autoCorrect: false,
-    helperText: 'Native secure entry; selection and multiline are unavailable on iOS.',
-  },
-};
 
 function PasswordVisibilityDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
@@ -330,21 +303,6 @@ function PasswordVisibilityDemo(args: Readonly<TextInputProps>) {
     </View>
   );
 }
-
-export const PasswordVisibility: Story = {
-  ...Password,
-  args: {
-    ...Password.args,
-    helperText:
-      'Tap the eye icon to reveal or hide the password. The field height stays stable in both modes.',
-  },
-  render: (args) => (
-    <PasswordVisibilityDemo
-      key={JSON.stringify([args.defaultValue, args.textStyle, args.colorScheme])}
-      {...args}
-    />
-  ),
-};
 
 function InputActionsDemo(args: Readonly<TextInputProps>) {
   const ref = useRef<TextInputRef>(null);
@@ -415,11 +373,6 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
   );
 }
 
-export const ImperativeActions: Story = {
-  args: { defaultValue: 'Hello native input', helperText: selectionNote },
-  render: (args) => <InputActionsDemo key={args.defaultValue} {...args} />,
-};
-
 function ControlledInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   return (
@@ -465,12 +418,4 @@ function ControlledInputDemo(args: Readonly<TextInputProps>) {
   );
 }
 
-export const Controlled: Story = {
-  args: {
-    defaultValue: 'HELLO',
-    autoCapitalize: 'none',
-    autoCorrect: false,
-    helperText: 'A regular string value supports editing, external updates and resets.',
-  },
-  render: (args) => <ControlledInputDemo key={args.defaultValue} {...args} />,
-};
+export const Playground: Story = {};

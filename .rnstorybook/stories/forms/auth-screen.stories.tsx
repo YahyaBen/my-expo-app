@@ -103,7 +103,13 @@ function NativeFormDemo({
 const meta = {
   title: 'Forms/Login Form',
   component: NativeFormDemo,
-  args: { pending: false, icons: false, colorScheme: 'dark' },
+  args: {
+    pending: false,
+    icons: false,
+    colorScheme: 'dark',
+    grouped: false,
+    fieldSelectors: true,
+  },
   argTypes: {
     pending: { control: 'boolean' },
     icons: { control: 'boolean' },
@@ -113,6 +119,7 @@ const meta = {
     grouped: { control: 'boolean' },
     viewportHeight: { control: 'number' },
     viewportWidth: { control: 'number' },
+    fieldSelectors: { control: 'boolean' },
   },
   parameters: { layout: 'fullscreen' },
   decorators: [
@@ -128,47 +135,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const SharedHost: Story = {};
-
-export const Pending: Story = { args: { pending: true } };
-
-export const WithoutFieldSelectors: Story = { args: { fieldSelectors: false } };
-
-export const GroupedForm: Story = { args: { grouped: true } };
-
-export const NarrowScreen: Story = { args: { viewportWidth: 360 } };
-
-export const WideScreen: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Use the full available preview on a wide device or window. Check equal outer margins, editable fields and keyboard access without forcing an oversized canvas.',
-      },
-    },
-  },
-};
-
-export const WideScreenOverflow: Story = {
-  args: {
-    viewportHeight: 360,
-    loginHelperText:
-      'This wrapped helper makes the short viewport scroll. Reach the password field and submit action while retaining the centered content width.',
-  },
-};
-
-export const AltareaLight: Story = {
-  args: { themeId: 'altarea', colorScheme: 'light', icons: true },
-};
-
-export const AltareaDark: Story = {
-  args: { themeId: 'altarea', colorScheme: 'dark', icons: true },
-};
-
-export const HostSchemeOverride: Story = {
-  args: {
-    colorScheme: 'light',
-    frameColorScheme: 'dark',
-    loginHelperText: 'Fields and validation feedback follow the dark form Host.',
-  },
-};
+export const Playground: Story = {};

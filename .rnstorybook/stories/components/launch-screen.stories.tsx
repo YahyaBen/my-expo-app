@@ -59,15 +59,32 @@ function LaunchDemo({
 const meta = {
   title: 'Components/Launch Screen',
   component: LaunchDemo,
-  args: { reducedMotion: false, waiting: false, mode: 'branded' },
-  argTypes: { mode: { control: 'select', options: ['minimal', 'branded'] } },
-} satisfies Meta<typeof LaunchDemo>;
+  args: {
+    reducedMotion: false,
+    waiting: false,
+    mode: 'branded',
+    colorScheme: 'light',
+    example: 'launch',
+  },
+  argTypes: {
+    mode: { control: 'select', options: ['minimal', 'branded'] },
+    waiting: { control: 'boolean' },
+    reducedMotion: { control: 'boolean' },
+    example: { control: 'select', options: ['launch', 'bottom-edge'] },
+  },
+
+  render: ({ example, colorScheme, ...args }) =>
+    example === 'bottom-edge' ? (
+      <LaunchEdgeDemo colorScheme={colorScheme} />
+    ) : (
+      <LaunchDemo key={`${args.mode}-${args.reducedMotion}`} {...args} />
+    ),
+} satisfies Meta<
+  React.ComponentProps<typeof LaunchDemo> & { colorScheme: 'light' | 'dark' } & {
+    example: 'launch' | 'bottom-edge';
+  }
+>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Ready: Story = {};
-export const Waiting: Story = { args: { waiting: true } };
-export const ReducedMotion: Story = { args: { reducedMotion: true } };
-export const MinimalReady: Story = { args: { mode: 'minimal' } };
-export const MinimalWaiting: Story = { args: { mode: 'minimal', waiting: true } };
-export const BottomEdgeLight: Story = { render: () => <LaunchEdgeDemo colorScheme="light" /> };
-export const BottomEdgeDark: Story = { render: () => <LaunchEdgeDemo colorScheme="dark" /> };
+
+export const Playground: Story = {};

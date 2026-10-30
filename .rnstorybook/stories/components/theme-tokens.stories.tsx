@@ -20,9 +20,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const UXLight: Story = {};
-export const UXDark: Story = { args: { colorScheme: 'dark' } };
-export const InstagramLight: Story = { args: { themeId: 'instagram' } };
-export const InstagramDark: Story = { args: { themeId: 'instagram', colorScheme: 'dark' } };
-export const AltareaLight: Story = { args: { themeId: 'altarea' } };
-export const AltareaDark: Story = { args: { themeId: 'altarea', colorScheme: 'dark' } };
+export const Playground: Story = {};

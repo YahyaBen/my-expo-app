@@ -165,23 +165,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Native24: Story = {};
-export const Native200: Story = { args: { count: 200 } };
-export const Native1000: Story = { args: { count: 1000 } };
-export const Recycled24: Story = { args: { renderer: 'flash-list' } };
-export const Recycled200: Story = { args: { renderer: 'flash-list', count: 200 } };
-export const Recycled1000: Story = { args: { renderer: 'flash-list', count: 1000 } };
-export const RecycledRtl: Story = {
-  args: { renderer: 'flash-list', count: 200, layoutDirection: 'rightToLeft' },
-};
-export const RecycledDark: Story = {
-  args: { renderer: 'flash-list', count: 200, colorScheme: 'dark' },
-};
-export const NativeRecycled200: Story = { args: { renderer: 'native-list', count: 200 } };
-export const NativeRecycled1000: Story = { args: { renderer: 'native-list', count: 1000 } };
-export const NativeRecycledRtl: Story = {
-  args: { renderer: 'native-list', count: 200, layoutDirection: 'rightToLeft' },
-};
-export const NativeRecycledDark: Story = {
-  args: { renderer: 'native-list', count: 200, colorScheme: 'dark' },
-};
+export const Playground: Story = {};

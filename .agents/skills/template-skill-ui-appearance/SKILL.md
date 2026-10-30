@@ -11,8 +11,8 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
 
 ## Preference ownership
 
-- The brand's `presentation.palette` fixes the root palette: `ux`,
-  `instagram` or `altarea`. Ordinary Settings has no brand/palette picker.
+- The brand's `presentation.palette` fixes the root palette to `ux`, the only
+  bundled palette. Ordinary Settings has no brand/palette picker.
   `allowThemeSelection` is an explicit isolated-preview opt-in; it is not saved.
 - System/Light/Dark uses `appColorScheme`. Root `persistAppearance` restores
   accepted values and exposes `appearanceReady`; disable controls until ready.
@@ -30,7 +30,7 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
 - Header choices are Default/Dunes/Ribbon/Rain. `appHeaderMotion` and
   `appReducedMotion` use the existing serialized preference writes.
   `persistHeaderMotion` restores both and joins launch readiness.
-- Altarea hides decorative header choices and bypasses their artwork while
+- UX hides decorative header choices and bypasses their artwork while
   retaining saved choices. Header blur remains on unless `headerBlur={false}`;
   there is no numeric blur preference, and old `appHeaderBlur` values are ignored.
 - Reduce Motion observes the live system value until explicitly selected.

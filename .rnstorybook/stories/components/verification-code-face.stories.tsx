@@ -94,12 +94,22 @@ function CodeEntry({
 const meta = {
   title: 'Components/Verification Code Face',
   component: VerificationCodeFaceDemo,
-  args: { colorScheme: 'light', rtl: false, length: 4, faceSize: 96, disabled: false },
+  args: {
+    colorScheme: 'light',
+    rtl: false,
+    length: 4,
+    faceSize: 96,
+    disabled: false,
+    initialValue: '',
+    initialStatus: 'default',
+  },
   argTypes: {
     rtl: { control: 'boolean' },
     length: { control: { type: 'number', min: 1, max: 8 } },
     faceSize: { control: { type: 'number', min: 48, max: 144 } },
     disabled: { control: 'boolean' },
+    initialValue: { control: 'text' },
+    initialStatus: { control: 'select', options: ['default', 'success', 'error'] },
   },
   parameters: {
     docs: {
@@ -113,9 +123,5 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Light: Story = {};
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const RTL: Story = { args: { rtl: true } };
-export const SixDigits: Story = { args: { length: 6, faceSize: 120 } };
-export const Rejected: Story = { args: { initialValue: '2468', initialStatus: 'error' } };
-export const Disabled: Story = { args: { initialValue: '1234', disabled: true } };
+
+export const Playground: Story = {};

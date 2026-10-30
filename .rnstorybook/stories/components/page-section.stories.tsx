@@ -71,4 +71,5 @@ const meta = {
 } satisfies Meta<typeof SectionDemo>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Interaction: Story = {};
+
+export const Playground: Story = {};

@@ -81,11 +81,20 @@ const meta = {
       },
     },
   },
-  args: { colorScheme: 'light', resendCooldownSeconds: 0 },
+  args: {
+    colorScheme: 'light',
+    resendCooldownSeconds: 0,
+    requestFailure: false,
+    resendFailure: false,
+    changeCooldownOnVerify: false,
+    recipient: 'hello@example.com',
+  },
   argTypes: {
     resendCooldownSeconds: { control: 'number' },
     requestFailure: { control: 'boolean' },
     resendFailure: { control: 'boolean' },
+    recipient: { control: 'text' },
+    changeCooldownOnVerify: { control: 'boolean' },
   },
   decorators: [
     (Story, { args }) => (
@@ -96,25 +105,16 @@ const meta = {
       </I18nextProvider>
     ),
   ],
+  render: (args) => (
+    <OtpDemo
+      key={`${args.recipient}-${args.resendCooldownSeconds}-${args.changeCooldownOnVerify}`}
+      {...args}
+    />
+  ),
 } satisfies Meta<typeof OtpDemo>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Light: Story = {};
-
-export const RequestFailure: Story = { args: { requestFailure: true } };
-export const ResendFailure: Story = { args: { resendFailure: true } };
-export const Cooldown: Story = { args: { resendCooldownSeconds: 5 } };
-export const CooldownDuringVerification: Story = {
-  args: { changeCooldownOnVerify: true },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Verification changes the cooldown while its request is pending. Try 123456 and an invalid code: both must finish, and rejection must allow another attempt.',
-      },
-    },
-  },
-};
+export const Playground: Story = {};

@@ -150,6 +150,7 @@ const meta = {
     onVolumeChange: action('volume changed'),
     onAppear: action('field group appeared'),
     onDisappear: action('field group disappeared'),
+    example: 'preferences',
   },
   argTypes: {
     ...nativeThemeControls,
@@ -175,19 +176,22 @@ const meta = {
     onVolumeChange: { control: false },
     onAppear: { control: false },
     onDisappear: { control: false },
+    example: { control: 'select', options: ['preferences', 'settings-row-feedback'] },
   },
-  render: (args) => (
+  render: ({ example, ...args }) => (
     <NativeStoryFrame {...args}>
-      <FieldGroupDemo key={`${args.notifications}-${args.accepted}-${args.volume}`} {...args} />
+      {example === 'settings-row-feedback' ? (
+        <SettingsRowFeedbackDemo {...args} />
+      ) : (
+        <FieldGroupDemo key={`${args.notifications}-${args.accepted}-${args.volume}`} {...args} />
+      )}
     </NativeStoryFrame>
   ),
-} satisfies Meta<typeof FieldGroupDemo>;
+} satisfies Meta<DemoProps & { example: 'preferences' | 'settings-row-feedback' }>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-export const Preferences: Story = {};
 
 function SettingsRowFeedbackDemo({ colorScheme, seedColor }: Readonly<DemoProps>) {
   const [isPresented, setIsPresented] = useState(false);
@@ -295,10 +299,4 @@ function SettingsRowFeedbackDemo({ colorScheme, seedColor }: Readonly<DemoProps>
   );
 }
 
-export const SettingsRowFeedback: Story = {
-  render: (args) => (
-    <NativeStoryFrame {...args}>
-      <SettingsRowFeedbackDemo {...args} />
-    </NativeStoryFrame>
-  ),
-};
+export const Playground: Story = {};

@@ -86,4 +86,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const FixedVertical: Story = {};
+export const Playground: Story = {};

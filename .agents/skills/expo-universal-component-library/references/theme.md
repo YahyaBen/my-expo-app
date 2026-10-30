@@ -7,7 +7,7 @@
 | `src/hooks/use-theme.ts`        | Theme colors and typography/shape tokens                        |
 | `src/components/ui/host/`       | Native scheme/tint inheritance and `useHostColorScheme`         |
 
-- Keep stable palette IDs: `ux`, `instagram`, `altarea`. The brand selects the
+- Keep the stable palette ID `ux`, the only bundled palette. The brand selects the
   root palette; user appearance is system/light/dark. Preview palette changes stay
   local and never become saved brand identity.
 - Reuse semantic roles (`background`, `surface`, `text`, `muted`, `border`, `tint`,
@@ -21,10 +21,9 @@
   compatibility; standard controls do not automatically map them.
 - Primary text uses `tint`; filled actions use `primary`/`onPrimary`. Keep paired
   semantic foreground/background colors and explicit caller override precedence.
-- UX/Instagram retain native shapes. Altarea supplies its existing mobile type
-  ramp, 24-point button radius, 6-point field radius and disabled header artwork.
-  Read current source values before changing a palette; do not introduce a new
-  palette as part of a structural refactor.
+- UX retains the default mobile type ramp and native shapes. Read current source
+  values before changing a palette; do not introduce a new palette as part of a
+  structural refactor.
 - UX uses neutral light/dark surfaces, purple accents and semantic feedback.
   Its header artwork stays disabled. It follows the common native seed/tint
   flow; no palette-specific color-role mapping belongs in the Host.
@@ -38,5 +37,4 @@
 Preview changes with production tokens, explicit light/dark state and native
 controls. Check rendered contrast and override behavior; token names and seed
 colors alone do not establish contrast. The [appearance guide](../../../../docs/appearance-themes.md)
-records user preference behavior and the [Altarea guide](../../../../docs/altarea-theme.md)
-records brand adaptation decisions.
+records user preference behavior.

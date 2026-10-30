@@ -1,9 +1,8 @@
 # App Settings and appearance
 
-The selected brand's `presentation.palette` chooses UX Template (`ux`),
-Instagram (`instagram`) or Altarea (`altarea`), each in light and dark appearance.
-The default template selects UX. Palette colors and semantic tokens stay in
-`src/constants/themes/`; Instagram's palette is bundled static JSON. Register new
+The selected brand's `presentation.palette` uses UX Template (`ux`), the only
+bundled palette, in light and dark appearance. Palette colors and semantic tokens
+stay in `src/constants/themes/`. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
 
@@ -12,22 +11,17 @@ and white in light appearance, `#121212` with progressively lighter surfaces in
 dark appearance, and `#6200EE` / `#BB86FC` accents. Normal and supporting text
 use separate readable colors; faint text is reserved for unavailable content.
 Its configured splash backgrounds match the page background in each appearance.
-Existing Instagram and Altarea brand colors remain in place.
 
-Altarea adds purple/magenta accents, warm neutral surfaces, a larger opt-in
-text ramp, 24-point button corners and 6-point field corners. The existing
-`useAppTheme` also exposes `design` for those component owners; UX/Instagram
-use the default mobile type ramp and native geometry. Native lists, toggles, pickers,
-padding and interaction feedback remain platform-owned. See the
-[website extraction and mobile mapping](altarea-theme.md) for exact source
-values, typography, spacing, shapes and adaptation limits.
+`useAppTheme` also exposes `design` for component owners. UX uses the default
+mobile type ramp and native geometry. Native lists, toggles, pickers, padding
+and interaction feedback remain platform-owned.
 
 Titled page frames blur the content beneath their headers by default in every
-theme. The title and Back remain sharp above that native backdrop. UX and Altarea set
+theme. The title and Back remain sharp above that native backdrop. UX sets
 `design.header.artwork` to false, omitting colored waves even when an older
 Dunes/Ribbon/Rain preference is stored. Title clearance, safe areas, scrolling
 and touch shielding stay in place. The inactive header-effect picker is hidden
-for those palettes; its saved value is preserved for themes that support artwork.
+for UX; its saved value is preserved for themes that support artwork.
 Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
@@ -40,7 +34,7 @@ The **Components/Theme Tokens** story displays the active palette, text hierarch
 type ramp with line heights, surface layers, shapes, shared spacing, working
 button states and an editable field. Toggle the local field/submit error example
 to inspect icon-and-text feedback and paired error-container foregrounds.
-UX, Instagram and Altarea each have light/dark stories. These previews do not
+UX has light/dark stories. These previews do not
 send backend requests. Native font scaling, RTL, rendered contrast and keyboard
 behavior still require verification on matching iOS and Android builds.
 
@@ -127,8 +121,8 @@ Language uses its existing saved provider. Header effect and the explicit motion
 choice still restore before launch completion. Header choices include Default,
 Dunes, Ribbon and Rain; unsupported saved values retain the manifest's initial
 style (Default for the template). Default avoids mounting the
-wave/canvas/mask while retaining the rectangular native header blur. UX and Altarea
-use that rectangular blur regardless of a saved decorative effect because their
+wave/canvas/mask while retaining the rectangular native header blur. UX
+uses that rectangular blur regardless of a saved decorative effect because its
 header artwork is disabled. Existing animated choices and saved values are
 preserved. Persistence remains opt-in; preview providers use neither
 storage flag. The palette itself is never saved as a user preference.
@@ -157,8 +151,6 @@ The 2026-10-23 palette audit calculated contrast for all eight text tones agains
 | Palette     | Light  | Dark   |
 | ----------- | ------ | ------ |
 | UX Template | 4.93:1 | 6.83:1 |
-| Instagram   | 4.56:1 | 4.76:1 |
-| Altarea     | 4.93:1 | 7.39:1 |
 
 The UX dark primary-text/background pair changes from 1.11:1 to 18.88:1; its
 primary button pair remains 21:1. These calculations use the explicit opaque

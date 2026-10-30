@@ -68,35 +68,27 @@ function PageDemo({
 const meta = {
   title: 'Components/Page Screen',
   component: PageDemo,
-  args: { showBack: false, longContent: false },
+  args: {
+    showBack: false,
+    longContent: false,
+    direction: 'ltr',
+  },
   argTypes: {
     viewportWidth: { control: 'number' },
     longContent: { control: 'boolean' },
+    showBack: { control: 'boolean' },
+    direction: { control: 'select', options: ['ltr', 'rtl'] },
   },
-} satisfies Meta<typeof PageDemo>;
-export default meta;
-type Story = StoryObj<typeof meta>;
-export const StandaloneHome: Story = {};
-export const BackAction: Story = { args: { showBack: true } };
-export const NarrowScreen: Story = { args: { viewportWidth: 360 } };
-export const WideScreen: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Open on a wide device or window. The available preview width stays real; the shared page bounds the header and content with equal outer margins.',
-      },
-    },
-  },
-};
-export const WideLongContent: Story = { args: { showBack: true, longContent: true } };
-export const WideRTL: Story = {
-  args: { showBack: true, longContent: true },
+
   decorators: [
-    (Story) => (
-      <LayoutDirectionProvider initialDirection="rtl">
+    (Story, { args }) => (
+      <LayoutDirectionProvider key={args.direction} initialDirection={args.direction}>
         <Story />
       </LayoutDirectionProvider>
     ),
   ],
-};
+} satisfies Meta<Parameters<typeof PageDemo>[0] & { direction: 'ltr' | 'rtl' }>;
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {};

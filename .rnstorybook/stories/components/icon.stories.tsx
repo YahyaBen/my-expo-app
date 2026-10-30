@@ -28,23 +28,48 @@ function IconPreview({
 const meta = {
   title: 'Components/Icon',
   component: IconPreview,
-  args: { name: star, size: 24, colorScheme: 'light', testID: 'expo-symbol-icon' },
+  args: {
+    name: star,
+    size: 24,
+    colorScheme: 'light',
+    testID: 'expo-symbol-icon',
+    disabled: false,
+    example: 'icon',
+  },
   argTypes: {
-    name: { control: false },
+    name: { control: 'object' },
     size: { control: { type: 'range', min: 16, max: 64, step: 2 } },
     color: { control: 'color' },
     colorScheme: { control: 'select', options: ['light', 'dark'] },
     modifiers: { control: false },
+    disabled: { control: 'boolean' },
+    style: { control: 'object' },
+    example: {
+      control: 'select',
+      options: ['icon', 'dynamic-name', 'button-foregrounds', 'parent-tap-targets'],
+    },
   },
-} satisfies Meta<typeof IconPreview>;
+
+  render: ({ example, ...args }) => {
+    switch (example) {
+      case 'dynamic-name':
+        return <ChangingSymbol {...args} />;
+      case 'button-foregrounds':
+        return renderButtonForegrounds(args);
+      case 'parent-tap-targets':
+        return <ParentButtonTaps {...args} />;
+      default:
+        return <IconPreview {...args} />;
+    }
+  },
+} satisfies Meta<
+  React.ComponentProps<typeof IconPreview> & {
+    example: 'icon' | 'dynamic-name' | 'button-foregrounds' | 'parent-tap-targets';
+  }
+>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const Tinted: Story = { args: { color: '#B45309', size: 40 } };
-export const Disabled: Story = { args: { disabled: true, style: { opacity: 0.5 } } };
 
 function ChangingSymbol({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [visible, setVisible] = useState(false);
@@ -72,36 +97,6 @@ function ChangingSymbol({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dar
     </UniversalHost>
   );
 }
-
-export const DynamicName: Story = { render: (args) => <ChangingSymbol {...args} /> };
-
-export const ButtonForegrounds: Story = {
-  render: (args) => (
-    <UniversalHost colorScheme={args.colorScheme}>
-      <Column spacing={16}>
-        {(['primary', 'secondary', 'destructive'] as const).map((variant) => (
-          <UniversalButtonContent key={variant} variant={variant} testID={`symbol-${variant}`}>
-            <Row alignment="center" spacing={8}>
-              <Icon name={star} />
-              <Text>{variant}</Text>
-            </Row>
-          </UniversalButtonContent>
-        ))}
-        <UniversalButtonContent
-          variant="primary"
-          contentColor="#00FFFF"
-          testID="symbol-custom-foreground"
-        >
-          <Row alignment="center" spacing={8}>
-            <Icon name={star} />
-            <Icon name={star} color="#FFFF00" />
-            <Text>Inherited and explicit colors</Text>
-          </Row>
-        </UniversalButtonContent>
-      </Column>
-    </UniversalHost>
-  ),
-};
 
 function ParentButtonTaps({
   colorScheme,
@@ -169,11 +164,30 @@ function ParentButtonTaps({
   );
 }
 
-export const ParentTapTargets: Story = {
-  render: (args) => <ParentButtonTaps {...args} />,
-};
+const renderButtonForegrounds = (args: Readonly<{ colorScheme?: 'light' | 'dark' }>) => (
+  <UniversalHost colorScheme={args.colorScheme}>
+    <Column spacing={16}>
+      {(['primary', 'secondary', 'destructive'] as const).map((variant) => (
+        <UniversalButtonContent key={variant} variant={variant} testID={`symbol-${variant}`}>
+          <Row alignment="center" spacing={8}>
+            <Icon name={star} />
+            <Text>{variant}</Text>
+          </Row>
+        </UniversalButtonContent>
+      ))}
+      <UniversalButtonContent
+        variant="primary"
+        contentColor="#00FFFF"
+        testID="symbol-custom-foreground"
+      >
+        <Row alignment="center" spacing={8}>
+          <Icon name={star} />
+          <Icon name={star} color="#FFFF00" />
+          <Text>Inherited and explicit colors</Text>
+        </Row>
+      </UniversalButtonContent>
+    </Column>
+  </UniversalHost>
+);
 
-export const DisabledParentTapTargets: Story = {
-  args: { disabled: true },
-  render: (args) => <ParentButtonTaps {...args} />,
-};
+export const Playground: Story = {};

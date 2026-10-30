@@ -126,7 +126,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Light: Story = { args: { colorScheme: 'light', isPresented: true } };
-export const Dark: Story = { args: { colorScheme: 'dark', isPresented: true } };
-
-export const FixedContentHeight: Story = { args: { contentHeight: 320 } };
+export const Playground: Story = {};

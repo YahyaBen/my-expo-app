@@ -93,7 +93,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const NativeStack: Story = {};
-export const AnimatedHeader: Story = { args: { themeId: 'instagram' } };
 export const Dark: Story = { args: { colorScheme: 'dark' } };
 
 function PausedContentDemo() {
@@ -105,7 +104,7 @@ function PausedContentDemo() {
       <PageMotionOverlay shape="rain">
         <PageScreen title="Motion visibility" description="" showBack={false}>
           <PageSection>
-            <Text>Pause the header and placeholder without unmounting the content.</Text>
+            <Text>Pause the placeholder without unmounting the content.</Text>
             <Switch
               label="Pause content motion"
               value={paused}
@@ -129,6 +128,5 @@ function PausedContentDemo() {
 }
 
 export const PausedContent: Story = {
-  args: { themeId: 'instagram' },
   render: () => <PausedContentDemo />,
 };

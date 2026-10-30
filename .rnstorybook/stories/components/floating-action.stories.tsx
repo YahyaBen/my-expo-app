@@ -45,16 +45,21 @@ function FloatingDemo({
 const meta = {
   title: 'Components/Floating Action',
   component: FloatingDemo,
-  args: { kind: 'create', disabled: false },
+  args: {
+    kind: 'create',
+    disabled: false,
+    repeated: false,
+  },
   argTypes: {
     kind: {
       control: 'select',
       options: ['create', 'continue', 'filters', 'active-filters', 'liked', 'profile', 'submit'],
     },
+    disabled: { control: 'boolean' },
+    repeated: { control: 'boolean' },
   },
 } satisfies Meta<typeof FloatingDemo>;
 export default meta;
 type Story = StoryObj<typeof meta>;
-export const Interactive: Story = {};
-export const Disabled: Story = { args: { disabled: true } };
-export const RepeatedActions: Story = { args: { repeated: true } };
+
+export const Playground: Story = {};

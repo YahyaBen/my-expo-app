@@ -122,6 +122,7 @@ const meta = {
     colorScheme: 'dark',
     onRowPress: action('list row pressed'),
     onRefreshRequested: action('list refresh requested'),
+    example: 'list',
   },
   argTypes: {
     ...nativeThemeControls,
@@ -136,19 +137,22 @@ const meta = {
     onRefresh: { control: false },
     onRowPress: { control: false },
     onRefreshRequested: { control: false },
+    example: { control: 'select', options: ['list', 'compound-slots'] },
   },
-  render: (args) => (
+  render: ({ example, ...args }) => (
     <NativeStoryFrame {...args}>
-      <ListDemo key={String(args.refreshable)} {...args} />
+      {example === 'compound-slots' ? (
+        <CompoundSlotsDemo {...args} />
+      ) : (
+        <ListDemo key={String(args.refreshable)} {...args} />
+      )}
     </NativeStoryFrame>
   ),
-} satisfies Meta<typeof ListDemo>;
+} satisfies Meta<DemoProps & { example: 'list' | 'compound-slots' }>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
 
 function CompoundSlotsDemo(args: Readonly<DemoProps>) {
   const [presses, setPresses] = useState(0);
@@ -181,10 +185,4 @@ function CompoundSlotsDemo(args: Readonly<DemoProps>) {
   );
 }
 
-export const CompoundSlots: Story = {
-  render: (args) => (
-    <NativeStoryFrame {...args}>
-      <CompoundSlotsDemo {...args} />
-    </NativeStoryFrame>
-  ),
-};
+export const Playground: Story = {};

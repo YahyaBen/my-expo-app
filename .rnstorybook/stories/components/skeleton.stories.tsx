@@ -20,52 +20,30 @@ const meta = {
     colorScheme: 'dark',
     testID: 'expo-ui-skeleton',
     style: { height: 20 },
+    example: 'skeleton',
   },
   argTypes: {
     animate: { control: 'boolean' },
     style: { control: 'object' },
+    example: { control: 'select', options: ['skeleton', 'card', 'animation'] },
   },
-  render: (args) => (
-    <NativeStoryFrame colorScheme={args.colorScheme}>
-      <Skeleton {...args} />
-    </NativeStoryFrame>
-  ),
-} satisfies Meta<typeof Skeleton>;
+  render: ({ example, ...args }) => {
+    if (example === 'card') return renderCard(args);
+    if (example === 'animation')
+      return <AnimationControlsDemo animate={args.animate} colorScheme={args.colorScheme} />;
+    return (
+      <NativeStoryFrame colorScheme={args.colorScheme}>
+        <Skeleton {...args} />
+      </NativeStoryFrame>
+    );
+  },
+} satisfies Meta<
+  React.ComponentProps<typeof Skeleton> & { example: 'skeleton' | 'card' | 'animation' }
+>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-export const Line: Story = {};
-export const Avatar: Story = { args: { style: { width: 64, height: 64, borderRadius: 32 } } };
-export const ImagePlaceholder: Story = { args: { style: { height: 160, borderRadius: 16 } } };
-
-export const Card: Story = {
-  render: ({ colorScheme }) => (
-    <NativeStoryFrame colorScheme={colorScheme}>
-      <UniversalHost colorScheme={colorScheme}>
-        <Column spacing={16} modifiers={nativeFillWidth} testID="skeleton-card">
-          <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
-            <SkeletonContent
-              testID="skeleton-card-avatar"
-              style={{ width: 48, height: 48, borderRadius: 24 }}
-            />
-            <Column spacing={8}>
-              <SkeletonContent style={{ width: 144, height: 18 }} />
-              <SkeletonContent style={{ width: 96, height: 12 }} />
-            </Column>
-          </Row>
-          <SkeletonContent testID="skeleton-card-image" style={{ height: 160, borderRadius: 16 }} />
-          <SkeletonContent style={{ height: 20 }} />
-          <SkeletonContent style={{ width: 180, height: 14 }} />
-          <UniversalTextContent variant="caption" tone="muted">
-            Avatar, image and text placeholders in one native card.
-          </UniversalTextContent>
-        </Column>
-      </UniversalHost>
-    </NativeStoryFrame>
-  ),
-};
 
 /** Standalone Hosts exercise CSS playback without changing the native content stories. */
 function AnimationControlsDemo({
@@ -113,7 +91,29 @@ function AnimationControlsDemo({
   );
 }
 
-export const AnimationControls: Story = {
-  args: { colorScheme: 'light' },
-  render: (args) => <AnimationControlsDemo animate={args.animate} colorScheme={args.colorScheme} />,
-};
+const renderCard = ({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) => (
+  <NativeStoryFrame colorScheme={colorScheme}>
+    <UniversalHost colorScheme={colorScheme}>
+      <Column spacing={16} modifiers={nativeFillWidth} testID="skeleton-card">
+        <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+          <SkeletonContent
+            testID="skeleton-card-avatar"
+            style={{ width: 48, height: 48, borderRadius: 24 }}
+          />
+          <Column spacing={8}>
+            <SkeletonContent style={{ width: 144, height: 18 }} />
+            <SkeletonContent style={{ width: 96, height: 12 }} />
+          </Column>
+        </Row>
+        <SkeletonContent testID="skeleton-card-image" style={{ height: 160, borderRadius: 16 }} />
+        <SkeletonContent style={{ height: 20 }} />
+        <SkeletonContent style={{ width: 180, height: 14 }} />
+        <UniversalTextContent variant="caption" tone="muted">
+          Avatar, image and text placeholders in one native card.
+        </UniversalTextContent>
+      </Column>
+    </UniversalHost>
+  </NativeStoryFrame>
+);
+
+export const Playground: Story = {};

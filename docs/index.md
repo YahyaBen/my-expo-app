@@ -23,7 +23,6 @@ Maintained guides are listed below. Component contracts belong to independent sk
 - [Live LTR / RTL](layout-direction.md)
 - [Safe-area handling](safe-area-handling.md)
 - [App Settings and appearance](appearance-themes.md)
-- [Altarea palette reference](altarea-theme.md)
 
 ## Builds and engineering
 

@@ -152,6 +152,13 @@ const meta = {
     scrollsBehindHeader: false,
     showBack: true,
     shape: DEFAULT_HEADER_SHAPE,
+    direction: 'ltr',
+    animateWaves: true,
+    withoutWaves: false,
+    expandedWaves: false,
+    colorProbe: false,
+    headerOverlay: false,
+    example: 'header',
   },
   argTypes: {
     showBack: { control: 'boolean' },
@@ -160,20 +167,38 @@ const meta = {
       options: HEADER_STYLES,
       description: 'Default uses a rectangular header; waves retain the shared artwork and mask.',
     },
+    title: { control: 'text' },
+    scrollsBehindHeader: { control: 'boolean' },
+    headerOverlay: { control: 'boolean' },
+    colorProbe: { control: 'boolean' },
+    direction: { control: 'select', options: ['ltr', 'rtl'] },
+    animateWaves: { control: 'boolean' },
+    withoutWaves: { control: 'boolean' },
+    expandedWaves: { control: 'boolean' },
+    example: {
+      control: 'select',
+      options: [
+        'header',
+        'ordinary-page',
+        'navigation',
+        'native-back-return',
+        'change-header-style',
+      ],
+    },
   },
   decorators: [
-    (Story, { args, parameters }) => {
+    (Story, { args }) => {
       const colors = useThemeColors(args.colorScheme);
       return (
-        <LayoutDirectionProvider initialDirection={parameters.waveDirection ?? 'ltr'}>
+        <LayoutDirectionProvider key={args.direction} initialDirection={args.direction}>
           <SafeAreaInsetsContext.Provider value={{ top: 59, bottom: 34, left: 0, right: 0 }}>
             <View style={{ flex: 1, backgroundColor: colors.background }}>
               <PageMotionOverlay
                 colorScheme={args.colorScheme}
                 shape={args.shape}
-                animate={parameters.animateWaves !== false}
-                visible={!parameters.withoutWaves}
-                expanded={Boolean(parameters.expandedWaves)}
+                animate={args.animateWaves}
+                visible={!args.withoutWaves}
+                expanded={args.expandedWaves}
               >
                 <Story />
               </PageMotionOverlay>
@@ -183,13 +208,35 @@ const meta = {
       );
     },
   ],
-  render: (args) => <HeaderDemo {...args} />,
-} satisfies Meta<Parameters<typeof HeaderDemo>[0] & StoryThemeProps>;
+  render: ({ example, direction, animateWaves, withoutWaves, expandedWaves, ...args }) => {
+    switch (example) {
+      case 'ordinary-page':
+        return <OrdinaryPageDemo colorScheme={args.colorScheme} />;
+      case 'navigation':
+        return <NavigationHeaderDemo colorScheme={args.colorScheme} />;
+      case 'native-back-return':
+        return <NativeBackReturnHeaderDemo colorScheme={args.colorScheme} />;
+      case 'change-header-style':
+        return <HeaderStyleSwitchDemo colorScheme={args.colorScheme} />;
+      default:
+        return <HeaderDemo {...args} />;
+    }
+  },
+} satisfies Meta<
+  Parameters<typeof HeaderDemo>[0] &
+    StoryThemeProps & {
+      direction: 'ltr' | 'rtl';
+      animateWaves: boolean;
+      withoutWaves: boolean;
+      expandedWaves: boolean;
+    } & {
+      example:
+        'header' | 'ordinary-page' | 'navigation' | 'native-back-return' | 'change-header-style';
+    }
+>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
 
 function OrdinaryPageDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [presses, setPresses] = useState(0);
@@ -207,53 +254,6 @@ function OrdinaryPageDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'd
     </PageScreen>
   );
 }
-
-export const OrdinaryPage: Story = {
-  render: ({ colorScheme }) => <OrdinaryPageDemo colorScheme={colorScheme} />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'The first action must start below the measured header and remain tappable at large text sizes. Check both appearances and RTL.',
-      },
-    },
-  },
-};
-
-export const PlainHeader: Story = { args: { shape: 'default', scrollsBehindHeader: true } };
-export const AltareaBlurLight: Story = {
-  args: {
-    themeId: 'altarea',
-    colorScheme: 'light',
-    shape: 'dunes',
-    scrollsBehindHeader: true,
-    colorProbe: true,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Scroll purple and magenta cards beneath the title to inspect the native Expo blur and tint while the title and Back stay sharp. Altarea adds no wave even with a retained Dunes preference. Check the retained draft and Back/content press counts.',
-      },
-    },
-  },
-};
-export const AltareaBlurDark: Story = {
-  ...AltareaBlurLight,
-  args: { ...AltareaBlurLight.args, colorScheme: 'dark' },
-};
-export const AltareaBlurOverlay: Story = {
-  args: {
-    themeId: 'altarea',
-    colorScheme: 'light',
-    shape: 'dunes',
-    headerOverlay: true,
-    colorProbe: true,
-  },
-};
-export const Home: Story = {
-  args: { title: 'Accueil', showBack: false, scrollsBehindHeader: true },
-};
 
 function NavigationHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [details, setDetails] = useState(false);
@@ -282,19 +282,6 @@ function NavigationHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' 
   );
 }
 
-export const NavigationContinuity: Story = {
-  render: ({ colorScheme }) => <NavigationHeaderDemo colorScheme={colorScheme} />,
-  parameters: {
-    animateWaves: false,
-    docs: {
-      description: {
-        story:
-          'Open details and use Back repeatedly. Each page remounts beneath the same paused wave; the header band and initial content clearance should stay at the same height.',
-      },
-    },
-  },
-};
-
 function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [presses, setPresses] = useState(0);
   return (
@@ -314,42 +301,6 @@ function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'l
     </PageFrame>
   );
 }
-
-export const NativeBackReturn: Story = {
-  args: {
-    themeId: 'altarea',
-    colorScheme: 'light',
-    shape: 'default',
-    scrollsBehindHeader: true,
-    colorProbe: true,
-  },
-  render: ({ colorScheme }) => <NativeBackReturnHeaderDemo colorScheme={colorScheme} />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Run inside the app Storybook route. Type a draft, count a content action, and open the wireframe. Use the actual wireframe header Back or Android system Back to pop to this retained Storybook screen; the fixture Back only increments its local count. Repeat and scroll purple/magenta cards under the title before and after returning: native blur must continue updating, and the draft, content count and scroll state must survive. This exercises a native route push/pop without remounting the fixture.',
-      },
-    },
-  },
-};
-export const NativeBackReturnDark: Story = {
-  ...NativeBackReturn,
-  args: { ...NativeBackReturn.args, colorScheme: 'dark' },
-};
-
-export const Dark: Story = { args: { colorScheme: 'dark' } };
-export const Scrolling: Story = { args: { title: 'Saved recipes', scrollsBehindHeader: true } };
-export const LongTitle: Story = {
-  args: { title: 'Toutes les pages et les paramètres de l’application', scrollsBehindHeader: true },
-  parameters: { animateWaves: true },
-};
-export const FullHeightOverlay: Story = { args: { title: 'Overlay', headerOverlay: true } };
-export const WithoutWaves: Story = { parameters: { withoutWaves: true } };
-export const ExpandedLogin: Story = {
-  args: { title: 'Login', showBack: false },
-  parameters: { expandedWaves: true },
-};
 
 function HeaderStyleSwitchDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [plain, setPlain] = useState(false);
@@ -371,15 +322,4 @@ function HeaderStyleSwitchDemo({ colorScheme }: Readonly<{ colorScheme?: 'light'
   );
 }
 
-export const ChangeHeaderStyle: Story = {
-  args: { shape: 'default' },
-  render: ({ colorScheme }) => <HeaderStyleSwitchDemo colorScheme={colorScheme} />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Type a draft and press the back control to switch between Dunes and Default. The draft, content count and scroll position must survive.',
-      },
-    },
-  },
-};
+export const Playground: Story = {};

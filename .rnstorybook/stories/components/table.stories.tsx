@@ -9,7 +9,7 @@ function TableStory({ colorScheme = 'light', ...props }: Readonly<TableStoryProp
   return (
     <NativeStoryFrame colorScheme={colorScheme} testID="table-story">
       <UniversalHost colorScheme={colorScheme}>
-        <TableDemo {...props} />
+        <TableDemo key={`${props.initialSearch}-${props.initialStatus}`} {...props} />
       </UniversalHost>
     </NativeStoryFrame>
   );
@@ -23,11 +23,12 @@ const meta = {
     initialSearch: '',
     readOnly: false,
     testID: 'story-table',
+    initialStatus: 'all',
   },
   argTypes: {
     colorScheme: { control: 'radio', options: ['light', 'dark'] },
-    initialSearch: { control: false },
-    initialStatus: { control: false },
+    initialSearch: { control: 'text' },
+    initialStatus: { control: 'select', options: ['all', 'preparing', 'ready'] },
     readOnly: { control: 'boolean' },
     testID: { control: false },
   },
@@ -37,31 +38,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Interactive: Story = {};
-
-/** Clear filters restores all rows; native search keeps the same field instance. */
-export const Empty: Story = {
-  args: { initialSearch: 'missing-order', testID: 'story-table-empty' },
-};
-
-export const ReadOnly: Story = {
-  args: { readOnly: true, testID: 'story-table-read-only' },
-};
-
-export const Dark: Story = {
-  args: { colorScheme: 'dark', testID: 'story-table-dark' },
-};
-
-/** A single bar and full status ring follow the same filter as the table. */
-export const SingleOrder: Story = {
-  args: { initialSearch: 'Sofia', testID: 'story-table-single-order' },
-};
-
-/** Marking a filtered preparing order ready removes it from the table and charts. */
-export const PreparingOrders: Story = {
-  args: { initialStatus: 'preparing', testID: 'story-table-preparing-orders' },
-};
-
-export const ReadyOrders: Story = {
-  args: { initialStatus: 'ready', testID: 'story-table-ready-orders' },
-};
+export const Playground: Story = {};
