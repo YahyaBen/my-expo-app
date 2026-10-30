@@ -63,6 +63,7 @@ export function TextInput({
   readOnly,
   onFocus,
   onBlur,
+  onChangeText,
   style,
   textStyle,
   leftIcon,
@@ -72,10 +73,12 @@ export function TextInput({
   ...inputProps
 }: Readonly<TextInputProps>) {
   const nativeValue = useNativeState(value ?? defaultValue ?? '');
+  const [editRevision, setEditRevision] = useState(0);
   useEffect(() => {
-    // Synchronize external edits/resets while retaining the same native field and ref.
+    // Reconcile every controlled edit, including characters the parent rejects
+    // without changing its value. Uncontrolled edits remain entirely native.
     if (value !== undefined && nativeValue.get() !== value) nativeValue.set(value);
-  }, [nativeValue, value]);
+  }, [nativeValue, value, editRevision]);
   const scheme = useHostColorScheme(colorScheme);
   const focusedRef = useRef(false);
   const [focused, setFocused] = useState(false);
@@ -96,6 +99,10 @@ export function TextInput({
     <ExpoTextInput
       {...inputProps}
       value={nativeValue}
+      onChangeText={(text) => {
+        if (value !== undefined) setEditRevision((revision) => revision + 1);
+        onChangeText?.(text);
+      }}
       modifiers={[
         ...inputRowFlex,
         ...inputAccessibilityModifiers(label),

@@ -47,9 +47,12 @@ export function subscribeAuthSession(listener: (event: SessionEvent) => void) {
 }
 
 export async function getAuthSession(): Promise<AuthSession | null> {
-  if (currentSession !== undefined) return currentSession;
   const version = sessionVersion;
   await storageQueue;
+  assertSessionVersion(version);
+  // A reserved generation must never read the previous account while its
+  // credential write is pending, even when a session is already in memory.
+  if (currentSession !== undefined) return currentSession;
   const raw = await SecureStore.getItemAsync(STORAGE_KEY);
   assertSessionVersion(version);
   if (currentSession !== undefined) return currentSession;
@@ -98,8 +101,10 @@ export async function establishAuthSession(token: TokenResponse, expectedVersion
   // Validate before starting a new session generation.
   normalizeAuthSession(token);
   const version = ++sessionVersion;
+  // Queue the credentials before cache notifications can start new reads.
+  const pendingSession = persistAuthSession(token, version);
   queryClient.clear();
-  const session = await persistAuthSession(token, version);
+  const session = await pendingSession;
   return { session, version };
 }
 

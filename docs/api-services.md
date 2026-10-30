@@ -76,7 +76,11 @@ Old product-only user fields are stripped during normalization and disappear fro
 disk on the next valid write. A missing/invalid user makes a stored record corrupt;
 it is removed before authentication. Failed deletion remains a recovery error.
 Invalid new sessions/profile updates are rejected before changing durable state;
-session establishment validates before reserving a new generation.
+session establishment validates before reserving a new generation. It queues the
+credential write before clearing caches. All session reads await the existing
+storage queue and recheck their generation before returning even an in-memory
+session, so requests and refresh cannot borrow the departing account's credentials
+while the new account is being saved.
 
 `signOut` captures the departing access-token string and generation, checks
 ownership after the read, and awaits the existing serialized SecureStore deletion.

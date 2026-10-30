@@ -36,9 +36,9 @@ export function PageFrame({
   title,
   onBack,
   colorScheme,
-  headerOverlay = true,
+  headerOverlay = false,
   headerBlur = true,
-  scrollsBehindHeader = true,
+  scrollsBehindHeader = false,
 }: Readonly<
   PropsWithChildren<{
     title?: string;

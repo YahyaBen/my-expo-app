@@ -18,6 +18,7 @@ type DemoProps = Pick<OtpBottomSheetProps, 'colorScheme' | 'resendCooldownSecond
   recipient?: string;
   requestFailure?: boolean;
   resendFailure?: boolean;
+  changeCooldownOnVerify?: boolean;
 };
 
 function OtpDemo({
@@ -25,10 +26,12 @@ function OtpDemo({
   resendCooldownSeconds = 0,
   requestFailure,
   resendFailure,
+  changeCooldownOnVerify,
   recipient = 'hello@example.com',
 }: Readonly<DemoProps>) {
   const [open, setOpen] = useState(false);
   const [resends, setResends] = useState(0);
+  const [cooldownOverride, setCooldownOverride] = useState<number>();
   return (
     <View style={{ gap: 16 }}>
       <UniversalButton
@@ -48,8 +51,11 @@ function OtpDemo({
         colorScheme={colorScheme}
         recipient={recipient}
         hint="Preview code: 123456"
-        resendCooldownSeconds={resendCooldownSeconds}
+        resendCooldownSeconds={cooldownOverride ?? resendCooldownSeconds}
         onVerify={async (code) => {
+          if (changeCooldownOnVerify) {
+            setCooldownOverride((seconds) => (seconds ?? resendCooldownSeconds) + 1);
+          }
           await new Promise((resolve) => setTimeout(resolve, 650));
           if (requestFailure) throw new Error('Preview request failure');
           return code === '123456';
@@ -101,3 +107,14 @@ export const Light: Story = {};
 export const RequestFailure: Story = { args: { requestFailure: true } };
 export const ResendFailure: Story = { args: { resendFailure: true } };
 export const Cooldown: Story = { args: { resendCooldownSeconds: 5 } };
+export const CooldownDuringVerification: Story = {
+  args: { changeCooldownOnVerify: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Verification changes the cooldown while its request is pending. Try 123456 and an invalid code: both must finish, and rejection must allow another attempt.',
+      },
+    },
+  },
+};

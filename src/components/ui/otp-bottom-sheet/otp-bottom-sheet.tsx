@@ -98,7 +98,6 @@ function OtpForm({
   const inputRef = useRef<TextInputRef>(null);
   const session = useRef(0);
   const pending = useRef(false);
-  const presented = useRef(false);
   const [deadline, setDeadline] = useState(() => (isPresented ? Date.now() + cooldown * 1000 : 0));
   const [code, setCode] = useState('');
   const [focused, setFocused] = useState(false);
@@ -123,23 +122,20 @@ function OtpForm({
     }
   }
   useLayoutEffect(() => {
-    const opening = isPresented && !presented.current;
-    presented.current = isPresented;
+    // Only opening/closing changes request ownership; cooldown edits do not.
     session.current += 1;
     pending.current = false;
     if (!isPresented) {
       inputRef.current?.blur();
       return;
     }
-    if (opening) {
-      // Native state is synchronized separately from React's presentation reset.
-      value.set('');
-    }
+    // Native state is synchronized separately from React's presentation reset.
+    value.set('');
     return () => {
       session.current += 1;
       pending.current = false;
     };
-  }, [isPresented, cooldown, value]);
+  }, [isPresented, value]);
 
   const busy = status === 'verifying' || status === 'resending';
   const complete = code.length === OTP_LENGTH;

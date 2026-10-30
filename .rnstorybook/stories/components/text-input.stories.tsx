@@ -173,6 +173,43 @@ type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {};
 
+function FilteredControlledInputDemo(args: Readonly<TextInputProps>) {
+  const [value, setValue] = useState('123');
+  return (
+    <Host colorScheme={args.colorScheme}>
+      <Column spacing={16}>
+        <TextInput
+          {...args}
+          value={value}
+          onChangeText={(text) => {
+            setValue(text.replace(/[^0-9]/g, ''));
+            args.onChangeText?.(text);
+          }}
+        />
+        <Text testID="filtered-input-value">{`Controlled value: ${value}`}</Text>
+        <UniversalButtonContent
+          variant="secondary"
+          label="Reset to 123"
+          testID="filtered-input-reset"
+          onPress={() => setValue('123')}
+        />
+      </Column>
+    </Host>
+  );
+}
+
+export const FilteredControlled: Story = {
+  args: {
+    label: 'Digits only',
+    helperText: 'Type or paste letters repeatedly: only digits should remain visible.',
+    keyboardType: 'default',
+    autoCapitalize: 'none',
+    autoCorrect: false,
+    testID: 'filtered-input',
+  },
+  render: (args) => <FilteredControlledInputDemo {...args} />,
+};
+
 function IconInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   const [pressCount, setPressCount] = useState(0);

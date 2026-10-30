@@ -2,6 +2,7 @@ import {
   Column,
   nativeFillWidth,
   PageFrame,
+  PageScreen,
   PageSection,
   PageMotionOverlay,
   ScrollView,
@@ -189,6 +190,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+function OrdinaryPageDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
+  const [presses, setPresses] = useState(0);
+  return (
+    <PageScreen title="Ordinary page" description="" showBack={false} colorScheme={colorScheme}>
+      <PageSection>
+        <UniversalButtonContent
+          variant="primary"
+          label="First content action"
+          testID="ordinary-page-first-action"
+          onPress={() => setPresses((count) => count + 1)}
+        />
+        <Text testID="ordinary-page-presses">{`Content presses: ${presses}`}</Text>
+      </PageSection>
+    </PageScreen>
+  );
+}
+
+export const OrdinaryPage: Story = {
+  render: ({ colorScheme }) => <OrdinaryPageDemo colorScheme={colorScheme} />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The first action must start below the measured header and remain tappable at large text sizes. Check both appearances and RTL.',
+      },
+    },
+  },
+};
+
 export const PlainHeader: Story = { args: { shape: 'default', scrollsBehindHeader: true } };
 export const AltareaBlurLight: Story = {
   args: {
