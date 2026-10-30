@@ -13,7 +13,6 @@ import {
 } from '../../components/animated-component-preview';
 
 type DemoProps = AnimatedComponentPreviewProps & {
-  length?: number;
   faceSize?: number;
   disabled?: boolean;
   initialValue?: string;
@@ -21,7 +20,6 @@ type DemoProps = AnimatedComponentPreviewProps & {
 };
 
 function VerificationCodeFaceDemo({
-  length = 4,
   faceSize = 96,
   disabled = false,
   initialValue = '',
@@ -31,8 +29,7 @@ function VerificationCodeFaceDemo({
   return (
     <AnimatedComponentPreview {...preview}>
       <CodeEntry
-        key={`${length}-${initialValue}-${initialStatus}`}
-        length={length}
+        key={`${initialValue}-${initialStatus}`}
         faceSize={faceSize}
         disabled={disabled}
         initialValue={initialValue}
@@ -43,13 +40,12 @@ function VerificationCodeFaceDemo({
 }
 
 function CodeEntry({
-  length,
   faceSize,
   disabled,
   initialValue,
   initialStatus,
 }: Readonly<
-  Required<Pick<DemoProps, 'length' | 'faceSize' | 'disabled' | 'initialValue' | 'initialStatus'>>
+  Required<Pick<DemoProps, 'faceSize' | 'disabled' | 'initialValue' | 'initialStatus'>>
 >) {
   const [value, setValue] = useState(initialValue);
   const [status, setStatus] = useState(initialStatus);
@@ -57,7 +53,7 @@ function CodeEntry({
 
   return (
     <Column spacing={spacing.md}>
-      <UniversalTextContent>{`Enter ${'1'.repeat(length)} for success.`}</UniversalTextContent>
+      <UniversalTextContent>Enter 123456 for success.</UniversalTextContent>
       <VerificationCodeFace
         value={value}
         onChangeText={(next) => {
@@ -66,14 +62,13 @@ function CodeEntry({
         }}
         onComplete={(code) => {
           // Only this fixture knows the example code; real consumers can validate remotely.
-          setStatus(code === '1'.repeat(length) ? 'success' : 'error');
+          setStatus(code === '123456' ? 'success' : 'error');
           setCompletions((count) => count + 1);
         }}
-        length={length}
         faceSize={faceSize}
         disabled={disabled}
         status={status}
-        label={`${length}-digit code`}
+        label="6-digit code"
         resetLabel="Reset code"
         helperText={
           status === 'success'
@@ -97,7 +92,6 @@ const meta = {
   args: {
     colorScheme: 'light',
     rtl: false,
-    length: 4,
     faceSize: 96,
     disabled: false,
     initialValue: '',
@@ -105,7 +99,6 @@ const meta = {
   },
   argTypes: {
     rtl: { control: 'boolean' },
-    length: { control: { type: 'number', min: 1, max: 8 } },
     faceSize: { control: { type: 'number', min: 48, max: 144 } },
     disabled: { control: 'boolean' },
     initialValue: { control: 'text' },
@@ -115,7 +108,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A controlled value, caller-owned validation and event-only completion callback. Enter the displayed code; compare six digits, externally supplied error and disabled state. Check Arabic/Persian/full-width digits, Reset, keyboard dismissal, RTL and Reduce motion.',
+          'Uses the same six-slot native OTP input and animated face as the OTP bottom sheet. Enter 123456 for success; completion fires only after a new six-digit edit. Check paste/autofill, Arabic/Persian/full-width digits, Reset, keyboard dismissal, error/disabled states, RTL and Reduce motion.',
       },
     },
   },
@@ -125,3 +118,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+export const Error: Story = {
+  args: { initialValue: '654321', initialStatus: 'error' },
+};
+
+export const Disabled: Story = {
+  args: { initialValue: '123', disabled: true },
+};

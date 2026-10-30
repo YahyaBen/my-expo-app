@@ -19,12 +19,13 @@ Source: [otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
 - Successful verification shows confirmation and Done. Reopening clears code
   and feedback. Preserve duplicate-request and stale-session guards after
   dismissal/unmount.
-- Opening resets React form state before presenting and clears native text in
-  a layout effect. Do not key/remount the form merely to reset it.
+- Opening resets React form state before presenting; the shared input reconciles
+  native text in a layout effect. Do not key/remount the form merely to reset it.
 
 ## Native input and presentation
 
-- One transparent native field overlays six decorative slots, preserving
+- Reuse `otp-input.tsx` for the same six-digit entry as `VerificationCodeFace`.
+  One transparent native field overlays six decorative slots, preserving
   paste/autofill/selection/backspace. Normalize Western, Arabic, Persian and
   full-width digits; strip pasted separators.
 - Keep the measured numeric row in an explicit-width LTR Host while surrounding
@@ -46,8 +47,10 @@ Source: [otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
 - Stop the timer at zero, on dismissal/inactivity or without a resend action.
   Recompute from the wall-clock deadline on resume; backgrounding does not
   extend cooldown.
-- Feedback uses existing declarative Reanimated CSS keyframes and respects
-  activity/reduced motion. Preserve verification/resend guards independently.
+- Reuse `verification-code-face/verification-face.tsx` for decorative progress
+  and caller-owned success/error expressions. Animate on the UI runtime and
+  respect visibility, activity and reduced motion. Preserve verification/resend
+  guards independently; only actual verification acceptance shows success.
 
 The [showcase](../../../.rnstorybook/components/catalog/bottom-sheet-preview.tsx)
 uses local simulation: only `123456` succeeds and resend sends no message.

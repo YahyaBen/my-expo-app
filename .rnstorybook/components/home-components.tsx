@@ -91,9 +91,9 @@ function VerificationPreview() {
       value={code}
       onChangeText={(next) => {
         setCode(next);
-        setStatus(/[^0-9\u0660-\u0669\u06f0-\u06f9\uff10-\uff19]/.test(next) ? 'error' : 'default');
+        setStatus('default');
       }}
-      onComplete={(normalized) => setStatus(normalized === '1111' ? 'success' : 'error')}
+      onComplete={(normalized) => setStatus(normalized === '123456' ? 'success' : 'error')}
       status={status}
       label={t('starter.verificationFaceLabel')}
       helperText={

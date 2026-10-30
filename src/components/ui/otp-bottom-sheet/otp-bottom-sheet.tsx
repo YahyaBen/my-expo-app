@@ -1,45 +1,19 @@
 import { spacing, radii } from '@/constants/layout';
-import {
-  Column,
-  RNHostView,
-  Row,
-  ScrollView,
-  Spacer,
-  useNativeState,
-  type TextInputRef,
-} from '@expo/ui';
-import { useEffect, useLayoutEffect, useRef, useState, type ComponentProps } from 'react';
-import Animated, { cubicBezier } from 'react-native-reanimated';
-import { useAppActive, useMotionEnabled } from '@/hooks/use-motion-enabled';
-import { AccessibilityInfo, Platform, useWindowDimensions } from 'react-native';
-import { onSizeChanged } from '@expo/ui/jetpack-compose/modifiers';
-import { onGeometryChange } from '@expo/ui/swift-ui/modifiers';
+import { Column, Row, ScrollView, Spacer, type TextInputRef } from '@expo/ui';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useAppActive } from '@/hooks/use-motion-enabled';
+import { AccessibilityInfo, useWindowDimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/use-theme';
-import { useMeasuredWidth } from '@/hooks/use-measured-width';
 import { triggerHaptic } from '@/lib/haptics';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { UniversalButtonContent } from '../button/universal-button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
-import { Icon } from '../icon/icon';
 import { LoadingContent } from '../loading/loading-state';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
-import { OtpInputLayout } from './otp-input-layout';
-
-const OTP_LENGTH = 6;
-
-/** Accept pasted separators and the numeric scripts used by our supported locales. */
-function normalizeOtpCode(value: string) {
-  return value
-    .replace(/[\u0660-\u0669\u06f0-\u06f9\uff10-\uff19]/g, (digit) => {
-      const point = digit.charCodeAt(0);
-      const zero = point >= 0xff10 ? 0xff10 : point >= 0x06f0 ? 0x06f0 : 0x0660;
-      return String(point - zero);
-    })
-    .replace(/[^0-9]/g, '')
-    .slice(0, OTP_LENGTH);
-}
+import { VerificationFace } from '../verification-code-face/verification-face';
+import { OTP_LENGTH, OtpInput } from './otp-input';
 
 export interface OtpBottomSheetProps {
   isPresented: boolean;
@@ -82,25 +56,15 @@ function OtpForm({
   const { t } = useTranslation();
   const scheme = useHostColorScheme();
   const colors = useThemeColors(scheme);
-  const { height, fontScale } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const cooldown = Number.isFinite(resendCooldownSeconds) ? Math.max(0, resendCooldownSeconds) : 30;
-  const value = useNativeState('');
-  const [width, setWidth] = useMeasuredWidth();
-  const measureWidth = ({ width: nextWidth }: { width: number }) => {
-    if (nextWidth > 0) setWidth(nextWidth);
-  };
-  const inputSizing =
-    Platform.OS === 'ios' ? onGeometryChange(measureWidth) : onSizeChanged(measureWidth);
   // Intrinsic sheet Hosts measure with an unbounded height. Compose scrolling needs a limit.
   const viewportHeight = Math.min(620, height * 0.7);
-  const inputHeight = Math.max(64, Math.ceil(35 * fontScale + 24));
-  const slotWidth = Math.max(5, (width - 8 * (OTP_LENGTH - 1)) / OTP_LENGTH);
   const inputRef = useRef<TextInputRef>(null);
   const session = useRef(0);
   const pending = useRef(false);
   const [deadline, setDeadline] = useState(() => (isPresented ? Date.now() + cooldown * 1000 : 0));
   const [code, setCode] = useState('');
-  const [focused, setFocused] = useState(false);
   const [status, setStatus] = useState<'idle' | 'verifying' | 'resending' | 'error' | 'success'>(
     'idle',
   );
@@ -114,7 +78,6 @@ function OtpForm({
       if (!presentation.isPresented) {
         // Adjust local state before committing the new presentation, retaining the native field.
         setCode('');
-        setFocused(false);
         setStatus('idle');
         setError(null);
         setResent(false);
@@ -129,21 +92,17 @@ function OtpForm({
       inputRef.current?.blur();
       return;
     }
-    // Native state is synchronized separately from React's presentation reset.
-    value.set('');
     return () => {
       session.current += 1;
       pending.current = false;
     };
-  }, [isPresented, value]);
+  }, [isPresented]);
 
   const busy = status === 'verifying' || status === 'resending';
   const complete = code.length === OTP_LENGTH;
   const success = status === 'success';
-  function changeCode(text: string) {
+  function changeCode(next: string) {
     if (pending.current || success) return;
-    const next = normalizeOtpCode(text);
-    if (next !== text) value.set(next);
     setCode(next);
     setStatus('idle');
     setError(null);
@@ -189,7 +148,6 @@ function OtpForm({
       await onResend();
       if (session.current !== currentSession) return;
       setDeadline(Date.now() + cooldown * 1000);
-      value.set('');
       setCode('');
       setResent(true);
       setStatus('idle');
@@ -223,7 +181,12 @@ function OtpForm({
             testID={`${testID}-close`}
           />
         </Row>
-        <OtpFeedback status={status} visible={isPresented && success} />
+        <VerificationFace
+          progress={code.length / OTP_LENGTH}
+          status={success ? 'success' : status === 'error' ? 'error' : 'default'}
+          visible={isPresented}
+          testID={`${testID}-artwork`}
+        />
         <Column
           alignment={success ? 'center' : 'start'}
           spacing={spacing.xl}
@@ -256,94 +219,17 @@ function OtpForm({
           </Column>
         </Column>
         {!success && (
-          <Column spacing={spacing.md} modifiers={[...nativeFillWidth, inputSizing]}>
-            {/* An explicit-width direction bridge keeps OTP digits LTR inside Arabic sheets. */}
-            {width > 0 && (
-              <RNHostView matchContents>
-                <UniversalHost
-                  colorScheme={scheme}
-                  layoutDirection="leftToRight"
-                  ignoreSafeArea="all"
-                  style={{ width }}
-                >
-                  <OtpInputLayout
-                    accessibilityLabel={t('otp.codeLabel')}
-                    height={inputHeight}
-                    input={{
-                      ref: inputRef,
-                      value,
-                      onChangeText: changeCode,
-                      onFocus: () => setFocused(true),
-                      onBlur: () => setFocused(false),
-                      keyboardType: 'number-pad',
-                      autoComplete: 'one-time-code',
-                      autoCorrect: false,
-                      autoCapitalize: 'none',
-                      caretHidden: true,
-                      maxLength: 32,
-                      editable: !busy && isPresented,
-                      onSubmitEditing: () => void verify(),
-                      testID: `${testID}-input`,
-                    }}
-                    slots={Array.from({ length: OTP_LENGTH }, (_, index) => {
-                      const active = focused && index === Math.min(code.length, OTP_LENGTH - 1);
-                      const filled = index < code.length;
-                      const borderWidth = active ? 3 : error ? 2 : 1;
-                      const borderColor = error
-                        ? colors.error
-                        : active
-                          ? colors.text
-                          : colors.border;
-                      const backgroundColor = error ? colors.errorContainer : colors.surfaceVariant;
-                      return (
-                        <Column
-                          key={index}
-                          testID={`${testID}-slot-${index}`}
-                          alignment="center"
-                          spacing={spacing.none}
-                          style={{
-                            width: slotWidth,
-                            height: inputHeight,
-                            padding: borderWidth,
-                            borderRadius: radii.control,
-                            backgroundColor: borderColor,
-                          }}
-                        >
-                          {/* Inset fills preserve rounded borders on SwiftUI as well as Compose. */}
-                          <Column
-                            alignment="center"
-                            spacing={spacing.none}
-                            style={{
-                              width: slotWidth - borderWidth * 2,
-                              height: inputHeight - borderWidth * 2,
-                              borderRadius: radii.control - borderWidth,
-                              backgroundColor,
-                            }}
-                          >
-                            <Spacer flexible size={0} />
-                            <UniversalTextContent
-                              fontSize={28}
-                              fontWeight="400"
-                              textStyle={{
-                                textAlign: 'center',
-                                color: error
-                                  ? colors.onErrorContainer
-                                  : filled
-                                    ? colors.text
-                                    : colors.muted,
-                              }}
-                            >
-                              {code[index] ?? ''}
-                            </UniversalTextContent>
-                            <Spacer flexible size={0} />
-                          </Column>
-                        </Column>
-                      );
-                    })}
-                  />
-                </UniversalHost>
-              </RNHostView>
-            )}
+          <Column spacing={spacing.md} modifiers={nativeFillWidth}>
+            <OtpInput
+              ref={inputRef}
+              value={code}
+              onChangeText={changeCode}
+              label={t('otp.codeLabel')}
+              disabled={busy || !isPresented}
+              error={!!error}
+              onSubmitEditing={() => void verify()}
+              testID={testID}
+            />
             {(error || resent || hint) && (
               <UniversalTextContent
                 testID={`${testID}-status`}
@@ -443,86 +329,5 @@ function OtpResendButton({
       disabled={!isPresented || remaining > 0 || busy}
       onPress={onPress}
     />
-  );
-}
-
-const fadeIn = {
-  animationName: {
-    from: { opacity: 0.4, transform: [{ scale: 0.92 }] },
-    to: { opacity: 1, transform: [{ scale: 1 }] },
-  },
-  animationDuration: 180,
-  animationTimingFunction: cubicBezier(0.23, 1, 0.32, 1),
-} satisfies ComponentProps<typeof Animated.View>['style'];
-
-const shake = {
-  animationName: {
-    from: { transform: [{ translateX: 0 }] },
-    '25%': { transform: [{ translateX: -6 }] },
-    '50%': { transform: [{ translateX: 6 }] },
-    '75%': { transform: [{ translateX: -3 }] },
-    to: { transform: [{ translateX: 0 }] },
-  },
-  animationDuration: 200,
-  animationTimingFunction: cubicBezier(0.77, 0, 0.175, 1),
-} satisfies ComponentProps<typeof Animated.View>['style'];
-
-function OtpFeedback({
-  status,
-  visible,
-}: Readonly<{
-  status: 'idle' | 'verifying' | 'resending' | 'error' | 'success';
-  visible: boolean;
-}>) {
-  if (!visible) return null;
-  return <AnimatedOtpFeedback status={status} />;
-}
-
-function AnimatedOtpFeedback({
-  status,
-}: Readonly<{
-  status: 'idle' | 'verifying' | 'resending' | 'error' | 'success';
-}>) {
-  const scheme = useHostColorScheme();
-  const colors = useThemeColors(scheme);
-  const motion = useMotionEnabled(true);
-  const success = status === 'success';
-  const error = status === 'error';
-  return (
-    // A fixed-size RN boundary is needed only to animate the native status artwork.
-    <RNHostView matchContents>
-      <Animated.View
-        key={status}
-        pointerEvents="none"
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-        style={[
-          {
-            width: 80,
-            height: 80,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: radii.pill,
-            backgroundColor: error ? colors.errorContainer : colors.successContainer,
-          },
-          motion ? (error ? shake : fadeIn) : undefined,
-        ]}
-      >
-        <UniversalHost inline colorScheme={scheme} ignoreSafeArea="all">
-          <Icon
-            name={Icon.select({
-              ios: success
-                ? 'checkmark.shield.fill'
-                : error
-                  ? 'exclamationmark.shield.fill'
-                  : 'lock.shield.fill',
-              android: success ? 'verified_user' : error ? 'gpp_maybe' : 'shield_lock',
-            })}
-            size={36}
-            color={error ? colors.onErrorContainer : colors.success}
-          />
-        </UniversalHost>
-      </Animated.View>
-    </RNHostView>
   );
 }

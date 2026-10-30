@@ -77,7 +77,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Verify 123456 for success feedback; any other complete code gives error feedback. Successful resend confirms once; failed requests give error feedback. Incomplete input, pending/duplicate submissions and cooldown taps stay silent. Dismiss during a request to check late completion stays silent. Reopening and typing digits must not request haptics.',
+          'Six-slot native OTP entry with the shared animated verification face. Verify 123456 for a smile; any other complete code gives error feedback and a frown. Successful resend confirms once; failed requests give error feedback. Incomplete input, pending/duplicate submissions and cooldown taps stay silent. Dismiss during a request to check late completion stays silent. Reopening and typing digits must not request haptics.',
       },
     },
   },
