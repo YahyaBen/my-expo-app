@@ -23,6 +23,28 @@ Source: [loading/](../../../src/components/ui/loading/).
 - Native progress rendering belongs in the existing iOS/Android adapters;
   shared state selection belongs in `loading-state.tsx`.
 
+## Native indicators
+
+Import `LoadingIndicator`, `LoadingIndicatorProps`, `ProgressIndicator` and
+`ProgressIndicatorProps` from `@components/ui` inside an existing Host.
+
+- LoadingIndicator defaults to a circular spinner. Its expressive variant uses
+  Material morphing shapes on Android and a SwiftUI spinner on iOS. Existing
+  LoadingContent keeps its circular appearance.
+- ProgressIndicator defaults to linear. A finite value is clamped to 0 through 1;
+  omitted or non-finite values are indeterminate. Linear progress needs a
+  constrained parent width. Circular is indeterminate and accepts no value in
+  the shared contract; iOS does not offer Android's determinate circular style.
+- Both indicators use the Host scheme's theme tint unless color is supplied.
+  Supply accessibilityLabel when there is no adjacent descriptive label.
+- Native animation needs no JS timer. Mount indicators only while work is active.
+  Do not invent elapsed-time completion percentages.
+
+Use [Loading Indicator/Playground](../../../.rnstorybook/stories/components/loading-indicator.stories.tsx)
+and [Progress Indicator/Playground](../../../.rnstorybook/stories/components/progress-indicator.stories.tsx)
+for native styles, progress updates, completion and explicit tint. Check actual
+rendering and accessibility separately on iOS and Android.
+
 ## Instance selectors
 
 Give simultaneous `QueryContent` instances distinct stable `testID` prefixes.

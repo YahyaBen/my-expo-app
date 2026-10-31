@@ -21,6 +21,7 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | [template-skill-ui-host](../.agents/skills/template-skill-ui-host/SKILL.md)                                       | Hosting, inherited appearance and sizing        |
 | [template-skill-ui-native](../.agents/skills/template-skill-ui-native/SKILL.md)                                   | Direct layout primitives, sizing and RN bridges |
+| [template-skill-ui-shape](../.agents/skills/template-skill-ui-shape/SKILL.md)                                     | Shared filled native geometric shapes           |
 | [template-skill-ui-page](../.agents/skills/template-skill-ui-page/SKILL.md)                                       | Page frames, headers, sections and safe areas   |
 | [template-skill-ui-refreshable-scroll-view](../.agents/skills/template-skill-ui-refreshable-scroll-view/SKILL.md) | Coalesced native pull-to-refresh                |
 
@@ -51,6 +52,7 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | ----------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | [template-skill-ui-button](../.agents/skills/template-skill-ui-button/SKILL.md)                       | Semantic actions and button states    |
 | [template-skill-ui-checkbox](../.agents/skills/template-skill-ui-checkbox/SKILL.md)                   | Controlled checked choices            |
+| [template-skill-ui-chip](../.agents/skills/template-skill-ui-chip/SKILL.md)                           | Native actions, filters and tokens    |
 | [template-skill-ui-switch](../.agents/skills/template-skill-ui-switch/SKILL.md)                       | Controlled boolean settings           |
 | [template-skill-ui-slider](../.agents/skills/template-skill-ui-slider/SKILL.md)                       | Continuous and stepped numeric values |
 | [template-skill-ui-picker](../.agents/skills/template-skill-ui-picker/SKILL.md)                       | Typed menus and iOS wheels            |
@@ -64,6 +66,7 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | Skill                                                                                               | Responsibility                                |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | [template-skill-ui-bottom-sheet](../.agents/skills/template-skill-ui-bottom-sheet/SKILL.md)         | Native sheet presentation and dismissal       |
+| [template-skill-ui-popover](../.agents/skills/template-skill-ui-popover/SKILL.md)                   | Anchored native popup content and dismissal   |
 | [template-skill-ui-loading](../.agents/skills/template-skill-ui-loading/SKILL.md)                   | Progress, query content, errors and retry     |
 | [template-skill-ui-skeleton](../.agents/skills/template-skill-ui-skeleton/SKILL.md)                 | Static placeholders and hosted pulse          |
 | [template-skill-ui-alert](../.agents/skills/template-skill-ui-alert/SKILL.md)                       | Queued native feedback and acknowledgment     |
