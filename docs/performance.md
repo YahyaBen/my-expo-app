@@ -1,161 +1,120 @@
 # Native performance
 
-Use release builds on the same physical iPhone and Android device for baseline
-and changed measurements. Record OS, refresh rate, build revision, brand, saved
-preferences, dataset, network/cache condition and thermal state. Development
-profiling and synthetic fixtures do not establish release performance.
+## Current scope
 
-Repeat each scenario and report sample count, median and p90 with raw observations.
-Twenty launches per condition are a useful initial sample. Set regression budgets
-from the device baseline. Source inspection, exports and static checks cannot
-establish startup, memory or frame-rate improvements.
+The Expo SDK 58 release renders the
+[template screen](../src/features/template/template-screen.tsx). Galleries,
+Preferences and stress fixtures belong to development-only Storybook. Optional
+auth/query providers are not mounted by the release root.
 
-## Scenarios
+Current code isolates palette, appearance, header and motion subscriptions,
+virtualizes carousel images, supports bounded grid rows and limits stacked
+indicators. Controlled inputs reconcile changed text; OTP errors derive from
+status. These are implementation facts. Native startup, frame and memory
+measurements remain pending.
 
-| Scenario                      | Procedure                                                                     | Observe                                                            |
-| ----------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Startup                       | Repeat cold/warm launches of the release wireframe                            | Native startup, JS loading, readiness and visible interactivity    |
-| Preferences                   | Reopen the Preferences story, return from system Settings and toggle location | Permission reads, scrolling, duplicate work and retained state     |
-| Navigation                    | Push the wireframe from a transition story and return with native Back        | Touch targets, blur, draft/scroll preservation and background work |
-| Collections                   | Compare fixed 24/200/1,000-row multilingual fixtures                          | Mounted rows, blank gaps, frame deadlines and memory settling      |
-| Motion                        | Repeat carousel swipes and grid open/drag/cancel/close                        | Slow frames, image handoff, focus guards and reduced motion        |
-| Future backend/media features | Repeat recovery, search and thumbnail loading with fixed data                 | Input latency, cancellation, decoding and retained memory          |
+## Measurement workflow
 
-Repeat affected interactions with Arabic/RTL, large text, both appearances and
-reduced motion. Check keyboard and safe areas when layout or hosting changes.
-Device checks and live-backend checks remain separate from static verification.
+1. Choose one reproducible interaction. Record revision, build profile, brand,
+   preferences, dataset, device/OS/refresh rate, thermal state and network/cache
+   conditions. Compare release builds on the same physical iPhone and Android.
+2. Capture a baseline before changing behavior: committed updates, mounted views,
+   startup milestones and relevant frame/CPU/memory traces. Development probes
+   identify leads; inspect native images, layout, blur and masks when React work
+   does not explain slow frames.
+3. Make the smallest change supported by evidence. Keep visible UI state and
+   native synchronization effects; derive values from existing owners and use
+   refs for nonvisual bookkeeping. State count alone does not measure render cost.
+4. Repeat the same interaction. Keep raw samples, sample count, median/p90 and
+   measurement boundaries; derive regression budgets from the baseline. Include
+   first-open cost when deferring work. Twenty launches per startup condition are
+   a useful initial sample.
 
-## Native fixtures
+## Native fixtures and regression checks
 
-Use the [Storybook workflow](storybook.md) to reproduce interactions:
+Use the [Storybook workflow](storybook.md). Fixture registration establishes
+availability; it does not establish device results.
 
-- **Performance/Native Lists/Playground** provides count and renderer controls for
-  eager native scrolling, FlashList and native ListForEach. All render the same
-  mixed-height English, French and Arabic rows. Compare native Host ownership and
-  actual mounted rows when choosing a collection implementation.
-- **Wireframes/Preferences** covers permission refresh, one-shot location,
-  language-sheet dismissal and bounded native settings scrolling.
-- **Motion/Transitions/NativeStack** covers native push/Back and retained state.
-  **PausedContent** pauses header/skeleton motion without losing the draft.
-- **Components/Theme Tokens/Playground**, with `example: subscriptions`, logs
-  committed palette, color, appearance, header and motion subscribers independently.
-  Change one preference after startup settles and compare the matching
-  `[theme-subscription]` probe logs. These development logs verify subscription
-  isolation; release frame/CPU measurements remain separate.
-- **Components/Launch Screen/Playground** exposes the waiting control. Let the
-  visible hold elapse, then clear waiting to check overlap with preparation.
-- Home photo stories cover circular/stacked/story carousels and grid expansion.
-  Include compact sizing, opaque cards, fast flicks, source replacement and
-  background/resume. Carousel datasets `large-200` / `large-1000` and grid counts
-  200 / 1,000 exercise virtualized image mounting. Inspect mounted photo selectors
-  after scrolling far forward and back. These offline fixtures repeat twelve
-  payloads; they exercise view lifetime, not unique-media decoding or network cost.
+| Fixture                                                      | Check                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Performance/Native Lists/Playground                          | Compare eager native scrolling, FlashList and native ListForEach with 24/200/1,000 mixed-height multilingual rows. Inspect mounted rows, native Host cost, fast-fling gaps and settled memory.                                                        |
+| Components/Theme Tokens/Playground, `example: subscriptions` | After startup settles, change one preference and inspect the matching `[theme-subscription]` committed-update logs.                                                                                                                                   |
+| Native input and OTP examples                                | Type, reject, reset, paste/autofill and dismiss while pending. Preserve focus, drafts, callbacks, countdown lifetime and duplicate-request guards. Local simulations do not verify a backend.                                                         |
+| Wireframes/Preferences                                       | Reopen, return from system Settings and toggle location. Check permission refresh, retryable writes, request cleanup and language-sheet dismissal.                                                                                                    |
+| Motion/Transitions/NativeStack and PausedContent             | Repeat push/Back and background/resume. Restore blur, touch shielding, drafts and scroll position; pause decorative work while hidden.                                                                                                                |
+| Components/Launch Screen/Playground                          | Let the visible hold elapse before clearing waiting. Check that preparation overlaps the hold without restarting it.                                                                                                                                  |
+| Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return. |
 
-Fixture registration demonstrates availability, not measured device results.
+Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion;
+check keyboard and safe areas after layout changes. The configured UX theme
+disables page-header artwork, so a saved wave preference alone is not an active
+animation workload. React freezing does not prove native blur/mask consumers idle.
 
-## Startup interpretation
+The [photo viewport](../src/components/ui/photo-scroll-view.tsx) owns the carousel
+window and geometry alignment. Measure its initial and retained windows rather
+than treating the current settings as a device budget. The large-grid fixture uses
+a bounded viewport with one vertical scroll owner; small inline grids stay eager.
+Preserve the grid's native image-display handoff and selection cleanup when cells
+unmount. Component contracts live in the matching entries in the
+[skill index](skills.md).
 
-The [root layout](../src/app/_layout.tsx) restores fonts, appearance, language,
-header/motion and device preferences. Startup does not restore auth, contact a
-backend, request permissions or check store updates. The initial usable page
-layout and configured launch overlay determine interactivity.
+Photo fixtures repeat twelve offline payloads. They exercise view lifetime, not
+unique-media decoding or network cost. Windowing does not evict native image caches
+or bound caller data; measure cache/decoder memory separately from mounted views.
 
-Preference hydration overlaps font loading. Optional font failure permits native
-fallback. The branded hold counts visible foreground time from its first layout;
-it overlaps preparation and does not restart after readiness. Background time
-does not count. Keep this intended presentation separate from technical readiness.
+## Startup boundaries
+
+The [root layout](../src/app/_layout.tsx) overlaps font loading and preference
+hydration, then waits for native page layout and launch exit. Font failure allows
+native fallback. Startup does not restore auth, contact a backend, request
+permissions or check store updates. The branded hold counts visible foreground
+time from its first layout, overlaps preparation and excludes background time.
+Keep that presentation separate from technical readiness.
 
 The [performance adapter](../src/lib/performance.ts) uses
 [SDK 58 Observe](https://docs.expo.dev/versions/v58.0.0/sdk/observe/) when both native
-metrics modules are available, otherwise falling back to a Fragment and stable
-no-op marker. Configuration and event reporting are best effort. Use a matching
-native build to inspect telemetry; debug dispatch is not enabled.
-
-Custom startup events occur once per JS runtime. Their elapsedMs starts at
-performance-module evaluation, not native process creation. getStartupTimings()
-returns the bounded snapshot even without native metrics.
+metrics modules exist; otherwise it supplies a Fragment and stable no-op marker.
+Reporting is best effort and requires a matching native build. Custom startup
+events occur once per JS runtime; `elapsedMs` starts at performance-module
+evaluation, not process creation. `getStartupTimings()` retains a bounded snapshot
+without native metrics.
 
 | Event                         | Milestone                                                   |
 | ----------------------------- | ----------------------------------------------------------- |
-| app.startup.fonts_ready       | Selected fonts resolved, including error fallback           |
+| app.startup.fonts_ready       | Selected fonts resolved, including fallback                 |
 | app.startup.preferences_ready | Appearance, language and header/device preferences hydrated |
 | app.startup.page_layout_ready | Initial usable page reported native layout                  |
 | app.startup.content_ready     | Fonts, preferences and layout ready beneath the overlay     |
 | app.startup.interactive       | Overlay exited and usable content is foregrounded           |
 
 [PageFrame](../src/components/ui/page/page-frame.tsx) uses
-[usePagePerformance](../src/hooks/use-page-performance.ts) to mark a focused,
-foreground frame after native layout and launch exit. Its frame-layout marker
-does not establish completion of child fetches, animation or a native transition.
-Observe records route interactivity once per screen instance. A first React commit
-can still render null during font loading; interpret these boundaries separately.
+[usePagePerformance](../src/hooks/use-page-performance.ts) after focus, foreground,
+native layout and launch exit. Its layout marker does not establish completion of
+child fetches, animations or native transitions. Observe marks interactivity once
+per screen instance; an initial React commit may still render null for fonts.
 
-## Resource lifetime and regression checks
+## Verification and results
 
-The existing readiness gate combines launch completion with native route focus.
-Background/unfocused content must stop decorative clocks and native blur/mask
-work. Freezing React alone does not prove native consumers are idle. Returning to
-a retained page must restore blur, touch shielding, drafts and scroll position.
+- **Static:** run `npm run lint`, `npm run typecheck` and formatting checks; validate
+  local documentation links. Regenerate registration after fixture edits. Keep
+  this template free of automated test suites.
+- **Export:** inspect both native release graphs after entry/tooling changes using
+  the [release boundary workflow](storybook.md#release-boundary). Developer probes
+  must be absent. `--no-bytecode` can inspect the graph when Hermes is unavailable;
+  it does not validate bytecode or replace a native build.
+- **Native device:** repeat the affected interactions and before/after measurements.
+  Source inspection, static checks and exports do not prove faster startup,
+  smoother frames or lower native memory. Mark unavailable measurements pending.
+- **Live backend:** the release wireframe has no backend workflow. When a feature
+  uses the optional kit, verify cancellation, session ownership, refresh keys,
+  pagination and duplicate submissions against its real backend separately.
 
-Preference/permission refreshes should wait for a visible foreground canvas;
-location reads stay with their existing owner and stop automatically when the
-feature is disabled. Keep duplicate-request guards and retryable failed writes.
-The root observes preference hydration rather than every feature-toggle change.
+Record results with raw samples or traces:
 
-Carousels derive interpolation ranges and fixed geometry outside per-frame
-worklets. Hidden cards return constant transparent styles; scroll-driven artwork
-still follows the native offset. Check forward/reverse drags, edge clamping,
-selection, RTL and reduced-motion geometry before changing these paths.
-
-Circular Carousel, Stacked Carousel and Story List use a shared virtualized
-horizontal photo viewport. Fixed-width cells and a trailing spacer preserve snap
-positions; shared-value transforms compensate for native cell movement where the
-artwork stays stacked. Native direction controls FlatList metrics, while paired
-mirroring preserves live app RTL and image orientation. Cells use descending
-stacking order and keep native clipping disabled for artwork extending beyond a
-logical cell. Virtualization unmounts distant cells. The initial render batch and
-five-viewport window do not establish an optimal device-specific budget. Stacked
-indicators show at most seven dots around the current selection.
-
-For a large IosHomeGrid, supply a positive finite `viewportHeight`. This bounds
-the native viewport and virtualizes measured rows while retaining native tile
-buttons and the expansion overlay. The grid then owns vertical scrolling; place
-it outside another vertical scroll container. Omitting the height keeps the
-small inline grid eager in its existing parent scroll. The grid story removes
-its outer scroll for bounded examples. Verify expansion from later rows,
-scroll locking during selection, return to the thumbnail, variable-height labels,
-font scaling, replacement and RTL on both platforms.
-
-Windowed mounting does not evict Expo Image's native caches or bound caller-owned
-data. Measure image-cache/decoder memory, retained views and fast-fling blank areas
-separately. No device measurements have been recorded for these changes.
-
-The home grid scales a fixed-size image inside an animated clipping frame. Its
-opening handoff waits for the expanded image's native onDisplay event while the
-loaded thumbnail stays visible. Source replacement waits again; failed loads
-cancel selection and Close remains usable before display completes. Verify this
-handoff frame by frame over repeated cycles on both platforms.
-
-Profile derived work and subscriptions before adding caching or memoization.
-Measure first-use cost as well as startup when deferring an import. Growing feeds
-need a measured scrolling/recycling composition; bounded lists and tables do not
-establish a production feed implementation. Retained memory should settle after
-navigation rather than grow indefinitely.
-
-## Results record
-
-| Field                                              | Result |
-| -------------------------------------------------- | ------ |
-| Revision, build profile, brand and environment     |        |
-| Device, OS, refresh rate and thermal condition     |        |
-| Scenario, dataset, cache and network state         |        |
-| Baseline and changed sample counts                 |        |
-| Median/p90, units and measurement boundary         |        |
-| Relevant frame/CPU/memory observations             |        |
-| Benefit, regressions and native interaction checks |        |
-| Static checks and separate live-backend checks     |        |
-| Remaining limitations                              |        |
-
-Attach raw samples or native traces. When measurements are unavailable, mark them
-pending and state only what was implemented and statically verified. Keep useful
-regression scenarios here; Git retains earlier investigation history.
+| Field                                                      | Result |
+| ---------------------------------------------------------- | ------ |
+| Revision/build/brand; device/OS/refresh rate/thermal state |        |
+| Scenario/dataset/preferences; network/cache conditions     |        |
+| Baseline/changed sample counts, median/p90 and boundaries  |        |
+| Frame/CPU/memory observations and interaction regressions  |        |
+| Static, native-device and live-backend checks; limitations |        |

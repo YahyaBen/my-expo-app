@@ -3,7 +3,6 @@ import { StyleSheet, View, type FlatList } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView, Row } from '@expo/ui';
 import Animated, {
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   type SharedValue,
@@ -19,7 +18,7 @@ import { triggerHaptic } from '@/lib/haptics';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
-import { PhotoScrollView, photoScrollOffset } from '../photo-scroll-view';
+import { PhotoScrollView } from '../photo-scroll-view';
 
 const motionInput = [-2, -1, 0, 1] as const;
 const opacityInput = [-3, -2, -1, 0, 1] as const;
@@ -81,10 +80,6 @@ function StackedCarouselContent({
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollOffset = useSharedValue(0);
 
-  const onScroll = useAnimatedScrollHandler((event) => {
-    scrollOffset.set(photoScrollOffset(event));
-  });
-
   function updateSelection(index: number) {
     const nextIndex = Math.max(0, Math.min(index, items.length - 1));
     if (nextIndex === selectedIndex.current) return;
@@ -132,10 +127,7 @@ function StackedCarouselContent({
             rtl={rtl}
             selectedIndex={selectedIndex}
             scrollOffset={scrollOffset}
-            onScroll={onScroll}
-            onMomentumScrollEnd={({ nativeEvent }) =>
-              updateSelection(Math.round(photoScrollOffset(nativeEvent) / cardWidth))
-            }
+            onIndexChange={updateSelection}
             renderItem={({ item, index }) => (
               <PhotoCard
                 item={item}

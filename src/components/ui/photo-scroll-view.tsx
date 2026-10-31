@@ -5,9 +5,8 @@ import {
   type FlatList,
   type ListRenderItem,
   type NativeScrollEvent,
-  type ScrollViewProps,
 } from 'react-native';
-import Animated, { type SharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedScrollHandler, type SharedValue } from 'react-native-reanimated';
 import type { PhotoItem } from './photo-item';
 
 type PhotoScrollViewProps = {
@@ -20,8 +19,7 @@ type PhotoScrollViewProps = {
   selectedIndex: RefObject<number>;
   scrollOffset: SharedValue<number>;
   renderItem: ListRenderItem<PhotoItem>;
-  onScroll: ScrollViewProps['onScroll'];
-  onMomentumScrollEnd: ScrollViewProps['onMomentumScrollEnd'];
+  onIndexChange: (index: number) => void;
   testID: string;
 };
 
@@ -31,7 +29,7 @@ const photoCellStyle = ({ index }: { index: number }) => ({ zIndex: -index });
 const nativeRtl = I18nManager.isRTL;
 
 /** FlatList metrics follow native direction; artwork uses an index increasing from zero. */
-export function photoScrollOffset(event: NativeScrollEvent) {
+function photoScrollOffset(event: NativeScrollEvent) {
   'worklet';
   return Math.max(
     0,
@@ -52,11 +50,13 @@ export function PhotoScrollView({
   selectedIndex,
   scrollOffset,
   renderItem,
-  onScroll,
-  onMomentumScrollEnd,
+  onIndexChange,
   testID,
 }: Readonly<PhotoScrollViewProps>) {
   const contentGeometry = useRef({ width: 0, itemWidth: 0 });
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollOffset.set(photoScrollOffset(event));
+  });
   useEffect(() => {
     const offset = selectedIndex.current * itemWidth;
     // Native RTL metrics are unavailable until the first content layout.
@@ -89,7 +89,9 @@ export function PhotoScrollView({
       scrollEnabled={items.length > 1}
       accessible={false}
       onScroll={onScroll}
-      onMomentumScrollEnd={onMomentumScrollEnd}
+      onMomentumScrollEnd={({ nativeEvent }) =>
+        onIndexChange(Math.round(photoScrollOffset(nativeEvent) / itemWidth))
+      }
       onContentSizeChange={() => {
         // Window changes can remeasure content without changing its geometry.
         if (

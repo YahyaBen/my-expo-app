@@ -5,7 +5,6 @@ import { Column, RNHostView } from '@expo/ui';
 import Animated, {
   Extrapolation,
   interpolate,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   type SharedValue,
@@ -20,7 +19,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 
 import type { PhotoItem } from '../photo-item';
 import { interpolatePhotoMotion } from '../photo-motion';
-import { PhotoScrollView, photoScrollOffset } from '../photo-scroll-view';
+import { PhotoScrollView } from '../photo-scroll-view';
 
 const opacityInput = [-3, -2, 0, 1] as const;
 const opacityOutput = [0, 1, 1, 1] as const;
@@ -73,10 +72,6 @@ function StoryListContent({
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollOffset = useSharedValue(0);
 
-  const onScroll = useAnimatedScrollHandler((event) => {
-    scrollOffset.set(photoScrollOffset(event));
-  });
-
   function updateSelection(index: number) {
     const nextIndex = Math.max(0, Math.min(index, items.length - 1));
     if (nextIndex === selectedIndex.current) return;
@@ -122,10 +117,7 @@ function StoryListContent({
             rtl={rtl}
             selectedIndex={selectedIndex}
             scrollOffset={scrollOffset}
-            onScroll={onScroll}
-            onMomentumScrollEnd={({ nativeEvent }) =>
-              updateSelection(Math.round(photoScrollOffset(nativeEvent) / cardWidth))
-            }
+            onIndexChange={updateSelection}
             renderItem={({ item, index }) => (
               <PhotoCard
                 item={item}

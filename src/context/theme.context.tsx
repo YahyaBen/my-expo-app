@@ -40,7 +40,6 @@ interface ThemeSettings {
   setReducedMotion: (reduced: boolean) => void;
 }
 
-const ThemeContext = createContext<ThemeSettings | undefined>(undefined);
 const PaletteContext = createContext<Pick<ThemeSettings, 'themeId' | 'setThemeId'> | undefined>(
   undefined,
 );
@@ -176,32 +175,6 @@ export function ThemePreferencesProvider({
     },
     [headerMotionReady, persistHeaderMotion],
   );
-  const value = useMemo(
-    () => ({
-      themeId,
-      colorScheme,
-      setThemeId,
-      setColorScheme,
-      appearanceReady,
-      headerShape,
-      setHeaderShape,
-      headerMotionReady,
-      reducedMotion,
-      setReducedMotion,
-    }),
-    [
-      themeId,
-      colorScheme,
-      setThemeId,
-      setColorScheme,
-      appearanceReady,
-      headerShape,
-      setHeaderShape,
-      headerMotionReady,
-      reducedMotion,
-      setReducedMotion,
-    ],
-  );
   // Each subscription changes only with the preference group it renders.
   const palette = useMemo(() => ({ themeId, setThemeId }), [themeId, setThemeId]);
   const appearance = useMemo(
@@ -217,25 +190,33 @@ export function ThemePreferencesProvider({
     [reducedMotion, setReducedMotion, headerMotionReady],
   );
   return (
-    <ThemeContext.Provider value={value}>
-      <PaletteContext.Provider value={palette}>
-        <AppearanceContext.Provider value={appearance}>
-          <HeaderContext.Provider value={header}>
-            <MotionContext.Provider value={motion}>
-              <HeaderMotionReadyContext.Provider value={headerMotionReady}>
-                {children}
-              </HeaderMotionReadyContext.Provider>
-            </MotionContext.Provider>
-          </HeaderContext.Provider>
-        </AppearanceContext.Provider>
-      </PaletteContext.Provider>
-    </ThemeContext.Provider>
+    <PaletteContext.Provider value={palette}>
+      <AppearanceContext.Provider value={appearance}>
+        <HeaderContext.Provider value={header}>
+          <MotionContext.Provider value={motion}>
+            <HeaderMotionReadyContext.Provider value={headerMotionReady}>
+              {children}
+            </HeaderMotionReadyContext.Provider>
+          </MotionContext.Provider>
+        </HeaderContext.Provider>
+      </AppearanceContext.Provider>
+    </PaletteContext.Provider>
   );
 }
 
 /** Full snapshots are for preview seeding; rendering hooks subscribe to a group below. */
 export function useThemePreferences() {
-  return useContext(ThemeContext);
+  const palette = useContext(PaletteContext);
+  const appearance = useContext(AppearanceContext);
+  const header = useContext(HeaderContext);
+  const motion = useContext(MotionContext);
+  return useMemo(
+    () =>
+      palette && appearance && header && motion
+        ? { ...palette, ...appearance, ...header, ...motion }
+        : undefined,
+    [palette, appearance, header, motion],
+  );
 }
 
 export function useThemeSettings() {
