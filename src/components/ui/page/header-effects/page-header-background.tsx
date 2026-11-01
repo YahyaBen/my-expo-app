@@ -2,10 +2,11 @@ import { useContext, useEffect, useState, type RefObject } from 'react';
 import { BlurView } from 'expo-blur';
 import { AccessibilityInfo, Platform, View, type ViewInstance } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
-import { useHostColorScheme } from '../host/universal-host';
+import { useHostColorScheme } from '../../host/universal-host';
 import { PageWaveContext } from './page-wave-context';
 import { PageWaveSurface } from './page-wave-surface';
 import { pageBlurProps } from './page-blur';
+import { usePageBlurKey } from './use-page-blur-key';
 
 /** Native backdrop only; the title and back control remain above the blur. */
 export function PageHeaderBackground({
@@ -19,7 +20,8 @@ export function PageHeaderBackground({
 }>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
-  const wave = useContext(PageWaveContext);
+  const wave = useContext(PageWaveContext)?.wave;
+  const blurKey = usePageBlurKey();
   const [reduceTransparency, setReduceTransparency] = useState(false);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export function PageHeaderBackground({
     const style = { position: 'absolute' as const, top: 0, left: 0, right: 0, height };
     return reduceTransparency ? (
       <View
+        key={blurKey}
         testID="page-header-solid-background"
         pointerEvents="none"
         accessible={false}
@@ -55,6 +58,7 @@ export function PageHeaderBackground({
       />
     ) : (
       <BlurView
+        key={blurKey}
         {...pageBlurProps(scheme)}
         testID="page-header-blur"
         pointerEvents="none"
@@ -69,6 +73,7 @@ export function PageHeaderBackground({
 
   return (
     <PageWaveSurface
+      key={blurKey}
       wave={wave}
       blurTarget={blurTarget}
       colorScheme={scheme}

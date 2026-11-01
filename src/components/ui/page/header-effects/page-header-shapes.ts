@@ -4,7 +4,6 @@ import type { PageHeaderShape } from '@/constants/header-motion';
 export type { PageHeaderShape } from '@/constants/header-motion';
 
 export const HEADER_CURVE_START = 400;
-export const HEADER_MOTION_PERIOD = 120;
 
 type Cubic = readonly [number, number, number, number, number, number];
 export type VectorCommand =

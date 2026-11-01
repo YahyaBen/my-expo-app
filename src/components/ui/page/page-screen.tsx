@@ -14,27 +14,38 @@ import type { ReactNode } from 'react';
 import { screenInsets } from '@/lib/screen-insets';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 
+export type PageScreenAction = {
+  label: string;
+  href: Href;
+  testID?: string;
+};
+
+type PageContentProps = {
+  description?: string;
+  children?: ReactNode;
+  actions?: readonly PageScreenAction[];
+  tab?: boolean;
+  onRefresh?: () => Promise<void>;
+  colorScheme?: 'light' | 'dark';
+};
+
+export type PageScreenProps = PageContentProps & {
+  title: string;
+  onBack?: () => void;
+  showBack?: boolean;
+};
+
 export function PageScreen({
   title,
   description,
-  actions = [],
+  actions,
   children,
   tab = false,
   onRefresh,
   colorScheme,
   onBack,
   showBack = true,
-}: Readonly<{
-  title: string;
-  description: string;
-  children?: ReactNode;
-  tab?: boolean;
-  onRefresh?: () => Promise<void>;
-  colorScheme?: 'light' | 'dark';
-  onBack?: () => void;
-  showBack?: boolean;
-  actions?: { label: string; href: Href; testID?: string }[];
-}>) {
+}: Readonly<PageScreenProps>) {
   const scheme = useColorScheme(colorScheme);
   const goBack = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   return (
@@ -42,7 +53,7 @@ export function PageScreen({
       title={title}
       onBack={tab || !showBack ? undefined : goBack}
       colorScheme={scheme}
-      scrollsBehindHeader
+      headerMode="scroll"
     >
       <PageContent
         description={description}
@@ -59,19 +70,12 @@ export function PageScreen({
 
 function PageContent({
   description,
-  actions,
+  actions = [],
   children,
-  tab,
+  tab = false,
   onRefresh,
   colorScheme: scheme,
-}: Readonly<{
-  description: string;
-  actions: { label: string; href: Href; testID?: string }[];
-  children?: ReactNode;
-  tab: boolean;
-  onRefresh?: () => Promise<void>;
-  colorScheme: 'light' | 'dark';
-}>) {
+}: Readonly<PageContentProps>) {
   const insets = useSafeAreaInsets();
   const headerInset = usePageHeaderInset();
   return (

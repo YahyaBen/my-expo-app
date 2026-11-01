@@ -31,7 +31,7 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
   background does not hide iOS Form's canvas.
 - Use one fill Host and the existing safe-area/keyboard owners. FieldGroup owns
   section gutters; do not repeat page padding or add a Host per row.
-- For content behind the header, use `PageFrame scrollsBehindHeader` and apply
+- For content behind the header, use `PageFrame headerMode="scroll"` and apply
   `usePageHeaderInset()` inside the first section header only. Keep the
   viewport bounded/clipped so content scrolls beneath the blur.
 - Settings remounts only its iOS form Host on direction changes because native

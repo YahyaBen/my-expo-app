@@ -21,8 +21,8 @@ Source: [launch-screen/](../../../src/components/ui/launch-screen/).
   Enabling it during exit completes after the hold. Pause Lottie when inactive.
 - Keep artwork in `RNHostView` and text in native content. Preserve bundled
   asset selection and static imports in existing brand configuration.
-- The splash edge reuses `PageMotionOverlay`'s cached `splash` paths and
-  `PAGE_WAVE_HEIGHT`; it does not evaluate header/detail contours.
+- The splash edge uses private `LaunchWave` cached paths and
+  `LAUNCH_WAVE_HEIGHT`; it does not depend on page headers or their contours.
   It respects activity/reduced motion and keeps moving during the branded slide.
 
 ## Root readiness boundary

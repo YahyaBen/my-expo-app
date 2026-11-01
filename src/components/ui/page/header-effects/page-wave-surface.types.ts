@@ -1,9 +1,9 @@
 import type { RefObject } from 'react';
 import type { ViewInstance } from 'react-native';
-import type { usePageWaveMotion } from './use-page-wave-motion';
+import type { PageWave } from './page-wave-context';
 
 export type PageWaveSurfaceProps = {
-  wave: ReturnType<typeof usePageWaveMotion>;
+  wave: PageWave;
   blurTarget: RefObject<ViewInstance | null>;
   colorScheme: 'light' | 'dark';
   backgroundColor: string;

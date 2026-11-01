@@ -1,17 +1,23 @@
 import { useIsFocused } from 'expo-router';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
+import { StartupLayoutContext } from '@/context/startup-layout.context';
 import { usePerformanceObserver } from '@/lib/performance';
 import { useAppActive } from './use-motion-enabled';
 
-/** Mark a usable native frame, independently of optional data or child animations. */
-export function usePagePerformance() {
+/** Report initial layout and frame readiness without making the frame own startup state. */
+export function usePageLayout() {
   const focused = useIsFocused();
   const active = useAppActive();
   const ready = useContext(PerformanceReadyContext);
+  const onStartupLayout = useContext(StartupLayoutContext);
   const { markInteractive } = usePerformanceObserver();
   const laidOut = useRef(false);
   const marked = useRef(false);
+
+  useEffect(() => {
+    if (laidOut.current) onStartupLayout?.();
+  }, [onStartupLayout]);
 
   const markIfReady = useCallback(() => {
     if (!laidOut.current || marked.current || !focused || !active || !ready) return;
@@ -30,6 +36,7 @@ export function usePagePerformance() {
 
   return useCallback(() => {
     laidOut.current = true;
+    onStartupLayout?.();
     markIfReady();
-  }, [markIfReady]);
+  }, [markIfReady, onStartupLayout]);
 }

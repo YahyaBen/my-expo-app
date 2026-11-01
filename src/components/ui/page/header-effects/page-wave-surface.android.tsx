@@ -13,16 +13,12 @@ export function PageWaveSurface({ wave, blurTarget, colorScheme }: Readonly<Page
       accessible={false}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: wave.overlayHeight }}
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: wave.height }}
       maskElement={
         <Canvas pointerEvents="none" style={{ flex: 1 }}>
-          <Group transform={wave.fit}>
-            <Group transform={wave.backDrift}>
-              <Path path={wave.backWave} color="black" />
-            </Group>
-            <Group transform={wave.frontDrift}>
-              <Path path={wave.frontWave} color="black" />
-            </Group>
+          <Group transform={wave.transform}>
+            <Path path={wave.backPath} color="black" />
+            <Path path={wave.frontPath} color="black" />
           </Group>
         </Canvas>
       }

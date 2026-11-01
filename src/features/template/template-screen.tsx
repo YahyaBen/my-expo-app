@@ -7,7 +7,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
   const { t } = useTranslation();
   const brand = getAppBrand();
   return (
-    <PageScreen title={brand.name} description="" showBack={showBack}>
+    <PageScreen title={brand.name} showBack={showBack}>
       <PageSection testID="template-wireframe">
         <UniversalTextContent variant="title">{t('template.title')}</UniversalTextContent>
         <UniversalTextContent tone="muted">{t('template.description')}</UniversalTextContent>

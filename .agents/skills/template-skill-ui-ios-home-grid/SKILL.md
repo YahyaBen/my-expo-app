@@ -31,13 +31,14 @@ owns presentation on iOS and Android; callers own photo data and translated text
 
 ## State and native boundaries
 
-- Ordered item IDs/labels, width, viewport height, columns, gap, radius, font scale or direction changes
+- Grid order and expansion always use LTR, regardless of the surrounding Host direction.
+- Ordered item IDs/labels, width, viewport height, columns, gap, radius or font scale changes
   remount the internal scene and cancel stale expansion. This reset does not emit
   `onClose`. Labels join the key because wrapping can change row height. Source
   updates with unchanged IDs/labels use current data while expanded.
 - Native buttons own tile/Close activation. Keep artwork as a pointer-transparent
   sibling: an RN bridge inside a native button label can consume Android photo taps.
-- Measure photo/scene in window coordinates for LTR/RTL expansion. Preserve the
+- Measure photo/scene in window coordinates for expansion. Preserve the
   local gesture root, async measurement/unmount guards and duplicate-close guard.
 - Keep spring return, downward distance/velocity dismissal and cancelled-drag
   reset. Hide/disable the underlying grid while expanded. Retain named Close,
@@ -48,4 +49,4 @@ owns presentation on iOS and Android; callers own photo data and translated text
 [Native stories](../../../.rnstorybook/stories/components/ios-home-grid.stories.tsx)
 exercise custom data/labels/width, callbacks, replacement while expanded, empty
 and one-item data, a partial three-column row and bounded 200/1,000-item data. Verify native edge taps,
-short/cancelled drags, large text, live RTL and both appearances on devices.
+short/cancelled drags, large text, LTR order and both appearances on devices.

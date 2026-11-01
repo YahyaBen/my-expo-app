@@ -22,13 +22,12 @@ import type { StoryThemeProps } from '../../components/story-theme';
 function Transitions() {
   const [draft, setDraft] = useState('Retain this draft');
   const [presses, setPresses] = useState(0);
-  const [expanded, setExpanded] = useState(false);
   const [shape, setShape] = useState<PageHeaderStyle>('dunes');
   const { setReducedMotion } = useMotionSettings();
   const reducedMotion = useAppReducedMotion();
   return (
-    <PageMotionOverlay shape={shape} expanded={expanded}>
-      <PageScreen title="Transitions" description="" showBack={false}>
+    <PageMotionOverlay shape={shape}>
+      <PageScreen title="Transitions" showBack={false}>
         <PageSection testID="motion-transitions">
           <Text>
             Open the wireframe, then use its Back button or Android system Back. Your draft and
@@ -64,12 +63,6 @@ function Transitions() {
             ))}
           </Picker>
           <Switch
-            label="Expand header"
-            value={expanded}
-            onValueChange={setExpanded}
-            testID="motion-transition-expand"
-          />
-          <Switch
             label="Reduce header motion"
             value={reducedMotion}
             onValueChange={setReducedMotion}
@@ -102,7 +95,7 @@ function PausedContentDemo() {
   return (
     <PerformanceReadyContext.Provider value={ready !== false && !paused}>
       <PageMotionOverlay shape="rain">
-        <PageScreen title="Motion visibility" description="" showBack={false}>
+        <PageScreen title="Motion visibility" showBack={false}>
           <PageSection>
             <Text>Pause the placeholder without unmounting the content.</Text>
             <Switch

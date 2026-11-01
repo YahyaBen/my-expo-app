@@ -17,9 +17,9 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 import { triggerHaptic } from '@/lib/haptics';
 
-import type { PhotoItem } from '../photo-item';
-import { interpolatePhotoMotion } from '../photo-motion';
-import { PhotoScrollView } from '../photo-scroll-view';
+import type { PhotoItem } from '../photo/photo-item';
+import { interpolatePhotoMotion } from '../photo/photo-motion';
+import { PhotoScrollView } from '../photo/photo-scroll-view';
 
 const motionInput = [-2, -1, 0, 1, 2] as const;
 const scaleOutput = [0.5, 0.9, 1.2, 0.9, 0.5] as const;

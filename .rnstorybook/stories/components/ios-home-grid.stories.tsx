@@ -10,7 +10,7 @@ import {
 } from '../../components/animated-component-preview';
 import { photoFixtures as photos, largePhotoFixtures } from '../../components/photo-fixtures';
 
-type GridDemoProps = AnimatedComponentPreviewProps & {
+type GridDemoProps = Omit<AnimatedComponentPreviewProps, 'rtl'> & {
   columns: number;
   itemCount: number;
   contentWidth?: number;
@@ -64,9 +64,8 @@ function IosHomeGridDemo({
 const meta = {
   title: 'Components/iOS Home Grid',
   component: IosHomeGridDemo,
-  args: { colorScheme: 'light', rtl: false, columns: 4, itemCount: 12 },
+  args: { colorScheme: 'light', columns: 4, itemCount: 12 },
   argTypes: {
-    rtl: { control: 'boolean' },
     columns: { control: { type: 'number', min: 1, max: 6, step: 1 } },
     itemCount: { control: 'select', options: [0, 1, 11, 12, 200, 1000] },
     contentWidth: { control: 'number' },
@@ -76,7 +75,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Caller-owned photos, labels, width and columns. Counts 200/1000 use a bounded virtualized viewport with no surrounding vertical scroll. Inspect mounted photo selectors while scrolling, open a later row and return, then replace data while expanded. The thumbnail stays visible until the expanded image displays. Also check slow/failed loads, Close before display, callbacks, partial rows, edge taps, RTL, large text and Reduce motion. Offline payloads repeat, so this measures view lifetime rather than unique image decoding.',
+          'LTR grid with caller-owned photos, labels, width and columns. Counts 200/1000 use a bounded virtualized viewport with no surrounding vertical scroll. Inspect mounted photo selectors while scrolling, open a later row and return, then replace data while expanded. The thumbnail stays visible until the expanded image displays. Also check slow/failed loads, Close before display, callbacks, partial rows, edge taps, large text and Reduce motion. Offline payloads repeat, so this measures view lifetime rather than unique image decoding.',
       },
     },
   },

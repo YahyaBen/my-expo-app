@@ -21,7 +21,7 @@ is saved by Storybook. Use its sidebar to browse:
 - **Wireframes/Component Gallery**: complete interactive native compositions, including camera.
 - **Wireframes/Preferences**: language, appearance, motion and device controls.
 - **Wireframes/Template**: the single release wireframe.
-- **Motion/Transitions**: native push/Back plus header expansion and reduced motion.
+- **Motion/Transitions**: native push/Back, header styles and reduced motion.
 
 `npm run start:app` explicitly disables Storybook to work on the wireframe.
 `EXPO_PUBLIC_STORYBOOK_ENABLED=false` also disables the catalog for a direct Expo
@@ -97,3 +97,9 @@ native blur after repeated trips. Use `colorProbe` with scrolling or overlay
 controls to inspect blur over primary/secondary cards. The Stacked Carousel
 `opaque-cards` dataset checks solid front-card visibility during slow drags and
 after settling; repeat with compact sizing, RTL and Reduce motion.
+
+The `change-header-style` example also toggles blur, title presence and header
+layout. Enter a draft, increment its content counter and scroll before changing
+these controls; check that the same native content and draft survive each change.
+After hiding the title, check that the first content controls remain interactive;
+another retained page's artwork height must not leave an invisible touch blocker.

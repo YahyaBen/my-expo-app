@@ -1,6 +1,6 @@
 import type { PageHeaderShape, VectorCommand } from './page-header-shapes';
 
-/** A few filled vector ribbons, or twelve staggered drops. No particle timers or React updates. */
+/** Twelve staggered drops for Rain; the other headers have no extra detail paths. */
 export function headerDetails(shape: PageHeaderShape, time: number): VectorCommand[] {
   'worklet';
   const paths: VectorCommand[] = [];

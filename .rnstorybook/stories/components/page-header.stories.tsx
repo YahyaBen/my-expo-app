@@ -2,6 +2,7 @@ import {
   Column,
   nativeFillWidth,
   PageFrame,
+  type PageHeaderMode,
   PageScreen,
   PageSection,
   PageMotionOverlay,
@@ -10,11 +11,12 @@ import {
   UniversalButtonContent,
   UniversalTextContent as Text,
   TextInput,
+  Switch,
   usePageHeaderInset,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import type { StoryThemeProps } from '../../components/story-theme';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { router } from 'expo-router';
 import { View } from 'react-native';
 import { SafeAreaInsetsContext, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,12 +31,14 @@ function HeaderContent({
   onNavigate,
   navigationLabel = 'Open details',
   colorProbe = false,
+  controls,
 }: Readonly<{
   colorScheme?: 'light' | 'dark';
   presses: number;
   onNavigate?: () => void;
   navigationLabel?: string;
   colorProbe?: boolean;
+  controls?: ReactNode;
 }>) {
   const colors = useThemeColors(colorScheme);
   const headerInset = usePageHeaderInset();
@@ -55,6 +59,7 @@ function HeaderContent({
           style={{ padding: 0, paddingTop: headerInset + insets.top }}
         >
           <PageSection>
+            {controls}
             <TextInput
               label="Retained draft"
               value={draft}
@@ -149,15 +154,14 @@ const meta = {
   args: {
     title: 'Settings',
     colorScheme: 'light',
-    scrollsBehindHeader: false,
+    headerMode: 'fixed',
+    headerBlur: true,
     showBack: true,
     shape: DEFAULT_HEADER_SHAPE,
     direction: 'ltr',
     animateWaves: true,
     withoutWaves: false,
-    expandedWaves: false,
     colorProbe: false,
-    headerOverlay: false,
     example: 'header',
   },
   argTypes: {
@@ -168,13 +172,12 @@ const meta = {
       description: 'Default uses a rectangular header; waves retain the shared artwork and mask.',
     },
     title: { control: 'text' },
-    scrollsBehindHeader: { control: 'boolean' },
-    headerOverlay: { control: 'boolean' },
+    headerMode: { control: 'select', options: ['fixed', 'scroll', 'overlay'] },
+    headerBlur: { control: 'boolean' },
     colorProbe: { control: 'boolean' },
     direction: { control: 'select', options: ['ltr', 'rtl'] },
     animateWaves: { control: 'boolean' },
     withoutWaves: { control: 'boolean' },
-    expandedWaves: { control: 'boolean' },
     example: {
       control: 'select',
       options: [
@@ -198,7 +201,6 @@ const meta = {
                 shape={args.shape}
                 animate={args.animateWaves}
                 visible={!args.withoutWaves}
-                expanded={args.expandedWaves}
               >
                 <Story />
               </PageMotionOverlay>
@@ -208,7 +210,7 @@ const meta = {
       );
     },
   ],
-  render: ({ example, direction, animateWaves, withoutWaves, expandedWaves, ...args }) => {
+  render: ({ example, direction, animateWaves, withoutWaves, ...args }) => {
     switch (example) {
       case 'ordinary-page':
         return <OrdinaryPageDemo colorScheme={args.colorScheme} />;
@@ -228,7 +230,6 @@ const meta = {
       direction: 'ltr' | 'rtl';
       animateWaves: boolean;
       withoutWaves: boolean;
-      expandedWaves: boolean;
     } & {
       example:
         'header' | 'ordinary-page' | 'navigation' | 'native-back-return' | 'change-header-style';
@@ -241,7 +242,7 @@ type Story = StoryObj<typeof meta>;
 function OrdinaryPageDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [presses, setPresses] = useState(0);
   return (
-    <PageScreen title="Ordinary page" description="" showBack={false} colorScheme={colorScheme}>
+    <PageScreen title="Ordinary page" showBack={false} colorScheme={colorScheme}>
       <PageSection>
         <UniversalButtonContent
           variant="primary"
@@ -263,7 +264,7 @@ function NavigationHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' 
       key={details ? 'details' : 'home'}
       title={details ? 'Details' : 'Accueil'}
       colorScheme={colorScheme}
-      scrollsBehindHeader
+      headerMode="scroll"
       onBack={
         details
           ? () => {
@@ -288,7 +289,7 @@ function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'l
     <PageFrame
       title="Retained header"
       colorScheme={colorScheme}
-      scrollsBehindHeader
+      headerMode="scroll"
       onBack={() => setPresses((value) => value + 1)}
     >
       <HeaderContent
@@ -305,18 +306,51 @@ function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'l
 function HeaderStyleSwitchDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dark' }>) {
   const [plain, setPlain] = useState(false);
   const [presses, setPresses] = useState(0);
+  const [blur, setBlur] = useState(true);
+  const [titled, setTitled] = useState(true);
+  const [headerMode, setHeaderMode] = useState<PageHeaderMode>('scroll');
   return (
     <PageMotionOverlay shape={plain ? 'default' : 'dunes'} colorScheme={colorScheme}>
       <PageFrame
-        title="Change header style"
+        title={titled ? 'Change header style' : undefined}
         colorScheme={colorScheme}
-        scrollsBehindHeader
+        headerMode={headerMode}
+        headerBlur={blur}
         onBack={() => {
           setPlain((value) => !value);
           setPresses((value) => value + 1);
         }}
       >
-        <HeaderContent colorScheme={colorScheme} presses={presses} />
+        <HeaderContent
+          colorScheme={colorScheme}
+          presses={presses}
+          controls={
+            <>
+              <Switch
+                label="Header blur"
+                value={blur}
+                onValueChange={setBlur}
+                testID="page-header-toggle-blur"
+              />
+              <Switch
+                label="Show title"
+                value={titled}
+                onValueChange={setTitled}
+                testID="page-header-toggle-title"
+              />
+              <UniversalButtonContent
+                label={`Layout: ${headerMode}`}
+                variant="secondary"
+                testID="page-header-cycle-layout"
+                onPress={() =>
+                  setHeaderMode((mode) =>
+                    mode === 'fixed' ? 'scroll' : mode === 'scroll' ? 'overlay' : 'fixed',
+                  )
+                }
+              />
+            </>
+          }
+        />
       </PageFrame>
     </PageMotionOverlay>
   );

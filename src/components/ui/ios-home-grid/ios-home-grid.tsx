@@ -20,8 +20,8 @@ import { Column, RNHostView, Row } from '@expo/ui';
 import { UniversalButtonContent, UniversalButton } from '../button/universal-button';
 import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
-import { UniversalHost, useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
-import type { PhotoItem } from '../photo-item';
+import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import type { PhotoItem } from '../photo/photo-item';
 import { radii, spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -70,7 +70,6 @@ export function IosHomeGrid({
   ...props
 }: Readonly<IosHomeGridProps>) {
   const { fontScale } = useWindowDimensions();
-  const direction = useHostLayoutDirection();
   const { width, viewportHeight, items } = props;
   if (!Number.isFinite(width) || width <= 0 || items.length === 0) return null;
   if (viewportHeight !== undefined && (!Number.isFinite(viewportHeight) || viewportHeight <= 0))
@@ -87,7 +86,6 @@ export function IosHomeGrid({
     width,
     viewportHeight,
     fontScale,
-    direction,
     columnCount,
     safeGap,
     safeRadius,
@@ -208,7 +206,7 @@ function PhotoGrid({
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
         {/* This RN boundary owns the expanding artwork above the native grid. */}
-        <GestureHandlerRootView style={{ width }}>
+        <GestureHandlerRootView style={{ width, direction: 'ltr' }}>
           <View ref={scene} collapsable={false} style={{ width }}>
             <Animated.View
               style={gridStyle}
@@ -217,7 +215,7 @@ function PhotoGrid({
               importantForAccessibility={selection ? 'no-hide-descendants' : 'auto'}
             >
               {viewportHeight === undefined ? (
-                <UniversalHost>
+                <UniversalHost layoutDirection="leftToRight">
                   <Column spacing={gap} modifiers={nativeFillWidth}>
                     {rows.map(renderRow)}
                   </Column>
@@ -227,7 +225,9 @@ function PhotoGrid({
                   data={rows}
                   keyExtractor={(row) => row[0].id}
                   renderItem={({ item, index }) => (
-                    <UniversalHost>{renderRow(item, index)}</UniversalHost>
+                    <UniversalHost layoutDirection="leftToRight">
+                      {renderRow(item, index)}
+                    </UniversalHost>
                   )}
                   ItemSeparatorComponent={<View style={{ height: gap }} />}
                   initialNumToRender={Math.ceil(viewportHeight / tileSize)}

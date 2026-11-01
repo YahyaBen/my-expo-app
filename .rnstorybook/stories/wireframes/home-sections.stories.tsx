@@ -8,7 +8,7 @@ import { SampleRecipeRows } from '../../components/navigation/sample-recipes';
 function HomeSections() {
   const { t } = useTranslation();
   return (
-    <PageScreen title={t('common.home')} description="" showBack={false}>
+    <PageScreen title={t('common.home')} showBack={false}>
       <PageSection testID="home-components">
         <Text variant="title">{t('starter.componentsTitle')}</Text>
         <HomeComponents />
@@ -29,7 +29,7 @@ export const Cards: Story = {};
 export const Dark: Story = { args: { colorScheme: 'dark' } };
 export const SampleRows: Story = {
   render: () => (
-    <PageScreen title="Home sections" description="" showBack={false}>
+    <PageScreen title="Home sections" showBack={false}>
       <PageSection testID="home-sample-rows">
         <SampleRecipeRows testIDPrefix="home" />
       </PageSection>

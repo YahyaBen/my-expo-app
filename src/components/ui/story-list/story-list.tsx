@@ -17,9 +17,9 @@ import { radii, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 
-import type { PhotoItem } from '../photo-item';
-import { interpolatePhotoMotion } from '../photo-motion';
-import { PhotoScrollView } from '../photo-scroll-view';
+import type { PhotoItem } from '../photo/photo-item';
+import { interpolatePhotoMotion } from '../photo/photo-motion';
+import { PhotoScrollView } from '../photo/photo-scroll-view';
 
 const opacityInput = [-3, -2, 0, 1] as const;
 const opacityOutput = [0, 1, 1, 1] as const;

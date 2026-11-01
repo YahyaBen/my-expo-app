@@ -50,7 +50,7 @@ check keyboard and safe areas after layout changes. The configured UX theme
 disables page-header artwork, so a saved wave preference alone is not an active
 animation workload. React freezing does not prove native blur/mask consumers idle.
 
-The [photo viewport](../src/components/ui/photo-scroll-view.tsx) owns the carousel
+The [photo viewport](../src/components/ui/photo/photo-scroll-view.tsx) owns the carousel
 window and geometry alignment. Measure its initial and retained windows rather
 than treating the current settings as a device budget. The large-grid fixture uses
 a bounded viewport with one vertical scroll owner; small inline grids stay eager.
@@ -88,7 +88,7 @@ without native metrics.
 | app.startup.interactive       | Overlay exited and usable content is foregrounded           |
 
 [PageFrame](../src/components/ui/page/page-frame.tsx) uses
-[usePagePerformance](../src/hooks/use-page-performance.ts) after focus, foreground,
+[usePageLayout](../src/hooks/use-page-layout.ts) after focus, foreground,
 native layout and launch exit. Its layout marker does not establish completion of
 child fetches, animations or native transitions. Observe marks interactivity once
 per screen instance; an initial React commit may still render null for fonts.

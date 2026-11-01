@@ -39,7 +39,7 @@ export default function FieldGroupScreen() {
       title={t('showcase.fieldGroup')}
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       colorScheme={scheme}
-      scrollsBehindHeader
+      headerMode="scroll"
     >
       <FieldGroupContent mode={mode} onModeChange={setMode} colorScheme={scheme} />
     </PageFrame>

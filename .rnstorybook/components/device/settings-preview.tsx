@@ -97,12 +97,7 @@ function SettingsPage({
     />
   );
   return (
-    <PageFrame
-      title={t('settings.title')}
-      onBack={onBack}
-      headerOverlay={false}
-      scrollsBehindHeader
-    >
+    <PageFrame title={t('settings.title')} onBack={onBack} headerMode="scroll">
       <SettingsViewport>
         <UniversalHost
           // Recreate only this iOS form host when direction flips; reused native cells mirror text.

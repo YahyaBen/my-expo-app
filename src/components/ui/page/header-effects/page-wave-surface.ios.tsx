@@ -3,7 +3,7 @@ import { background, foregroundStyle, frame, shapes } from '@expo/ui/swift-ui/mo
 import { View } from 'react-native';
 import Animated, { useAnimatedProps } from 'react-native-reanimated';
 import Svg, { G, Path, type GProps, type PathProps } from 'react-native-svg';
-import { UniversalHost } from '../host/universal-host';
+import { UniversalHost } from '../../host/universal-host';
 import type { PageWaveSurfaceProps } from './page-wave-surface.types';
 import { vectorPathToSvg } from './page-header-shapes';
 
@@ -26,7 +26,6 @@ export function PageWaveSurface({
   backgroundColor,
   reduceTransparency,
 }: Readonly<PageWaveSurfaceProps>) {
-  const { fit, backDrift, frontDrift } = wave;
   // Serialize only where SVG is rendered; Android and launch edges keep numeric paths.
   const frontPathProps = useAnimatedProps<PathProps>(() => ({
     d: vectorPathToSvg(wave.frontContour.get()),
@@ -34,59 +33,17 @@ export function PageWaveSurface({
   const backPathProps = useAnimatedProps<PathProps>(() => ({
     d: vectorPathToSvg(wave.backContour.get()),
   }));
-  const fitProps = useAnimatedProps<GProps>(
+  const transformProps = useAnimatedProps<GProps>(
     () => {
-      const transform = fit.get();
-      const scaleX = transform[0].scaleX ?? 0;
+      const scaleX = wave.scaleX.get();
       return {
-        transform: [
-          scaleX,
-          0,
-          0,
-          transform[3].scaleY ?? 1,
-          scaleX * (transform[2].translateX ?? 0),
-          transform[1].translateY ?? 0,
-        ],
+        transform: [scaleX, 0, 0, wave.scaleY, scaleX * wave.translateX, 0],
       };
     },
     undefined,
     svgMatrixAdapter,
   );
-  const backProps = useAnimatedProps<GProps>(
-    () => {
-      const drift = backDrift.get();
-      return {
-        transform: [
-          drift[3].scaleX ?? 1,
-          0,
-          0,
-          drift[2].scaleY ?? 1,
-          drift[0].translateX ?? 0,
-          drift[1].translateY ?? 0,
-        ],
-      };
-    },
-    undefined,
-    svgMatrixAdapter,
-  );
-  const frontProps = useAnimatedProps<GProps>(
-    () => {
-      const drift = frontDrift.get();
-      return {
-        transform: [
-          drift[3].scaleX ?? 1,
-          0,
-          0,
-          drift[2].scaleY ?? 1,
-          drift[0].translateX ?? 0,
-          drift[1].translateY ?? 0,
-        ],
-      };
-    },
-    undefined,
-    svgMatrixAdapter,
-  );
-  const bounds = [frame({ height: wave.overlayHeight }), frame({ maxWidth: Infinity })];
+  const bounds = [frame({ height: wave.height }), frame({ maxWidth: Infinity })];
 
   return (
     <UniversalHost
@@ -97,7 +54,7 @@ export function PageWaveSurface({
       accessible={false}
       accessibilityElementsHidden
       testID="page-wave-blur-mask"
-      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: wave.overlayHeight }}
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, height: wave.height }}
     >
       <Mask alignment="topLeading" modifiers={bounds}>
         <Rectangle
@@ -113,15 +70,11 @@ export function PageWaveSurface({
         />
         <Mask.Content>
           <RNHostView>
-            <View style={{ width: '100%', height: wave.overlayHeight }} pointerEvents="none">
-              <Svg width="100%" height={wave.overlayHeight}>
-                <AnimatedGroup animatedProps={fitProps}>
-                  <AnimatedGroup animatedProps={backProps}>
-                    <AnimatedPath animatedProps={backPathProps} fill="black" />
-                  </AnimatedGroup>
-                  <AnimatedGroup animatedProps={frontProps}>
-                    <AnimatedPath animatedProps={frontPathProps} fill="black" />
-                  </AnimatedGroup>
+            <View style={{ width: '100%', height: wave.height }} pointerEvents="none">
+              <Svg width="100%" height={wave.height}>
+                <AnimatedGroup animatedProps={transformProps}>
+                  <AnimatedPath animatedProps={backPathProps} fill="black" />
+                  <AnimatedPath animatedProps={frontPathProps} fill="black" />
                 </AnimatedGroup>
               </Svg>
             </View>

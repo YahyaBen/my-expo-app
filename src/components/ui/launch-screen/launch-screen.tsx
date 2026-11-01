@@ -25,7 +25,7 @@ import { useAppActive, useAppReducedMotion, useMotionEnabled } from '@/hooks/use
 import { UniversalHost } from '../host/universal-host';
 import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillSize } from '../native/native-fill-width';
-import { PageMotionOverlay, PAGE_WAVE_HEIGHT as WAVE_HEIGHT } from '../page/page-motion-overlay';
+import { LaunchWave, LAUNCH_WAVE_HEIGHT as WAVE_HEIGHT } from './launch-wave';
 import { LoadingScreen } from '../loading/loading-state';
 
 type LaunchScreenProps = {
@@ -212,7 +212,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
           </Column>
         </UniversalHost>
       </View>
-      <PageMotionOverlay variant="splash" colorScheme={scheme} />
+      <LaunchWave colorScheme={scheme} />
     </Animated.View>
   );
 }

@@ -8,13 +8,13 @@ type PageNavigation = Pick<
 >;
 
 /** Rebind only the Android backdrop after its retained native screen reappears. */
-export function usePageBlurKey(enabled: boolean) {
+export function usePageBlurKey() {
   const navigation = useNavigation<PageNavigation>();
   const [generation, setGeneration] = useState(0);
   const leftScreen = useRef(false);
 
   useEffect(() => {
-    if (Platform.OS !== 'android' || !enabled) return;
+    if (Platform.OS !== 'android') return;
 
     if (!navigation.isFocused()) leftScreen.current = true;
     let returning = false;
@@ -61,7 +61,7 @@ export function usePageBlurKey(enabled: boolean) {
       unsubscribeFocus();
       unsubscribeTransition();
     };
-  }, [enabled, navigation]);
+  }, [navigation]);
 
   return generation;
 }

@@ -1,4 +1,5 @@
-import { LaunchScreen, PageMotionOverlay, UniversalButton, UniversalText } from '@components/ui';
+import { LaunchScreen, UniversalButton, UniversalText } from '@components/ui';
+import { LaunchWave } from '@/components/ui/launch-screen/launch-wave';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
@@ -18,7 +19,7 @@ function LaunchEdgeDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark
         testID="launch-edge-preview-body"
         style={{ height: 160, backgroundColor: colors.background }}
       />
-      <PageMotionOverlay variant="splash" colorScheme={colorScheme} animate={false} />
+      <LaunchWave colorScheme={colorScheme} animate={false} />
       <UniversalText colorScheme={colorScheme}>
         The background should join the front wave without a gap; the lower wave uses theme colors.
       </UniversalText>
