@@ -20,12 +20,13 @@ function LaunchEdgeDemo({
     <View testID="launch-edge-preview" style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
       <View
         testID="launch-edge-preview-body"
-        style={{ height: 160, backgroundColor: colors.background }}
+        style={{ height: 160, backgroundColor: colors.launchWaveBody }}
       />
       <LaunchWave colorScheme={colorScheme} animate={animate} />
       <UniversalText colorScheme={colorScheme}>
-        Four solid waves join the splash body without a gap. Enable animation to check their
-        independent phases and speeds; pause to inspect the layers in light and dark appearances.
+        Taller solid waves fill the screen width in portrait and landscape. Enable animation to
+        watch their crests roll independently; pause to inspect the launchWave theme colors in light
+        and dark appearances. The body and waves should stay joined without a gap.
       </UniversalText>
     </View>
   );

@@ -169,7 +169,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
         style={{
           height,
           ...screenInsets(insets),
-          backgroundColor: colors.background,
+          backgroundColor: colors.launchWaveBody,
         }}
       >
         <UniversalHost

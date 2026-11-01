@@ -47,6 +47,10 @@ export interface SemanticColors {
 export function createColorTokens(colors: SemanticColors) {
   return {
     ...colors,
+    launchWaveOuter: colors.primaryContainer,
+    launchWaveMiddle: colors.primary,
+    launchWaveInner: colors.primaryPressed,
+    launchWaveBody: colors.background,
     tabIconDefault: colors.muted,
     tabIconSelected: colors.tint,
     tabBarBackground: colors.surfaceRaised,
