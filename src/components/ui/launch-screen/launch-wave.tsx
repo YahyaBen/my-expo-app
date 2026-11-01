@@ -36,14 +36,14 @@ const WAVE_LAYERS = [
   },
   {
     color: 'launchWaveInner',
-    edge: -2,
+    edge: 5,
     crest: 46,
     period: 5,
     phase: Math.PI,
   },
   {
     color: 'launchWaveBody',
-    edge: -25,
+    edge: 0,
     crest: 23,
     period: 4,
     phase: (3 * Math.PI) / 2,

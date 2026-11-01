@@ -1,32 +1,32 @@
-import { useTranslation } from 'react-i18next';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColors } from '@/hooks/use-theme';
+import { screenInsets } from '@/lib/screen-insets';
 import { Column, RNHostView, Spacer } from '@expo/ui';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import LottieView from 'lottie-react-native';
 import { Image } from 'expo-image';
+import LottieView from 'lottie-react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
+  ReduceMotion,
   cancelAnimation,
   useAnimatedStyle,
-  ReduceMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { scheduleOnRN } from 'react-native-worklets';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { screenInsets } from '@/lib/screen-insets';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import { getAppBrand } from '@/config/brand';
 import { getBrandHeadingFont, getBrandLaunchArtwork } from '@/config/brand-assets';
 import { useLanguage } from '@/context/language.context';
 import { useAppActive, useAppReducedMotion, useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { UniversalHost } from '../host/universal-host';
-import { UniversalTextContent } from '../text/universal-text';
-import { nativeFillSize } from '../native/native-fill-width';
-import { LaunchWave, LAUNCH_WAVE_HEIGHT as WAVE_HEIGHT } from './launch-wave';
 import { LoadingScreen } from '../loading/loading-state';
+import { nativeFillSize } from '../native/native-fill-width';
+import { UniversalTextContent } from '../text/universal-text';
+import { LaunchWave, LAUNCH_WAVE_HEIGHT as WAVE_HEIGHT } from './launch-wave';
 
 type LaunchScreenProps = {
   mode?: 'minimal' | 'branded';
