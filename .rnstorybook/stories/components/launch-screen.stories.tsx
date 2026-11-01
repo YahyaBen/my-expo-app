@@ -11,7 +11,10 @@ import {
 import { getAppBrand } from '@/config/brand';
 import { useThemeColors } from '@/hooks/use-theme';
 
-function LaunchEdgeDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark' }>) {
+function LaunchEdgeDemo({
+  colorScheme,
+  animate,
+}: Readonly<{ colorScheme: 'light' | 'dark'; animate: boolean }>) {
   const colors = useThemeColors(colorScheme);
   return (
     <View testID="launch-edge-preview" style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
@@ -19,9 +22,10 @@ function LaunchEdgeDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark
         testID="launch-edge-preview-body"
         style={{ height: 160, backgroundColor: colors.background }}
       />
-      <LaunchWave colorScheme={colorScheme} animate={false} />
+      <LaunchWave colorScheme={colorScheme} animate={animate} />
       <UniversalText colorScheme={colorScheme}>
-        The background should join the front wave without a gap; the lower wave uses theme colors.
+        Four solid waves join the splash body without a gap. Enable animation to check their
+        independent phases and speeds; pause to inspect the layers in light and dark appearances.
       </UniversalText>
     </View>
   );
@@ -71,23 +75,26 @@ const meta = {
     mode: 'branded',
     colorScheme: 'light',
     example: 'launch',
+    animate: false,
   },
   argTypes: {
     mode: { control: 'select', options: ['minimal', 'branded'] },
     waiting: { control: 'boolean' },
     reducedMotion: { control: 'boolean' },
+    animate: { control: 'boolean' },
     example: { control: 'select', options: ['launch', 'bottom-edge'] },
   },
 
-  render: ({ example, colorScheme, ...args }) =>
+  render: ({ example, colorScheme, animate, ...args }) =>
     example === 'bottom-edge' ? (
-      <LaunchEdgeDemo colorScheme={colorScheme} />
+      <LaunchEdgeDemo colorScheme={colorScheme} animate={animate && !args.reducedMotion} />
     ) : (
       <LaunchDemo key={`${args.mode}-${args.reducedMotion}`} {...args} />
     ),
 } satisfies Meta<
   React.ComponentProps<typeof LaunchDemo> & { colorScheme: 'light' | 'dark' } & {
     example: 'launch' | 'bottom-edge';
+    animate: boolean;
   }
 >;
 export default meta;
