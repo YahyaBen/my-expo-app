@@ -1,13 +1,13 @@
-import { spacing, radii } from '@/constants/layout';
-import { Column, Row, ScrollView, Spacer, type TextInputRef } from '@expo/ui';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { radii, spacing } from '@/constants/layout';
 import { useAppActive } from '@/hooks/use-motion-enabled';
-import { AccessibilityInfo, useWindowDimensions } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/use-theme';
 import { triggerHaptic } from '@/lib/haptics';
+import { Column, Row, ScrollView, Spacer, type TextInputRef } from '@expo/ui';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AccessibilityInfo, useWindowDimensions } from 'react-native';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
-import { UniversalButtonContent } from '../button/universal-button';
+import { ButtonContent } from '../button/button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { LoadingContent } from '../loading/loading-state';
 import { nativeFillWidth } from '../native/native-fill-width';
@@ -168,7 +168,7 @@ function OtpForm({
       >
         <Row modifiers={nativeFillWidth} alignment="center">
           <Spacer flexible />
-          <UniversalButtonContent
+          <ButtonContent
             variant="link"
             label={t('common.close')}
             onPress={dismiss}
@@ -238,7 +238,7 @@ function OtpForm({
             )}
           </Column>
         )}
-        <UniversalButtonContent
+        <ButtonContent
           variant={success ? 'success' : 'primary'}
           color={success ? colors.success : undefined}
           contentColor={success ? colors.onSuccess : undefined}
@@ -253,7 +253,7 @@ function OtpForm({
           {busy ? (
             <LoadingContent label={t(status === 'resending' ? 'otp.resending' : 'otp.verifying')} />
           ) : undefined}
-        </UniversalButtonContent>
+        </ButtonContent>
         {!success && onResend && (
           <Column alignment="center" spacing={spacing.none} modifiers={nativeFillWidth}>
             <OtpResendButton
@@ -316,7 +316,7 @@ function OtpResendButton({
   }, [deadline, visible]);
 
   return (
-    <UniversalButtonContent
+    <ButtonContent
       variant="link"
       testID={testID}
       label={remaining > 0 ? t('otp.resendIn', { seconds: remaining }) : t('otp.resend')}

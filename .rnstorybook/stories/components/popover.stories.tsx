@@ -2,7 +2,7 @@ import {
   Column,
   Popover,
   Text,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   type UniversalThemeProps,
 } from '@components/ui';
@@ -40,7 +40,7 @@ function PopoverDemo({
             action('popover changed')(next);
           }}
           trigger={
-            <UniversalButtonContent
+            <ButtonContent
               variant="primary"
               label={label}
               disabled={disabled}
@@ -52,13 +52,13 @@ function PopoverDemo({
           <Column spacing={16} style={{ padding: 16, width: 240 }}>
             <Text>Anchored native content</Text>
             <Text testID="popover-demo-count">{`Actions: ${count}`}</Text>
-            <UniversalButtonContent
+            <ButtonContent
               variant="primary"
               label="Add one"
               testID="popover-demo-increment"
               onPress={() => setCount((previous) => previous + 1)}
             />
-            <UniversalButtonContent
+            <ButtonContent
               label="Close"
               variant="secondary"
               testID="popover-demo-close"

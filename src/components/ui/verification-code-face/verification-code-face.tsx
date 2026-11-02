@@ -1,11 +1,11 @@
-import { useRef } from 'react';
+import { spacing } from '@/constants/layout';
 import { Column, type TextInputRef } from '@expo/ui';
-import { UniversalButtonContent } from '../button/universal-button';
+import { useRef } from 'react';
+import { ButtonContent } from '../button/button';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { normalizeOtpCode, OTP_LENGTH, OtpInput } from '../otp-bottom-sheet/otp-input';
 import { UniversalTextContent } from '../text/universal-text';
 import { VerificationFace, type VerificationCodeFaceStatus } from './verification-face';
-import { spacing } from '@/constants/layout';
 
 export type { VerificationCodeFaceStatus } from './verification-face';
 
@@ -76,7 +76,7 @@ export function VerificationCodeFace({
         </UniversalTextContent>
       ) : null}
       {resetLabel ? (
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={resetLabel}
           onPress={() => {

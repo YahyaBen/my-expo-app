@@ -9,7 +9,7 @@ import {
   Row,
   Switch,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
   nativeRowWeight,
@@ -104,14 +104,14 @@ function ControlledInputDemo() {
           ? t('showcase.inputGallery.notSubmitted')
           : t('showcase.inputGallery.submittedValue', { value: submitted })}
       </Text>
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={t('showcase.inputGallery.fill')}
         fullWidth
         onPress={() => setDraft(t('showcase.inputGallery.sample'))}
         testID="demo-input-fill"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={t('showcase.inputGallery.reset')}
         fullWidth
@@ -123,7 +123,7 @@ function ControlledInputDemo() {
       />
       <Row spacing={spacing.md} modifiers={nativeFillWidth}>
         <Column modifiers={nativeRowWeight}>
-          <UniversalButtonContent
+          <ButtonContent
             variant="tertiary"
             label={t('showcase.inputGallery.focus')}
             fullWidth
@@ -132,7 +132,7 @@ function ControlledInputDemo() {
           />
         </Column>
         <Column modifiers={nativeRowWeight}>
-          <UniversalButtonContent
+          <ButtonContent
             variant="tertiary"
             label={t('showcase.inputGallery.blur')}
             fullWidth
@@ -165,7 +165,7 @@ function UncontrolledInputDemo() {
         autoComplete="off"
         testID="demo-input-uncontrolled"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={t('showcase.inputGallery.clearNative')}
         fullWidth
@@ -346,7 +346,7 @@ function InputKeyboardDemo() {
         autoComplete="off"
         testID="demo-input-decimal"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="tertiary"
         label={t('showcase.inputGallery.dismissKeyboard')}
         fullWidth

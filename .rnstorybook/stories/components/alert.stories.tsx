@@ -1,4 +1,4 @@
-import { Alert, type AlertProps, UniversalButton, UniversalText } from '@components/ui';
+import { Alert, type AlertProps, Button, UniversalText } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
@@ -23,7 +23,7 @@ function AlertDemo({
     <LayoutDirectionProvider initialDirection={direction}>
       <NativeStoryFrame colorScheme={colorScheme}>
         <View style={{ gap: 16 }}>
-          <UniversalButton
+          <Button
             variant="secondary"
             testID="alert-story-show"
             label="Show alert"
@@ -60,7 +60,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Showing a success, warning or error alert requests matching outcome feedback once. Info and acknowledgment stay silent. Rerendering the same visible alert must not repeat feedback.',
+          'Variants use semantic theme accents: error red, success green, warning amber and info blue. The Host supplies native tint; Android also colors the title and OK action explicitly. iOS keeps its system alert surface and text styling. Success, warning and error request matching haptics once; info and acknowledgment stay silent.',
       },
     },
   },

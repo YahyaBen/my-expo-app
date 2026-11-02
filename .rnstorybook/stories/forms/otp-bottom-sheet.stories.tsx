@@ -1,9 +1,4 @@
-import {
-  OtpBottomSheet,
-  UniversalButton,
-  UniversalText,
-  type OtpBottomSheetProps,
-} from '@components/ui';
+import { OtpBottomSheet, Button, UniversalText, type OtpBottomSheetProps } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -34,7 +29,7 @@ function OtpDemo({
   const [cooldownOverride, setCooldownOverride] = useState<number>();
   return (
     <View style={{ gap: 16 }}>
-      <UniversalButton
+      <Button
         variant="primary"
         label="Open OTP sheet"
         testID="otp-demo-open"

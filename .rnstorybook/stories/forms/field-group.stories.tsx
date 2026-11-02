@@ -9,7 +9,7 @@ import {
   pageFormModifiers,
   Slider,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
 } from '@components/ui';
@@ -286,7 +286,7 @@ function SettingsRowFeedbackDemo({ colorScheme, seedColor }: Readonly<DemoProps>
                 </FieldGroup.Section>
               </FieldGroup>
             </Column>
-            <UniversalButtonContent
+            <ButtonContent
               variant="link"
               label="Close"
               testID="settings-row-feedback-close"

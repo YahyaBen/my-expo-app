@@ -7,7 +7,7 @@ import {
   Skeleton,
   Switch,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
@@ -39,13 +39,13 @@ function Transitions() {
             onChangeText={setDraft}
             testID="motion-transition-draft"
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label="Open wireframe"
             testID="motion-transition-open"
             onPress={() => router.push({ pathname: '/', params: { preview: 'true' } })}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             label="Count action"
             testID="motion-transition-count"

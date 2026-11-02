@@ -1,4 +1,4 @@
-import { LaunchScreen, UniversalButton, UniversalText } from '@components/ui';
+import { LaunchScreen, Button, UniversalText } from '@components/ui';
 import { LaunchWave } from '@/components/ui/launch-screen/launch-wave';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useCallback, useState } from 'react';
@@ -55,7 +55,7 @@ function LaunchDemo({
     >
       <View style={{ flex: 1 }}>
         <UniversalText testID="launch-preview-brand">{brand.name}</UniversalText>
-        <UniversalButton
+        <Button
           variant="secondary"
           label="Replay launch"
           testID="launch-preview-replay"

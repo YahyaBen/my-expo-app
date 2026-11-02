@@ -1,4 +1,4 @@
-import { UniversalText as Text, UniversalButton } from '@components/ui';
+import { UniversalText as Text, Button } from '@components/ui';
 import {
   UniversalSlider,
   type UniversalSliderProps,
@@ -24,7 +24,7 @@ function SliderDemo(args: Readonly<UniversalSliderProps>) {
           args.onValueChange(next);
         }}
       />
-      <UniversalButton
+      <Button
         variant="secondary"
         testID={args.testID ? `${args.testID}-reset` : undefined}
         label="Reset slider"

@@ -2,7 +2,7 @@ import {
   PageScreen,
   PageSection,
   TabNavigationBar,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalText,
   UniversalTextContent,
   type TabNavigationItemId,
@@ -55,7 +55,7 @@ function NavigationDemo({
               <UniversalTextContent testID="navigation-final-action-count">
                 {`Final actions: ${contentPresses}`}
               </UniversalTextContent>
-              <UniversalButtonContent
+              <ButtonContent
                 variant="primary"
                 label="Count final content action"
                 fullWidth

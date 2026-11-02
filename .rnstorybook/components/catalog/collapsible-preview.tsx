@@ -4,7 +4,7 @@ import {
   Column,
   PageScreen,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
 } from '@components/ui';
@@ -40,7 +40,7 @@ export default function CollapsibleScreen() {
         <Text testID="demo-collapsible-state">
           {t(open ? 'showcase.gallery.expanded' : 'showcase.gallery.collapsed')}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t(open ? 'showcase.gallery.collapse' : 'showcase.gallery.expand')}
           onPress={() => setOpen((current) => !current)}
@@ -65,7 +65,7 @@ export default function CollapsibleScreen() {
         >
           <Text>{t('examples.tip1')}</Text>
         </Collapsible>
-        <UniversalButtonContent
+        <ButtonContent
           variant="tertiary"
           label={t('showcase.gallery.collapseAll')}
           onPress={() => {

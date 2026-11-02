@@ -3,7 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import {
   CircularCarousel,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent,
   type PhotoItem,
 } from '@components/ui';
@@ -54,13 +54,13 @@ function CircularCarouselDemo({
       <UniversalTextContent testID="circular-carousel-selection">
         {`${selection}; ${events} callbacks`}
       </UniversalTextContent>
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Replace with the last two photos"
         onPress={() => setReplacement(photoFixtures.slice(-2))}
         testID="circular-carousel-replace"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Clear photos"
         onPress={() => setReplacement([])}

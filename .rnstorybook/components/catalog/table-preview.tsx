@@ -8,7 +8,7 @@ import {
   Table,
   TableActions,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
   type TableColumn,
@@ -149,7 +149,7 @@ export function TableDemo({
                 <Picker.Item label={t('showcase.tableGallery.ready')} value="ready" />
               </Picker>
             </Row>
-            <UniversalButtonContent
+            <ButtonContent
               variant="tertiary"
               label={t('showcase.tableGallery.clearFilters')}
               disabled={!hasFilters}
@@ -171,7 +171,7 @@ export function TableDemo({
               {t('showcase.tableGallery.empty')}
             </Text>
             <Text tone="muted">{t('showcase.tableGallery.emptyHint')}</Text>
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('showcase.tableGallery.clearFilters')}
               onPress={clearFilters}
@@ -234,7 +234,7 @@ export function TableDemo({
               status: t(`showcase.tableGallery.${selectedOrder.status}`),
             })}
           </Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="tertiary"
             label={t('showcase.tableGallery.closeDetails')}
             onPress={() => setSelectedId(null)}

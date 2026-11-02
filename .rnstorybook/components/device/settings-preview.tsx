@@ -17,7 +17,7 @@ import {
   pageFormModifiers,
   Row,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
   usePageHeaderInset,
@@ -194,7 +194,7 @@ function SettingsPage({
                   {t(`settings.permissions.${device.error ?? 'saveFailed'}`)}
                 </Text>
               ) : null}
-              <UniversalButtonContent
+              <ButtonContent
                 variant="link"
                 label={t('settings.permissions.systemSettings')}
                 disabled={deviceControlsDisabled}
@@ -251,7 +251,7 @@ function SettingsPage({
                   </>
                 ) : null}
               </Column>
-              <UniversalButtonContent
+              <ButtonContent
                 variant="secondary"
                 label={t(
                   location.pending
@@ -266,7 +266,7 @@ function SettingsPage({
                 onPress={() => void location.requestLocation()}
                 testID="app-settings-get-location"
               />
-              <UniversalButtonContent
+              <ButtonContent
                 variant="link"
                 label={t('settings.location.openSettings')}
                 disabled={location.pending || device.pending !== null}
@@ -346,7 +346,7 @@ function SettingsPage({
                   </FieldGroup.Section>
                 </FieldGroup>
               </Column>
-              <UniversalButtonContent
+              <ButtonContent
                 variant="link"
                 label={t('common.close')}
                 testID="app-settings-language-close"

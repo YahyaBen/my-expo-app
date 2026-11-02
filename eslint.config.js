@@ -264,7 +264,7 @@ module.exports = defineConfig([
         {
           selector: String.raw`ImportDeclaration[source.value=/^@expo\/ui(?:\/|$)/]`,
           message:
-            'Import native UI from @components/ui. Buttons use UniversalButtonContent inside a Host or UniversalButton at an RN boundary, with an explicit variant.',
+            'Import native UI from @components/ui. Buttons use ButtonContent inside a Host or Button at an RN boundary, with an explicit variant.',
         },
         {
           selector: String.raw`ImportDeclaration[source.value=/^@\/components\//]`,

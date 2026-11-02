@@ -1,7 +1,7 @@
 import {
   Column,
   SegmentedControl,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent,
 } from '@components/ui';
@@ -41,14 +41,14 @@ function HapticsDemo({ colorScheme = 'light' }: Readonly<{ colorScheme?: 'light'
           <UniversalTextContent testID="haptics-selection">
             {`Selected: ${selection}`}
           </UniversalTextContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             label="Reset selection silently"
             testID="haptics-reset"
             onPress={() => setSelection('first')}
           />
           {feedbackOptions.map((feedback) => (
-            <UniversalButtonContent
+            <ButtonContent
               key={feedback}
               variant="secondary"
               label={`Preview ${feedback}`}

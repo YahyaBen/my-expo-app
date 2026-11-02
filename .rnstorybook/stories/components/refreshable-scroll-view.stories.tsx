@@ -2,7 +2,7 @@ import {
   Column,
   RefreshableScrollView,
   Text,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   nativeFillWidth,
   type UniversalThemeProps,
@@ -67,7 +67,7 @@ function RefreshDemo({
       >
         <Column spacing={16} style={{ padding: 16 }}>
           <Text testID="refresh-demo-status">{status}</Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label="Complete refresh"
             testID="refresh-demo-complete"

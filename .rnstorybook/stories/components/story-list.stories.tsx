@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import {
-  StoryList,
-  UniversalButtonContent,
-  UniversalTextContent,
-  type PhotoItem,
-} from '@components/ui';
+import { StoryList, ButtonContent, UniversalTextContent, type PhotoItem } from '@components/ui';
 import { spacing } from '@/constants/layout';
 import {
   AnimatedComponentPreview,
@@ -54,13 +49,13 @@ function StoryListDemo({
       <UniversalTextContent testID="story-list-selection">
         {`${selection}; ${events} callbacks`}
       </UniversalTextContent>
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Replace with the last two photos"
         onPress={() => setReplacement(photoFixtures.slice(-2))}
         testID="story-list-replace"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Clear photos"
         onPress={() => setReplacement([])}

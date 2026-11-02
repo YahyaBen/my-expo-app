@@ -8,7 +8,7 @@ import {
   Row,
   Spacer,
   Text as NativeText,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalText,
   UniversalTextContent as Text,
@@ -168,7 +168,7 @@ function TextColorPreview() {
               ))}
             </Column>
           ))}
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label={t('showcase.gallery.primaryAction')}
             testID="demo-text-primary-button"

@@ -1,8 +1,8 @@
 import {
   Column,
-  UniversalButton,
-  UniversalButtonContent,
-  type UniversalButtonProps,
+  Button,
+  ButtonContent,
+  type ButtonProps,
   UniversalTextContent,
   UniversalText,
   UniversalHost,
@@ -21,11 +21,11 @@ import {
   useLayoutDirectionSettings,
 } from '@/context/layout-direction.context';
 
-function ButtonDemo(args: Readonly<UniversalButtonProps>) {
+function ButtonDemo(args: Readonly<ButtonProps>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={args.colorScheme}>
-      <UniversalButton
+      <Button
         {...args}
         onPress={() => {
           setPresses((value) => value + 1);
@@ -41,7 +41,7 @@ function ButtonDemo(args: Readonly<UniversalButtonProps>) {
 
 const meta = {
   title: 'Components/Button',
-  component: UniversalButton,
+  component: Button,
   args: {
     testID: 'expo-ui-button',
     label: 'Continue',
@@ -111,7 +111,7 @@ const meta = {
     },
   },
 } satisfies Meta<
-  UniversalButtonProps &
+  ButtonProps &
     StoryThemeProps & {
       example: 'button' | 'interaction' | 'semantic-variants' | 'standalone-host';
     }
@@ -121,13 +121,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function InteractionDemo(args: Readonly<UniversalButtonProps>) {
+function InteractionDemo(args: Readonly<ButtonProps>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={args.colorScheme}>
       <UniversalHost colorScheme={args.colorScheme}>
         <Column spacing={16}>
-          <UniversalButtonContent
+          <ButtonContent
             variant={args.variant}
             label="Count press"
             testID="button-count"
@@ -135,7 +135,7 @@ function InteractionDemo(args: Readonly<UniversalButtonProps>) {
             contentPadding={12}
             onPress={() => setPresses((value) => value + 1)}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             label="Disabled press"
             testID="button-disabled"
@@ -144,7 +144,7 @@ function InteractionDemo(args: Readonly<UniversalButtonProps>) {
             onPress={() => setPresses((value) => value + 1)}
           />
           <UniversalTextContent testID="button-press-count">{`Presses: ${presses}`}</UniversalTextContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="link"
             label="Reset count"
             testID="button-reset"
@@ -157,9 +157,7 @@ function InteractionDemo(args: Readonly<UniversalButtonProps>) {
 }
 
 /** Use component defaults so a preview cannot hide a missing semantic color mapping. */
-function SemanticVariantsDemo({
-  colorScheme,
-}: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
+function SemanticVariantsDemo({ colorScheme }: Readonly<Pick<ButtonProps, 'colorScheme'>>) {
   const [presses, setPresses] = useState(0);
   return (
     <NativeStoryFrame colorScheme={colorScheme}>
@@ -178,7 +176,7 @@ function SemanticVariantsDemo({
               'glass',
             ] as const
           ).map((variant) => (
-            <UniversalButtonContent
+            <ButtonContent
               key={variant}
               variant={variant}
               label={variant}
@@ -187,7 +185,7 @@ function SemanticVariantsDemo({
               onPress={() => setPresses((value) => value + 1)}
             />
           ))}
-          <UniversalButtonContent
+          <ButtonContent
             variant="warning"
             label="Disabled warning"
             disabled
@@ -198,7 +196,7 @@ function SemanticVariantsDemo({
           <UniversalTextContent testID="button-semantic-presses">
             {`Presses: ${presses}`}
           </UniversalTextContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="link"
             label="Reset count"
             testID="button-semantic-reset"
@@ -210,7 +208,7 @@ function SemanticVariantsDemo({
   );
 }
 
-function StandaloneHostDemo({ colorScheme }: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
+function StandaloneHostDemo({ colorScheme }: Readonly<Pick<ButtonProps, 'colorScheme'>>) {
   return (
     <LayoutDirectionProvider initialDirection="ltr">
       <StandaloneHostContent colorScheme={colorScheme} />
@@ -218,9 +216,7 @@ function StandaloneHostDemo({ colorScheme }: Readonly<Pick<UniversalButtonProps,
   );
 }
 
-function StandaloneHostContent({
-  colorScheme,
-}: Readonly<Pick<UniversalButtonProps, 'colorScheme'>>) {
+function StandaloneHostContent({ colorScheme }: Readonly<Pick<ButtonProps, 'colorScheme'>>) {
   const [presses, setPresses] = useState(0);
   const { direction, setDirection } = useLayoutDirectionSettings();
   return (
@@ -238,7 +234,7 @@ function StandaloneHostContent({
           testID="button-host-rtl"
         />
         <UniversalTextContent testID="button-host-presses">{`Presses: ${presses}`}</UniversalTextContent>
-        <UniversalButtonContent
+        <ButtonContent
           variant="link"
           label="Reset count"
           testID="button-host-reset"

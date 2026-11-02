@@ -2,7 +2,7 @@ import {
   Column,
   ProgressIndicator,
   Text,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   nativeFillWidth,
   type UniversalThemeProps,
@@ -42,14 +42,14 @@ function ProgressDemo({
         <Text testID="progress-demo-value">
           {variant === 'circular' || indeterminate ? 'Working…' : `${Math.round(progress * 100)}%`}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="primary"
           label="Advance progress"
           testID="progress-demo-advance"
           disabled={variant === 'circular' || indeterminate || progress >= 1}
           onPress={() => setProgress((previous) => Math.min(1, previous + 0.1))}
         />
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label="Reset progress"
           testID="progress-demo-reset"

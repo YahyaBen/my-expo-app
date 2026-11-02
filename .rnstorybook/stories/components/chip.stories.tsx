@@ -4,7 +4,7 @@ import {
   Row,
   ScrollView,
   Text,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   nativeFillWidth,
   type UniversalThemeProps,
@@ -85,7 +85,7 @@ function ChipDemo({ colorScheme, seedColor, layoutDirection, ...args }: Readonly
             ? 'Press an input chip to remove its token.'
             : 'Scroll sideways to explore the chips. Each filter has its own selection.'}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           label="Reset chips"
           variant="secondary"
           testID="chip-demo-reset"

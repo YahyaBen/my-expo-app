@@ -7,7 +7,7 @@ import {
   ScrollView,
   Spacer,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeCenteredMinHeight,
   nativeFillSize,
@@ -32,7 +32,7 @@ export default function NativeScreen() {
       description={t('showcase.gallery.nativeDescription')}
     >
       <DemoSection title="nativeFillWidth" hint={t('showcase.gallery.widthHint')}>
-        <UniversalButtonContent
+        <ButtonContent
           variant="primary"
           label={t('showcase.gallery.fullWidth')}
           fullWidth
@@ -43,7 +43,7 @@ export default function NativeScreen() {
       <DemoSection title="nativeRowWeight" hint={t('showcase.gallery.equalWidthHint')}>
         <Row spacing={spacing.md} modifiers={nativeFillWidth}>
           <Column modifiers={nativeRowWeight}>
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('common.recipes')}
               fullWidth
@@ -52,7 +52,7 @@ export default function NativeScreen() {
             />
           </Column>
           <Column modifiers={nativeRowWeight}>
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('common.favoritesOnly')}
               fullWidth

@@ -5,7 +5,7 @@ import {
   PageScreen,
   ScrollView,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
   nativeFillSize,
@@ -67,7 +67,7 @@ export default function HostScreen() {
       <DemoSection title={t('showcase.gallery.inline')} hint={t('showcase.gallery.inlineHint')}>
         <HostedPreview>
           <UniversalHost inline testID="demo-host-inline">
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('showcase.gallery.interaction')}
               onPress={() => setPresses((current) => current + 1)}
@@ -99,7 +99,7 @@ function HostContent() {
       <Text>
         {t(direction === 'rightToLeft' ? 'showcase.gallery.rtl' : 'showcase.gallery.ltr')}
       </Text>
-      <UniversalButtonContent
+      <ButtonContent
         variant="primary"
         label={t('showcase.gallery.interaction')}
         onPress={() => setPresses((current) => current + 1)}

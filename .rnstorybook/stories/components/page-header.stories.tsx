@@ -8,7 +8,7 @@ import {
   PageMotionOverlay,
   ScrollView,
   UniversalHost,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   TextInput,
   Switch,
@@ -67,14 +67,14 @@ function HeaderContent({
               testID="page-header-draft"
             />
             {onNavigate ? (
-              <UniversalButtonContent
+              <ButtonContent
                 variant="secondary"
                 label={navigationLabel}
                 testID="page-header-open-details"
                 onPress={onNavigate}
               />
             ) : null}
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label="Content action"
               testID="page-header-content-action"
@@ -244,7 +244,7 @@ function OrdinaryPageDemo({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'd
   return (
     <PageScreen title="Ordinary page" showBack={false} colorScheme={colorScheme}>
       <PageSection>
-        <UniversalButtonContent
+        <ButtonContent
           variant="primary"
           label="First content action"
           testID="ordinary-page-first-action"
@@ -338,7 +338,7 @@ function HeaderStyleSwitchDemo({ colorScheme }: Readonly<{ colorScheme?: 'light'
                 onValueChange={setTitled}
                 testID="page-header-toggle-title"
               />
-              <UniversalButtonContent
+              <ButtonContent
                 label={`Layout: ${headerMode}`}
                 variant="secondary"
                 testID="page-header-cycle-layout"

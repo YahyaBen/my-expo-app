@@ -17,7 +17,6 @@ export function NativeAlert({
       }}
     >
       <Alert.Trigger>
-        {/* SwiftUI requires a mounted trigger even for programmatic presentation. */}
         <Spacer minLength={0} modifiers={[frame({ width: 1, height: 1 })]} />
       </Alert.Trigger>
       <Alert.Message>

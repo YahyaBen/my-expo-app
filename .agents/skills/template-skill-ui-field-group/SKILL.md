@@ -19,9 +19,9 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
 - Place `SectionHeader` / `SectionFooter` markers directly in their section.
   A custom header replaces the title. Keep markers visible to native parsing,
   with one header/footer per section.
-- iOS directly re-exports Expo UI. Android recognizes original ListItem markers
-  to avoid a second Material cell, preserving grouped corners and caller
-  colors/modifiers. Do not hide markers behind opaque custom React wrappers.
+- Both platforms directly re-export Expo UI's universal `FieldGroup` from one file.
+  Keep native section and row markers visible; do not hide them behind opaque
+  custom React wrappers.
 
 ## Screen composition
 

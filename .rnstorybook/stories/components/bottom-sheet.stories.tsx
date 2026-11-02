@@ -2,10 +2,10 @@ import {
   BottomSheet,
   type BottomSheetProps,
   Column,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalText,
   UniversalTextContent,
-  UniversalButton,
+  Button,
   nativeFillWidth,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
@@ -31,7 +31,7 @@ function BottomSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<
   }
   return (
     <View style={{ gap: 20 }}>
-      <UniversalButton
+      <Button
         variant="secondary"
         testID={args.testID ? `${args.testID}-open` : undefined}
         label="Open bottom sheet"
@@ -76,7 +76,7 @@ function BottomSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<
           >
             {content}
           </UniversalTextContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             fullWidth
             testID={args.testID ? `${args.testID}-close` : undefined}

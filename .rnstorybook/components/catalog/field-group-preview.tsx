@@ -12,7 +12,7 @@ import {
   Picker,
   Switch,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
   pageFormModifiers,
@@ -233,7 +233,7 @@ function FieldGroupContent({
               </ListItem>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('showcase.gallery.interaction')}>
-              <UniversalButtonContent
+              <ButtonContent
                 variant="secondary"
                 label={t('showcase.gallery.reset')}
                 onPress={() => {

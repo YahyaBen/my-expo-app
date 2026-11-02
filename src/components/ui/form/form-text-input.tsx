@@ -1,18 +1,18 @@
 import { spacing } from '@/constants/layout';
 import { translateValidationMessage } from '@/lib/i18n';
-import { useTranslation } from 'react-i18next';
 import { Column, Row } from '@expo/ui';
-import { Icon } from '../icon/icon';
-import { nativeFillWidth, nativeFillWidthEnd, nativeRowWeight } from '../native/native-fill-width';
 import { useEffect, useRef, useState } from 'react';
 import { useController, type Control, type FieldPath, type FieldValues } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Icon } from '../icon/icon';
+import { nativeFillWidth, nativeFillWidthEnd, nativeRowWeight } from '../native/native-fill-width';
 
-import { UniversalButtonContent } from '../button/universal-button';
-import { UniversalTextContent as Text } from '../text/universal-text';
-import { TextInput, type TextInputProps } from '../text-input/text-input';
-import { useHostColorScheme } from '../host/universal-host';
 import { useThemeColors } from '@/hooks/use-theme';
 import { notifyValidationError } from '@/lib/validation-feedback';
+import { ButtonContent } from '../button/button';
+import { useHostColorScheme } from '../host/universal-host';
+import { TextInput, type TextInputProps } from '../text-input/text-input';
+import { UniversalTextContent as Text } from '../text/universal-text';
 
 type Props<T extends FieldValues> = Omit<
   TextInputProps,
@@ -116,7 +116,7 @@ export function FormTextInput<T extends FieldValues>({
       ) : null}
       {password && passwordToggle === 'button' ? (
         <Column alignment="end" modifiers={nativeFillWidthEnd}>
-          <UniversalButtonContent
+          <ButtonContent
             testID={testID ? `${testID}-visibility` : undefined}
             variant="link"
             disabled={props.disabled}

@@ -5,7 +5,7 @@ import {
   Skeleton,
   SkeletonContent,
   UniversalHost,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
@@ -63,7 +63,7 @@ function AnimationControlsDemo({
             style={{ width: '100%', height: 16, opacity: 0.35 }}
           />
           <UniversalTextContent>Hosted content stays static</UniversalTextContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID="skeleton-toggle-animation"
             label={animate && playing ? 'Pause animation' : 'Resume animation'}

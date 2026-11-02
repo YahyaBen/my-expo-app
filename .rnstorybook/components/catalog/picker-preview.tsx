@@ -1,10 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  PageScreen,
-  Picker,
-  UniversalButtonContent,
-  UniversalTextContent as Text,
-} from '@components/ui';
+import { PageScreen, Picker, ButtonContent, UniversalTextContent as Text } from '@components/ui';
 import { useState } from 'react';
 import { DemoSection } from './demo-section';
 
@@ -54,7 +49,7 @@ export default function PickerScreen() {
         <Text testID="demo-picker-numeric-value">
           {t('showcase.gallery.servings', { value: servings })}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.gallery.reset')}
           onPress={() => {

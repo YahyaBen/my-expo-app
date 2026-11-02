@@ -1,10 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  PageScreen,
-  Switch,
-  UniversalButtonContent,
-  UniversalTextContent as Text,
-} from '@components/ui';
+import { PageScreen, Switch, ButtonContent, UniversalTextContent as Text } from '@components/ui';
 import { useState } from 'react';
 import { DemoSection } from './demo-section';
 
@@ -40,7 +35,7 @@ export default function SwitchScreen() {
         <Text testID="demo-switch-changes">
           {t('showcase.gallery.changes', { total: changes })}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.gallery.reset')}
           onPress={() => {

@@ -9,7 +9,7 @@ import {
   PageSection,
   ScrollView,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
 } from '@components/ui';
@@ -48,7 +48,7 @@ export default function BottomSheetScreen() {
       <PageSection>
         <Text variant="title">{t('otp.openDemo')}</Text>
         <Text>{t('otp.demoHint')}</Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('otp.openDemo')}
           testID="demo-sheet-open-otp"
@@ -67,7 +67,7 @@ export default function BottomSheetScreen() {
       <PageSection>
         <Text variant="title">{t('showcase.sheetGallery.details')}</Text>
         <Text>{t('showcase.sheetGallery.detailsHint')}</Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="primary"
           label={t('showcase.sheetGallery.openDetails')}
           fullWidth
@@ -95,7 +95,7 @@ export default function BottomSheetScreen() {
             ),
           })}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.sheetGallery.openPreferences')}
           fullWidth
@@ -110,7 +110,7 @@ export default function BottomSheetScreen() {
       <PageSection>
         <Text variant="title">{t('showcase.sheetGallery.scroll')}</Text>
         <Text>{t('showcase.sheetGallery.scrollHint')}</Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.sheetGallery.openScroll')}
           fullWidth
@@ -142,7 +142,7 @@ export default function BottomSheetScreen() {
           <Text variant="title">{t('examples.salad')}</Text>
           <Text>{t('examples.saladDetail')}</Text>
           <Text>{t('showcase.sheetGallery.detailsBody')}</Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label={t('common.close')}
             fullWidth
@@ -184,7 +184,7 @@ export default function BottomSheetScreen() {
               modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
               testID="demo-sheet-quick-meals"
             />
-            <UniversalButtonContent
+            <ButtonContent
               variant="primary"
               label={t('showcase.sheetGallery.apply')}
               fullWidth
@@ -194,7 +194,7 @@ export default function BottomSheetScreen() {
                 closeSheet('preferences');
               }}
             />
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('showcase.sheetGallery.cancel')}
               fullWidth
@@ -232,7 +232,7 @@ export default function BottomSheetScreen() {
             <Text tone="success" testID="demo-sheet-scroll-end">
               {t('showcase.sheetGallery.scrollEnd')}
             </Text>
-            <UniversalButtonContent
+            <ButtonContent
               variant="primary"
               label={t('common.close')}
               fullWidth

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import { Column, IosHomeGrid, UniversalButtonContent, UniversalTextContent } from '@components/ui';
+import { Column, IosHomeGrid, ButtonContent, UniversalTextContent } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import {
   AnimatedComponentPreview,
@@ -50,7 +50,7 @@ function IosHomeGridDemo({
           testID="story-ios-home-grid"
         />
         <UniversalTextContent testID="story-ios-home-grid-event">{event}</UniversalTextContent>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label="Replace photos"
           onPress={() => setReplaced((value) => !value)}

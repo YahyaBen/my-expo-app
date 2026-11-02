@@ -1,18 +1,18 @@
+import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { screenInsets } from '@/lib/screen-insets';
 import { Column } from '@expo/ui';
-import { UniversalButtonContent } from '../button/universal-button';
 import { router, type Href } from 'expo-router';
+import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ButtonContent } from '../button/button';
 import { UniversalHost } from '../host/universal-host';
-import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
 import { nativeFillWidth } from '../native/native-fill-width';
+import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
+import { UniversalTextContent } from '../text/universal-text';
 import { PageFrame, usePageHeaderInset } from './page-frame';
 import { PageSection } from './page-section';
-import { UniversalTextContent } from '../text/universal-text';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import type { ReactNode } from 'react';
-import { screenInsets } from '@/lib/screen-insets';
-import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 
 export type PageScreenAction = {
   label: string;
@@ -112,7 +112,7 @@ function PageContent({
               {actions.length > 0 ? (
                 <PageSection>
                   {actions.map(({ label, href, testID }) => (
-                    <UniversalButtonContent
+                    <ButtonContent
                       key={testID ?? (typeof href === 'string' ? href : JSON.stringify(href))}
                       label={label}
                       variant="secondary"

@@ -1,10 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Checkbox,
-  PageScreen,
-  UniversalButtonContent,
-  UniversalTextContent as Text,
-} from '@components/ui';
+import { Checkbox, PageScreen, ButtonContent, UniversalTextContent as Text } from '@components/ui';
 import { useState } from 'react';
 import { DemoSection } from './demo-section';
 
@@ -40,7 +35,7 @@ export default function CheckboxScreen() {
         <Text testID="demo-checkbox-changes">
           {t('showcase.gallery.changes', { total: changes })}
         </Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.gallery.reset')}
           onPress={() => {

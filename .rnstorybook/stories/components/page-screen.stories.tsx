@@ -1,9 +1,4 @@
-import {
-  PageScreen,
-  PageSection,
-  UniversalButtonContent,
-  UniversalTextContent,
-} from '@components/ui';
+import { PageScreen, PageSection, ButtonContent, UniversalTextContent } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -29,7 +24,7 @@ function PageDemo({
         onBack={() => setBacks((value) => value + 1)}
       >
         <PageSection>
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label="Count action"
             testID="page-demo-action"
@@ -50,7 +45,7 @@ function PageDemo({
           : null}
         {longContent ? (
           <PageSection>
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label="Count bottom action"
               fullWidth

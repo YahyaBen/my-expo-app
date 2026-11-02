@@ -3,7 +3,7 @@ import {
   FloatingActionButton,
   Icon,
   Row,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   Text,
   TextInput,
@@ -87,7 +87,7 @@ function ChangingSymbol({ colorScheme }: Readonly<{ colorScheme?: 'light' | 'dar
           />
           <Text testID="changing-symbol-state">{visible ? 'Visible' : 'Hidden'}</Text>
         </Row>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label="Toggle visibility"
           testID="change-symbol"
@@ -123,7 +123,7 @@ function ParentButtonTaps({
         <Text>Tap directly on each icon, then its label or padding. Each tap counts once.</Text>
         {(['primary', 'secondary', 'link'] as const).map((variant) => (
           <Column key={variant} spacing={4}>
-            <UniversalButtonContent
+            <ButtonContent
               variant={variant}
               disabled={disabled}
               testID={`icon-parent-${variant}`}
@@ -133,7 +133,7 @@ function ParentButtonTaps({
                 <Icon name={star} testID={`icon-parent-${variant}-artwork`} />
                 <Text>{variant}</Text>
               </Row>
-            </UniversalButtonContent>
+            </ButtonContent>
             <Text testID={`icon-parent-${variant}-count`}>{`${variant}: ${presses[variant]}`}</Text>
           </Column>
         ))}
@@ -168,24 +168,20 @@ const renderButtonForegrounds = (args: Readonly<{ colorScheme?: 'light' | 'dark'
   <UniversalHost colorScheme={args.colorScheme}>
     <Column spacing={16}>
       {(['primary', 'secondary', 'destructive'] as const).map((variant) => (
-        <UniversalButtonContent key={variant} variant={variant} testID={`symbol-${variant}`}>
+        <ButtonContent key={variant} variant={variant} testID={`symbol-${variant}`}>
           <Row alignment="center" spacing={8}>
             <Icon name={star} />
             <Text>{variant}</Text>
           </Row>
-        </UniversalButtonContent>
+        </ButtonContent>
       ))}
-      <UniversalButtonContent
-        variant="primary"
-        contentColor="#00FFFF"
-        testID="symbol-custom-foreground"
-      >
+      <ButtonContent variant="primary" contentColor="#00FFFF" testID="symbol-custom-foreground">
         <Row alignment="center" spacing={8}>
           <Icon name={star} />
           <Icon name={star} color="#FFFF00" />
           <Text>Inherited and explicit colors</Text>
         </Row>
-      </UniversalButtonContent>
+      </ButtonContent>
     </Column>
   </UniversalHost>
 );

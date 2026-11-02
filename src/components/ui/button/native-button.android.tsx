@@ -1,10 +1,9 @@
 import { Button, OutlinedButton, Shape, Text, TextButton } from '@expo/ui/jetpack-compose';
 import { fillMaxWidth, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
-import type { UniversalButtonContentProps } from './universal-button';
 import { IconColorContext } from '../icon/icon-color-context';
+import type { ButtonContentProps } from './button';
 
-/** Internal renderer; callers resolve theme colors before reaching the native control. */
-export function NativeButtonContent({
+export function NativeButton({
   variant,
   label,
   children,
@@ -16,13 +15,13 @@ export function NativeButtonContent({
   contentPadding,
   color,
   contentColor,
-}: Readonly<UniversalButtonContentProps>) {
-  let NativeButton = Button;
-  if (variant === 'secondary' || variant === 'glass') NativeButton = OutlinedButton;
-  if (variant === 'tertiary' || variant === 'link') NativeButton = TextButton;
-  const filled = NativeButton === Button;
+}: Readonly<ButtonContentProps>) {
+  let NativeControl = Button;
+  if (variant === 'secondary' || variant === 'glass') NativeControl = OutlinedButton;
+  if (variant === 'tertiary' || variant === 'link') NativeControl = TextButton;
+  const filled = NativeControl === Button;
   return (
-    <NativeButton
+    <NativeControl
       onClick={disabled ? undefined : onPress}
       enabled={!disabled}
       shape={
@@ -63,6 +62,6 @@ export function NativeButtonContent({
       <IconColorContext.Provider value={contentColor ?? (filled ? undefined : color)}>
         {children ?? <Text>{label ?? ''}</Text>}
       </IconColorContext.Provider>
-    </NativeButton>
+    </NativeControl>
   );
 }

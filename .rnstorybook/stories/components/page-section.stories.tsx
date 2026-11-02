@@ -5,7 +5,7 @@ import {
   Row,
   ScrollView,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
 } from '@components/ui';
@@ -33,7 +33,7 @@ function SectionDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark' }
             <TextInput label="Section title" value={value} onChangeText={setValue} />
             <Text testID="page-section-value">{value}</Text>
             <Text testID="page-section-presses">{`Actions: ${presses}`}</Text>
-            <UniversalButtonContent variant="primary" label="Count action" onPress={open} />
+            <ButtonContent variant="primary" label="Count action" onPress={open} />
           </PageSection>
           <PageSection inset={false} style={{ backgroundColor: colors.infoContainer }}>
             <Column modifiers={nativeFillWidth} style={{ paddingHorizontal: spacing.lg }}>
@@ -44,11 +44,7 @@ function SectionDemo({ colorScheme }: Readonly<{ colorScheme: 'light' | 'dark' }
                 {[1, 2, 3].map((item) => (
                   <Column key={item} spacing={spacing.md} style={{ width: 260 }}>
                     <Text variant="title">{`Example ${item}`}</Text>
-                    <UniversalButtonContent
-                      variant="secondary"
-                      label="Count action"
-                      onPress={open}
-                    />
+                    <ButtonContent variant="secondary" label="Count action" onPress={open} />
                   </Column>
                 ))}
               </Row>

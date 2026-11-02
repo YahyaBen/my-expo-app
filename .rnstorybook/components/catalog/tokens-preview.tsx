@@ -8,7 +8,7 @@ import {
   PageScreen,
   Row,
   TextInput,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
   nativeRowWeight,
@@ -196,27 +196,27 @@ function TokenControlPreview() {
   const countAction = () => setPresses((count) => count + 1);
   return (
     <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
-      <UniversalButtonContent
+      <ButtonContent
         variant="primary"
         label={t('showcase.gallery.primaryAction')}
         fullWidth
         onPress={countAction}
         testID="demo-tokens-primary"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={t('showcase.tokenGallery.secondaryAction')}
         fullWidth
         onPress={countAction}
         testID="demo-tokens-secondary"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="link"
         label={t('showcase.tokenGallery.linkAction')}
         onPress={countAction}
         testID="demo-tokens-link"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="primary"
         label={t('showcase.disabledAction')}
         disabled
@@ -224,7 +224,7 @@ function TokenControlPreview() {
         onPress={countAction}
         testID="demo-tokens-disabled"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={t('showcase.buttonGallery.square')}
         borderRadius={0}
@@ -244,7 +244,7 @@ function TokenControlPreview() {
       <Text variant="caption" tone="muted" testID="demo-tokens-input-value">
         {t('showcase.draftValue', { value })}
       </Text>
-      <UniversalButtonContent
+      <ButtonContent
         variant="link"
         label={t('showcase.tokenGallery.reset')}
         onPress={() => {

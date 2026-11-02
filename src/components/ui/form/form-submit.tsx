@@ -1,12 +1,12 @@
 import { spacing } from '@/constants/layout';
-import { useTranslation } from 'react-i18next';
-import { Column, Row } from '@expo/ui';
-import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
-import { Icon } from '../icon/icon';
-import { UniversalButtonContent } from '../button/universal-button';
-import { UniversalTextContent as Text } from '../text/universal-text';
-import { useHostColorScheme } from '../host/universal-host';
 import { useThemeColors } from '@/hooks/use-theme';
+import { Column, Row } from '@expo/ui';
+import { useTranslation } from 'react-i18next';
+import { ButtonContent } from '../button/button';
+import { useHostColorScheme } from '../host/universal-host';
+import { Icon } from '../icon/icon';
+import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
+import { UniversalTextContent as Text } from '../text/universal-text';
 
 export function FormSubmit({
   testID,
@@ -27,7 +27,7 @@ export function FormSubmit({
   const colors = useThemeColors(useHostColorScheme());
   return (
     <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
-      <UniversalButtonContent
+      <ButtonContent
         variant="primary"
         testID={testID}
         label={pending ? t('common.wait') : label}

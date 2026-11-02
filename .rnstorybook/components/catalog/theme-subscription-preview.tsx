@@ -3,7 +3,7 @@ import {
   Column,
   ScrollView,
   Switch,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
   nativeFillWidth,
@@ -69,7 +69,7 @@ function AppearanceProbe() {
   const { colorScheme, setColorScheme } = useAppearanceSettings();
   useCommitLog('appearance');
   return (
-    <UniversalButtonContent
+    <ButtonContent
       variant="secondary"
       label={`Appearance: ${colorScheme}`}
       onPress={() => setColorScheme(colorScheme === 'light' ? 'dark' : 'light')}
@@ -82,7 +82,7 @@ function HeaderProbe() {
   const { headerShape, setHeaderShape } = useHeaderSettings();
   useCommitLog('header');
   return (
-    <UniversalButtonContent
+    <ButtonContent
       variant="secondary"
       label={`Header: ${headerShape}`}
       onPress={() => setHeaderShape(headerShape === 'default' ? 'dunes' : 'default')}

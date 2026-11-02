@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   PageScreen,
   RNHostView,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
 } from '@components/ui';
 import { radii, screenContentMaxWidth, spacing } from '@/constants/layout';
@@ -236,7 +236,7 @@ export default function CameraScreen() {
           </RNHostView>
         ) : null}
         {!cameraOpen || photo || !permission?.granted || error === 'cameraFailed' ? (
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label={t(permissionBlocked ? 'media.openSettings' : 'media.openCamera')}
             disabled={pending !== null || !cameraEnabled}
@@ -245,14 +245,14 @@ export default function CameraScreen() {
           />
         ) : (
           <>
-            <UniversalButtonContent
+            <ButtonContent
               variant="primary"
               label={t(pending === 'capture' ? 'media.capturing' : 'media.takePhoto')}
               disabled={!ready || !previewActive || pending !== null}
               onPress={() => void takePhoto()}
               testID="demo-camera-capture"
             />
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('media.flipCamera')}
               disabled={pending !== null || !ready}
@@ -262,7 +262,7 @@ export default function CameraScreen() {
               }}
               testID="demo-camera-flip"
             />
-            <UniversalButtonContent
+            <ButtonContent
               variant="link"
               label={t('media.closeCamera')}
               disabled={pending !== null}
@@ -274,7 +274,7 @@ export default function CameraScreen() {
       </DemoSection>
       <DemoSection title={t('media.photoLibrary')} hint={t('media.photoHint')}>
         {!photosEnabled ? <Text tone="muted">{t('media.photosDisabled')}</Text> : null}
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t(pending === 'picker' ? 'media.choosing' : 'media.choosePhoto')}
           disabled={pending !== null || !photosEnabled}
@@ -286,7 +286,7 @@ export default function CameraScreen() {
             <Text testID="demo-camera-photo-size">
               {t('media.photoSize', { width: photo.width, height: photo.height })}
             </Text>
-            <UniversalButtonContent
+            <ButtonContent
               variant="link"
               label={t('common.clear')}
               disabled={pending !== null}

@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
 import { useAppTheme } from '@/hooks/use-theme';
+import type { ReactNode } from 'react';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
-import { NativeButtonContent } from './universal-button-content';
+import { NativeButton } from './native-button';
 
-export type UniversalButtonVariant =
+export type ButtonVariant =
   | 'primary'
   | 'secondary'
   | 'tertiary'
@@ -12,30 +12,24 @@ export type UniversalButtonVariant =
   | 'warning'
   | 'info'
   | 'destructive'
-  /** Native glass on iOS 26+; native automatic on older iOS, outlined on Android. */
   | 'glass';
 
-export type UniversalButtonContentProps = {
-  variant: UniversalButtonVariant;
+export type ButtonContentProps = {
+  variant: ButtonVariant;
   label?: string;
   children?: ReactNode;
   onPress?: () => void;
   disabled?: boolean;
   testID?: string;
   fullWidth?: boolean;
-  /** Corner radius in iOS points / Android dp. Omit for theme/native defaults; 0 is square. */
   borderRadius?: number;
-  /** Override label padding, for example 0 for a whole recipe card. */
   contentPadding?: number;
-  /** Override the variant's accent color. */
   color?: string;
-  /** Override the native label color. */
   contentColor?: string;
 };
 
-export type UniversalButtonProps = UniversalButtonContentProps & {
+export type ButtonProps = ButtonContentProps & {
   colorScheme?: 'light' | 'dark';
-  /** Physical corners of the standalone Host. Overrides borderRadius; omitted corners are square. */
   cornerRadii?: {
     topLeft?: number;
     topRight?: number;
@@ -44,14 +38,13 @@ export type UniversalButtonProps = UniversalButtonContentProps & {
   };
 };
 
-/** Resolve theme colors and shape once; explicit caller values retain precedence. */
 function useButtonTheme({
   variant,
   color,
   contentColor,
   borderRadius: radiusOverride,
   colorScheme,
-}: UniversalButtonProps) {
+}: ButtonProps) {
   const { colors, design } = useAppTheme(useHostColorScheme(colorScheme));
   const borderRadius = radiusOverride ?? design.shape.buttonRadius;
   if (color !== undefined || contentColor !== undefined)
@@ -79,17 +72,12 @@ function useButtonTheme({
 }
 
 /** Native content. Compose inside an existing Host. */
-export function UniversalButtonContent(props: Readonly<UniversalButtonContentProps>) {
+export function ButtonContent(props: Readonly<ButtonContentProps>) {
   const theme = useButtonTheme(props);
-  return <NativeButtonContent {...props} {...theme} />;
+  return <NativeButton {...props} {...theme} />;
 }
 
-/** Standalone control. Inside an existing Host, use UniversalButtonContent. */
-export function UniversalButton({
-  colorScheme,
-  cornerRadii,
-  ...props
-}: Readonly<UniversalButtonProps>) {
+export function Button({ colorScheme, cornerRadii, ...props }: Readonly<ButtonProps>) {
   const theme = useButtonTheme({ ...props, colorScheme });
   return (
     <UniversalHost
@@ -98,8 +86,6 @@ export function UniversalButton({
       matchContents={props.fullWidth ? { vertical: true } : true}
       style={[
         props.fullWidth ? { width: '100%' } : undefined,
-        // SwiftUI's native button shape only supports a uniform radius. Clip the
-        // existing RN boundary, without painting another surface or adding a Host.
         cornerRadii && {
           overflow: 'hidden',
           borderTopLeftRadius: cornerRadii.topLeft ?? 0,
@@ -110,11 +96,7 @@ export function UniversalButton({
       ]}
       colorScheme={colorScheme}
     >
-      <NativeButtonContent
-        {...props}
-        {...theme}
-        borderRadius={cornerRadii ? 0 : theme.borderRadius}
-      />
+      <NativeButton {...props} {...theme} borderRadius={cornerRadii ? 0 : theme.borderRadius} />
     </UniversalHost>
   );
 }

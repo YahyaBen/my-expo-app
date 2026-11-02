@@ -3,13 +3,18 @@ import { testID } from '@expo/ui/jetpack-compose/modifiers';
 import type { NativeAlertProps } from './native-alert';
 
 export function NativeAlert({
+  accentColor,
   title,
   message,
   confirmLabel,
   onDismiss,
 }: Readonly<NativeAlertProps>) {
   return (
-    <AlertDialog onDismissRequest={onDismiss} modifiers={[testID('app-alert')]}>
+    <AlertDialog
+      colors={{ titleContentColor: accentColor }}
+      onDismissRequest={onDismiss}
+      modifiers={[testID('app-alert')]}
+    >
       <AlertDialog.Title>
         <Text>{title}</Text>
       </AlertDialog.Title>
@@ -17,7 +22,11 @@ export function NativeAlert({
         <Text modifiers={[testID('app-alert-message')]}>{message}</Text>
       </AlertDialog.Text>
       <AlertDialog.ConfirmButton>
-        <TextButton onClick={onDismiss} modifiers={[testID('app-alert-dismiss')]}>
+        <TextButton
+          colors={{ contentColor: accentColor }}
+          onClick={onDismiss}
+          modifiers={[testID('app-alert-dismiss')]}
+        >
           <Text>{confirmLabel}</Text>
         </TextButton>
       </AlertDialog.ConfirmButton>

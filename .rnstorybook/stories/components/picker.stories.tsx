@@ -1,4 +1,4 @@
-import { UniversalText as Text, UniversalButton } from '@components/ui';
+import { UniversalText as Text, Button } from '@components/ui';
 import {
   UniversalPicker,
   type UniversalPickerProps,
@@ -30,7 +30,7 @@ function PickerDemo(args: Readonly<UniversalPickerProps>) {
       <Text
         testID={args.testID ? `${args.testID}-value` : undefined}
       >{`Selected: ${String(selectedValue)}`}</Text>
-      <UniversalButton
+      <Button
         variant="secondary"
         label="Reset selection"
         testID={args.testID ? `${args.testID}-reset` : undefined}

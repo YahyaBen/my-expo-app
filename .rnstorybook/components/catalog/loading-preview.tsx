@@ -4,7 +4,7 @@ import {
   PageScreen,
   PageSection,
   QueryContent,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   type ContentQuery,
 } from '@components/ui';
@@ -38,7 +38,7 @@ export function QueryRetryPreview({ testID, title }: Readonly<{ testID: string; 
         <Text testID={`${testID}-content`}>{t('showcase.gallery.loaded')}</Text>
       </QueryContent>
       <Text testID={`${testID}-count`}>{t('showcase.actions', { count: retries })}</Text>
-      <UniversalButtonContent
+      <ButtonContent
         variant="link"
         label={t('showcase.buttonGallery.reset')}
         testID={`${testID}-reset`}

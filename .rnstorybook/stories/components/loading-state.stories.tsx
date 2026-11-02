@@ -3,7 +3,7 @@ import {
   ScrollView,
   UniversalHost,
   UniversalTextContent as Text,
-  UniversalButtonContent,
+  ButtonContent,
   QueryContent,
   type ContentQuery,
   nativeFillWidth,
@@ -47,19 +47,19 @@ function LoadingDemo({ state: initial, colorScheme }: Readonly<Props>) {
           >
             <Text testID="loading-demo-content">Saved recipe</Text>
           </QueryContent>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             label="Start loading"
             testID="loading-demo-start"
             onPress={() => setState('loading')}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="primary"
             label="Complete loading"
             testID="loading-demo-complete"
             onPress={() => setState('ready')}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             label="Go offline"
             testID="loading-demo-offline"

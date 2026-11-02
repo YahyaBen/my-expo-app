@@ -7,14 +7,17 @@ description: Compose native semantic buttons and maintain their Host, color and 
 
 Import public buttons/types from `@components/ui`.
 Source: [button/](../../../src/components/ui/button/).
-Keep shared props/theme resolution in `universal-button.tsx` and rendering in
-the existing iOS/Android adapters and private declaration.
+Keep public `Button`, `ButtonContent`, `ButtonProps`, `ButtonContentProps` and
+`ButtonVariant`, with shared theme resolution, in `button.tsx`. Keep the private
+`NativeButton` renderer in `native-button.ios.tsx`, `native-button.android.tsx`
+and `native-button.d.ts`. Use distinct basenames so native module resolution
+always reaches the shared entry before selecting a renderer.
 
 ## Choose the rendering boundary
 
-- `UniversalButtonContent`: inside `PageScreen`, `AuthScreenFrame`,
+- `ButtonContent`: inside `PageScreen`, `AuthScreenFrame`,
   an existing native Host, list/card native content or a native sheet.
-- `UniversalButton`: at an RN view/footer/overlay boundary; it owns one
+- `Button`: at an RN view/footer/overlay boundary; it owns one
   `UniversalHost`. An `RNHostView` subtree is also an RN boundary.
 - For a group at an RN boundary, use one `UniversalHost` with content buttons.
   `PageFrame` alone does not establish native content hosting.

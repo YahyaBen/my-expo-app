@@ -12,15 +12,15 @@ import {
   RNHostView,
   Row,
   Text,
-  UniversalButton,
-  UniversalButtonContent,
+  Button,
+  ButtonContent,
   UniversalTextContent,
   nativeFillWidth,
   nativeRowWeight,
   useHostColorScheme,
   useHostLayoutDirection,
-  type UniversalButtonContentProps,
-  type UniversalButtonVariant,
+  type ButtonContentProps,
+  type ButtonVariant,
 } from '@components/ui';
 import { radii, spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -36,7 +36,7 @@ const variants = [
   'info',
   'destructive',
   'glass',
-] as const satisfies readonly UniversalButtonVariant[];
+] as const satisfies readonly ButtonVariant[];
 
 const starIcon = Icon.select({
   ios: 'star.fill',
@@ -61,13 +61,13 @@ function IconButtonExample({
   label,
   ...props
 }: Readonly<
-  Omit<UniversalButtonContentProps, 'children' | 'label'> & {
+  Omit<ButtonContentProps, 'children' | 'label'> & {
     label: string;
     placement?: IconPlacement;
   }
 >) {
   return (
-    <UniversalButtonContent {...props}>
+    <ButtonContent {...props}>
       {placement === 'above' ? (
         <Column spacing={spacing.sm} alignment="center">
           <Icon name={starIcon} size={24} />
@@ -80,7 +80,7 @@ function IconButtonExample({
           {placement !== 'leading' && <Icon name={checkIcon} size={18} />}
         </Row>
       )}
-    </UniversalButtonContent>
+    </ButtonContent>
   );
 }
 
@@ -163,7 +163,7 @@ export default function ButtonsScreen() {
             ? t('showcase.buttonGallery.lastAction', { label: t(lastAction) })
             : t('showcase.buttonGallery.noActions')}
         </UniversalTextContent>
-        <UniversalButtonContent
+        <ButtonContent
           variant="link"
           label={t('showcase.buttonGallery.reset')}
           testID="demo-button-reset"
@@ -182,14 +182,14 @@ export default function ButtonsScreen() {
         {variants.map((variant) => (
           <Column key={variant} spacing={spacing.sm} modifiers={nativeFillWidth}>
             <UniversalTextContent variant="label">{t(`showcase.${variant}`)}</UniversalTextContent>
-            <UniversalButtonContent
+            <ButtonContent
               variant={variant}
               label={t(`showcase.${variant}`)}
               fullWidth
               testID={`demo-button-${variant}`}
               onPress={() => recordPress(`showcase.${variant}`)}
             />
-            <UniversalButtonContent
+            <ButtonContent
               variant={variant}
               label={t('showcase.disabledAction')}
               disabled
@@ -240,7 +240,7 @@ export default function ButtonsScreen() {
             />
           </Column>
         </Row>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.buttonGallery.longLabel')}
           fullWidth
@@ -270,7 +270,7 @@ export default function ButtonsScreen() {
           testID="demo-button-icon-disabled"
           onPress={() => recordPress('showcase.disabledAction')}
         />
-        <UniversalButtonContent
+        <ButtonContent
           variant="primary"
           fullWidth
           contentPadding={spacing.lg}
@@ -282,8 +282,8 @@ export default function ButtonsScreen() {
             <Text>{t('showcase.buttonGallery.stackedTitle')}</Text>
             <Text>{t('showcase.buttonGallery.stackedDetail')}</Text>
           </Column>
-        </UniversalButtonContent>
-        <UniversalButtonContent
+        </ButtonContent>
+        <ButtonContent
           variant="secondary"
           fullWidth
           contentPadding={0}
@@ -298,7 +298,7 @@ export default function ButtonsScreen() {
             </Row>
             <Text>{t('showcase.buttonGallery.cardDetail')}</Text>
           </Column>
-        </UniversalButtonContent>
+        </ButtonContent>
       </GallerySection>
 
       <GallerySection title={t('showcase.buttonGallery.geometry')}>
@@ -469,7 +469,7 @@ export function StandaloneButtonPreview({
         <View
           style={{ width: '100%', backgroundColor: lightColors.background, padding: spacing.lg }}
         >
-          <UniversalButton
+          <Button
             variant="primary"
             colorScheme="light"
             contentPadding={spacing.lg}
@@ -482,12 +482,12 @@ export function StandaloneButtonPreview({
               label={t('showcase.buttonGallery.lightCorners')}
               testID="demo-button-standalone-light-label"
             />
-          </UniversalButton>
+          </Button>
         </View>
         <View
           style={{ width: '100%', backgroundColor: darkColors.background, padding: spacing.lg }}
         >
-          <UniversalButton
+          <Button
             variant="primary"
             colorScheme="dark"
             contentPadding={spacing.lg}
@@ -500,9 +500,9 @@ export function StandaloneButtonPreview({
               label={t('showcase.buttonGallery.darkCorners')}
               testID="demo-button-standalone-dark-label"
             />
-          </UniversalButton>
+          </Button>
         </View>
-        <UniversalButton
+        <Button
           variant="primary"
           testID="demo-button-standalone-inline"
           onPress={() => onPress('showcase.buttonGallery.fitContent')}
@@ -511,8 +511,8 @@ export function StandaloneButtonPreview({
             label={t('showcase.buttonGallery.fitContent')}
             testID="demo-button-standalone-inline-label"
           />
-        </UniversalButton>
-        <UniversalButton
+        </Button>
+        <Button
           variant="primary"
           disabled
           fullWidth

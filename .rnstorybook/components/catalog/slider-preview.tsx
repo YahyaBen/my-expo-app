@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
   PageScreen,
   Slider,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent as Text,
   nativeFillWidth,
 } from '@components/ui';
@@ -40,7 +40,7 @@ export default function SliderScreen() {
           modifiers={nativeFillWidth}
           testID="demo-slider-continuous"
         />
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label={t('showcase.gallery.reset')}
           onPress={() => {

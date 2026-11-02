@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useSyncExternalStore } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useThemeColors } from '@/hooks/use-theme';
 import { dismissAlert, getAlert, subscribeAlerts, type AlertOptions } from '@/lib/alerts';
 import { triggerHaptic } from '@/lib/haptics';
-import { UniversalHost } from '../host/universal-host';
+import { useEffect, useSyncExternalStore } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { NativeAlert } from './native-alert';
 
 export type { AlertVariant } from '@/lib/alerts';
@@ -12,29 +13,25 @@ export interface AlertProps extends AlertOptions {
   colorScheme?: 'light' | 'dark';
 }
 
-const titleKeys = {
-  error: 'common.errorNotificationTitle',
-  success: 'common.successNotificationTitle',
-  warning: 'common.warningNotificationTitle',
-  info: 'common.infoNotificationTitle',
-} as const;
-
-/** Mount while visible; Expo UI owns the native modal and its accessibility. */
 export function Alert({ variant, title, message, onDismiss, colorScheme }: Readonly<AlertProps>) {
   const { t } = useTranslation();
+  const colors = useThemeColors(useHostColorScheme(colorScheme));
+  const accentColor = colors[variant];
   useEffect(() => {
     if (variant !== 'info') triggerHaptic(variant);
   }, [variant]);
   return (
     <UniversalHost
       colorScheme={colorScheme}
+      seedColor={accentColor}
       matchContents={false}
       ignoreSafeArea="all"
       pointerEvents="box-none"
       style={{ position: 'absolute', width: 1, height: 1 }}
     >
       <NativeAlert
-        title={title ?? t(titleKeys[variant])}
+        accentColor={accentColor}
+        title={title ?? t(`common.${variant}NotificationTitle`)}
         message={message}
         confirmLabel={t('common.ok')}
         onDismiss={onDismiss}
@@ -43,12 +40,9 @@ export function Alert({ variant, title, message, onDismiss, colorScheme }: Reado
   );
 }
 
-/** One root presenter keeps queued feedback available across navigation. */
 export function AlertHost() {
   const alert = useSyncExternalStore(subscribeAlerts, getAlert);
-  const id = alert?.id;
-  const dismiss = useCallback(() => {
-    if (id !== undefined) dismissAlert(id);
-  }, [id]);
-  return alert ? <Alert key={alert.id} {...alert} onDismiss={dismiss} /> : null;
+  return alert ? (
+    <Alert key={alert.id} {...alert} onDismiss={() => dismissAlert(alert.id)} />
+  ) : null;
 }

@@ -1,4 +1,4 @@
-import { UniversalText as Text, UniversalButton } from '@components/ui';
+import { UniversalText as Text, Button } from '@components/ui';
 import {
   UniversalSwitch,
   type UniversalSwitchProps,
@@ -24,7 +24,7 @@ function SwitchDemo(args: Readonly<UniversalSwitchProps>) {
       <Text
         testID={args.testID ? `${args.testID}-value` : undefined}
       >{`Value: ${value ? 'On' : 'Off'}`}</Text>
-      <UniversalButton
+      <Button
         variant="secondary"
         testID={args.testID ? `${args.testID}-reset` : undefined}
         label="Reset switch"

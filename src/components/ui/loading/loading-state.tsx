@@ -1,19 +1,19 @@
 import { spacing } from '@/constants/layout';
-import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/use-theme';
+import { screenInsets } from '@/lib/screen-insets';
 import { Column, Row, ScrollView, Spacer } from '@expo/ui';
-import type { ReactNode } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { ErrorBoundaryProps } from 'expo-router';
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { LoadingIndicator } from './loading-indicator';
+import { ButtonContent } from '../button/button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
-import { UniversalTextContent as Text } from '../text/universal-text';
-import { UniversalButtonContent } from '../button/universal-button';
-import { PageFrame } from '../page/page-frame';
 import { nativeFillSize } from '../native/native-fill-width';
-import { screenInsets } from '@/lib/screen-insets';
+import { PageFrame } from '../page/page-frame';
 import { PageSection } from '../page/page-section';
+import { UniversalTextContent as Text } from '../text/universal-text';
+import { LoadingIndicator } from './loading-indicator';
 
 export function LoadingContent({
   label,
@@ -101,7 +101,7 @@ export function QueryContent<T>({
           <Text testID={testID ? `${testID}-error` : 'query-error'}>
             {query.data === undefined ? t('query.failed') : t('query.refreshFailed')}
           </Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={testID ? `${testID}-retry` : 'query-retry'}
             label={t('common.retry')}
@@ -151,7 +151,7 @@ export function ScreenError({ error, retry }: Readonly<ErrorBoundaryProps>) {
             <Text variant="title">{t('recovery.failed')}</Text>
             <Text>{t('recovery.description')}</Text>
             {__DEV__ ? <Text textStyle={{ color: colors.error }}>{error.message}</Text> : null}
-            <UniversalButtonContent
+            <ButtonContent
               variant="secondary"
               label={t('common.tryAgain')}
               testID="screen-error-retry"

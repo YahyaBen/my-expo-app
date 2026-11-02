@@ -1,6 +1,10 @@
+import { radii, spacing } from '@/constants/layout';
+import { useMotionEnabled } from '@/hooks/use-motion-enabled';
+import { useThemeColors } from '@/hooks/use-theme';
+import { Column, RNHostView, Row } from '@expo/ui';
+import { Image } from 'expo-image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, View, useWindowDimensions, type ViewInstance } from 'react-native';
-import { Image } from 'expo-image';
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -16,15 +20,11 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Column, RNHostView, Row } from '@expo/ui';
-import { UniversalButtonContent, UniversalButton } from '../button/universal-button';
-import { UniversalTextContent } from '../text/universal-text';
-import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
+import { Button, ButtonContent } from '../button/button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
 import type { PhotoItem } from '../photo/photo-item';
-import { radii, spacing } from '@/constants/layout';
-import { useMotionEnabled } from '@/hooks/use-motion-enabled';
-import { useThemeColors } from '@/hooks/use-theme';
+import { UniversalTextContent } from '../text/universal-text';
 
 export type IosHomeGridProps = {
   items: readonly PhotoItem[];
@@ -256,7 +256,7 @@ function PhotoGrid({
           </View>
         </GestureHandlerRootView>
       </RNHostView>
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label={closeLabel}
         onPress={close}
@@ -291,7 +291,7 @@ function PhotoTile({
   return (
     <RNHostView matchContents>
       <View style={{ width: size }}>
-        <UniversalButton
+        <Button
           variant="tertiary"
           contentPadding={0}
           fullWidth
@@ -309,7 +309,7 @@ function PhotoTile({
             <Column style={{ width: size, height: size }} />
             <UniversalTextContent variant="caption">{item.label}</UniversalTextContent>
           </Column>
-        </UniversalButton>
+        </Button>
         {/* A sibling overlay keeps the native button's entire photo area tappable. */}
         <View
           ref={image}

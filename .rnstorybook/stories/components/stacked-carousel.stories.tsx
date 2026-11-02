@@ -3,7 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import {
   StackedCarousel,
-  UniversalButtonContent,
+  ButtonContent,
   UniversalTextContent,
   type PhotoItem,
 } from '@components/ui';
@@ -69,13 +69,13 @@ function StackedCarouselDemo({
       <UniversalTextContent testID="stacked-carousel-selection">
         {`${selection}; ${events} callbacks`}
       </UniversalTextContent>
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Replace with the last two photos"
         onPress={() => setReplacement(photoFixtures.slice(-2))}
         testID="stacked-carousel-replace"
       />
-      <UniversalButtonContent
+      <ButtonContent
         variant="secondary"
         label="Clear photos"
         onPress={() => setReplacement([])}

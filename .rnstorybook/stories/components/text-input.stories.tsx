@@ -4,7 +4,7 @@ import {
   Icon,
   UniversalTextContent as Text,
   type TextInputRef,
-  UniversalButtonContent,
+  ButtonContent,
   TextInput,
   type TextInputProps,
 } from '@components/ui';
@@ -195,7 +195,7 @@ function FilteredControlledInputDemo(args: Readonly<TextInputProps>) {
           }}
         />
         <Text testID="filtered-input-value">{`Controlled value: ${value}`}</Text>
-        <UniversalButtonContent
+        <ButtonContent
           variant="secondary"
           label="Reset to 123"
           testID="filtered-input-reset"
@@ -238,7 +238,7 @@ function IconInputDemo(args: Readonly<TextInputProps>) {
           <Text
             testID={args.testID ? `${args.testID}-press-count` : undefined}
           >{`Right icon presses: ${pressCount}`}</Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-toggle-disabled` : undefined}
             label={disabled ? 'Enable input' : 'Disable input'}
@@ -330,7 +330,7 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
           <Text testID={args.testID ? `${args.testID}-focus-state` : undefined}>
             {focused ? 'Input focused' : 'Input blurred'}
           </Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-focus` : undefined}
             label="Focus"
@@ -339,7 +339,7 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
               ref.current?.focus();
             }}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-blur` : undefined}
             label="Blur"
@@ -348,7 +348,7 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
               ref.current?.blur();
             }}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-clear` : undefined}
             label="Clear"
@@ -357,7 +357,7 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
               ref.current?.clear();
             }}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-select` : undefined}
             label="Select first five characters"
@@ -394,7 +394,7 @@ function ControlledInputDemo(args: Readonly<TextInputProps>) {
           <Text
             testID={args.testID ? `${args.testID}-description` : undefined}
           >{`Controlled value: ${value}`}</Text>
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-set-value` : undefined}
             label="Set value from JavaScript"
@@ -403,7 +403,7 @@ function ControlledInputDemo(args: Readonly<TextInputProps>) {
               setValue('UPDATED');
             }}
           />
-          <UniversalButtonContent
+          <ButtonContent
             variant="secondary"
             testID={args.testID ? `${args.testID}-reset` : undefined}
             label="Reset value"
