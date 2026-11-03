@@ -1,14 +1,8 @@
-import {
-  Column,
-  Shape,
-  Text,
-  UniversalHost,
-  type ShapeProps,
-  type UniversalThemeProps,
-} from '@components/ui';
+import type { NativeStoryTheme } from '../../components/native-story-frame';
+import { Column, Shape, Text, UniversalHost, type ShapeProps } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 
-type Props = ShapeProps & UniversalThemeProps;
+type Props = ShapeProps & NativeStoryTheme;
 
 function ShapeDemo({ colorScheme, seedColor, ...props }: Readonly<Props>) {
   return (

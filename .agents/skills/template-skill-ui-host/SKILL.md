@@ -1,6 +1,6 @@
 ---
 name: template-skill-ui-host
-description: Choose native Host boundaries, sizing, theme inheritance and live layout direction.
+description: Compose native groups with shared Host ownership; audit redundant boundaries while preserving sizing, appearance and live layout direction.
 ---
 
 # UniversalHost
@@ -8,12 +8,46 @@ description: Choose native Host boundaries, sizing, theme inheritance and live l
 Import `UniversalHost` from `@components/ui` where React Native enters native UI.
 Source: [universal-host.tsx](../../../src/components/ui/host/universal-host.tsx).
 
-## Ownership
+## Choose the boundary
 
-- `PageScreen` and `AuthScreenFrame` already host native content.
-- Arrange siblings with Row/Column; direct Host siblings can overlap.
-- After an `RNHostView` bridge, use one Host for a native group or an existing
-  standalone hosted control. Avoid another Host around standalone controls.
+Reuse the existing Host for a native group. A Host around every small control is
+an audit candidate; one Host containing many controls is not itself a problem.
+
+| Caller location                                  | Composition                                                 |
+| ------------------------------------------------ | ----------------------------------------------------------- |
+| Inside `PageScreen` or an existing native tree   | Use native controls and content variants directly.          |
+| RN view, footer, overlay or `RNHostView` subtree | Use one `UniversalHost` around a related native group.      |
+| One standalone control at an RN boundary         | Use its existing hosted variant without an extra Host.      |
+| Recycled RN list cell rendering native content   | Keep the cell's Host; share it across that cell's controls. |
+
+- `PageFrame` alone does not host its content. React theme context surviving an
+  `RNHostView` does not restore native ancestry; native content must re-enter a Host.
+- Group siblings with `Row`/`Column`; direct Host children can overlap. Prefer
+  `ButtonContent`, `UniversalTextContent` and static `SkeletonContent` inside
+  that group. Use direct controls such as `TextInput` without standalone wrappers.
+- Keep deliberate boundaries for native appearance/direction isolation,
+  measured RN artwork, gestures, overlays and standalone animation. Preserve
+  standalone APIs and examples that exercise those contracts.
+- Choose boundaries explicitly at call sites. Do not make `UniversalHost` skip
+  itself based on React context, or add detection providers, caches or wrappers.
+
+## Audit and apply
+
+Trace the rendered path through callers, aliases and wrappers. Distinguish a
+native group from RN siblings before counting Hosts; an `RNHostView` starts a new
+RN subtree. Inspect the installed Expo UI types and both platform implementations.
+
+For each candidate, identify what its Host owns: bounds/measurement, native
+appearance/direction, safe areas, refs, selectors, clipping, touch handling or
+animation. Consolidate only when an existing or shared Host can retain those
+responsibilities. Replace hosted children with their content variants together;
+never place standalone hosted controls inside a new group Host.
+
+Preserve field identity, drafts, focus/selection, callbacks, disabled guards and
+stable `testID` props. Carry any needed container selector to the surviving
+container. Retain bounded scrolling and RN cell recycling; do not replace
+virtualization with an eager native group just to reduce Host count. Keep numeric
+LTR islands and independently themed previews isolated from surrounding content.
 
 ## Sizing
 
@@ -43,3 +77,16 @@ request centering in native layout.
 
 Check intrinsic/bounded sizes, retained state, touch bounds and RTL using the
 [Host showcase](../../../.rnstorybook/components/catalog/host-preview.tsx).
+
+## Verification and performance claims
+
+Run lint, typecheck and formatting checks; regenerate registration after story
+changes. In the Host showcase, enter a draft and press its action, then change
+appearance/direction without losing either value. Check changed controls on iOS
+and Android with large text, keyboard, screen readers and edge taps.
+
+Report structural changes separately from measured results. Host count does not
+rank CPU, frame or memory costs, and a React profile of a Host includes descendant
+work. Before claiming a gain, compare the same interaction in same-device release
+builds using relevant native frame/CPU/memory traces. Record sample counts and
+median/p90; mark unavailable native measurements pending.

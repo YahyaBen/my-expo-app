@@ -23,7 +23,6 @@ export * from './field-group/field-group';
 export * from './floating-action/floating-action';
 export * from './form/form-submit';
 export * from './form/form-text-input';
-export * from './host/types';
 export * from './host/universal-host';
 export * from './icon/icon';
 export * from './ios-home-grid/ios-home-grid';

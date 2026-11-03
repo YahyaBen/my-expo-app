@@ -1,7 +1,7 @@
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
 import { Column, type ColumnProps } from '@expo/ui';
-import { UniversalHost, type UniversalThemeProps } from '@components/ui';
 
-export type UniversalColumnProps = ColumnProps & UniversalThemeProps;
+export type UniversalColumnProps = ColumnProps & NativeStoryTheme;
 
 export function UniversalColumn({
   colorScheme,
@@ -9,12 +9,8 @@ export function UniversalColumn({
   ...props
 }: Readonly<UniversalColumnProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
-      colorScheme={colorScheme}
-      seedColor={seedColor}
-    >
+    <NativeStoryHost testID={props.testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Column {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

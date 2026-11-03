@@ -1,11 +1,7 @@
-import {
-  Checkbox,
-  type CheckboxProps,
-  UniversalHost,
-  type UniversalThemeProps,
-} from '@components/ui';
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
+import { Checkbox, type CheckboxProps } from '@components/ui';
 
-export type UniversalCheckboxProps = CheckboxProps & UniversalThemeProps;
+export type UniversalCheckboxProps = CheckboxProps & NativeStoryTheme;
 
 export function UniversalCheckbox({
   colorScheme,
@@ -13,12 +9,8 @@ export function UniversalCheckbox({
   ...props
 }: Readonly<UniversalCheckboxProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
-      colorScheme={colorScheme}
-      seedColor={seedColor}
-    >
+    <NativeStoryHost testID={props.testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Checkbox {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

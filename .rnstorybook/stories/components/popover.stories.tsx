@@ -1,16 +1,10 @@
-import {
-  Column,
-  Popover,
-  Text,
-  ButtonContent,
-  UniversalHost,
-  type UniversalThemeProps,
-} from '@components/ui';
+import type { NativeStoryTheme } from '../../components/native-story-frame';
+import { Column, Popover, Text, ButtonContent, UniversalHost } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
 import { action } from 'storybook/actions';
 
-type Props = UniversalThemeProps & {
+type Props = NativeStoryTheme & {
   label: string;
   disabled: boolean;
   layoutDirection: 'leftToRight' | 'rightToLeft';

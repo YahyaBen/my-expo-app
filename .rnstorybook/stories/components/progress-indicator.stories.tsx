@@ -1,3 +1,4 @@
+import type { NativeStoryTheme } from '../../components/native-story-frame';
 import {
   Column,
   ProgressIndicator,
@@ -5,12 +6,11 @@ import {
   ButtonContent,
   UniversalHost,
   nativeFillWidth,
-  type UniversalThemeProps,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
 
-type Props = UniversalThemeProps & {
+type Props = NativeStoryTheme & {
   variant: 'linear' | 'circular';
   value: number;
   indeterminate: boolean;

@@ -1,3 +1,4 @@
+import type { NativeStoryTheme } from '../../components/native-story-frame';
 import {
   Chip,
   Column,
@@ -7,13 +8,12 @@ import {
   ButtonContent,
   UniversalHost,
   nativeFillWidth,
-  type UniversalThemeProps,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
 import { action } from 'storybook/actions';
 
-type Props = UniversalThemeProps & {
+type Props = NativeStoryTheme & {
   variant: 'assist' | 'filter' | 'input' | 'suggestion';
   label: string;
   selected: boolean;

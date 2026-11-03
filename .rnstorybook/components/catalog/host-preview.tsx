@@ -5,6 +5,7 @@ import {
   PageScreen,
   ScrollView,
   Switch,
+  TextInput,
   ButtonContent,
   UniversalHost,
   UniversalTextContent as Text,
@@ -31,7 +32,7 @@ export default function HostScreen() {
       <DemoSection title={t('showcase.gallery.inherit')} hint={t('showcase.gallery.inheritHint')}>
         <HostedPreview>
           <UniversalHost testID="demo-host-inherited">
-            <HostContent />
+            <HostContent testID="demo-host-inherited-content" />
           </UniversalHost>
         </HostedPreview>
       </DemoSection>
@@ -59,7 +60,7 @@ export default function HostScreen() {
             testID="demo-host-bounded"
           >
             <ScrollView modifiers={nativeFillSize}>
-              <HostContent />
+              <HostContent testID="demo-host-bounded-content" />
             </ScrollView>
           </UniversalHost>
         </HostedPreview>
@@ -81,17 +82,19 @@ export default function HostScreen() {
   );
 }
 
-function HostContent() {
+function HostContent({ testID }: Readonly<{ testID: string }>) {
   const { t } = useTranslation();
   const scheme = useHostColorScheme();
   const direction = useHostLayoutDirection();
   const colors = useThemeColors(scheme);
   const [presses, setPresses] = useState(0);
+  const [draft, setDraft] = useState('');
   return (
     <Column
       spacing={spacing.md}
       modifiers={nativeFillWidth}
       style={{ padding: spacing.lg, backgroundColor: colors.surface }}
+      testID={testID}
     >
       <Text variant="subtitle">
         {t(scheme === 'dark' ? 'common.darkMode' : 'common.lightMode')}
@@ -99,12 +102,19 @@ function HostContent() {
       <Text>
         {t(direction === 'rightToLeft' ? 'showcase.gallery.rtl' : 'showcase.gallery.ltr')}
       </Text>
+      <TextInput
+        label={t('showcase.input')}
+        value={draft}
+        onChangeText={setDraft}
+        testID={`${testID}-draft`}
+      />
       <ButtonContent
         variant="primary"
         label={t('showcase.gallery.interaction')}
         onPress={() => setPresses((current) => current + 1)}
+        testID={`${testID}-action`}
       />
-      <Text>{t('showcase.actions', { count: presses })}</Text>
+      <Text testID={`${testID}-presses`}>{t('showcase.actions', { count: presses })}</Text>
     </Column>
   );
 }

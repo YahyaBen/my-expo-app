@@ -1,12 +1,8 @@
-import { useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, type FlatList } from 'react-native';
+import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView, Row } from '@expo/ui';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  type SharedValue,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { UniversalTextContent } from '../text/universal-text';
 import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
 import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
@@ -19,6 +15,7 @@ import { triggerHaptic } from '@/lib/haptics';
 import type { PhotoItem } from '../photo/photo-item';
 import { interpolatePhotoMotion } from '../photo/photo-motion';
 import { PhotoScrollView } from '../photo/photo-scroll-view';
+import { usePhotoSelection } from '../photo/use-photo-selection';
 
 const motionInput = [-2, -1, 0, 1] as const;
 const opacityInput = [-3, -2, -1, 0, 1] as const;
@@ -75,26 +72,24 @@ function StackedCarouselContent({
     requestedHeight ?? cardWidth * 0.625 + spacing.xl * 3,
   );
   const cardHeight = height - spacing.xl * 3;
-  const scrollRef = useRef<FlatList<PhotoItem>>(null);
-  const selectedIndex = useRef(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const scrollOffset = useSharedValue(0);
+  const {
+    scrollRef,
+    selectedIndex,
+    activeIndex,
+    scrollOffset,
+    updateSelection,
+    positionLabel,
+    accessibilityProps,
+  } = usePhotoSelection({
+    items,
+    itemWidth: cardWidth,
+    reducedMotion,
+    accessibilityLabel,
+    getPositionLabel,
+    onIndexChange,
+    onSelectionFeedback: () => triggerHaptic('selection'),
+  });
 
-  function updateSelection(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    if (nextIndex === selectedIndex.current) return;
-    selectedIndex.current = nextIndex;
-    setActiveIndex(nextIndex);
-    triggerHaptic('selection');
-    onIndexChange?.(nextIndex, items[nextIndex]);
-  }
-
-  function selectPhoto(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    updateSelection(nextIndex);
-    scrollRef.current?.scrollToOffset({ offset: nextIndex * cardWidth, animated: !reducedMotion });
-  }
-  const positionLabel = getPositionLabel?.(activeIndex, items.length);
   const firstIndicator = Math.max(0, Math.min(activeIndex - 3, items.length - 7));
 
   return (
@@ -102,20 +97,7 @@ function StackedCarouselContent({
       <RNHostView matchContents>
         <View
           style={{ width, height, overflow: 'hidden', direction: 'ltr' }}
-          accessible
-          accessibilityRole="adjustable"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityValue={{
-            min: 1,
-            max: items.length,
-            now: activeIndex + 1,
-            text: positionLabel ?? items[activeIndex].label,
-          }}
-          accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-          onAccessibilityAction={({ nativeEvent }) => {
-            if (nativeEvent.actionName === 'increment') selectPhoto(activeIndex + 1);
-            if (nativeEvent.actionName === 'decrement') selectPhoto(activeIndex - 1);
-          }}
+          {...accessibilityProps}
           testID={`${testID}-cards`}
         >
           <PhotoScrollView

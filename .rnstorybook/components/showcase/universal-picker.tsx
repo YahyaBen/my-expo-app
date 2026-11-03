@@ -1,13 +1,8 @@
-import {
-  Picker,
-  type PickerProps,
-  type PickerItemValue,
-  UniversalHost,
-  type UniversalThemeProps,
-} from '@components/ui';
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
+import { Picker, type PickerProps, type PickerItemValue } from '@components/ui';
 
 export type UniversalPickerProps = Omit<PickerProps, 'children'> &
-  UniversalThemeProps & {
+  NativeStoryTheme & {
     options: { label: string; value: PickerItemValue }[];
   };
 
@@ -18,16 +13,12 @@ export function UniversalPicker({
   ...props
 }: Readonly<UniversalPickerProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
-      colorScheme={colorScheme}
-      seedColor={seedColor}
-    >
+    <NativeStoryHost testID={props.testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Picker {...props}>
         {options.map((item) => (
           <Picker.Item key={`${typeof item.value}:${item.value}`} {...item} />
         ))}
       </Picker>
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

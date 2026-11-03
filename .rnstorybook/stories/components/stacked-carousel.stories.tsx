@@ -1,17 +1,7 @@
-import { useState } from 'react';
-import { useWindowDimensions } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import {
-  StackedCarousel,
-  ButtonContent,
-  UniversalTextContent,
-  type PhotoItem,
-} from '@components/ui';
-import { spacing } from '@/constants/layout';
-import {
-  AnimatedComponentPreview,
-  type AnimatedComponentPreviewProps,
-} from '../../components/animated-component-preview';
+import { StackedCarousel, type PhotoItem } from '@components/ui';
+import type { AnimatedComponentPreviewProps } from '../../components/animated-component-preview';
+import { PhotoCarouselPreview } from '../../components/photo-carousel-preview';
 import { photoFixtures, photoDatasets } from '../../components/photo-fixtures';
 import { svgImageSource } from '../../components/svg-image-source';
 
@@ -33,55 +23,35 @@ type Props = AnimatedComponentPreviewProps & {
 
 function StackedCarouselDemo({
   items: initialItems,
-  width: requestedWidth,
+  width,
   height,
   itemWidth,
   dataset = 'photos',
   ...preview
 }: Readonly<Props>) {
-  const { width: screenWidth } = useWindowDimensions();
-  const width = Math.max(1, Math.min(requestedWidth, screenWidth - spacing.lg * 2));
-  const [replacement, setReplacement] = useState<readonly PhotoItem[] | null>(null);
-  const items =
-    replacement ??
-    (dataset === 'opaque-cards'
-      ? opaqueCards
-      : dataset === 'photos'
-        ? initialItems
-        : photoDatasets[dataset]);
-  const [selection, setSelection] = useState('No selection callback yet');
-  const [events, setEvents] = useState(0);
   return (
-    <AnimatedComponentPreview {...preview}>
-      <StackedCarousel
-        items={items}
-        width={width}
-        height={height}
-        itemWidth={itemWidth}
-        accessibilityLabel="Stacked Carousel photos"
-        getPositionLabel={(index, total) => `Photo ${index + 1} of ${total}`}
-        onIndexChange={(index, item) => {
-          setEvents((count) => count + 1);
-          setSelection(`${item.label} at index ${index}`);
-        }}
-        testID="story-stacked-carousel"
-      />
-      <UniversalTextContent testID="stacked-carousel-selection">
-        {`${selection}; ${events} callbacks`}
-      </UniversalTextContent>
-      <ButtonContent
-        variant="secondary"
-        label="Replace with the last two photos"
-        onPress={() => setReplacement(photoFixtures.slice(-2))}
-        testID="stacked-carousel-replace"
-      />
-      <ButtonContent
-        variant="secondary"
-        label="Clear photos"
-        onPress={() => setReplacement([])}
-        testID="stacked-carousel-clear"
-      />
-    </AnimatedComponentPreview>
+    <PhotoCarouselPreview
+      {...preview}
+      items={
+        dataset === 'opaque-cards'
+          ? opaqueCards
+          : dataset === 'photos'
+            ? initialItems
+            : photoDatasets[dataset]
+      }
+      width={width}
+      testID="stacked-carousel"
+    >
+      {(photoProps) => (
+        <StackedCarousel
+          {...photoProps}
+          height={height}
+          itemWidth={itemWidth}
+          accessibilityLabel="Stacked Carousel photos"
+          testID="story-stacked-carousel"
+        />
+      )}
+    </PhotoCarouselPreview>
   );
 }
 

@@ -1,3 +1,4 @@
+import type { NativeStoryTheme } from '../../components/native-story-frame';
 import {
   Column,
   RefreshableScrollView,
@@ -5,13 +6,12 @@ import {
   ButtonContent,
   UniversalHost,
   nativeFillWidth,
-  type UniversalThemeProps,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 
-type Props = UniversalThemeProps & {
+type Props = NativeStoryTheme & {
   disabled: boolean;
   hidden: boolean;
   outcome: 'success' | 'error';

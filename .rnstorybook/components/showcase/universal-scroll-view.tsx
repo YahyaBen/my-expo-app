@@ -1,8 +1,8 @@
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
 import { ScrollView, type ScrollViewProps } from '@expo/ui';
-import { UniversalHost, type UniversalThemeProps } from '@components/ui';
 
 export type UniversalScrollViewProps = ScrollViewProps &
-  UniversalThemeProps & { viewportHeight?: number };
+  NativeStoryTheme & { viewportHeight?: number };
 
 export function UniversalScrollView({
   colorScheme,
@@ -11,13 +11,13 @@ export function UniversalScrollView({
   ...props
 }: Readonly<UniversalScrollViewProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
+    <NativeStoryHost
+      testID={props.testID}
       viewportHeight={viewportHeight}
       colorScheme={colorScheme}
       seedColor={seedColor}
     >
       <ScrollView {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

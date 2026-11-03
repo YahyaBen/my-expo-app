@@ -7,6 +7,7 @@ import {
   ButtonContent,
   TextInput,
   type TextInputProps,
+  nativeFillWidth,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useRef, useState } from 'react';
@@ -211,29 +212,28 @@ function IconInputDemo(args: Readonly<TextInputProps>) {
   const [pressCount, setPressCount] = useState(0);
   const [disabled, setDisabled] = useState(args.disabled ?? false);
   return (
-    <View style={{ gap: 20 }}>
-      <InputPreview
-        {...args}
-        leftIcon={searchIcon}
-        rightIcon={clearIcon}
-        rightIconAccessibilityLabel={args.rightIconAccessibilityLabel ?? 'Clear search'}
-        value={value}
-        onChangeText={(text) => {
-          setValue(text);
-          args.onChangeText?.(text);
-        }}
-        disabled={disabled}
-        onRightIconPress={() => {
-          setValue('');
-          setPressCount((count) => count + 1);
-          action('right icon pressed')();
-        }}
-      />
-      <Host
-        matchContents={{ vertical: true }}
-        colorScheme={args.colorScheme}
-        style={{ width: '100%' }}
-      >
+    <Host
+      colorScheme={args.colorScheme}
+      testID={args.testID ? `${args.testID}-container` : undefined}
+    >
+      <Column spacing={20} modifiers={nativeFillWidth}>
+        <TextInput
+          {...args}
+          leftIcon={searchIcon}
+          rightIcon={clearIcon}
+          rightIconAccessibilityLabel={args.rightIconAccessibilityLabel ?? 'Clear search'}
+          value={value}
+          onChangeText={(text) => {
+            setValue(text);
+            args.onChangeText?.(text);
+          }}
+          disabled={disabled}
+          onRightIconPress={() => {
+            setValue('');
+            setPressCount((count) => count + 1);
+            action('right icon pressed')();
+          }}
+        />
         <Column spacing={10}>
           <Text
             testID={args.testID ? `${args.testID}-press-count` : undefined}
@@ -245,8 +245,8 @@ function IconInputDemo(args: Readonly<TextInputProps>) {
             onPress={() => setDisabled((current) => !current)}
           />
         </Column>
-      </Host>
-    </View>
+      </Column>
+    </Host>
   );
 }
 
@@ -308,24 +308,23 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
   const ref = useRef<TextInputRef>(null);
   const [focused, setFocused] = useState(false);
   return (
-    <View style={{ gap: 20 }}>
-      <InputPreview
-        {...args}
-        ref={ref}
-        onFocus={() => {
-          setFocused(true);
-          args.onFocus?.();
-        }}
-        onBlur={() => {
-          setFocused(false);
-          args.onBlur?.();
-        }}
-      />
-      <Host
-        matchContents={{ vertical: true }}
-        colorScheme={args.colorScheme}
-        style={{ width: '100%' }}
-      >
+    <Host
+      colorScheme={args.colorScheme}
+      testID={args.testID ? `${args.testID}-container` : undefined}
+    >
+      <Column spacing={20} modifiers={nativeFillWidth}>
+        <TextInput
+          {...args}
+          ref={ref}
+          onFocus={() => {
+            setFocused(true);
+            args.onFocus?.();
+          }}
+          onBlur={() => {
+            setFocused(false);
+            args.onBlur?.();
+          }}
+        />
         <Column testID={args.testID ? `${args.testID}-actions` : undefined} spacing={10}>
           <Text testID={args.testID ? `${args.testID}-focus-state` : undefined}>
             {focused ? 'Input focused' : 'Input blurred'}
@@ -368,28 +367,27 @@ function InputActionsDemo(args: Readonly<TextInputProps>) {
             }}
           />
         </Column>
-      </Host>
-    </View>
+      </Column>
+    </Host>
   );
 }
 
 function ControlledInputDemo(args: Readonly<TextInputProps>) {
   const [value, setValue] = useState(args.defaultValue ?? '');
   return (
-    <View style={{ gap: 20 }}>
-      <InputPreview
-        {...args}
-        value={value}
-        onChangeText={(text) => {
-          setValue(text);
-          args.onChangeText?.(text);
-        }}
-      />
-      <Host
-        matchContents={{ vertical: true }}
-        colorScheme={args.colorScheme}
-        style={{ width: '100%' }}
-      >
+    <Host
+      colorScheme={args.colorScheme}
+      testID={args.testID ? `${args.testID}-container` : undefined}
+    >
+      <Column spacing={20} modifiers={nativeFillWidth}>
+        <TextInput
+          {...args}
+          value={value}
+          onChangeText={(text) => {
+            setValue(text);
+            args.onChangeText?.(text);
+          }}
+        />
         <Column testID={args.testID ? `${args.testID}-actions` : undefined} spacing={10}>
           <Text
             testID={args.testID ? `${args.testID}-description` : undefined}
@@ -413,8 +411,8 @@ function ControlledInputDemo(args: Readonly<TextInputProps>) {
             }}
           />
         </Column>
-      </Host>
-    </View>
+      </Column>
+    </Host>
   );
 }
 

@@ -1,8 +1,9 @@
+import type { NativeStoryTheme } from '../../components/native-story-frame';
 import { Column, LoadingIndicator, Text, UniversalHost } from '@components/ui';
-import type { LoadingIndicatorProps, UniversalThemeProps } from '@components/ui';
+import type { LoadingIndicatorProps } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 
-type Props = LoadingIndicatorProps & UniversalThemeProps;
+type Props = LoadingIndicatorProps & NativeStoryTheme;
 
 function LoadingIndicatorDemo({ colorScheme, seedColor, ...props }: Readonly<Props>) {
   return (

@@ -1,9 +1,9 @@
 import { TableDemo, type TableDemoProps } from '../../components/catalog/table-preview';
-import { UniversalHost, type UniversalThemeProps } from '@components/ui';
+import { UniversalHost } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import { NativeStoryFrame } from '../../components/native-story-frame';
+import { NativeStoryFrame, type NativeStoryTheme } from '../../components/native-story-frame';
 
-type TableStoryProps = TableDemoProps & Pick<UniversalThemeProps, 'colorScheme'>;
+type TableStoryProps = TableDemoProps & Pick<NativeStoryTheme, 'colorScheme'>;
 
 function TableStory({ colorScheme = 'light', ...props }: Readonly<TableStoryProps>) {
   return (

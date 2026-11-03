@@ -1,11 +1,4 @@
-import {
-  Column,
-  RNHostView,
-  ScrollView,
-  UniversalHost,
-  nativeFillWidth,
-  type UniversalThemeProps,
-} from '@components/ui';
+import { Column, RNHostView, ScrollView, UniversalHost, nativeFillWidth } from '@components/ui';
 import type { PropsWithChildren } from 'react';
 
 import { View } from 'react-native';
@@ -14,7 +7,26 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useMeasuredWidth } from '@/hooks/use-measured-width';
 
-export type NativeStoryTheme = UniversalThemeProps;
+/** Appearance and selectors used only by the native story fixtures. */
+export type NativeStoryTheme = {
+  colorScheme?: 'light' | 'dark';
+  seedColor?: string;
+  testID?: string;
+};
+
+/** Standalone showcase controls enter native UI after the frame's RN bridge. */
+export function NativeStoryHost({
+  children,
+  testID,
+  ...props
+}: Readonly<PropsWithChildren<NativeStoryTheme & { viewportHeight?: number }>>) {
+  return (
+    <UniversalHost {...props} testID={testID ? `${testID}-container` : undefined}>
+      {children}
+    </UniversalHost>
+  );
+}
+
 const canvasPadding = 24;
 
 /** Shared on-device canvas for the Expo UI stories. */

@@ -1,6 +1,7 @@
-import { Switch, type SwitchProps, UniversalHost, type UniversalThemeProps } from '@components/ui';
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
+import { Switch, type SwitchProps } from '@components/ui';
 
-export type UniversalSwitchProps = SwitchProps & UniversalThemeProps;
+export type UniversalSwitchProps = SwitchProps & NativeStoryTheme;
 
 export function UniversalSwitch({
   colorScheme,
@@ -8,12 +9,8 @@ export function UniversalSwitch({
   ...props
 }: Readonly<UniversalSwitchProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
-      colorScheme={colorScheme}
-      seedColor={seedColor}
-    >
+    <NativeStoryHost testID={props.testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Switch {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

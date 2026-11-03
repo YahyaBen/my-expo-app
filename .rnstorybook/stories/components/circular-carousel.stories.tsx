@@ -1,17 +1,7 @@
-import { useState } from 'react';
-import { useWindowDimensions } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import {
-  CircularCarousel,
-  ButtonContent,
-  UniversalTextContent,
-  type PhotoItem,
-} from '@components/ui';
-import { spacing } from '@/constants/layout';
-import {
-  AnimatedComponentPreview,
-  type AnimatedComponentPreviewProps,
-} from '../../components/animated-component-preview';
+import { CircularCarousel, type PhotoItem } from '@components/ui';
+import type { AnimatedComponentPreviewProps } from '../../components/animated-component-preview';
+import { PhotoCarouselPreview } from '../../components/photo-carousel-preview';
 import { photoFixtures, photoDatasets } from '../../components/photo-fixtures';
 
 type Props = AnimatedComponentPreviewProps & {
@@ -24,49 +14,29 @@ type Props = AnimatedComponentPreviewProps & {
 
 function CircularCarouselDemo({
   items: initialItems,
-  width: requestedWidth,
+  width,
   height,
   scaleEnabled,
   dataset = 'photos',
   ...preview
 }: Readonly<Props>) {
-  const { width: screenWidth } = useWindowDimensions();
-  const width = Math.max(1, Math.min(requestedWidth, screenWidth - spacing.lg * 2));
-  const [replacement, setReplacement] = useState<readonly PhotoItem[] | null>(null);
-  const items = replacement ?? (dataset === 'photos' ? initialItems : photoDatasets[dataset]);
-  const [selection, setSelection] = useState('No selection callback yet');
-  const [events, setEvents] = useState(0);
   return (
-    <AnimatedComponentPreview {...preview}>
-      <CircularCarousel
-        items={items}
-        width={width}
-        height={height}
-        scaleEnabled={scaleEnabled}
-        accessibilityLabel="Circular Carousel photos"
-        getPositionLabel={(index, total) => `Photo ${index + 1} of ${total}`}
-        onIndexChange={(index, item) => {
-          setEvents((count) => count + 1);
-          setSelection(`${item.label} at index ${index}`);
-        }}
-        testID="story-circular-carousel"
-      />
-      <UniversalTextContent testID="circular-carousel-selection">
-        {`${selection}; ${events} callbacks`}
-      </UniversalTextContent>
-      <ButtonContent
-        variant="secondary"
-        label="Replace with the last two photos"
-        onPress={() => setReplacement(photoFixtures.slice(-2))}
-        testID="circular-carousel-replace"
-      />
-      <ButtonContent
-        variant="secondary"
-        label="Clear photos"
-        onPress={() => setReplacement([])}
-        testID="circular-carousel-clear"
-      />
-    </AnimatedComponentPreview>
+    <PhotoCarouselPreview
+      {...preview}
+      items={dataset === 'photos' ? initialItems : photoDatasets[dataset]}
+      width={width}
+      testID="circular-carousel"
+    >
+      {(photoProps) => (
+        <CircularCarousel
+          {...photoProps}
+          height={height}
+          scaleEnabled={scaleEnabled}
+          accessibilityLabel="Circular Carousel photos"
+          testID="story-circular-carousel"
+        />
+      )}
+    </PhotoCarouselPreview>
   );
 }
 

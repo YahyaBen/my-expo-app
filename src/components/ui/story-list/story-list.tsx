@@ -1,12 +1,11 @@
-import { useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, type FlatList } from 'react-native';
+import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
 import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedStyle,
-  useSharedValue,
   type SharedValue,
 } from 'react-native-reanimated';
 import { UniversalTextContent } from '../text/universal-text';
@@ -20,6 +19,7 @@ import { useThemeColors } from '@/hooks/use-theme';
 import type { PhotoItem } from '../photo/photo-item';
 import { interpolatePhotoMotion } from '../photo/photo-motion';
 import { PhotoScrollView } from '../photo/photo-scroll-view';
+import { usePhotoSelection } from '../photo/use-photo-selection';
 
 const opacityInput = [-3, -2, 0, 1] as const;
 const opacityOutput = [0, 1, 1, 1] as const;
@@ -67,45 +67,28 @@ function StoryListContent({
   const cardWidth = Math.max(1, Math.min(width, requestedItemWidth ?? width * 0.78));
   const height = Math.max(1, requestedHeight ?? Math.min(width * 1.05, 420));
   const cardHeight = height;
-  const scrollRef = useRef<FlatList<PhotoItem>>(null);
-  const selectedIndex = useRef(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const scrollOffset = useSharedValue(0);
-
-  function updateSelection(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    if (nextIndex === selectedIndex.current) return;
-    selectedIndex.current = nextIndex;
-    setActiveIndex(nextIndex);
-    onIndexChange?.(nextIndex, items[nextIndex]);
-  }
-
-  function selectPhoto(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    updateSelection(nextIndex);
-    scrollRef.current?.scrollToOffset({ offset: nextIndex * cardWidth, animated: !reducedMotion });
-  }
-  const positionLabel = getPositionLabel?.(activeIndex, items.length);
+  const {
+    scrollRef,
+    selectedIndex,
+    scrollOffset,
+    updateSelection,
+    positionLabel,
+    accessibilityProps,
+  } = usePhotoSelection({
+    items,
+    itemWidth: cardWidth,
+    reducedMotion,
+    accessibilityLabel,
+    getPositionLabel,
+    onIndexChange,
+  });
 
   return (
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
         <View
           style={{ width, height, overflow: 'hidden', direction: 'ltr' }}
-          accessible
-          accessibilityRole="adjustable"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityValue={{
-            min: 1,
-            max: items.length,
-            now: activeIndex + 1,
-            text: positionLabel ?? items[activeIndex].label,
-          }}
-          accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-          onAccessibilityAction={({ nativeEvent }) => {
-            if (nativeEvent.actionName === 'increment') selectPhoto(activeIndex + 1);
-            if (nativeEvent.actionName === 'decrement') selectPhoto(activeIndex - 1);
-          }}
+          {...accessibilityProps}
           testID={`${testID}-cards`}
         >
           <PhotoScrollView

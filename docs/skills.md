@@ -17,13 +17,13 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 
 ## Layout and primitives
 
-| Skill                                                                                                             | Responsibility                                  |
-| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| [template-skill-ui-host](../.agents/skills/template-skill-ui-host/SKILL.md)                                       | Hosting, inherited appearance and sizing        |
-| [template-skill-ui-native](../.agents/skills/template-skill-ui-native/SKILL.md)                                   | Direct layout primitives, sizing and RN bridges |
-| [template-skill-ui-shape](../.agents/skills/template-skill-ui-shape/SKILL.md)                                     | Shared filled native geometric shapes           |
-| [template-skill-ui-page](../.agents/skills/template-skill-ui-page/SKILL.md)                                       | Page frames, headers, sections and safe areas   |
-| [template-skill-ui-refreshable-scroll-view](../.agents/skills/template-skill-ui-refreshable-scroll-view/SKILL.md) | Coalesced native pull-to-refresh                |
+| Skill                                                                                                             | Responsibility                                    |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [template-skill-ui-host](../.agents/skills/template-skill-ui-host/SKILL.md)                                       | Shared Host ownership, boundary audits and sizing |
+| [template-skill-ui-native](../.agents/skills/template-skill-ui-native/SKILL.md)                                   | Direct layout primitives, sizing and RN bridges   |
+| [template-skill-ui-shape](../.agents/skills/template-skill-ui-shape/SKILL.md)                                     | Shared filled native geometric shapes             |
+| [template-skill-ui-page](../.agents/skills/template-skill-ui-page/SKILL.md)                                       | Page frames, headers, sections and safe areas     |
+| [template-skill-ui-refreshable-scroll-view](../.agents/skills/template-skill-ui-refreshable-scroll-view/SKILL.md) | Coalesced native pull-to-refresh                  |
 
 ## Text and collections
 

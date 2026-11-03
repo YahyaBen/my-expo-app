@@ -1,10 +1,9 @@
-import { useMemo, useRef, useState } from 'react';
-import { StyleSheet, View, type FlatList } from 'react-native';
+import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
 import Animated, {
   useAnimatedStyle,
-  useSharedValue,
   useDerivedValue,
   withSpring,
   type SharedValue,
@@ -20,6 +19,7 @@ import { triggerHaptic } from '@/lib/haptics';
 import type { PhotoItem } from '../photo/photo-item';
 import { interpolatePhotoMotion } from '../photo/photo-motion';
 import { PhotoScrollView } from '../photo/photo-scroll-view';
+import { usePhotoSelection } from '../photo/use-photo-selection';
 
 const motionInput = [-2, -1, 0, 1, 2] as const;
 const scaleOutput = [0.5, 0.9, 1.2, 0.9, 0.5] as const;
@@ -69,50 +69,34 @@ function CircularCarouselContent({
   const cardWidth = Math.max(1, Math.min(width, requestedItemSize ?? width / 4));
   const cardHeight = cardWidth;
   const height = Math.max(1, requestedHeight ?? cardWidth * 3);
-  const scrollRef = useRef<FlatList<PhotoItem>>(null);
-  const selectedIndex = useRef(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const scrollOffset = useSharedValue(0);
+  const {
+    scrollRef,
+    selectedIndex,
+    scrollOffset,
+    updateSelection,
+    positionLabel,
+    accessibilityProps,
+  } = usePhotoSelection({
+    items,
+    itemWidth: cardWidth,
+    reducedMotion,
+    accessibilityLabel,
+    getPositionLabel,
+    onIndexChange,
+    onSelectionFeedback: () => triggerHaptic('selection'),
+  });
 
   const scaleProgress = useDerivedValue<number>(() => {
     if (reducedMotion) return 0;
     return withSpring(scaleEnabled ? 1 : 0, { duration: 400, dampingRatio: 1 });
   });
-  function updateSelection(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    if (nextIndex === selectedIndex.current) return;
-    selectedIndex.current = nextIndex;
-    setActiveIndex(nextIndex);
-    triggerHaptic('selection');
-    onIndexChange?.(nextIndex, items[nextIndex]);
-  }
-
-  function selectPhoto(index: number) {
-    const nextIndex = Math.max(0, Math.min(index, items.length - 1));
-    updateSelection(nextIndex);
-    scrollRef.current?.scrollToOffset({ offset: nextIndex * cardWidth, animated: !reducedMotion });
-  }
-  const positionLabel = getPositionLabel?.(activeIndex, items.length);
 
   return (
     <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
         <View
           style={{ width, height, overflow: 'hidden', direction: 'ltr' }}
-          accessible
-          accessibilityRole="adjustable"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityValue={{
-            min: 1,
-            max: items.length,
-            now: activeIndex + 1,
-            text: positionLabel ?? items[activeIndex].label,
-          }}
-          accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-          onAccessibilityAction={({ nativeEvent }) => {
-            if (nativeEvent.actionName === 'increment') selectPhoto(activeIndex + 1);
-            if (nativeEvent.actionName === 'decrement') selectPhoto(activeIndex - 1);
-          }}
+          {...accessibilityProps}
           testID={`${testID}-cards`}
         >
           <PhotoScrollView

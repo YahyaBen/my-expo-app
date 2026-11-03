@@ -1,12 +1,8 @@
-import {
-  FieldGroup,
-  type FieldGroupProps,
-  UniversalHost,
-  type UniversalThemeProps,
-} from '@components/ui';
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
+import { FieldGroup, type FieldGroupProps } from '@components/ui';
 
 export type UniversalFieldGroupProps = FieldGroupProps &
-  UniversalThemeProps & { viewportHeight?: number };
+  NativeStoryTheme & { viewportHeight?: number };
 
 /** Form/LazyColumn needs a bounded viewport instead of content-size measurement. */
 export function UniversalFieldGroup({
@@ -16,13 +12,13 @@ export function UniversalFieldGroup({
   ...props
 }: Readonly<UniversalFieldGroupProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
+    <NativeStoryHost
+      testID={props.testID}
       viewportHeight={viewportHeight}
       colorScheme={colorScheme}
       seedColor={seedColor}
     >
       <FieldGroup {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }

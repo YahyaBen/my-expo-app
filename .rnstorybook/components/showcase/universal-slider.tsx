@@ -1,6 +1,7 @@
-import { Slider, type SliderProps, UniversalHost, type UniversalThemeProps } from '@components/ui';
+import { NativeStoryHost, type NativeStoryTheme } from '../native-story-frame';
+import { Slider, type SliderProps } from '@components/ui';
 
-export type UniversalSliderProps = SliderProps & UniversalThemeProps;
+export type UniversalSliderProps = SliderProps & NativeStoryTheme;
 
 export function UniversalSlider({
   colorScheme,
@@ -8,12 +9,8 @@ export function UniversalSlider({
   ...props
 }: Readonly<UniversalSliderProps>) {
   return (
-    <UniversalHost
-      testID={props.testID ? `${props.testID}-container` : undefined}
-      colorScheme={colorScheme}
-      seedColor={seedColor}
-    >
+    <NativeStoryHost testID={props.testID} colorScheme={colorScheme} seedColor={seedColor}>
       <Slider {...props} />
-    </UniversalHost>
+    </NativeStoryHost>
   );
 }
