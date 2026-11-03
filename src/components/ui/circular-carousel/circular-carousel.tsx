@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView } from '@expo/ui';
 import Animated, {
+  ReduceMotion,
   useAnimatedStyle,
   useDerivedValue,
   withSpring,
@@ -88,7 +89,12 @@ function CircularCarouselContent({
 
   const scaleProgress = useDerivedValue<number>(() => {
     if (reducedMotion) return 0;
-    return withSpring(scaleEnabled ? 1 : 0, { duration: 400, dampingRatio: 1 });
+    return withSpring(scaleEnabled ? 1 : 0, {
+      duration: 400,
+      dampingRatio: 1,
+      // The live app preference is already checked above.
+      reduceMotion: ReduceMotion.Never,
+    });
   });
 
   return (

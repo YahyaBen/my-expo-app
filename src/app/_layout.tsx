@@ -5,7 +5,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { Appearance, Platform, View } from 'react-native';
-import { ReducedMotionConfig, ReduceMotion } from 'react-native-reanimated';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
 import { storybookEnabled } from '@/config/developer-tools';
@@ -140,27 +139,23 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
   const direction = useLayoutDirection();
   const reducedMotion = useAppReducedMotion();
   const theme = useMemo(() => navigationTheme(colorScheme, colors), [colorScheme, colors]);
+  if (!ready) return null;
   return (
-    <>
-      <ReducedMotionConfig mode={reducedMotion ? ReduceMotion.Always : ReduceMotion.Never} />
-      {ready ? (
-        <ThemeProvider value={theme}>
-          <Stack
-            activityEnabled={Platform.OS === 'android' ? 1 : false}
-            screenOptions={{
-              ...stackMotionOptions(reducedMotion),
-              contentStyle: { backgroundColor: colors.background, direction },
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="index" />
-            <Stack.Protected guard={storybookEnabled}>
-              <Stack.Screen name="storybook" />
-            </Stack.Protected>
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      ) : null}
-    </>
+    <ThemeProvider value={theme}>
+      <Stack
+        activityEnabled={Platform.OS === 'android' ? 1 : false}
+        screenOptions={{
+          ...stackMotionOptions(reducedMotion),
+          contentStyle: { backgroundColor: colors.background, direction },
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Protected guard={storybookEnabled}>
+          <Stack.Screen name="storybook" />
+        </Stack.Protected>
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </ThemeProvider>
   );
 }

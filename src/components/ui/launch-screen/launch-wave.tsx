@@ -7,7 +7,7 @@ import {
   Group,
   Path,
   Skia,
-  usePathInterpolation,
+  interpolatePaths,
   type Transforms3d,
 } from '@shopify/react-native-skia';
 import { useMemo } from 'react';
@@ -124,7 +124,8 @@ function LaunchWaveLayer({
     return (time.get() / layer.period) * 2 * Math.PI * horizontalDirection + layer.phase;
   });
   const progress = useDerivedValue(() => (1 - Math.cos(phase.get())) / 2);
-  const path = usePathInterpolation(progress, [0, 1], paths);
+  // Skia's interpolation hook passes web-only dependencies to Reanimated on native.
+  const path = useDerivedValue(() => interpolatePaths(progress.get(), [0, 1], paths));
   const drift = useDerivedValue<Transforms3d>(() => [
     { translateY: Math.sin(phase.get() + Math.PI / 3) * 3 },
   ]);

@@ -11,6 +11,7 @@ import {
   usePanGesture,
 } from 'react-native-gesture-handler';
 import Animated, {
+  ReduceMotion,
   cancelAnimation,
   interpolate,
   useAnimatedStyle,
@@ -44,7 +45,8 @@ export type IosHomeGridProps = {
   testID?: string;
 };
 
-const spring = { duration: 400, dampingRatio: 1 };
+// Callers gate motion with the live app preference before starting a spring.
+const spring = { duration: 400, dampingRatio: 1, reduceMotion: ReduceMotion.Never };
 type Rect = { x: number; y: number; width: number; height: number };
 type LoadedImageSize = { source: PhotoItem['source']; width: number; height: number };
 type Selection = {

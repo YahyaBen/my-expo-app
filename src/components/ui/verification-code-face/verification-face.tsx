@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { Canvas, Circle, Group, Path, Skia } from '@shopify/react-native-skia';
 import Animated, {
   Easing,
+  ReduceMotion,
   cubicBezier,
   useDerivedValue,
   withTiming,
@@ -68,16 +69,19 @@ function AnimatedVerificationFace({
 }>) {
   const colors = useThemeColors(useHostColorScheme());
   const motionEnabled = useMotionEnabled(visible);
+  // The live app preference owns both timing durations, including explicit overrides.
   const progress = useDerivedValue(() =>
     withTiming(inputProgress, {
       duration: motionEnabled ? 150 : 0,
       easing: Easing.bezier(0.23, 1, 0.32, 1),
+      reduceMotion: ReduceMotion.Never,
     }),
   );
   const expression = useDerivedValue(() =>
     withTiming(status === 'success' ? 1 : status === 'error' ? -1 : 0, {
       duration: motionEnabled ? 200 : 0,
       easing: Easing.bezier(0.23, 1, 0.32, 1),
+      reduceMotion: ReduceMotion.Never,
     }),
   );
   const faceTransform = useDerivedValue(() => [{ translateX: progress.get() * 8 - 4 }]);
