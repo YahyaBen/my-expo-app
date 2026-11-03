@@ -8,10 +8,12 @@ function PageDemo({
   showBack = false,
   viewportWidth,
   longContent = false,
+  footer,
 }: Readonly<{
   showBack?: boolean;
   viewportWidth?: number;
   longContent?: boolean;
+  footer?: string;
 }>) {
   const [actions, setActions] = useState(0);
   const [backs, setBacks] = useState(0);
@@ -20,6 +22,7 @@ function PageDemo({
       <PageScreen
         title="Home"
         description="Standalone starter page."
+        footer={footer}
         showBack={showBack}
         onBack={() => setBacks((value) => value + 1)}
       >
@@ -66,11 +69,13 @@ const meta = {
   args: {
     showBack: false,
     longContent: false,
+    footer: 'Version 1.0.0',
     direction: 'ltr',
   },
   argTypes: {
     viewportWidth: { control: 'number' },
     longContent: { control: 'boolean' },
+    footer: { control: 'text' },
     showBack: { control: 'boolean' },
     direction: { control: 'select', options: ['ltr', 'rtl'] },
   },

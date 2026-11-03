@@ -15,6 +15,8 @@ Source: [page/](../../../src/components/ui/page/).
   It owns keyboard avoidance, refresh composition and optional route actions.
   Only `title` is required; omit `description` when the content supplies its own
   introduction. Actions accept readonly arrays of `PageScreenAction`.
+  An optional `footer` string stays below the scrollable content as a centered,
+  muted caption, within the page's bottom safe area. The caller owns its text.
 - Use `PageFrame` for custom content boundaries; it owns header safe areas.
 - Wrap ordinary content in `PageSection`: 16-point symmetric padding and gap.
   Use `inset={false}` when full-width content owns its gutters.

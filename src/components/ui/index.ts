@@ -13,6 +13,7 @@ export {
 
 export * from './alert/alert';
 export * from './appearance/color-scheme-control';
+export * from './auth/auth-screen-frame';
 export * from './bottom-sheet/bottom-sheet';
 export * from './button/button';
 export * from './checkbox/checkbox';

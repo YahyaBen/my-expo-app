@@ -1,5 +1,6 @@
 {
   "common": {
+    "appVersion": "الإصدار {{version}}",
     "language": "اللغة",
     "theme": "المظهر",
     "colorScheme": "وضع الألوان",

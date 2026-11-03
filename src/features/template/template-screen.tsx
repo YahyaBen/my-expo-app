@@ -1,4 +1,5 @@
 import { PageScreen, PageSection, SkeletonContent, UniversalTextContent } from '@components/ui';
+import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
 import { getAppBrand } from '@/config/brand';
 
@@ -6,8 +7,13 @@ import { getAppBrand } from '@/config/brand';
 export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
   const { t } = useTranslation();
   const brand = getAppBrand();
+  const version = Constants.expoConfig?.version;
   return (
-    <PageScreen title={brand.name} showBack={showBack}>
+    <PageScreen
+      title={brand.name}
+      showBack={showBack}
+      footer={version ? t('common.appVersion', { version }) : undefined}
+    >
       <PageSection testID="template-wireframe">
         <UniversalTextContent variant="title">{t('template.title')}</UniversalTextContent>
         <UniversalTextContent tone="muted">{t('template.description')}</UniversalTextContent>

@@ -1,5 +1,6 @@
 {
   "common": {
+    "appVersion": "Version {{version}}",
     "language": "Langue",
     "theme": "Thème",
     "colorScheme": "Mode d’affichage",

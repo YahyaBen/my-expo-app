@@ -1,4 +1,4 @@
-import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
+import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { screenInsets } from '@/lib/screen-insets';
 import { Column } from '@expo/ui';
@@ -8,9 +8,9 @@ import { KeyboardAvoidingView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonContent } from '../button/button';
 import { UniversalHost } from '../host/universal-host';
-import { nativeFillWidth } from '../native/native-fill-width';
+import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
 import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
-import { UniversalTextContent } from '../text/universal-text';
+import { UniversalText, UniversalTextContent } from '../text/universal-text';
 import { PageFrame, usePageHeaderInset } from './page-frame';
 import { PageSection } from './page-section';
 
@@ -22,6 +22,7 @@ export type PageScreenAction = {
 
 type PageContentProps = {
   description?: string;
+  footer?: string;
   children?: ReactNode;
   actions?: readonly PageScreenAction[];
   tab?: boolean;
@@ -38,6 +39,7 @@ export type PageScreenProps = PageContentProps & {
 export function PageScreen({
   title,
   description,
+  footer,
   actions,
   children,
   tab = false,
@@ -57,6 +59,7 @@ export function PageScreen({
     >
       <PageContent
         description={description}
+        footer={footer}
         actions={actions}
         tab={tab}
         onRefresh={onRefresh}
@@ -70,6 +73,7 @@ export function PageScreen({
 
 function PageContent({
   description,
+  footer,
   actions = [],
   children,
   tab = false,
@@ -128,6 +132,19 @@ function PageContent({
             </Column>
           </RefreshableScrollView>
         </UniversalHost>
+        {footer ? (
+          <UniversalText
+            variant="caption"
+            tone="muted"
+            colorScheme={scheme}
+            modifiers={nativeFillWidthCenter}
+            style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}
+            textStyle={{ textAlign: 'center' }}
+            testID="page-footer"
+          >
+            {footer}
+          </UniversalText>
+        ) : null}
       </KeyboardAvoidingView>
     </View>
   );
