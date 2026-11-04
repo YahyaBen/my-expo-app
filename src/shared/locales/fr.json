@@ -439,6 +439,7 @@
       "noActions": "Aucun bouton utilisé pour le moment.",
       "reset": "Réinitialiser le compteur",
       "pendingAction": "Simuler un enregistrement",
+      "loadingHint": "Touchez pour simuler un enregistrement. Le bouton affiche un indicateur et bloque les appuis répétés pendant 1,5 seconde, puis incrémente le compteur et redevient disponible.",
       "variants": "Toutes les variantes · actives et désactivées",
       "variantsHint": "Comparez chaque style natif avec votre thème actuel. Les couleurs sémantiques explicites sont présentées plus bas.",
       "glassHint": "Le style verre utilise le verre natif sur iOS 26 et versions ultérieures, un style natif de repli sur les versions antérieures et un contour sur Android.",
@@ -451,6 +452,12 @@
       "content": "Icônes et contenu personnalisé",
       "iconVariants": "Boutons avec icônes · toutes les variantes",
       "iconVariantsHint": "Chaque style présente une icône au début, à la fin, des deux côtés, au-dessus du texte et une action désactivée.",
+      "iconOnly": "Icône seule",
+      "sizes": {
+        "sm": "Petit · sm",
+        "md": "Moyen · md",
+        "lg": "Grand · lg"
+      },
       "leadingIcon": "Icône au début",
       "trailingIcon": "Icône à la fin",
       "bothIcons": "Icônes des deux côtés",
@@ -715,6 +722,68 @@
     "noComponents": "Aucun composant trouvé."
   },
   "componentCatalog": {
+    "tables": {
+      "hint": "Repliez ou dépliez les commandes récentes. Faites défiler jusqu’à la dernière colonne pour ouvrir les actions d’une ligne, consulter ses détails ou modifier son statut d’exemple.",
+      "itemsHeader": "Articles",
+      "detailsFor": "Détails de #{{id}}",
+      "markPreparing": "Marquer en préparation",
+      "statusUpdated": "Commande #{{id}} : {{status}}",
+      "reset": "Réinitialiser le tableau"
+    },
+    "sliders": {
+      "hint": "Ajustez ces aperçus locaux. Le volume, la luminosité et les réglages de texte de l’appareil restent inchangés.",
+      "disable": "Désactiver les curseurs",
+      "volume": "Volume",
+      "bothIcons": "Icônes des deux côtés · 0–100 %",
+      "brightness": "Luminosité",
+      "startIcon": "Icône au début · réglage continu",
+      "textSize": "Taille du texte",
+      "endIcon": "Icône à la fin · 14–30 pt par pas de 2",
+      "points": "{{value}} pt",
+      "textPreview": "Prévisualisez votre taille de texte préférée.",
+      "reset": "Réinitialiser les curseurs"
+    },
+    "chips": {
+      "multiple": "Sélection multiple",
+      "multipleHint": "Choisissez plusieurs centres d’intérêt. Faites défiler les puces horizontalement pour voir toutes les options.",
+      "single": "Sélection unique",
+      "disableSelection": "Désactiver la sélection",
+      "selectionCount": "{{selected}} sur {{total}} sélectionnés",
+      "selectionStates": {
+        "none": "Aucune sélection",
+        "some": "Sélection partielle",
+        "all": "Tout est sélectionné"
+      },
+      "selectedValues": "Sélection : {{labels}}",
+      "selectAll": "Tout sélectionner",
+      "clearAll": "Tout désélectionner",
+      "input": "Puces supprimables",
+      "inputHint": "Touchez une puce pour la supprimer. Restaurez tout pour les faire toutes réapparaître.",
+      "remove": "Supprimer {{label}}",
+      "empty": "Toutes les puces ont été supprimées.",
+      "tokenCount": "Puces restantes : {{count}}",
+      "restoreAll": "Tout restaurer",
+      "suggestion": "Suggestions",
+      "suggestionHint": "Touchez une suggestion pour ajouter une puce. Les puces déjà présentes sont indisponibles ici.",
+      "assist": "Puces d’action",
+      "assistHint": "Une puce d’action incrémente le compteur sans modifier la sélection.",
+      "disabled": "États désactivés",
+      "disabledHint": "Les puces désactivées conservent leur sélection et ignorent les appuis. Le compteur reste inchangé.",
+      "selected": "Sélectionné",
+      "unselected": "Non sélectionné",
+      "variants": {
+        "filter": "Puces de filtre",
+        "input": "Puces de saisie",
+        "assist": "Puce d’action",
+        "suggestion": "Puce de suggestion"
+      },
+      "topics": {
+        "design": "Design",
+        "code": "Code",
+        "music": "Musique",
+        "travel": "Voyage"
+      }
+    },
     "dateTime": {
       "date": "Date",
       "time": "Heure",

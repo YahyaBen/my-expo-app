@@ -4,7 +4,6 @@ import {
   Button,
   ButtonContent,
   Checkbox,
-  Chip,
   CircularCarousel,
   Collapsible,
   ColorSchemeControl,
@@ -20,6 +19,7 @@ import {
   List,
   ListItem,
   LoadingContent,
+  LoadingIndicator,
   OtpBottomSheet,
   PageFrame,
   PageScreen,
@@ -38,26 +38,33 @@ import {
   StoryList,
   Switch,
   TabNavigationBar,
-  Table,
+  Text as ButtonText,
   TextInput,
   UniversalHost,
   UniversalTextContent as Text,
   VerificationCodeFace,
+  nativeCenteredMinHeight,
   nativeFillWidth,
   pageFormModifiers,
+  useHostColorScheme,
+  type ButtonVariant,
   type DateTimePickerMode,
   type PhotoItem,
   type TabNavigationItemId,
 } from '@components/ui';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme';
 import { showAlert } from '@/lib/alerts';
 import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
+import { ChipExamples } from './chip-examples';
+import { SliderExamples } from './slider-examples';
+import { TableExamples } from './table-examples';
 
 const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
@@ -184,14 +191,8 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
       case 'button':
         return (
           <>
-            <ButtonContent
-              variant="primary"
-              label={actionLabel}
-              onPress={countAction}
-              testID="component-button"
-            />
-            <ButtonContent variant="secondary" label={t('common.options')} onPress={countAction} />
             {result}
+            <ButtonExamples onPress={countAction} />
           </>
         );
       case 'checkbox':
@@ -214,28 +215,13 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
         );
       case 'chip':
         return (
-          <Chip
-            variant="filter"
-            selected={enabled}
-            onPress={() => setEnabled((current) => !current)}
-            label={title}
-            testID="component-chip"
-          />
-        );
-      case 'slider':
-        return (
           <>
-            <Text>{t('common.selectedValue', { value: Math.round(value) })}</Text>
-            <Slider
-              value={value}
-              min={0}
-              max={100}
-              step={1}
-              onValueChange={setValue}
-              testID="component-slider"
-            />
+            {result}
+            <ChipExamples onAction={countAction} />
           </>
         );
+      case 'slider':
+        return <SliderExamples />;
       case 'picker':
         return (
           <Picker selectedValue={choice} onValueChange={setChoice} testID="component-picker">
@@ -334,15 +320,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           </>
         );
       case 'table':
-        return (
-          <Table
-            rows={options}
-            columns={[{ id: 'name', header: title, width: 220, renderCell: (row) => row.label }]}
-            keyExtractor={(row) => row.value}
-            emptyState={t('common.none')}
-            testID="component-table"
-          />
-        );
+        return <TableExamples contentWidth={width} />;
       case 'collapsible':
         return (
           <Collapsible label={title} isOpen={open} onOpenChange={setOpen}>
@@ -593,6 +571,153 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
         <LaunchScreen mode="branded" exiting onExitComplete={() => setOpen(false)} />
       ) : null}
     </View>
+  );
+}
+
+function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
+  const { t } = useTranslation();
+  const icon = Icon.select({ ios: 'star.fill', android: 'star' });
+  const iconOnlyLabel = t('showcase.buttonGallery.iconOnly');
+  // Minimum content heights keep native button minimums from flattening the size steps.
+  const sizes = [
+    { size: 'sm', minHeight: 48 },
+    { size: 'md', minHeight: 56 },
+    { size: 'lg', minHeight: 64 },
+  ] as const;
+  const variants = [
+    'primary',
+    'secondary',
+    'tertiary',
+    'link',
+    'success',
+    'warning',
+    'info',
+    'destructive',
+    'glass',
+  ] as const satisfies readonly ButtonVariant[];
+
+  return (
+    <Column spacing={spacing.xl} modifiers={nativeFillWidth}>
+      <LoadingButtonExample onComplete={onPress} />
+      {variants.map((variant) => {
+        const variantLabel = t(`showcase.${variant}`);
+        return (
+          <Column key={variant} spacing={spacing.md} modifiers={nativeFillWidth}>
+            <Text variant="subtitle">{variantLabel}</Text>
+            {sizes.map(({ size, minHeight }) => (
+              <ButtonContent
+                key={size}
+                variant={variant}
+                accessibilityLabel={`${variantLabel}: ${t(`showcase.buttonGallery.sizes.${size}`)}`}
+                contentPadding={0}
+                fullWidth
+                onPress={onPress}
+                testID={
+                  size === 'md'
+                    ? variant === 'primary'
+                      ? 'component-button'
+                      : `component-button-${variant}`
+                    : `component-button-${variant}-${size}`
+                }
+              >
+                <Column alignment="center" modifiers={nativeCenteredMinHeight(minHeight)}>
+                  <ButtonText>{t(`showcase.buttonGallery.sizes.${size}`)}</ButtonText>
+                </Column>
+              </ButtonContent>
+            ))}
+            <Row spacing={spacing.md} alignment="center">
+              <ButtonContent
+                variant={variant}
+                accessibilityLabel={`${variantLabel}: ${iconOnlyLabel}`}
+                contentPadding={spacing.md}
+                onPress={onPress}
+                testID={`component-button-${variant}-icon-only`}
+              >
+                <Icon name={icon} size={20} />
+              </ButtonContent>
+              <Text variant="caption">{iconOnlyLabel}</Text>
+            </Row>
+            {(['leading', 'trailing'] as const).map((placement) => {
+              const label = t(`showcase.buttonGallery.${placement}Icon`);
+              return (
+                <ButtonContent
+                  key={placement}
+                  variant={variant}
+                  accessibilityLabel={`${variantLabel}: ${label}`}
+                  fullWidth
+                  onPress={onPress}
+                  testID={`component-button-${variant}-${placement}-icon`}
+                >
+                  <Row spacing={spacing.sm} alignment="center">
+                    {placement === 'leading' && <Icon name={icon} size={20} />}
+                    <ButtonText>{label}</ButtonText>
+                    {placement === 'trailing' && <Icon name={icon} size={20} />}
+                  </Row>
+                </ButtonContent>
+              );
+            })}
+          </Column>
+        );
+      })}
+    </Column>
+  );
+}
+
+function LoadingButtonExample({ onComplete }: Readonly<{ onComplete: () => void }>) {
+  const { t } = useTranslation();
+  const colors = useThemeColors(useHostColorScheme());
+  const [pending, setPending] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const label = t(pending ? 'common.wait' : 'showcase.buttonGallery.pendingAction');
+
+  useEffect(
+    () => () => {
+      if (timer.current !== null) clearTimeout(timer.current);
+    },
+    [],
+  );
+
+  return (
+    <Column spacing={spacing.md} modifiers={nativeFillWidth}>
+      <Text variant="subtitle">{t('componentCatalog.names.loading')}</Text>
+      <Text variant="caption" tone="muted">
+        {t('showcase.buttonGallery.loadingHint')}
+      </Text>
+      <ButtonContent
+        variant="primary"
+        accessibilityLabel={label}
+        contentPadding={spacing.md}
+        fullWidth
+        disabled={pending}
+        testID="component-button-loading"
+        onPress={() => {
+          if (timer.current !== null) return;
+          setPending(true);
+          timer.current = setTimeout(() => {
+            timer.current = null;
+            setPending(false);
+            onComplete();
+          }, 1500);
+        }}
+      >
+        <Row spacing={spacing.sm} alignment="center">
+          <Row spacing={0} alignment="center" style={{ width: 20, height: 20 }}>
+            {pending ? (
+              <LoadingIndicator
+                color={colors.onPrimary}
+                testID="component-button-loading-spinner"
+              />
+            ) : (
+              <Icon
+                name={Icon.select({ ios: 'square.and.arrow.down', android: 'save' })}
+                size={20}
+              />
+            )}
+          </Row>
+          <ButtonText>{label}</ButtonText>
+        </Row>
+      </ButtonContent>
+    </Column>
   );
 }
 
