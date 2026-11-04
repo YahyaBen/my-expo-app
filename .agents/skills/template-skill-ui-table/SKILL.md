@@ -14,13 +14,27 @@ Both are content-only and require an existing native Host.
 - Supply `rows`, `columns`, stable `keyExtractor` and `emptyState`.
 - Columns have stable `id`, translated `header`, `renderCell`, optional numeric
   `width` (144 points by default) and logical start/center/end `align`.
+  Optional `renderHeader` supplies a native header control, such as sorting.
 - Width includes cell padding. Let rows grow and overflow scroll horizontally.
   Do not combine fixed cell width with fill-width modifiers.
 - String/number cells and empty content receive themed text. Custom cells,
   empty content and `toolbar` must contain native UI.
 - Pass a bounded dataset or one page; Table renders every row.
 - The consumer owns filters, counts, reset, query states, pagination and navigation.
-- Body/header/outline use Host-resolved surface, surfaceVariant and border tokens.
+- Compact body/header/outline use the Host-resolved `tableSurface`, `tableHeader`,
+  `tableText` and `tableBorder` tokens. Preserve native control touch targets.
+
+## Selection
+
+Optional `selection` receives `selectedKeys`, `onSelectRow`, `onSelectAll`,
+translated `selectAllLabel` and `rowLabel`, and optional `disabled`.
+Callbacks receive the next boolean; select-all receives the current visible rows.
+The consumer owns keys, filtering and preservation of hidden selections.
+Header selection is checked only when every visible row is selected; an empty
+header is disabled. The native checkbox API is boolean, without a mixed state.
+Private platform adapters add spoken labels to the existing native Checkbox;
+iOS retains its native toggle appearance. Never draw replacement checkbox artwork.
+Selectors append `-select-all` and `-row-{key}-select` to the Table testID.
 
 ## Row actions
 

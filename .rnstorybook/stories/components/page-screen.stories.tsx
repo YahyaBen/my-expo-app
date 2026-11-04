@@ -69,7 +69,7 @@ const meta = {
   args: {
     showBack: false,
     longContent: false,
-    footer: 'Version 1.0.0',
+    footer: 'Page footer',
     direction: 'ltr',
   },
   argTypes: {

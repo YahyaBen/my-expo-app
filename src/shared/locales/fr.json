@@ -723,11 +723,34 @@
   },
   "componentCatalog": {
     "tables": {
-      "hint": "Repliez ou dépliez les commandes récentes. Faites défiler jusqu’à la dernière colonne pour ouvrir les actions d’une ligne, consulter ses détails ou modifier son statut d’exemple.",
-      "itemsHeader": "Articles",
+      "title": "Paiements",
+      "hint": "Sélectionnez des lignes avec les cases à cocher. Triez par e-mail, puis faites défiler jusqu’à la dernière colonne pour les actions et les détails repliables de chaque paiement.",
+      "email": "E-mail",
+      "amount": "Montant",
+      "search": "Rechercher des paiements",
+      "searchPlaceholder": "E-mail ou identifiant du paiement",
+      "resultCount": "{{visible}} sur {{total}} paiements",
+      "selectionCount": "{{selected}} sur {{total}} lignes visibles sélectionnées",
+      "selectAll": "Sélectionner tous les paiements visibles",
+      "selectRow": "Sélectionner le paiement de {{email}}",
+      "clearSelection": "Effacer la sélection",
+      "sortAscending": "Trier les e-mails par ordre croissant",
+      "sortDescending": "Trier les e-mails par ordre décroissant",
+      "empty": "Aucun paiement correspondant",
+      "actionsFor": "Actions pour {{email}}",
       "detailsFor": "Détails de #{{id}}",
-      "markPreparing": "Marquer en préparation",
-      "statusUpdated": "Commande #{{id}} : {{status}}",
+      "detailsSummary": "Paiement #{{id}} · {{amount}} · {{status}}",
+      "statusUpdated": "{{email}} : {{status}}",
+      "statuses": {
+        "success": "Réussi",
+        "processing": "En cours",
+        "failed": "Échoué"
+      },
+      "actions": {
+        "success": "Marquer comme réussi",
+        "processing": "Marquer en cours",
+        "failed": "Marquer comme échoué"
+      },
       "reset": "Réinitialiser le tableau"
     },
     "sliders": {

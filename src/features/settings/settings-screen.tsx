@@ -29,7 +29,6 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
-import { version as appVersion } from '../../../package.json';
 import { HeaderMotionPicker } from './header-motion-picker';
 import { getBrandHeadingFont } from '@/config/brand-assets';
 import { useDeviceLocation } from './use-device-location';
@@ -209,7 +208,11 @@ function SettingsPage({
                 testID="app-settings-system-permissions"
               />
             </FieldGroup.Section>
-            <FieldGroup.Section title={t('settings.location.title')} titleUppercase>
+            <FieldGroup.Section
+              title={t('settings.location.title')}
+              titleUppercase
+              style={{ paddingBottom: tab ? tabBarRaisedHeight : 0 }}
+            >
               <FieldGroup.SectionHeader>
                 <SettingsSectionHeading label={t('settings.location.title')} language={language} />
               </FieldGroup.SectionHeader>
@@ -280,24 +283,6 @@ function SettingsPage({
                 onPress={() => void location.openSettings()}
                 testID="app-settings-location-open-settings"
               />
-            </FieldGroup.Section>
-            <FieldGroup.Section
-              title={t('settings.about')}
-              titleUppercase
-              style={{ paddingBottom: tab ? tabBarRaisedHeight : 0 }}
-            >
-              <FieldGroup.SectionHeader>
-                <SettingsSectionHeading label={t('settings.about')} language={language} />
-              </FieldGroup.SectionHeader>
-              <ListItem
-                supportingText={
-                  <Text fontSize={14} tone="muted">
-                    {appVersion}
-                  </Text>
-                }
-              >
-                <Text>{t('settings.appVersion')}</Text>
-              </ListItem>
             </FieldGroup.Section>
           </FieldGroup>
         </UniversalHost>

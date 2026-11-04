@@ -5,15 +5,28 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
+import { TableCheckbox } from './table-checkbox';
 
 export interface TableColumn<T> {
   id: string;
   header: string;
+  /** Optional native header control, such as a sort button. */
+  renderHeader?: () => ReactNode;
   /** Fixed native width, including cell padding. Defaults to 144 points/dp. */
   width?: number;
   align?: 'start' | 'center' | 'end';
   /** Strings and numbers receive themed text; custom content must be native UI. */
   renderCell: (row: T) => ReactNode;
+}
+
+export interface TableSelection<T> {
+  selectedKeys: readonly string[];
+  onSelectRow: (row: T, selected: boolean) => void;
+  /** Select/deselect the supplied visible rows; hidden selection belongs to the caller. */
+  onSelectAll: (rows: readonly T[], selected: boolean) => void;
+  selectAllLabel: string;
+  rowLabel: (row: T) => string;
+  disabled?: boolean;
 }
 
 export interface TableProps<T> {
@@ -26,12 +39,15 @@ export interface TableProps<T> {
   renderActions?: (row: T) => ReactNode;
   actionsHeader?: string;
   actionsWidth?: number;
+  selection?: TableSelection<T>;
   testID?: string;
 }
 
-function cellContent(content: ReactNode) {
+function cellContent(content: ReactNode, color: string) {
   return typeof content === 'string' || typeof content === 'number' ? (
-    <UniversalTextContent>{String(content)}</UniversalTextContent>
+    <UniversalTextContent variant="body" fontSize={14} textStyle={{ color }}>
+      {String(content)}
+    </UniversalTextContent>
   ) : (
     content
   );
@@ -47,13 +63,19 @@ export function Table<T>({
   renderActions,
   actionsHeader,
   actionsWidth = 112,
+  selection,
   testID,
 }: Readonly<TableProps<T>>) {
   const colors = useThemeColors(useHostColorScheme());
   const tableWidth =
     columns.reduce((total, column) => total + (column.width ?? 144), 0) +
-    (renderActions ? actionsWidth : 0);
-  const cellStyle = { paddingHorizontal: spacing.md, paddingVertical: spacing.md };
+    (renderActions ? actionsWidth : 0) +
+    (selection ? 64 : 0);
+  const cellStyle = { paddingHorizontal: spacing.md, paddingVertical: spacing.sm };
+  const selectionStyle = { width: 64, paddingHorizontal: spacing.xs };
+  const actionStyle = { width: actionsWidth, paddingHorizontal: spacing.sm };
+  const allSelected =
+    rows.length > 0 && rows.every((row) => selection?.selectedKeys.includes(keyExtractor(row)));
 
   return (
     <Column modifiers={nativeFillWidth} spacing={spacing.md} testID={testID}>
@@ -62,10 +84,10 @@ export function Table<T>({
         modifiers={nativeFillWidth}
         spacing={0}
         style={{
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
+          backgroundColor: colors.tableSurface,
+          borderColor: colors.tableBorder,
           borderWidth: 1,
-          borderRadius: radii.card,
+          borderRadius: radii.sm,
         }}
       >
         <ScrollView
@@ -78,21 +100,44 @@ export function Table<T>({
               alignment="center"
               spacing={0}
               modifiers={nativeFillWidth}
-              style={{ backgroundColor: colors.surfaceVariant }}
+              style={{ backgroundColor: colors.tableHeader }}
               testID={testID ? `${testID}-header` : undefined}
             >
+              {selection && (
+                <Column alignment="center" style={selectionStyle}>
+                  <TableCheckbox
+                    value={allSelected}
+                    disabled={selection.disabled || rows.length === 0}
+                    accessibilityLabel={selection.selectAllLabel}
+                    onValueChange={(selected) => selection.onSelectAll(rows, selected)}
+                    testID={testID ? `${testID}-select-all` : undefined}
+                  />
+                </Column>
+              )}
               {columns.map((column) => (
                 <Column
                   key={column.id}
                   alignment={column.align}
-                  style={{ ...cellStyle, width: column.width ?? 144 }}
+                  style={{ ...cellStyle, paddingVertical: spacing.xs, width: column.width ?? 144 }}
                 >
-                  <UniversalTextContent variant="label">{column.header}</UniversalTextContent>
+                  {column.renderHeader ? (
+                    column.renderHeader()
+                  ) : (
+                    <UniversalTextContent
+                      variant="label"
+                      fontWeight="500"
+                      textStyle={{ color: colors.tableText }}
+                    >
+                      {column.header}
+                    </UniversalTextContent>
+                  )}
                 </Column>
               ))}
               {renderActions && (
-                <Column style={{ ...cellStyle, width: actionsWidth }}>
-                  <UniversalTextContent variant="label">{actionsHeader ?? ''}</UniversalTextContent>
+                <Column style={actionStyle}>
+                  <UniversalTextContent variant="label" textStyle={{ color: colors.tableText }}>
+                    {actionsHeader ?? ''}
+                  </UniversalTextContent>
                 </Column>
               )}
             </Row>
@@ -103,9 +148,20 @@ export function Table<T>({
                 <Column key={rowKey} spacing={0} modifiers={nativeFillWidth}>
                   <Column
                     modifiers={nativeFillWidth}
-                    style={{ height: 1, backgroundColor: colors.border }}
+                    style={{ height: 1, backgroundColor: colors.tableBorder }}
                   />
                   <Row alignment="center" spacing={0} modifiers={nativeFillWidth} testID={rowID}>
+                    {selection && (
+                      <Column alignment="center" style={selectionStyle}>
+                        <TableCheckbox
+                          value={selection.selectedKeys.includes(rowKey)}
+                          disabled={selection.disabled}
+                          accessibilityLabel={selection.rowLabel(row)}
+                          onValueChange={(selected) => selection.onSelectRow(row, selected)}
+                          testID={rowID ? `${rowID}-select` : undefined}
+                        />
+                      </Column>
+                    )}
                     {columns.map((column) => (
                       <Column
                         key={column.id}
@@ -113,11 +169,11 @@ export function Table<T>({
                         style={{ ...cellStyle, width: column.width ?? 144 }}
                         testID={rowID ? `${rowID}-cell-${column.id}` : undefined}
                       >
-                        {cellContent(column.renderCell(row))}
+                        {cellContent(column.renderCell(row), colors.tableText)}
                       </Column>
                     ))}
                     {renderActions && (
-                      <Column style={{ ...cellStyle, width: actionsWidth }}>
+                      <Column alignment="center" style={actionStyle}>
                         {renderActions(row)}
                       </Column>
                     )}
@@ -134,7 +190,7 @@ export function Table<T>({
             style={{ padding: spacing.xl }}
             testID={testID ? `${testID}-empty` : undefined}
           >
-            {cellContent(emptyState)}
+            {cellContent(emptyState, colors.tableText)}
           </Column>
         )}
       </Column>

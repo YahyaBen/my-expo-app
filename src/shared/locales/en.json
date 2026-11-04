@@ -721,11 +721,34 @@
   },
   "componentCatalog": {
     "tables": {
-      "hint": "Collapse or expand Recent orders. Swipe to the last column for each row’s Actions popover, then expand its details or change its sample status.",
-      "itemsHeader": "Items",
+      "title": "Payments",
+      "hint": "Select rows with the checkboxes. Sort by email, then swipe to the last column for each payment’s actions and collapsible details.",
+      "email": "Email",
+      "amount": "Amount",
+      "search": "Search payments",
+      "searchPlaceholder": "Email or payment ID",
+      "resultCount": "{{visible}} of {{total}} payments",
+      "selectionCount": "{{selected}} of {{total}} visible rows selected",
+      "selectAll": "Select all visible payments",
+      "selectRow": "Select payment for {{email}}",
+      "clearSelection": "Clear selection",
+      "sortAscending": "Sort email ascending",
+      "sortDescending": "Sort email descending",
+      "empty": "No matching payments",
+      "actionsFor": "Actions for {{email}}",
       "detailsFor": "Details for #{{id}}",
-      "markPreparing": "Mark preparing",
-      "statusUpdated": "Order #{{id}}: {{status}}",
+      "detailsSummary": "Payment #{{id}} · {{amount}} · {{status}}",
+      "statusUpdated": "{{email}}: {{status}}",
+      "statuses": {
+        "success": "Success",
+        "processing": "Processing",
+        "failed": "Failed"
+      },
+      "actions": {
+        "success": "Mark successful",
+        "processing": "Mark processing",
+        "failed": "Mark failed"
+      },
       "reset": "Reset table example"
     },
     "sliders": {

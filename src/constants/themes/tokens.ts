@@ -22,6 +22,10 @@ export interface SemanticColors {
   textDisabled: string;
   border: string;
   divider: string;
+  tableSurface: string;
+  tableHeader: string;
+  tableBorder: string;
+  tableText: string;
   /** Foreground accent for primary text, links and native tint. */
   tint: string;
   selection: string;

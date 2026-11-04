@@ -2,96 +2,136 @@ import {
   ButtonContent,
   Collapsible,
   Column,
+  Icon,
   Popover,
+  Row,
   Table,
   TextInput,
   UniversalTextContent as Text,
   nativeFillWidth,
+  useHostColorScheme,
   type TableColumn,
 } from '@components/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme';
 
-type OrderStatus = 'preparing' | 'ready';
-type ExampleOrder = {
+type PaymentStatus = 'success' | 'processing' | 'failed';
+type ExamplePayment = {
   id: string;
-  customer: string;
-  items: number;
-  total: number;
-  status: OrderStatus;
+  email: string;
+  amount: number;
+  status: PaymentStatus;
 };
 
-const initialOrders: readonly ExampleOrder[] = [
-  { id: '1042', customer: 'Sofia Amrani', items: 3, total: 185, status: 'preparing' },
-  { id: '1041', customer: 'Adam Benali', items: 2, total: 120, status: 'ready' },
-  { id: '1040', customer: 'Nora Idrissi', items: 4, total: 240, status: 'preparing' },
-  { id: '1039', customer: 'Youssef Alaoui', items: 1, total: 65, status: 'ready' },
+const initialPayments: readonly ExamplePayment[] = [
+  { id: '1042', email: 'ken99@example.com', amount: 316, status: 'success' },
+  { id: '1041', email: 'abe45@example.com', amount: 242, status: 'success' },
+  { id: '1040', email: 'monserrat44@example.com', amount: 837, status: 'processing' },
+  { id: '1039', email: 'silas22@example.com', amount: 874, status: 'success' },
+  { id: '1038', email: 'carmella@example.com', amount: 721, status: 'failed' },
 ];
 
-export function TableExamples({ contentWidth }: Readonly<{ contentWidth: number }>) {
+export function TableExamples({
+  contentWidth,
+  readOnly = false,
+}: Readonly<{ contentWidth: number; readOnly?: boolean }>) {
   const { t, i18n } = useTranslation();
-  const [orders, setOrders] = useState(initialOrders);
+  const colors = useThemeColors(useHostColorScheme());
+  const [payments, setPayments] = useState(initialPayments);
   const [search, setSearch] = useState('');
+  const [selectedKeys, setSelectedKeys] = useState<readonly string[]>([]);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
   const [tableOpen, setTableOpen] = useState(true);
   const [popoverId, setPopoverId] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<{ id: string; status: OrderStatus } | null>(null);
+  const [feedback, setFeedback] = useState<{ email: string; status: PaymentStatus } | null>(null);
   const query = search.trim().toLocaleLowerCase();
-  const visibleOrders = orders.filter((order) =>
-    `#${order.id} ${order.customer}`.toLocaleLowerCase().includes(query),
+  const filteredPayments = payments.filter((payment) =>
+    ('#' + payment.id + ' ' + payment.email).toLocaleLowerCase().includes(query),
   );
+  const visiblePayments = sortDirection
+    ? [...filteredPayments].sort(
+        (a, b) => a.email.localeCompare(b.email) * (sortDirection === 'asc' ? 1 : -1),
+      )
+    : filteredPayments;
+  const visibleSelectedCount = visiblePayments.filter((payment) =>
+    selectedKeys.includes(payment.id),
+  ).length;
   const currency = new Intl.NumberFormat(i18n.resolvedLanguage ?? 'en', {
     style: 'currency',
-    currency: 'MAD',
+    currency: 'USD',
   });
-  const columns: readonly TableColumn<ExampleOrder>[] = [
-    {
-      id: 'order',
-      header: t('showcase.tableGallery.order'),
-      width: 112,
-      renderCell: (order) => `#${order.id}`,
-    },
-    {
-      id: 'customer',
-      header: t('showcase.tableGallery.customer'),
-      width: 184,
-      renderCell: (order) => order.customer,
-    },
-    {
-      id: 'items',
-      header: t('componentCatalog.tables.itemsHeader'),
-      width: 88,
-      align: 'center',
-      renderCell: (order) => order.items,
-    },
+  const sortIcon = Icon.select(
+    sortDirection === 'asc'
+      ? { ios: 'arrow.up', android: 'arrow_upward' }
+      : sortDirection === 'desc'
+        ? { ios: 'arrow.down', android: 'arrow_downward' }
+        : { ios: 'arrow.up.arrow.down', android: 'swap_vert' },
+  );
+  const columns: readonly TableColumn<ExamplePayment>[] = [
     {
       id: 'status',
       header: t('showcase.tableGallery.status'),
-      width: 140,
-      renderCell: (order) => (
+      width: 112,
+      renderCell: (payment) => (
         <Text
-          tone={order.status === 'ready' ? 'success' : 'warning'}
-          testID={`component-table-status-${order.id}`}
+          variant="body"
+          fontSize={14}
+          textStyle={{ color: colors.tableText }}
+          testID={'component-table-status-' + payment.id}
         >
-          {t(`showcase.tableGallery.${order.status}`)}
+          {t('componentCatalog.tables.statuses.' + payment.status)}
         </Text>
       ),
     },
     {
-      id: 'total',
-      header: t('showcase.tableGallery.total'),
-      width: 144,
+      id: 'email',
+      header: t('componentCatalog.tables.email'),
+      width: 256,
+      renderHeader: () => (
+        <ButtonContent
+          variant="tertiary"
+          color={colors.tableText}
+          contentColor={colors.tableText}
+          contentPadding={0}
+          accessibilityLabel={t(
+            'componentCatalog.tables.' +
+              (sortDirection === 'asc' ? 'sortDescending' : 'sortAscending'),
+          )}
+          onPress={() => setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'))}
+          testID="component-table-sort-email"
+        >
+          <Row spacing={spacing.xs} alignment="center">
+            <Text variant="label" fontWeight="500" textStyle={{ color: colors.tableText }}>
+              {t('componentCatalog.tables.email')}
+            </Text>
+            <Icon name={sortIcon} size={16} />
+          </Row>
+        </ButtonContent>
+      ),
+      renderCell: (payment) => payment.email,
+    },
+    {
+      id: 'amount',
+      header: t('componentCatalog.tables.amount'),
+      width: 128,
       align: 'end',
-      renderCell: (order) => currency.format(order.total),
+      renderCell: (payment) => (
+        <Text variant="body" fontSize={14} fontWeight="600" textStyle={{ color: colors.tableText }}>
+          {currency.format(payment.amount)}
+        </Text>
+      ),
     },
   ];
 
-  function updateStatus(id: string, status: OrderStatus) {
-    setOrders((current) =>
-      current.map((order) => (order.id === id ? { ...order, status } : order)),
+  function updateStatus(payment: ExamplePayment, status: PaymentStatus) {
+    if (readOnly) return;
+    setPayments((current) =>
+      current.map((row) => (row.id === payment.id ? { ...row, status } : row)),
     );
-    setFeedback({ id, status });
+    setFeedback({ email: payment.email, status });
     setPopoverId(null);
   }
 
@@ -106,21 +146,21 @@ export function TableExamples({ contentWidth }: Readonly<{ contentWidth: number 
           setSearch(next);
           setPopoverId(null);
         }}
-        label={t('showcase.tableGallery.search')}
-        placeholder={t('showcase.tableGallery.searchPlaceholder')}
+        label={t('componentCatalog.tables.search')}
+        placeholder={t('componentCatalog.tables.searchPlaceholder')}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
         testID="component-table-search"
       />
       <Text variant="caption" testID="component-table-result-count">
-        {t('showcase.tableGallery.resultCount', {
-          visible: visibleOrders.length,
-          total: orders.length,
+        {t('componentCatalog.tables.resultCount', {
+          visible: visiblePayments.length,
+          total: payments.length,
         })}
       </Text>
       <Collapsible
-        label={t('showcase.tableGallery.title')}
+        label={t('componentCatalog.tables.title')}
         isOpen={tableOpen}
         onOpenChange={(open) => {
           setTableOpen(open);
@@ -128,12 +168,36 @@ export function TableExamples({ contentWidth }: Readonly<{ contentWidth: number 
         }}
       >
         <Table
-          rows={visibleOrders}
+          rows={visiblePayments}
           columns={columns}
-          keyExtractor={(order) => order.id}
+          keyExtractor={(payment) => payment.id}
+          selection={{
+            selectedKeys,
+            disabled: readOnly,
+            selectAllLabel: t('componentCatalog.tables.selectAll'),
+            rowLabel: (payment) => t('componentCatalog.tables.selectRow', { email: payment.email }),
+            onSelectRow: (payment, selected) => {
+              if (readOnly) return;
+              setSelectedKeys((current) =>
+                selected
+                  ? current.includes(payment.id)
+                    ? current
+                    : [...current, payment.id]
+                  : current.filter((id) => id !== payment.id),
+              );
+            },
+            onSelectAll: (rows, selected) => {
+              if (readOnly) return;
+              const visibleKeys = rows.map((row) => row.id);
+              setSelectedKeys((current) => {
+                const hiddenKeys = current.filter((id) => !visibleKeys.includes(id));
+                return selected ? [...hiddenKeys, ...visibleKeys] : hiddenKeys;
+              });
+            },
+          }}
           emptyState={
             <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-              <Text>{t('showcase.tableGallery.empty')}</Text>
+              <Text>{t('componentCatalog.tables.empty')}</Text>
               <ButtonContent
                 variant="secondary"
                 label={t('showcase.tableGallery.clearFilters')}
@@ -142,89 +206,102 @@ export function TableExamples({ contentWidth }: Readonly<{ contentWidth: number 
               />
             </Column>
           }
-          actionsHeader={t('showcase.tableGallery.actions')}
-          actionsWidth={144}
+          actionsWidth={80}
           testID="component-table"
-          renderActions={(order) => (
+          renderActions={(payment) => (
             <Popover
-              isPresented={popoverId === order.id}
+              isPresented={popoverId === payment.id}
               onIsPresentedChange={(open) =>
-                setPopoverId((current) => (open ? order.id : current === order.id ? null : current))
+                setPopoverId((current) =>
+                  open ? payment.id : current === payment.id ? null : current,
+                )
               }
-              testID={`component-table-popover-${order.id}`}
+              testID={'component-table-popover-' + payment.id}
               trigger={
                 <ButtonContent
-                  variant="secondary"
-                  label={t('showcase.tableGallery.actions')}
-                  accessibilityLabel={t('showcase.tableGallery.actionsFor', { id: order.id })}
-                  onPress={() => setPopoverId(order.id)}
-                  testID={`component-table-actions-${order.id}`}
-                />
+                  variant="tertiary"
+                  color={colors.tableText}
+                  contentColor={colors.tableText}
+                  contentPadding={0}
+                  disabled={readOnly}
+                  accessibilityLabel={t('componentCatalog.tables.actionsFor', {
+                    email: payment.email,
+                  })}
+                  onPress={() => setPopoverId(payment.id)}
+                  testID={'component-table-actions-' + payment.id}
+                >
+                  <Icon name={Icon.select({ ios: 'ellipsis', android: 'more_horiz' })} size={18} />
+                </ButtonContent>
               }
             >
               <Column
                 spacing={spacing.md}
                 style={{ width: Math.min(280, contentWidth), padding: spacing.lg }}
               >
-                <Text variant="subtitle">
-                  {t('showcase.tableGallery.detailsTitle', { id: order.id })}
-                </Text>
+                <Text variant="label">{payment.email}</Text>
                 <Collapsible
-                  label={t('componentCatalog.tables.detailsFor', { id: order.id })}
-                  isOpen={detailsId === order.id}
-                  onOpenChange={(open) => setDetailsId(open ? order.id : null)}
+                  label={t('componentCatalog.tables.detailsFor', { id: payment.id })}
+                  isOpen={detailsId === payment.id}
+                  onOpenChange={(open) => setDetailsId(open ? payment.id : null)}
                 >
                   <Column
                     spacing={spacing.sm}
                     modifiers={nativeFillWidth}
-                    testID={`component-table-details-${order.id}`}
+                    testID={'component-table-details-' + payment.id}
                   >
-                    <Text>{order.customer}</Text>
-                    <Text variant="caption" tone="muted">
-                      {t('showcase.tableGallery.detailsSummary', {
-                        items: order.items,
-                        total: currency.format(order.total),
-                        status: t(`showcase.tableGallery.${order.status}`),
+                    <Text variant="caption">
+                      {t('componentCatalog.tables.detailsSummary', {
+                        id: payment.id,
+                        amount: currency.format(payment.amount),
+                        status: t('componentCatalog.tables.statuses.' + payment.status),
                       })}
                     </Text>
                   </Column>
                 </Collapsible>
-                <ButtonContent
-                  variant="primary"
-                  label={t('showcase.tableGallery.markReady')}
-                  disabled={order.status === 'ready'}
-                  fullWidth
-                  onPress={() => updateStatus(order.id, 'ready')}
-                  testID={`component-table-ready-${order.id}`}
-                />
-                <ButtonContent
-                  variant="secondary"
-                  label={t('componentCatalog.tables.markPreparing')}
-                  disabled={order.status === 'preparing'}
-                  fullWidth
-                  onPress={() => updateStatus(order.id, 'preparing')}
-                  testID={`component-table-preparing-${order.id}`}
-                />
+                {(['success', 'processing', 'failed'] as const).map((status) => (
+                  <ButtonContent
+                    key={status}
+                    variant="tertiary"
+                    label={t('componentCatalog.tables.actions.' + status)}
+                    disabled={payment.status === status}
+                    fullWidth
+                    onPress={() => updateStatus(payment, status)}
+                    testID={'component-table-' + status + '-' + payment.id}
+                  />
+                ))}
                 <ButtonContent
                   variant="tertiary"
                   label={t('common.close')}
                   fullWidth
                   onPress={() => setPopoverId(null)}
-                  testID={`component-table-close-${order.id}`}
+                  testID={'component-table-close-' + payment.id}
                 />
               </Column>
             </Popover>
           )}
         />
       </Collapsible>
+      <Text variant="caption" tone="muted" testID="component-table-selection-count">
+        {t('componentCatalog.tables.selectionCount', {
+          selected: visibleSelectedCount,
+          total: visiblePayments.length,
+        })}
+      </Text>
+      <ButtonContent
+        variant="tertiary"
+        label={t('componentCatalog.tables.clearSelection')}
+        disabled={readOnly || selectedKeys.length === 0}
+        onPress={() => setSelectedKeys([])}
+        testID="component-table-clear-selection"
+      />
       <Text variant="caption" tone="muted">
         {t('showcase.tableGallery.scrollHint')}
       </Text>
       {feedback && (
-        <Text tone="success" testID="component-table-feedback">
+        <Text testID="component-table-feedback">
           {t('componentCatalog.tables.statusUpdated', {
-            id: feedback.id,
-            status: t(`showcase.tableGallery.${feedback.status}`),
+            email: feedback.email,
+            status: t('componentCatalog.tables.statuses.' + feedback.status),
           })}
         </Text>
       )}
@@ -232,9 +309,12 @@ export function TableExamples({ contentWidth }: Readonly<{ contentWidth: number 
         variant="secondary"
         label={t('componentCatalog.tables.reset')}
         fullWidth
+        disabled={readOnly}
         onPress={() => {
-          setOrders(initialOrders);
+          setPayments(initialPayments);
           setSearch('');
+          setSelectedKeys([]);
+          setSortDirection(null);
           setTableOpen(true);
           setPopoverId(null);
           setDetailsId(null);

@@ -2,6 +2,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import { Column, RNHostView, Spacer } from '@expo/ui';
+import Constants from 'expo-constants';
 import { Image } from 'expo-image';
 import LottieView from 'lottie-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -67,6 +68,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   const { t } = useTranslation();
   const { language } = useLanguage();
   const brand = getAppBrand();
+  const version = Constants.expoConfig?.version;
   const launchArtwork = getBrandLaunchArtwork(brand);
   const headingFont = getBrandHeadingFont(language, brand);
   const scheme = useColorScheme();
@@ -178,7 +180,12 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
           ignoreSafeArea="all"
           style={{ flex: 1 }}
         >
-          <Column alignment="center" spacing={16} modifiers={nativeFillSize}>
+          <Column
+            alignment="center"
+            spacing={16}
+            modifiers={nativeFillSize}
+            style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16 }}
+          >
             <Spacer flexible />
             <RNHostView matchContents>
               {launchArtwork.type === 'lottie' ? (
@@ -209,6 +216,17 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
               {brand.name}
             </UniversalTextContent>
             <Spacer flexible />
+            {version ? (
+              <UniversalTextContent
+                colorScheme={scheme}
+                variant="caption"
+                tone="muted"
+                textStyle={{ textAlign: 'center' }}
+                testID="app-brand-version"
+              >
+                {t('common.appVersion', { version })}
+              </UniversalTextContent>
+            ) : null}
           </Column>
         </UniversalHost>
       </View>

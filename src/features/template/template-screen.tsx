@@ -2,7 +2,6 @@ import {
   Column,
   Icon,
   ListItem,
-  LoadingScreen,
   PageScreen,
   PageSection,
   SkeletonContent,
@@ -11,9 +10,8 @@ import {
   UniversalTextContent,
   type TabNavigationItemId,
 } from '@components/ui';
-import Constants from 'expo-constants';
 import { router, useFocusEffect } from 'expo-router';
-import { Activity, lazy, Suspense, useCallback, useRef, useState } from 'react';
+import { Activity, useCallback, useRef, useState, type ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,8 +19,17 @@ import { getAppBrand } from '@/config/brand';
 import { componentCatalog, type ComponentId } from './component-catalog';
 import { ComponentMenu } from './component-menu';
 
-// Load native permission/location integrations only when Settings is first opened.
-const SettingsScreen = lazy(() => import('@/features/settings/settings-screen'));
+type SettingsScreenProps = ComponentProps<
+  typeof import('@/features/settings/settings-screen').default
+>;
+
+/** Evaluate bundled Settings on first open without requesting a separate native JS chunk. */
+function DeferredSettingsScreen(props: Readonly<SettingsScreenProps>) {
+  const SettingsScreen: typeof import('@/features/settings/settings-screen').default =
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Keep native module evaluation deferred while bundling Settings synchronously for releases.
+    require('@/features/settings/settings-screen').default;
+  return <SettingsScreen {...props} />;
+}
 
 type ContentTabId = Exclude<TabNavigationItemId, 'more'>;
 
@@ -30,7 +37,6 @@ type ContentTabId = Exclude<TabNavigationItemId, 'more'>;
 export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
   const { t } = useTranslation();
   const brand = getAppBrand();
-  const version = Constants.expoConfig?.version;
   const insets = useSafeAreaInsets();
   const [{ activeId, contentId, settingsOpened }, setTab] = useState<{
     activeId: TabNavigationItemId;
@@ -86,19 +92,10 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{ flex: 1 }}
-        accessibilityElementsHidden={menuOpen}
-        importantForAccessibility={menuOpen ? 'no-hide-descendants' : 'auto'}
-      >
+      <View style={{ flex: 1 }}>
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
         <Activity mode={activeId === 'more' ? 'hidden' : 'visible'}>
-          <PageScreen
-            tab
-            title={titles[contentId]}
-            showBack={showBack}
-            footer={version ? t('common.appVersion', { version }) : undefined}
-          >
+          <PageScreen tab title={titles[contentId]} showBack={showBack}>
             {contentId === 'home' ? (
               <PageSection testID="template-wireframe">
                 <UniversalTextContent variant="title">{t('template.title')}</UniversalTextContent>
@@ -144,13 +141,11 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         {/* Do not render hidden Settings at startup: Activity also prerenders hidden children. */}
         {settingsOpened ? (
           <Activity mode={activeId === 'more' ? 'visible' : 'hidden'}>
-            <Suspense fallback={<LoadingScreen />}>
-              <SettingsScreen tab onBack={showBack ? () => router.back() : undefined} />
-            </Suspense>
+            <DeferredSettingsScreen tab onBack={showBack ? () => router.back() : undefined} />
           </Activity>
         ) : null}
       </View>
-      {menuOpen ? <ComponentMenu onClose={closeMenu} onNavigate={navigateToComponent} /> : null}
+      <ComponentMenu isPresented={menuOpen} onClose={closeMenu} onNavigate={navigateToComponent} />
       <TabNavigationBar
         activeId={activeId}
         onSelect={selectTab}
@@ -173,10 +168,10 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         ]}
         action={{
           kind: 'continue',
-          label: t(menuOpen ? 'template.closeComponents' : 'template.openComponents'),
+          label: t('template.openComponents'),
           onPress: () => {
             Keyboard.dismiss();
-            setMenuOpen((open) => !open);
+            setMenuOpen(true);
           },
           testID: 'template-component-menu-toggle',
         }}

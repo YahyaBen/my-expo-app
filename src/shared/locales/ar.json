@@ -719,11 +719,34 @@
   },
   "componentCatalog": {
     "tables": {
-      "hint": "اطوِ الطلبات الأخيرة أو وسّعها. مرّر إلى العمود الأخير لفتح إجراءات كل صف، ثم اعرض تفاصيله أو غيّر حالته التجريبية.",
-      "itemsHeader": "العناصر",
+      "title": "المدفوعات",
+      "hint": "حدّد الصفوف بمربعات الاختيار. رتّب حسب البريد الإلكتروني، ثم مرّر إلى العمود الأخير للإجراءات والتفاصيل القابلة للطي لكل دفعة.",
+      "email": "البريد الإلكتروني",
+      "amount": "المبلغ",
+      "search": "البحث في المدفوعات",
+      "searchPlaceholder": "البريد الإلكتروني أو معرّف الدفعة",
+      "resultCount": "{{visible}} من {{total}} دفعات",
+      "selectionCount": "تم تحديد {{selected}} من {{total}} صفوف ظاهرة",
+      "selectAll": "تحديد جميع المدفوعات الظاهرة",
+      "selectRow": "تحديد دفعة {{email}}",
+      "clearSelection": "مسح التحديد",
+      "sortAscending": "ترتيب البريد الإلكتروني تصاعدياً",
+      "sortDescending": "ترتيب البريد الإلكتروني تنازلياً",
+      "empty": "لا توجد مدفوعات مطابقة",
+      "actionsFor": "إجراءات {{email}}",
       "detailsFor": "تفاصيل #{{id}}",
-      "markPreparing": "تعيين قيد التحضير",
-      "statusUpdated": "الطلب #{{id}}: {{status}}",
+      "detailsSummary": "الدفعة #{{id}} · {{amount}} · {{status}}",
+      "statusUpdated": "{{email}}: {{status}}",
+      "statuses": {
+        "success": "ناجحة",
+        "processing": "قيد المعالجة",
+        "failed": "فاشلة"
+      },
+      "actions": {
+        "success": "تعيين ناجحة",
+        "processing": "تعيين قيد المعالجة",
+        "failed": "تعيين فاشلة"
+      },
       "reset": "إعادة تعيين الجدول"
     },
     "sliders": {
