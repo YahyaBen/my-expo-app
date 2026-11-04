@@ -17,6 +17,8 @@ export type ButtonVariant =
 export type ButtonContentProps = {
   variant: ButtonVariant;
   label?: string;
+  /** Native accessible name, including when custom artwork replaces the label. */
+  accessibilityLabel?: string;
   children?: ReactNode;
   onPress?: () => void;
   disabled?: boolean;

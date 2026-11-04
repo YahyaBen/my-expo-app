@@ -1,6 +1,6 @@
 import { Column, Row } from '@expo/ui';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Icon } from '../icon/icon';
+import { Icon, type IconName } from '../icon/icon';
 import { StyleSheet, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
@@ -18,6 +18,7 @@ export type TabNavigationItemId = 'home' | 'search' | 'recipes' | 'more';
 export type TabNavigationItem = {
   id: TabNavigationItemId;
   label: string;
+  icon?: IconName;
   testID?: string;
 };
 
@@ -71,7 +72,7 @@ export function TabNavigationBar({
     return (
       <Column key={item.id} modifiers={nativeRowWeight}>
         <NavigationTab
-          icon={item.id === 'home' && selected ? selectedHome : icons[item.id]}
+          icon={item.icon ?? (item.id === 'home' && selected ? selectedHome : icons[item.id])}
           label={item.label}
           selected={selected}
           color={selected ? colors.tabBarActive : colors.tabBarInactive}

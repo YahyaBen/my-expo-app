@@ -151,6 +151,7 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="components/[id]" />
         <Stack.Protected guard={storybookEnabled}>
           <Stack.Screen name="storybook" />
         </Stack.Protected>

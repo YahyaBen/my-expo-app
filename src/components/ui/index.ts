@@ -20,6 +20,11 @@ export * from './checkbox/checkbox';
 export * from './chip/chip';
 export * from './circular-carousel/circular-carousel';
 export * from './collapsible/collapsible';
+export {
+  DateTimePicker,
+  type DateTimePickerMode,
+  type DateTimePickerProps,
+} from './date-time-picker/date-time-picker';
 export * from './field-group/field-group';
 export * from './floating-action/floating-action';
 export * from './form/form-submit';

@@ -1,6 +1,7 @@
 import { Button, Text, VStack } from '@expo/ui/swift-ui';
 import {
   buttonBorderShape,
+  accessibilityLabel as nativeAccessibilityLabel,
   buttonStyle,
   clipShape,
   contentShape,
@@ -18,6 +19,7 @@ import type { ButtonContentProps } from './button';
 export function NativeButton({
   variant,
   label,
+  accessibilityLabel,
   children,
   onPress,
   disabled,
@@ -40,6 +42,7 @@ export function NativeButton({
       onPress={disabled ? undefined : onPress}
       modifiers={[
         buttonStyle(style),
+        ...(accessibilityLabel ? [nativeAccessibilityLabel(accessibilityLabel)] : []),
         ...(color === undefined ? [] : [tint(color)]),
         nativeDisabled(Boolean(disabled)),
         ...(borderRadius === undefined

@@ -24,6 +24,11 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   their precedence. Preview providers stay in memory and do not persist.
 - Language sheets use the existing language provider and translated autonyms.
   Arabic updates live RTL without remounting ordinary forms.
+- Template's Settings tab uses the root preferences through
+  [the Settings feature](../../../src/features/settings/settings-screen.tsx).
+  Its native permission/location helpers load on first opening. The Preferences
+  story renders that same feature with isolated appearance; it adds no parallel
+  preference owner.
 
 ## Header and motion preferences
 

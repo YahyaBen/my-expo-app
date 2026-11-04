@@ -9,7 +9,8 @@ product screens are not part of the template dictionary.
 French is the default. The Preferences story and shared auth language control use
 the existing language provider and appLanguage storage key. Startup waits for
 restoration; failed reads use French and failed writes leave the current selection
-usable for the session. The release wireframe has no Settings or login route.
+usable for the session. Template's Settings tab exposes the saved language choice;
+there is no login route.
 
 Arabic selects RTL through the existing direction provider; French and English
 select LTR. Language changes preserve mounted drafts and navigation. Storybook's

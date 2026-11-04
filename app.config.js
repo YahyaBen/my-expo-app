@@ -3,12 +3,13 @@ const assets = require('./config/brand-assets.json');
 
 module.exports = ({ config }) => {
   const { brand, variant } = resolveBrand();
+  const nameSuffix = { development: ' Dev', preview: ' Preview', production: '' }[variant];
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
   const androidMapsApiKey = process.env.GOOGLE_MAPS_ANDROID_API_KEY?.trim();
 
   return {
     ...config,
-    name: brand.name,
+    name: `${brand.name}${nameSuffix}`,
     slug: brand.slug,
     scheme: brand.scheme,
     icon: brand.icon,
@@ -32,6 +33,7 @@ module.exports = ({ config }) => {
     },
     plugins: [
       ...(config.plugins ?? []),
+      ['expo-dev-client', { addGeneratedScheme: variant === 'development' }],
       ['expo-font', { fonts: headingFont.file ? [headingFont.file] : [] }],
       [
         'expo-splash-screen',

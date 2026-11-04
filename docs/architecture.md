@@ -1,25 +1,33 @@
 # Application architecture
 
-The template has one release wireframe and a development-only Storybook entry.
+The template has a native dock, an on-demand circular component menu, app-facing
+component pages and a development-only Storybook entry.
 `/` redirects to `/storybook` in development unless explicitly disabled.
 `/?preview=true` lets transition stories push the real wireframe and return using
-native Back. Preview/production always show the wireframe. Unknown URLs use the
-existing not-found fallback. The old auth, account, tab and showcase routes are gone.
+native Back. Preview/production start at the Template page. Its center action opens
+the component menu; dragging reveals the centered page name in a non-blocking
+native callout and updates it during the swipe. The name panel remains mounted
+while the menu is open, and its local state updates independently of the carousel.
+Tapping explicitly pushes `/components/[id]`. The menu closes
+before navigation, on outside taps and on Android Back. Component IDs/icons belong
+to `src/features/template/component-catalog.ts`; translated names belong to the locales.
+Unknown URLs use the existing not-found fallback.
 
-| Responsibility                         | Owner                                                                           |
-| -------------------------------------- | ------------------------------------------------------------------------------- |
-| Routes and native stack                | `src/app/`                                                                      |
-| Release wireframe                      | `src/features/template/`                                                        |
-| Development entry and flag             | `src/features/storybook/`, `src/config/developer-tools.ts`                      |
-| Stories and demonstration compositions | `.rnstorybook/`                                                                 |
-| Shared native presentation             | `src/components/ui/`                                                            |
-| Preferences, language and direction    | Existing contexts, hooks and storage owners                                     |
-| Optional auth/form workflow kit        | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
-| Entity data access                     | `src/services/<entity>/<entity>.repository.ts`                                  |
-| HTTP, queries and session lifecycle    | `src/services/`, `src/lib/api-query-keys.ts`                                    |
-| Validation and DTOs                    | `src/validation/`, `src/types/`                                                 |
-| Build-time identity                    | `config/brand.js`, `config/brands/`, `app.config.js`                            |
-| Public brand/asset metadata            | `src/config/brand.ts`, `src/config/brand-assets.ts`, `config/brand-assets.json` |
+| Responsibility                          | Owner                                                                           |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| Routes and native stack                 | `src/app/`                                                                      |
+| Template shell and component pages      | `src/features/template/`                                                        |
+| App settings and native device controls | `src/features/settings/`                                                        |
+| Development entry and flag              | `src/features/storybook/`, `src/config/developer-tools.ts`                      |
+| Stories and demonstration compositions  | `.rnstorybook/`                                                                 |
+| Shared native presentation              | `src/components/ui/`                                                            |
+| Preferences, language and direction     | Existing contexts, hooks and storage owners                                     |
+| Optional auth/form workflow kit         | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
+| Entity data access                      | `src/services/<entity>/<entity>.repository.ts`                                  |
+| HTTP, queries and session lifecycle     | `src/services/`, `src/lib/api-query-keys.ts`                                    |
+| Validation and DTOs                     | `src/validation/`, `src/types/`                                                 |
+| Build-time identity                     | `config/brand.js`, `config/brands/`, `app.config.js`                            |
+| Public brand/asset metadata             | `src/config/brand.ts`, `src/config/brand-assets.ts`, `config/brand-assets.json` |
 
 ## Startup
 
@@ -31,8 +39,11 @@ request permissions or check store updates. Reduced motion and activity state
 remain shared native capabilities. Native stack transitions use the existing
 platform options.
 
-Notification presentation is configured by Storybook, which owns the device
-examples. The release shell does not load camera/location/notification helpers.
+Notification presentation is configured by Storybook. Template loads its Settings
+feature on first opening the tab, keeping camera/location/notification helpers
+out of Home startup. Settings reads permission state while visible, and requests
+OS access or a one-shot location only after the matching action. The same feature
+serves the Preferences story under its isolated appearance provider.
 
 Optional auth/query/service helpers are retained for future features and are not
 mounted by the starter. A consuming auth flow supplies its own verification
@@ -61,9 +72,10 @@ rule replacement must preserve the shared restrictions.
 - Storybook imports stay in `.rnstorybook/` and its narrow feature entry. Native
   control restrictions cover both stories and supporting preview compositions.
 
-Every example formerly mounted as a showcase screen now lives inside Storybook.
-The runtime guard, Metro integration and conditional registration import keep it
-out of releases. Verify both native graphs after entry/Metro changes; see
+Storybook compositions and fixtures remain behind the development boundary.
+App-facing component pages use public UI directly, without importing Storybook.
+The runtime guard, Metro integration and conditional registration import keep
+developer tooling out of releases. Verify both native graphs after entry/Metro changes; see
 [the catalog boundary](storybook.md#release-boundary).
 
 ## Brand and services

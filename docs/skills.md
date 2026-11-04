@@ -48,18 +48,19 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 
 ## Controls and forms
 
-| Skill                                                                                                 | Responsibility                        |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| [template-skill-ui-button](../.agents/skills/template-skill-ui-button/SKILL.md)                       | Semantic actions and button states    |
-| [template-skill-ui-checkbox](../.agents/skills/template-skill-ui-checkbox/SKILL.md)                   | Controlled checked choices            |
-| [template-skill-ui-chip](../.agents/skills/template-skill-ui-chip/SKILL.md)                           | Native actions, filters and tokens    |
-| [template-skill-ui-switch](../.agents/skills/template-skill-ui-switch/SKILL.md)                       | Controlled boolean settings           |
-| [template-skill-ui-slider](../.agents/skills/template-skill-ui-slider/SKILL.md)                       | Continuous and stepped numeric values |
-| [template-skill-ui-picker](../.agents/skills/template-skill-ui-picker/SKILL.md)                       | Typed menus and iOS wheels            |
-| [template-skill-ui-segmented-control](../.agents/skills/template-skill-ui-segmented-control/SKILL.md) | Typed single selection                |
-| [template-skill-ui-text-input](../.agents/skills/template-skill-ui-text-input/SKILL.md)               | String inputs and native state bridge |
-| [template-skill-ui-field-group](../.agents/skills/template-skill-ui-field-group/SKILL.md)             | Native grouped settings sections      |
-| [template-skill-ui-form](../.agents/skills/template-skill-ui-form/SKILL.md)                           | React Hook Form bindings and submit   |
+| Skill                                                                                                 | Responsibility                         |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| [template-skill-ui-button](../.agents/skills/template-skill-ui-button/SKILL.md)                       | Semantic actions and button states     |
+| [template-skill-ui-checkbox](../.agents/skills/template-skill-ui-checkbox/SKILL.md)                   | Controlled checked choices             |
+| [template-skill-ui-chip](../.agents/skills/template-skill-ui-chip/SKILL.md)                           | Native actions, filters and tokens     |
+| [template-skill-ui-switch](../.agents/skills/template-skill-ui-switch/SKILL.md)                       | Controlled boolean settings            |
+| [template-skill-ui-slider](../.agents/skills/template-skill-ui-slider/SKILL.md)                       | Continuous and stepped numeric values  |
+| [template-skill-ui-picker](../.agents/skills/template-skill-ui-picker/SKILL.md)                       | Typed menus and iOS wheels             |
+| [template-skill-ui-date-time-picker](../.agents/skills/template-skill-ui-date-time-picker/SKILL.md)   | Controlled native date and time fields |
+| [template-skill-ui-segmented-control](../.agents/skills/template-skill-ui-segmented-control/SKILL.md) | Typed single selection                 |
+| [template-skill-ui-text-input](../.agents/skills/template-skill-ui-text-input/SKILL.md)               | String inputs and native state bridge  |
+| [template-skill-ui-field-group](../.agents/skills/template-skill-ui-field-group/SKILL.md)             | Native grouped settings sections       |
+| [template-skill-ui-form](../.agents/skills/template-skill-ui-form/SKILL.md)                           | React Hook Form bindings and submit    |
 
 ## Feedback and app compositions
 

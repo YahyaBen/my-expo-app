@@ -46,14 +46,14 @@ export function PageScreen({
   onRefresh,
   colorScheme,
   onBack,
-  showBack = true,
+  showBack = !tab,
 }: Readonly<PageScreenProps>) {
   const scheme = useColorScheme(colorScheme);
   const goBack = onBack ?? (() => (router.canGoBack() ? router.back() : router.replace('/')));
   return (
     <PageFrame
       title={title}
-      onBack={tab || !showBack ? undefined : goBack}
+      onBack={!showBack ? undefined : goBack}
       colorScheme={scheme}
       headerMode="scroll"
     >

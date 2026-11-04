@@ -90,6 +90,12 @@ function resolveBrand(env = process.env) {
   const brand = parsed.data;
   if (brand.id !== id) throw new Error(`Brand manifest ID must match its registry key: ${id}.`);
 
+  // Apply variant IDs before validating package-specific integrations.
+  const identitySuffix = { development: '.dev', preview: '.preview', production: '' }[variant];
+  brand.ios.bundleIdentifier += identitySuffix;
+  brand.android.package += identitySuffix;
+  brand.scheme += identitySuffix;
+
   requireAsset(brand.icon, 'icon');
   if (brand.ios.icon) {
     const iconFile = brand.ios.icon.endsWith('.icon')

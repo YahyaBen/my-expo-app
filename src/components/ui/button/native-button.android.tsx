@@ -1,11 +1,16 @@
 import { Button, OutlinedButton, Shape, Text, TextButton } from '@expo/ui/jetpack-compose';
-import { fillMaxWidth, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
+import {
+  fillMaxWidth,
+  semantics,
+  testID as nativeTestID,
+} from '@expo/ui/jetpack-compose/modifiers';
 import { IconColorContext } from '../icon/icon-color-context';
 import type { ButtonContentProps } from './button';
 
 export function NativeButton({
   variant,
   label,
+  accessibilityLabel,
   children,
   onPress,
   disabled,
@@ -57,6 +62,7 @@ export function NativeButton({
       modifiers={[
         ...(fullWidth ? [fillMaxWidth()] : []),
         ...(testID ? [nativeTestID(testID)] : []),
+        ...(accessibilityLabel ? [semantics({ contentDescription: accessibilityLabel })] : []),
       ]}
     >
       <IconColorContext.Provider value={contentColor ?? (filled ? undefined : color)}>

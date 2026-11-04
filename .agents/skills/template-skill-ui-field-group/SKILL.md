@@ -7,7 +7,7 @@ description: Compose grouped native settings forms with one bounded scroll owner
 
 Import `FieldGroup` from `@components/ui`.
 Sources: [field-group/](../../../src/components/ui/field-group/) and
-[Settings example](../../../.rnstorybook/components/device/settings-preview.tsx).
+[Settings page](../../../src/features/settings/settings-screen.tsx).
 
 ## Structure
 

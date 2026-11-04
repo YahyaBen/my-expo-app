@@ -58,8 +58,8 @@ behavior still require verification on matching iOS and Android builds.
 
 The **Wireframes/Preferences** story offers system/light/dark appearance,
 supported header effects, Reduce Motion, language, device permissions, haptic
-feedback, device location and app version. The release wireframe has no Settings
-or account screen.
+feedback, device location and app version. Template's Settings tab exposes that
+same page using the root's saved preferences; the app has no account screen.
 
 ## Theme values
 
@@ -85,7 +85,7 @@ explicit overrides and native control behavior remain with their existing owners
 
 ## Device permissions
 
-The Settings example has switches for notifications, camera, microphone, photos
+The [Settings page](../src/features/settings/settings-screen.tsx) has switches for notifications, camera, microphone, photos
 and haptics, plus **Use location** in its Location section. Camera, microphone,
 location, photo selection and haptics respect saved app preferences. Enabling a
 capability requests OS approval when needed. **Device settings** manages system
@@ -116,7 +116,7 @@ settings. Coordinates stay in screen state and are acquired only on request.
 The existing `expo-location` native module and foreground permission configuration
 must be present in the installed development build.
 
-The Preferences story owns its [header-effect picker](../.rnstorybook/components/device/header-motion-picker.tsx). The
+Settings owns its [header-effect picker](../src/features/settings/header-motion-picker.tsx). The
 shared [color-scheme control](../src/components/ui/appearance/color-scheme-control.tsx)
 serves Settings and login.
 Its System/Light/Dark picker applies appearance changes immediately through the
@@ -133,7 +133,13 @@ The color-sample area has its own explicit-scheme Host after the RN bridge;
 page chrome and the other text examples keep the app appearance. The retained
 native Storybook controls also operate on isolated providers.
 
-The release wireframe has no Settings screen. Preferences in Storybook uses an isolated appearance provider, so its theme controls do not persist app appearance. The root still supports saved appearance for future screens. Language and device switches in that story use their real saved settings.
+Template's Settings tab and Appearance component page use the root's saved appearance
+preference. Settings also exposes saved motion, language and device choices, with
+one native grouped scroll owner and clearance for the raised dock action. Its
+permission/location modules load when the tab is first opened. Preferences in
+Storybook renders the same feature through an isolated appearance provider, so its
+theme controls do not persist app appearance. Language and device switches in
+that story use their real saved settings.
 
 ## Saved appearance
 

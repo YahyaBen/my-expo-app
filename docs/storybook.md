@@ -1,7 +1,8 @@
 # On-device Storybook
 
-Storybook is the development entry for this iOS/Android template. The old `/ui`,
-`/ui-component/*`, auth, account and tab routes have been removed.
+Storybook is the development entry for this iOS/Android template. The Template
+page also exposes a lightweight native component menu and `/components/[id]`
+pages. Those pages use shared UI directly; they do not import Storybook fixtures.
 
 ## Launch
 
@@ -19,11 +20,11 @@ is saved by Storybook. Use its sidebar to browse:
 - **Forms**: local form validation and OTP demonstrations without a backend.
 - **Wireframes/Home Sections**: the former Home gallery and sample rows, retaining IDs.
 - **Wireframes/Component Gallery**: complete interactive native compositions, including camera.
-- **Wireframes/Preferences**: language, appearance, motion and device controls.
-- **Wireframes/Template**: the single release wireframe.
+- **Wireframes/Preferences**: the shared app Settings page with isolated appearance.
+- **Wireframes/Template**: the Template page, native dock and circular component menu.
 - **Motion/Transitions**: native push/Back, header styles and reduced motion.
 
-`npm run start:app` explicitly disables Storybook to work on the wireframe.
+`npm run start:app` explicitly disables Storybook to work on Template and its component pages.
 `EXPO_PUBLIC_STORYBOOK_ENABLED=false` also disables the catalog for a direct Expo
 start. Restart with a cleared Metro cache after switching modes.
 
@@ -34,8 +35,10 @@ The root waits for resources and page layout before revealing the app.
 
 ## Isolation and native effects
 
-Stories and all demonstration compositions live in `.rnstorybook/`. Shared UI never
-imports fixtures. Story themes use in-memory providers. Preferences stories can
+Stories and demonstration compositions live in `.rnstorybook/`. Shared UI never
+imports fixtures. The Settings feature in `src/features/settings/` also serves
+the app's Settings tab; its thin story wrapper supplies no duplicate settings state.
+Story themes use in-memory providers. Preferences stories can
 change the saved language and device feature switches; real permission requests,
 camera, one-shot location and notification actions happen only when requested.
 They are device tools and do not require an auth session or backend.
@@ -60,8 +63,8 @@ require is removed in release mode, and the root protects the Storybook route.
 EAS development profiles enable Storybook; preview and production disable it.
 The brand resolver rejects explicit Storybook enablement outside development.
 
-All showcase compositions now live behind this tooling boundary; they are no
-longer ordinary Router screens. Inspect both native release source maps after
+Storybook compositions live behind this tooling boundary. The app's component
+pages and bundled artwork remain available independently. Inspect both native release source maps after
 entry, Metro or Router changes:
 
 ```powershell

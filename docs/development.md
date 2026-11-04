@@ -60,8 +60,10 @@ variant/flag. Public variables are bundled and must not contain secrets.
 `EXPO_PUBLIC_ENABLE_DEV_SCREENS` is obsolete and unused.
 
 For a different product, change the manifest's name, slug, scheme, native IDs and
-assets as needed. Variants do not suffix native identities. The retained Google
-configuration files stay unchanged and inactive for the neutral identity; enable
+assets as needed. The manifest defines production identity; development and preview
+suffix native IDs and URL schemes for side-by-side installation. See
+[native identity and integrations](eas-development-builds.md#native-identity-and-integrations).
+The retained Google configuration files stay unchanged and inactive for the neutral identity; enable
 Firebase only with files matching the chosen package/bundle ID. No backend,
 auth restoration, permission prompt or store-update check blocks starter startup.
 

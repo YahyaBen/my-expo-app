@@ -11,7 +11,7 @@ Source: [navigation/](../../../src/components/ui/navigation/).
 ## Public contract
 
 - `items` is a readonly tuple of exactly four records: stable `id`,
-  translated `label`, optional `testID`.
+  translated `label`, optional typed `icon` override and `testID`.
 - `activeId` is `home`, `search`, `recipes` or `more`.
 - `onSelect(id)` delegates navigation to the consumer.
 - `action` supplies center-button `kind`, translated `label`, `onPress`

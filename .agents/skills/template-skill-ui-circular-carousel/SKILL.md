@@ -5,21 +5,33 @@ description: Compose a caller-configured native photo carousel with circular cli
 
 # Circular carousel
 
-Import `CircularCarousel`, `CircularCarouselProps` and `PhotoItem` from `@components/ui`
+Import `CircularCarousel`, `CircularCarouselProps`, `CircularCarouselItem`,
+`CircularCarouselIconItem` and `PhotoItem` from `@components/ui`
 inside an existing native Host.
 [Source](../../../src/components/ui/circular-carousel/circular-carousel.tsx) owns
 presentation; the caller owns images, translated labels, data and surrounding layout.
 
 ## Props
 
-- Required: `items: readonly PhotoItem[]`, `width: number`,
-  `accessibilityLabel: string`. Items need unique stable string IDs, an Expo
-  Image source (URI, object or bundled asset number) and a translated label.
+- Required: `items`, `width: number`, `accessibilityLabel: string`. Items need
+  unique stable string IDs and translated labels. A photo supplies `source`
+  (Expo Image URI/object/bundled asset); an icon supplies typed `icon` names.
+  The generic props infer the item/callback type; existing photo callers remain valid.
 - `itemSize` changes the image step/diameter; `height` is the artwork viewport height. `scaleEnabled` defaults to false; the caller owns any Scale switch.
 - `getPositionLabel(index, total)` formats a zero-based index for the optional
   caption and spoken value. Without it, accessibility uses the item's label.
 - `onIndexChange(index, item)` runs once for a changed user selection. Initial
   render, resizing, identical selections and dataset resets do not emit events.
+- `onPreviewIndexChange(index, item)` reports the centered item at drag start and
+  subsequent nearest-item changes during the swipe/inertia. It does not commit
+  selection or activate an item. Index crossings are detected on the UI runtime;
+  React receives preview changes rather than every scroll frame. Keep transient
+  name feedback separate from the carousel's caller state so it can update alone.
+- Optional `onItemPress(index, item)` enables named native circle actions. Swipes
+  select without activating. Accessibility increment/decrement selects; activate
+  opens the selected item. `onScrollBeginDrag` reports a new drag;
+  `onSelectionSettled(index, item)` reports a settled scroll, including the same item.
+  Feature navigation and informational name callouts stay in the consumer.
 - `testID` defaults to `circular-carousel`. Caller-supplied prefixes identify instances.
 
 ## State and boundaries
@@ -33,6 +45,9 @@ presentation; the caller owns images, translated labels, data and surrounding la
   distant images unmount. Keep native clipping off for transformed overlap and
   descending cell stacking order. Continuous artwork motion stays on the UI
   runtime; React handles settled selection and the native list owns its window.
+- Interactive cells use centered content padding and local artwork coordinates
+  so native actions stay within each cell's touch frame. Native controls re-enter
+  through the cell Host; photos remain pointer-transparent inside their action.
 - Preserve snap scrolling, native-direction scroll metrics normalized to logical offsets, paired RTL
   mirroring, adjustable accessibility actions, theme and reduced-motion behavior.
 - Keep native text/controls around the RN artwork boundary. UI files contain no

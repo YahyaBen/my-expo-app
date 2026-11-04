@@ -13,8 +13,10 @@ for operator commands. Keep configuration in these existing owners:
 | `config/api.js`, `src/services/api.config.ts`            | Shared API normalization/timeout and lazy native environment access          |
 
 - `APP_BRAND` selects identity; `APP_VARIANT` selects development, preview or
-  production. Preserve existing identifiers and Firebase mappings. Variants do
-  not automatically suffix IDs; a side-by-side app needs its own identity.
+  production. Preserve production identifiers. The resolver suffixes development
+  native IDs and URL schemes with `.dev`, and preview with `.preview`, before
+  validating package-specific Firebase mappings. Both development profiles share
+  one identity. Keep the generated Expo client URL scheme development-only.
 - Local and standard build profiles default to the template in every variant.
   A clone fills its existing `eas.projectId` slot; `eas.owner` is optional.
   Keep an empty slot usable locally and omit it from public EAS metadata.

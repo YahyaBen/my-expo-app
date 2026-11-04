@@ -33,7 +33,7 @@ always reaches the shared entry before selecting a renderer.
 and Android outlined styling. Destructive also sets the iOS role.
 
 Optional common props: `label`, native `children`, `onPress`, `disabled`,
-`testID`, `fullWidth`, `color`, `contentColor`, `borderRadius`,
+`accessibilityLabel`, `testID`, `fullWidth`, `color`, `contentColor`, `borderRadius`,
 `contentPadding`. Standalone-only: `colorScheme`, `cornerRadii`.
 
 - Children replace the label when non-nullish. For icon/text content, use native
@@ -41,9 +41,9 @@ Optional common props: `label`, native `children`, `onPress`, `disabled`,
   Shared Icon artwork inherits the resolved button foreground through React
   context, with an explicit icon color taking precedence.
   `UniversalTextContent` sets its own foreground, so check filled-button contrast.
-- Generic icon-only accessible naming is not exposed: there is no
-  `accessibilityLabel` prop, and a label is ignored with children. Use an
-  existing named icon-control adapter or deliberately extend both native adapters.
+- With custom icon/photo children, supply translated `accessibilityLabel` to name
+  the native action on both platforms. A plain `label` is ignored with children.
+  Keep decorative artwork pointer-transparent so the native button owns taps.
 - There are no `style`, `modifiers`, `icon`, `loading`, `pending` or `href`
   props. Navigation, confirmation, pending/error state and duplicate-submit
   guards belong to the consumer. Disable unavailable actions with `disabled`.

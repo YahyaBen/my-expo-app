@@ -3,8 +3,10 @@
 ## Current scope
 
 The Expo SDK 58 release renders the
-[template screen](../src/features/template/template-screen.tsx). Galleries,
-Preferences and stress fixtures belong to development-only Storybook. Optional
+[template screen](../src/features/template/template-screen.tsx), component pages
+and an on-demand Settings feature. Storybook's isolated previews and stress
+fixtures stay development-only. Settings native permission/location integrations
+are evaluated when that tab is opened. Optional
 auth/query providers are not mounted by the release root.
 
 Current code isolates palette, appearance, header and motion subscriptions,

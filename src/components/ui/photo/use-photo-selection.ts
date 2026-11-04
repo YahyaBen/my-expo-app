@@ -3,27 +3,29 @@ import type { FlatList, ViewProps } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import type { PhotoItem } from './photo-item';
 
-type PhotoSelectionOptions = {
-  items: readonly PhotoItem[];
+type PhotoSelectionOptions<T extends { id: string; label: string }> = {
+  items: readonly T[];
   itemWidth: number;
   reducedMotion: boolean;
   accessibilityLabel: string;
   getPositionLabel?: (index: number, total: number) => string;
-  onIndexChange?: (index: number, item: PhotoItem) => void;
+  onIndexChange?: (index: number, item: T) => void;
+  onItemPress?: (index: number, item: T) => void;
   onSelectionFeedback?: () => void;
 };
 
 /** Each carousel's ordered-ID key owns resets; resizing never emits selection events. */
-export function usePhotoSelection({
+export function usePhotoSelection<T extends { id: string; label: string } = PhotoItem>({
   items,
   itemWidth,
   reducedMotion,
   accessibilityLabel,
   getPositionLabel,
   onIndexChange,
+  onItemPress,
   onSelectionFeedback,
-}: Readonly<PhotoSelectionOptions>) {
-  const scrollRef = useRef<FlatList<PhotoItem>>(null);
+}: Readonly<PhotoSelectionOptions<T>>) {
+  const scrollRef = useRef<FlatList<T>>(null);
   const selectedIndex = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollOffset = useSharedValue(0);
@@ -54,10 +56,18 @@ export function usePhotoSelection({
       now: activeIndex + 1,
       text: positionLabel ?? items[activeIndex].label,
     },
-    accessibilityActions: [{ name: 'increment' }, { name: 'decrement' }],
+    accessibilityActions: [
+      { name: 'increment' },
+      { name: 'decrement' },
+      ...(onItemPress ? [{ name: 'activate' as const }] : []),
+    ],
+    onAccessibilityTap: onItemPress
+      ? () => onItemPress(activeIndex, items[activeIndex])
+      : undefined,
     onAccessibilityAction: ({ nativeEvent }) => {
       if (nativeEvent.actionName === 'increment') selectPhoto(activeIndex + 1);
       if (nativeEvent.actionName === 'decrement') selectPhoto(activeIndex - 1);
+      if (nativeEvent.actionName === 'activate') onItemPress?.(activeIndex, items[activeIndex]);
     },
   } satisfies ViewProps;
 

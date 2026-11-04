@@ -2,8 +2,10 @@
 
 iOS and Android starter using Expo SDK 58, Expo Router and native Expo UI.
 Development opens the on-device Storybook catalog. Preview and production builds
-open a single neutral UX wireframe. Product, auth, account, settings and tab screens
-have been removed; shared components and optional service/workflow helpers remain.
+open the Template page with a native dock and circular component menu. Tap its
+center action to browse components: swiping shows the page name and tapping an
+icon pushes its native example. Shared components and optional service/workflow
+helpers remain available independently of Storybook.
 
 Keep it simple. Native performance is a primary requirement: load only what the
 active feature needs, preserve idle/motion guards and measure before optimizing.
@@ -23,7 +25,7 @@ modules. Storybook opens automatically with its sidebar and Controls. Start with
 `home-*` selectors. Demo artwork works offline. No backend or `.env.local` is needed.
 
 ```sh
-npm run start:app           # View the release wireframe in development
+npm run start:app           # View Template and its component menu in development
 npm run storybook:dev       # Alias for the default development catalog
 npm run storybook:generate  # After adding or moving stories
 npm run check              # Typecheck, lint and formatting

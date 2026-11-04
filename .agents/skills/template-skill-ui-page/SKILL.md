@@ -24,6 +24,8 @@ Source: [page/](../../../src/components/ui/page/).
   wide displays. Keep frame backgrounds, header blur and artwork edge-to-edge.
 - `showBack={false}` hides Back without adding tab insets. `tab` adds only the
   28-point raised-button trailing clearance; the dock owns its row/system inset.
+  Tab pages hide Back by default; explicit `showBack` can retain a pushed
+  Template preview's Back action while keeping dock spacing.
 - Keep system insets outside keyboard padding and avoid nested scroll containers.
 
 ## Header

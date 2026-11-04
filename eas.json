@@ -14,7 +14,7 @@
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "true"
       },
       "android": {
-        "gradleCommand": ":app:assembleDebug --max-workers=1 --no-parallel --init-script ../config/android-build-memory.gradle"
+        "gradleCommand": ":app:assembleDebug --max-workers=1 --no-parallel"
       },
       "ios": {
         "image": "auto",

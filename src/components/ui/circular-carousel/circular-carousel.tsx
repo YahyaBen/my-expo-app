@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { Column, RNHostView } from '@expo/ui';
+import { Column, RNHostView, Spacer } from '@expo/ui';
 import Animated, {
   ReduceMotion,
   useAnimatedStyle,
@@ -10,8 +10,10 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { UniversalTextContent } from '../text/universal-text';
+import { ButtonContent } from '../button/button';
+import { Icon, type IconName } from '../icon/icon';
 import { nativeFillWidth } from '../native/native-fill-width';
-import { useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
+import { UniversalHost, useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
 import { radii, spacing } from '@/constants/layout';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -26,9 +28,12 @@ const motionInput = [-2, -1, 0, 1, 2] as const;
 const scaleOutput = [0.5, 0.9, 1.2, 0.9, 0.5] as const;
 const opacityOutput = [0.5, 1, 1, 1, 0.5] as const;
 
-export type CircularCarouselProps = {
+export type CircularCarouselIconItem = { id: string; label: string; icon: IconName };
+export type CircularCarouselItem = PhotoItem | CircularCarouselIconItem;
+
+export type CircularCarouselProps<T extends CircularCarouselItem = PhotoItem> = {
   /** Unique, stable IDs; an empty list renders nothing. */
-  items: readonly PhotoItem[];
+  items: readonly T[];
   /** Available viewport dimensions in native points/dp, supplied by the parent. */
   width: number;
   height?: number;
@@ -37,13 +42,22 @@ export type CircularCarouselProps = {
   /** Format a zero-based index for both the visible caption and screen reader. */
   getPositionLabel?: (index: number, total: number) => string;
   /** Fires once when a user selects a different item, never on initial render. */
-  onIndexChange?: (index: number, item: PhotoItem) => void;
+  onIndexChange?: (index: number, item: T) => void;
+  /** Reports drag start and nearest-item changes while swiping, without committing selection. */
+  onPreviewIndexChange?: (index: number, item: T) => void;
+  /** Explicit activation is separate from swipe selection. */
+  onItemPress?: (index: number, item: T) => void;
+  onScrollBeginDrag?: () => void;
+  /** Runs when a user scroll settles, including a return to the same item. */
+  onSelectionSettled?: (index: number, item: T) => void;
   scaleEnabled?: boolean;
   testID?: string;
 };
 
 // Motion reference: https://github.com/enzomanuelmangano/demos/tree/main/src/animations/circular-carousel
-export function CircularCarousel(props: Readonly<CircularCarouselProps>) {
+export function CircularCarousel<T extends CircularCarouselItem = PhotoItem>(
+  props: Readonly<CircularCarouselProps<T>>,
+) {
   if (props.items.length === 0 || !Number.isFinite(props.width) || props.width <= 0) return null;
   // A changed data order starts a fresh selection; resizing keeps the current item.
   return (
@@ -51,7 +65,7 @@ export function CircularCarousel(props: Readonly<CircularCarouselProps>) {
   );
 }
 
-function CircularCarouselContent({
+function CircularCarouselContent<T extends CircularCarouselItem>({
   items,
   width: availableWidth,
   height: requestedHeight,
@@ -61,8 +75,12 @@ function CircularCarouselContent({
   accessibilityLabel,
   getPositionLabel,
   onIndexChange,
+  onPreviewIndexChange,
+  onItemPress,
+  onScrollBeginDrag,
+  onSelectionSettled,
   testID = 'circular-carousel',
-}: Readonly<CircularCarouselProps>) {
+}: Readonly<CircularCarouselProps<T>>) {
   const rtl = useHostLayoutDirection() === 'rightToLeft';
   const reducedMotion = useAppReducedMotion();
 
@@ -84,6 +102,7 @@ function CircularCarouselContent({
     accessibilityLabel,
     getPositionLabel,
     onIndexChange,
+    onItemPress,
     onSelectionFeedback: () => triggerHaptic('selection'),
   });
 
@@ -114,7 +133,18 @@ function CircularCarouselContent({
             rtl={rtl}
             selectedIndex={selectedIndex}
             scrollOffset={scrollOffset}
-            onIndexChange={updateSelection}
+            onIndexChange={(index) => {
+              const next = Math.max(0, Math.min(index, items.length - 1));
+              updateSelection(next);
+              onSelectionSettled?.(next, items[next]);
+            }}
+            onPreviewIndexChange={
+              onPreviewIndexChange
+                ? (index) => onPreviewIndexChange(index, items[index])
+                : undefined
+            }
+            interactive={Boolean(onItemPress)}
+            onScrollBeginDrag={onScrollBeginDrag}
             renderItem={({ item, index }) => (
               <PhotoCard
                 item={item}
@@ -128,6 +158,7 @@ function CircularCarouselContent({
                 scaleProgress={scaleProgress}
                 rtl={rtl}
                 reducedMotion={reducedMotion}
+                onPress={onItemPress ? () => onItemPress(index, item) : undefined}
                 testID={`${testID}-photo-${item.id}`}
               />
             )}
@@ -158,8 +189,9 @@ function PhotoCard({
   rtl,
   reducedMotion,
   testID,
+  onPress,
 }: Readonly<{
-  item: PhotoItem;
+  item: CircularCarouselItem;
   index: number;
   width: number;
   height: number;
@@ -171,11 +203,15 @@ function PhotoCard({
   rtl: boolean;
   reducedMotion: boolean;
   testID: string;
+  onPress?: () => void;
 }>) {
   const colors = useThemeColors(useHostColorScheme());
-  const insetX = inset + spacing.sm;
+  // Interactive cells stay inside their own horizontal touch frame. Content
+  // padding centers the first/last cell instead of overflowing a narrow cell.
+  const insetX = (onPress ? 0 : inset) + spacing.sm;
   const diameter = Math.max(1, width - spacing.lg);
-  const left = rtl ? sceneWidth - insetX - diameter : insetX;
+  const viewportInset = inset + spacing.sm;
+  const left = rtl ? sceneWidth - viewportInset - diameter : viewportInset;
   const radius = diameter * 0.6;
   const translateYOutput = useMemo(() => [0, -width / 3, -width / 2, -width / 3, 0], [width]);
   const animatedStyle = useAnimatedStyle(() => {
@@ -210,7 +246,7 @@ function PhotoCard({
           width: Math.max(1, width - spacing.lg),
           height: Math.max(1, height - spacing.lg),
           borderRadius: radii.pill,
-          borderWidth: 2,
+          borderWidth: onPress ? 0 : 2,
           borderColor: colors.background,
           overflow: 'hidden',
           backgroundColor: colors.surfaceVariant,
@@ -218,14 +254,61 @@ function PhotoCard({
         animatedStyle,
       ]}
     >
-      <Image
-        source={item.source}
-        contentFit="cover"
-        cachePolicy="memory-disk"
-        accessible={false}
-        style={StyleSheet.absoluteFill}
-        testID={testID}
-      />
+      {onPress ? (
+        <UniversalHost
+          matchContents={false}
+          ignoreSafeArea="all"
+          style={{ width: diameter, height: diameter }}
+        >
+          <ButtonContent
+            variant="tertiary"
+            accessibilityLabel={item.label}
+            onPress={onPress}
+            borderRadius={diameter / 2}
+            contentPadding={0}
+            color={colors.surfaceVariant}
+            contentColor={colors.text}
+            testID={`${testID}-action`}
+          >
+            <Column alignment="center" style={{ width: diameter, height: diameter }}>
+              <Spacer flexible />
+              {'icon' in item ? (
+                <Icon name={item.icon} size={Math.min(28, diameter / 2)} />
+              ) : (
+                <RNHostView matchContents>
+                  <View pointerEvents="none" style={{ width: diameter, height: diameter }}>
+                    <Image
+                      source={item.source}
+                      contentFit="cover"
+                      accessible={false}
+                      style={StyleSheet.absoluteFill}
+                      testID={testID}
+                    />
+                  </View>
+                </RNHostView>
+              )}
+              <Spacer flexible />
+            </Column>
+          </ButtonContent>
+        </UniversalHost>
+      ) : 'source' in item ? (
+        <Image
+          source={item.source}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          accessible={false}
+          style={StyleSheet.absoluteFill}
+          testID={testID}
+        />
+      ) : (
+        <UniversalHost matchContents={false} style={{ width: diameter, height: diameter }}>
+          <Column alignment="center" style={{ width: diameter, height: diameter }}>
+            <Spacer flexible />
+            <Icon name={item.icon} size={Math.min(28, diameter / 2)} />
+            <Spacer flexible />
+          </Column>
+        </UniversalHost>
+      )}
     </Animated.View>
   );
 }
