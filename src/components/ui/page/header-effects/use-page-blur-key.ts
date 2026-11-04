@@ -54,8 +54,9 @@ export function usePageBlurKey() {
     if (navigation.isFocused()) handleFocus();
 
     return () => {
-      // Preserve departure even when Activity cleans up before the blur listener runs.
-      if (!navigation.isFocused()) leftScreen.current = true;
+      // Activity can hide a local tab while its enclosing Router screen stays focused.
+      // Rebind only the backdrop when its effects resume against the retained target.
+      leftScreen.current = true;
       cancelRefresh();
       unsubscribeBlur();
       unsubscribeFocus();

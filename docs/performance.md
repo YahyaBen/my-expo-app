@@ -9,6 +9,12 @@ fixtures stay development-only. Settings native permission/location integrations
 are evaluated when that tab is opened. Optional
 auth/query providers are not mounted by the release root.
 
+Template retains its ordinary page and Settings in separate React Activities
+after the first Settings visit. Hidden Activities retain state/native views and
+clean up React effects; they do not establish native idle behavior. Settings is
+not prerendered or imported before that first visit. Compare retained memory and
+hidden native work as well as tab-switch frame costs.
+
 Current code isolates palette, appearance, header and motion subscriptions,
 virtualizes carousel images, supports bounded grid rows and limits stacked
 indicators. Controlled inputs reconcile changed text; OTP errors derive from
@@ -37,15 +43,16 @@ measurements remain pending.
 Use the [Storybook workflow](storybook.md). Fixture registration establishes
 availability; it does not establish device results.
 
-| Fixture                                                      | Check                                                                                                                                                                                                                                                 |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Performance/Native Lists/Playground                          | Compare eager native scrolling, FlashList and native ListForEach with 24/200/1,000 mixed-height multilingual rows. Inspect mounted rows, native Host cost, fast-fling gaps and settled memory.                                                        |
-| Components/Theme Tokens/Playground, `example: subscriptions` | After startup settles, change one preference and inspect the matching `[theme-subscription]` committed-update logs.                                                                                                                                   |
-| Native input and OTP examples                                | Type, reject, reset, paste/autofill and dismiss while pending. Preserve focus, drafts, callbacks, countdown lifetime and duplicate-request guards. Local simulations do not verify a backend.                                                         |
-| Wireframes/Preferences                                       | Reopen, return from system Settings and toggle location. Check permission refresh, retryable writes, request cleanup and language-sheet dismissal.                                                                                                    |
-| Motion/Transitions/NativeStack and PausedContent             | Repeat push/Back and background/resume. Restore blur, touch shielding, drafts and scroll position; pause decorative work while hidden.                                                                                                                |
-| Components/Launch Screen/Playground                          | Let the visible hold elapse before clearing waiting. Check that preparation overlaps the hold without restarting it.                                                                                                                                  |
-| Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return. |
+| Fixture                                                      | Check                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Performance/Native Lists/Playground                          | Compare eager native scrolling, FlashList and native ListForEach with 24/200/1,000 mixed-height multilingual rows. Inspect mounted rows, native Host cost, fast-fling gaps and settled memory.                                                                               |
+| Components/Theme Tokens/Playground, `example: subscriptions` | After startup settles, change one preference and inspect the matching `[theme-subscription]` committed-update logs.                                                                                                                                                          |
+| Native input and OTP examples                                | Type, reject, reset, paste/autofill and dismiss while pending. Preserve focus, drafts, callbacks, countdown lifetime and duplicate-request guards. Local simulations do not verify a backend.                                                                                |
+| Wireframes/Preferences                                       | Reopen, return from system Settings and toggle location. Check permission refresh, retryable writes, request cleanup and language-sheet dismissal.                                                                                                                           |
+| Wireframes/Template                                          | Repeat Components/Settings switches after the first visit. Check retained scroll/drafts, header blur restoration, absence of narrow initial text and hidden permission/motion work. Capture menu closed, opening, settled open and closed again separately on the same page. |
+| Motion/Transitions/NativeStack and PausedContent             | Repeat push/Back and background/resume. Restore blur, touch shielding, drafts and scroll position; pause decorative work while hidden.                                                                                                                                       |
+| Components/Launch Screen/Playground                          | Let the visible hold elapse before clearing waiting. Check that preparation overlaps the hold without restarting it.                                                                                                                                                         |
+| Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return.                        |
 
 Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion;
 check keyboard and safe areas after layout changes. The configured UX theme

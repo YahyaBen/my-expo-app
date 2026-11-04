@@ -28,6 +28,8 @@ export function useDeviceLocation(permissionChanged?: DevicePermission) {
 
   useEffect(() => {
     mounted.current = true;
+    // Reconcile a request that finished while this retained Activity was hidden.
+    if (!busy.current) setPending(false);
     return () => {
       mounted.current = false;
     };

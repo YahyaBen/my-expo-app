@@ -109,6 +109,7 @@ function SettingsPage({
           // Recreate only this iOS form host when direction flips; reused native cells mirror text.
           key={Platform.OS === 'ios' ? direction : undefined}
           matchContents={false}
+          useViewportSizeMeasurement={Platform.OS === 'android'}
           ignoreSafeArea="all"
           style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
           testID="app-settings-content"

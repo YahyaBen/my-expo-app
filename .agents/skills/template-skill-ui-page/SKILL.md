@@ -22,6 +22,9 @@ Source: [page/](../../../src/components/ui/page/).
   Use `inset={false}` when full-width content owns its gutters.
 - Native content Hosts cap at `screenContentMaxWidth` (640 points), centered on
   wide displays. Keep frame backgrounds, header blur and artwork edge-to-edge.
+- Bounded Android page/form Hosts use `useViewportSizeMeasurement` to supply a
+  nonzero initial Compose proposal before Yoga settles their viewport. Keep
+  explicit bounds and the width cap; do not enable it for intrinsic inline Hosts.
 - `showBack={false}` hides Back without adding tab insets. `tab` adds only the
   28-point raised-button trailing clearance; the dock owns its row/system inset.
   Tab pages hide Back by default; explicit `showBack` can retain a pushed

@@ -4,7 +4,7 @@ import { screenInsets } from '@/lib/screen-insets';
 import { Column } from '@expo/ui';
 import { router, type Href } from 'expo-router';
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonContent } from '../button/button';
 import { UniversalHost } from '../host/universal-host';
@@ -94,6 +94,8 @@ function PageContent({
         <UniversalHost
           colorScheme={scheme}
           matchContents={false}
+          // Compose can measure before Yoga supplies the first nonzero viewport.
+          useViewportSizeMeasurement={Platform.OS === 'android'}
           ignoreSafeArea="all"
           style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
         >

@@ -35,6 +35,8 @@ export function useDevicePermissions() {
 
   useEffect(() => {
     mounted.current = true;
+    // A request may settle while Activity has cleaned up this hidden page's effects.
+    if (!busy.current) setPending(null);
     return () => {
       mounted.current = false;
     };

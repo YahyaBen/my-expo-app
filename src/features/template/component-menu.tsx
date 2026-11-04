@@ -70,7 +70,7 @@ export function ComponentMenu({
         pointerEvents="box-none"
       >
         <View pointerEvents="box-none" style={{ width, height: height + 56 }}>
-          <UniversalHost viewportHeight={height} ignoreSafeArea="all">
+          <UniversalHost viewportHeight={height} style={{ width }} ignoreSafeArea="all">
             <CircularCarousel
               items={items}
               width={width}
