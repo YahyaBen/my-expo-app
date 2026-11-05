@@ -31,7 +31,8 @@ Source: [page implementation](../../../../src/components/ui/page/).
 - Root `PageMotionOverlay` supplies one PageWaveContext above navigation. Header
   effects live in `page/header-effects/`; the context exposes explicit geometry,
   paths and a header-height setter rather than the whole animation hook result.
-  Default is rectangular blur; Dunes, Ribbon and Rain add decorative artwork.
+  Default uses rectangular blur. Seasonal motifs reuse the Dunes contour and
+  stay in the trailing portion of the header.
 - Theme `design.header.artwork=false` overrides saved artwork choice. Launch
   artwork is owned separately by `launch-screen/launch-wave.tsx`.
 - Default retains provider/children identity while mounting no wave hook,

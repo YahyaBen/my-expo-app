@@ -54,10 +54,10 @@ availability; it does not establish device results.
 | Components/Launch Screen/Playground                          | Let the visible hold elapse before clearing waiting. Check that preparation overlaps the hold without restarting it.                                                                                                                                                         |
 | Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return.                        |
 
-Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion;
-check keyboard and safe areas after layout changes. The configured UX theme
-disables page-header artwork, so a saved wave preference alone is not an active
-animation workload. React freezing does not prove native blur/mask consumers idle.
+Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion.
+Check keyboard and safe areas after layout changes. Compare Default with an
+animated header effect to measure the artwork's cost. Check whether native blur
+and mask consumers idle when React freezes a screen.
 
 The [photo viewport](../src/components/ui/photo/photo-scroll-view.tsx) owns the carousel
 window and geometry alignment. Measure its initial and retained windows rather

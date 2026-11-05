@@ -1,4 +1,11 @@
-export const HEADER_SHAPES = ['dunes', 'ribbon', 'rain'] as const;
+export const HEADER_SHAPES = [
+  'dunes',
+  'ribbon',
+  'rain',
+  'halloween',
+  'ramadan',
+  'new-year',
+] as const;
 export type PageHeaderShape = (typeof HEADER_SHAPES)[number];
 export const DEFAULT_HEADER_SHAPE: PageHeaderShape = 'dunes';
 export const HEADER_STYLES = ['default', ...HEADER_SHAPES] as const;

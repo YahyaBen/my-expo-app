@@ -54,7 +54,9 @@ export const headerShapeCurves = {
   },
 } as const satisfies Record<string, { front: readonly Cubic[]; back: readonly Cubic[] }>;
 
-function displacedPoint(x: number, y: number, time: number, shape: PageHeaderShape, layer: number) {
+type WaveShape = keyof typeof headerShapeCurves;
+
+function displacedPoint(x: number, y: number, time: number, shape: WaveShape, layer: number) {
   'worklet';
   const distance = Math.max(0, (x - HEADER_CURVE_START) / 600);
   const ramp = Math.min(1, distance * 4);
@@ -77,11 +79,6 @@ function displacedPoint(x: number, y: number, time: number, shape: PageHeaderSha
       dx = 10 * Math.sin(phase / 20 - distance * 4 + layer * 2);
       dy = 7 * Math.sin(phase / 15 - distance * 6 + layer * 2.5);
       break;
-    default:
-      dx = 10 * Math.sin(phase / 8 - distance * 7 + layer * 2);
-      dy =
-        12 * Math.sin(phase / 8 - distance * 10 + layer * 2.2) +
-        3 * Math.sin(phase / 4 - distance * 18);
   }
   return [x + dx * envelope, Math.max(6, Math.min(100, y + dy * envelope))];
 }
@@ -94,7 +91,9 @@ export function headerContour(
   fillEdge: number,
 ): VectorCommand[] {
   'worklet';
-  const curves = layer === 0 ? headerShapeCurves[shape].front : headerShapeCurves[shape].back;
+  const waveShape = shape === 'ribbon' || shape === 'rain' ? shape : 'dunes';
+  const curves =
+    layer === 0 ? headerShapeCurves[waveShape].front : headerShapeCurves[waveShape].back;
   const result: VectorCommand[] = [
     ['M', -100, 100],
     ['L', HEADER_CURVE_START, 100],
@@ -102,9 +101,9 @@ export function headerContour(
   let lastX = 1140;
   for (let index = 0; index < curves.length; index++) {
     const curve = curves[index];
-    const a = displacedPoint(curve[0], curve[1], time, shape, layer);
-    const b = displacedPoint(curve[2], curve[3], time, shape, layer);
-    const c = displacedPoint(curve[4], curve[5], time, shape, layer);
+    const a = displacedPoint(curve[0], curve[1], time, waveShape, layer);
+    const b = displacedPoint(curve[2], curve[3], time, waveShape, layer);
+    const c = displacedPoint(curve[4], curve[5], time, waveShape, layer);
     // Preserve the horizontal tangent where the curve leaves the protected title band.
     if (index === 0) a[1] = 100;
     result.push(['C', a[0], a[1], b[0], b[1], c[0], c[1]]);
@@ -114,7 +113,7 @@ export function headerContour(
   return result;
 }
 
-export function drawVectorPath(builder: SkPathBuilder, commands: VectorCommand[]) {
+export function drawVectorPath(builder: SkPathBuilder, commands: readonly VectorCommand[]) {
   'worklet';
   for (const command of commands) {
     switch (command[0]) {

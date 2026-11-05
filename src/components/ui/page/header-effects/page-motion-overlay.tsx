@@ -3,6 +3,7 @@ import { Canvas, Group, LinearGradient, Path, vec } from '@shopify/react-native-
 import { useLayoutEffect, useState, type ReactNode } from 'react';
 import { View } from 'react-native';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { getSeasonalHeaderColor } from './page-header-details';
 import { PageWaveContext, type PageWaveContextValue } from './page-wave-context';
 import { usePageWaveMotion } from './use-page-wave-motion';
 import type { PageHeaderShape, PageHeaderStyle } from '@/constants/header-motion';
@@ -63,7 +64,9 @@ function PageMotionArtwork({
   const { wave } = context;
   const gradientStart = vec(0, 0);
   const gradientEnd = vec(0, 100);
-  const overlayColors = [colors.tint, `${colors.tint}CC`];
+  const seasonalColor = shape ? getSeasonalHeaderColor(shape, scheme) : undefined;
+  const tint = seasonalColor ?? colors.tint;
+  const overlayColors = [tint, `${tint}CC`];
 
   return visible ? (
     <View
@@ -86,12 +89,12 @@ function PageMotionArtwork({
           </Path>
           <Path
             path={wave.frontPath}
-            color={colors.tint}
+            color={tint}
             opacity={scheme === 'dark' ? 0.22 : 0.12}
             style="stroke"
             strokeWidth={1}
           />
-          <Path path={detailPath} color={colors.tint} opacity={0.28} />
+          <Path path={detailPath} color={tint} opacity={seasonalColor ? 0.36 : 0.28} />
         </Group>
       </Canvas>
     </View>

@@ -35,8 +35,8 @@
   native token names. Keep upstream OKLCH colors converted to native sRGB hex,
   including translucent dark borders. `input` owns field borders and `ring` owns
   focus outlines. App-only feedback and state roles remain explicit extensions.
-  Its header artwork stays disabled. It follows the common native seed/tint
-  flow; no palette-specific color-role mapping belongs in the Host.
+  It follows the common native seed/tint flow. Keep palette-specific color-role
+  mapping outside the Host.
 - Reserve `textDisabled` for unavailable content; `muted` remains readable
   supporting text. Pair `errorContainer` with `onErrorContainer`, rather than
   reusing filled-action `onError` or the ordinary page foreground.

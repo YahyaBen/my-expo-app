@@ -32,12 +32,12 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
 
 ## Header and motion preferences
 
-- Header choices are Default/Dunes/Ribbon/Rain. `appHeaderMotion` and
-  `appReducedMotion` use the existing serialized preference writes.
-  `persistHeaderMotion` restores both and joins launch readiness.
-- UX hides decorative header choices and bypasses their artwork while
-  retaining saved choices. Header blur remains on unless `headerBlur={false}`;
-  there is no numeric blur preference, and old `appHeaderBlur` values are ignored.
+- `appHeaderMotion` and `appReducedMotion` use the existing serialized preference
+  writes. `persistHeaderMotion` restores both and joins launch readiness.
+- UX exposes Default, Dunes, Ribbon, Rain, Halloween, Ramadan and New Year in
+  Settings. Seasonal choices are available year-round. Default uses rectangular
+  blur. Use `headerBlur={false}` to disable blur on a frame. Old `appHeaderBlur`
+  values are ignored.
 - Reduce Motion observes the live system value until explicitly selected.
   Use `useAppReducedMotion` / `useMotionEnabled`; retain activity checks.
 - Keep `ThemePicker` local to Text previews and `HeaderMotionPicker` local to

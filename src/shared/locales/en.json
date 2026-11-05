@@ -173,7 +173,10 @@
       "default": "Default",
       "dunes": "Dunes",
       "ribbon": "Ribbon",
-      "rain": "Rain"
+      "rain": "Rain",
+      "halloween": "Halloween",
+      "ramadan": "Ramadan",
+      "new-year": "New Year"
     },
     "reduceMotion": "Reduce motion",
     "location": {

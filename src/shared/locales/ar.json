@@ -173,7 +173,10 @@
       "default": "افتراضي",
       "dunes": "كثبان",
       "ribbon": "شريط",
-      "rain": "مطر"
+      "rain": "مطر",
+      "halloween": "الهالوين",
+      "ramadan": "رمضان",
+      "new-year": "رأس السنة"
     },
     "reduceMotion": "تقليل الحركة",
     "location": {

@@ -31,9 +31,3 @@ export const nativeDesign: ThemeDesign = {
   },
   shape: { buttonRadius: undefined, inputRadius: radii.control },
 };
-
-/** Flat wireframe chrome; saved decorative effects cannot add colored artwork. */
-export const wireframeDesign: ThemeDesign = {
-  ...nativeDesign,
-  header: { artwork: false },
-};

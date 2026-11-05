@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { drawVectorPath, headerContour } from './page-header-shapes';
-import { headerDetails } from './page-header-details';
+import { drawHeaderDetails } from './page-header-details';
 import type { PageWave, PageWaveContextValue } from './page-wave-context';
 
 const HEADER_WAVE_WIDTH = 1000;
@@ -42,7 +42,7 @@ export function usePageWaveMotion(animate: boolean, shape: PageHeaderShape = DEF
   });
   const detailPath = usePathValue((builder) => {
     'worklet';
-    drawVectorPath(builder, headerDetails(shape, time.get()));
+    drawHeaderDetails(builder, shape, time.get(), scaleX.get(), scaleY);
   });
   const wave = useMemo<PageWave>(
     () => ({

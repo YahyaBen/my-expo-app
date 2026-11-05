@@ -173,7 +173,10 @@
       "default": "Par défaut",
       "dunes": "Dunes",
       "ribbon": "Ruban",
-      "rain": "Pluie"
+      "rain": "Pluie",
+      "halloween": "Halloween",
+      "ramadan": "Ramadan",
+      "new-year": "Nouvel An"
     },
     "reduceMotion": "Réduire les animations",
     "location": {

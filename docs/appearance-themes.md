@@ -57,12 +57,11 @@ appearance changes commit appearance and colors. The fixed palette probe stays
 unchanged. Probe logs count their component commits, not descendant native style
 updates, and do not establish device frame-rate improvements.
 
-Titled page frames blur the content beneath their headers by default in every
-theme. The title and Back remain sharp above that native backdrop. UX sets
-`design.header.artwork` to false, omitting colored waves even when an older
-Dunes/Ribbon/Rain preference is stored. Title clearance, safe areas, scrolling
-and touch shielding stay in place. The inactive header-effect picker is hidden
-for UX; its saved value is preserved for themes that support artwork.
+Titled page frames blur the content beneath their headers by default. The title
+and Back remain sharp above that native backdrop. In **Settings → Appearance →
+Header motion**, choose Default, Dunes, Ribbon, Rain, Halloween, Ramadan or
+New Year. The selected effect applies to shared page headers and is saved across
+app restarts. Seasonal styles are available year-round.
 Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
@@ -187,14 +186,10 @@ app presentation; the OS's initial native splash appearance remains native.
 Explicit component and Host scheme overrides retain their existing priority.
 
 Language uses its existing saved provider. Header effect and the explicit motion
-choice still restore before launch completion. Header choices include Default,
-Dunes, Ribbon and Rain; unsupported saved values retain the manifest's initial
-style (Default for the template). Default avoids mounting the
-wave/canvas/mask while retaining the rectangular native header blur. UX
-uses that rectangular blur regardless of a saved decorative effect because its
-header artwork is disabled. Existing animated choices and saved values are
-preserved. Persistence remains opt-in; preview providers use neither
-storage flag. The palette itself is never saved as a user preference.
+choice restore before launch completion. Missing or unsupported saved header
+values use the manifest's initial style (Default for the template). Default uses
+rectangular native blur without mounting the artwork. Reduce Motion pauses the
+artwork. Persistence remains opt-in, with preview preferences held in memory.
 
 Header blur strength stays fixed on both platforms. There is no numeric Settings
 control or saved blur-level preference; older `appHeaderBlur` values are ignored.
