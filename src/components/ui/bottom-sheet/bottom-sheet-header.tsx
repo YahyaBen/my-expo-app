@@ -29,8 +29,7 @@ export function BottomSheetHeader({
       {headerAction ? (
         <ButtonContent
           variant="tertiary"
-          borderRadius={9999}
-          contentPadding={12}
+          circular
           accessibilityLabel={headerAction.accessibilityLabel}
           onPress={headerAction.onPress}
           testID={headerAction.testID}

@@ -14,8 +14,15 @@ export type ButtonVariant =
   | 'destructive'
   | 'glass';
 
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+const minimumHeights: Record<ButtonSize, number> = { sm: 44, md: 48, lg: 56 };
+
 export type ButtonContentProps = {
   variant: ButtonVariant;
+  size?: ButtonSize;
+  /** Use a circular button for a single icon with an accessible name. */
+  circular?: boolean;
   label?: string;
   /** Native accessible name, including when custom artwork replaces the label. */
   accessibilityLabel?: string;
@@ -40,8 +47,11 @@ export type ButtonProps = ButtonContentProps & {
   };
 };
 
-function useButtonTheme({
+function useButtonAppearance({
   variant,
+  size,
+  circular,
+  contentPadding,
   color,
   contentColor,
   borderRadius: radiusOverride,
@@ -49,45 +59,50 @@ function useButtonTheme({
 }: ButtonProps) {
   const { colors, design } = useAppTheme(useHostColorScheme(colorScheme));
   const borderRadius = radiusOverride ?? design.shape.buttonRadius;
+  const minHeight =
+    size || circular || contentPadding === undefined ? minimumHeights[size ?? 'md'] : undefined;
+  const geometry = { borderRadius, minHeight };
   if (color !== undefined || contentColor !== undefined)
-    return { color, contentColor, borderRadius };
+    return { color, contentColor, ...geometry };
   switch (variant) {
     case 'primary':
-      return { color: colors.primary, contentColor: colors.onPrimary, borderRadius };
+      return { color: colors.primary, contentColor: colors.onPrimary, ...geometry };
     case 'secondary':
-      return { color: colors.secondary, contentColor: colors.onSecondary, borderRadius };
+      return { color: colors.secondary, contentColor: colors.onSecondary, ...geometry };
     case 'tertiary':
-      return { color: colors.muted, contentColor: colors.muted, borderRadius };
+      return { color: colors.muted, contentColor: colors.muted, ...geometry };
     case 'link':
-      return { color: colors.tint, contentColor: colors.tint, borderRadius };
+      return { color: colors.tint, contentColor: colors.tint, ...geometry };
     case 'success':
-      return { color: colors.success, contentColor: colors.onSuccess, borderRadius };
+      return { color: colors.success, contentColor: colors.onSuccess, ...geometry };
     case 'warning':
-      return { color: colors.warning, contentColor: colors.onWarning, borderRadius };
+      return { color: colors.warning, contentColor: colors.onWarning, ...geometry };
     case 'info':
-      return { color: colors.info, contentColor: colors.onInfo, borderRadius };
+      return { color: colors.info, contentColor: colors.onInfo, ...geometry };
     case 'destructive':
-      return { color: colors.error, contentColor: colors.onError, borderRadius };
+      return { color: colors.error, contentColor: colors.onError, ...geometry };
     case 'glass':
-      return { color: colors.surfaceVariant, contentColor: colors.text, borderRadius };
+      return { color: colors.surfaceVariant, contentColor: colors.text, ...geometry };
   }
 }
 
 /** Native content. Compose inside an existing Host. */
 export function ButtonContent(props: Readonly<ButtonContentProps>) {
-  const theme = useButtonTheme(props);
-  return <NativeButton {...props} {...theme} />;
+  const appearance = useButtonAppearance(props);
+  return <NativeButton {...props} {...appearance} />;
 }
 
 export function Button({ colorScheme, cornerRadii, ...props }: Readonly<ButtonProps>) {
-  const theme = useButtonTheme({ ...props, colorScheme });
+  const circular = props.circular && !cornerRadii;
+  const fullWidth = props.fullWidth && !circular;
+  const appearance = useButtonAppearance({ ...props, circular, colorScheme });
   return (
     <UniversalHost
       testID={props.testID ? `${props.testID}-container` : undefined}
-      inline={!props.fullWidth}
-      matchContents={props.fullWidth ? { vertical: true } : true}
+      inline={!fullWidth}
+      matchContents={fullWidth ? { vertical: true } : true}
       style={[
-        props.fullWidth ? { width: '100%' } : undefined,
+        fullWidth ? { width: '100%' } : undefined,
         cornerRadii && {
           overflow: 'hidden',
           borderTopLeftRadius: cornerRadii.topLeft ?? 0,
@@ -98,7 +113,13 @@ export function Button({ colorScheme, cornerRadii, ...props }: Readonly<ButtonPr
       ]}
       colorScheme={colorScheme}
     >
-      <NativeButton {...props} {...theme} borderRadius={cornerRadii ? 0 : theme.borderRadius} />
+      <NativeButton
+        {...props}
+        {...appearance}
+        fullWidth={fullWidth}
+        circular={circular}
+        borderRadius={cornerRadii ? 0 : appearance.borderRadius}
+      />
     </UniversalHost>
   );
 }

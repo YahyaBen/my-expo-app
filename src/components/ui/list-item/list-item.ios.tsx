@@ -1,5 +1,5 @@
-import { Column, ListItem as NativeListItem } from '@expo/ui';
-import { buttonStyle } from '@expo/ui/swift-ui/modifiers';
+import { ListItem as NativeListItem } from '@expo/ui';
+import { disabled as nativeDisabled } from '@expo/ui/swift-ui/modifiers';
 import { nativeFillWidth } from '../native/native-fill-width';
 import type { ListItemProps } from './list-item';
 
@@ -9,18 +9,16 @@ export function ListItem({
   modifiers,
   ...props
 }: Readonly<ListItemProps>) {
-  const defaultStyle =
-    onPress && !modifiers?.some((modifier) => modifier.$type === 'buttonStyle')
-      ? [buttonStyle('automatic')]
-      : [];
   return (
-    <Column disabled={disabled} modifiers={nativeFillWidth}>
-      <NativeListItem
-        {...props}
-        onPress={disabled ? undefined : onPress}
-        modifiers={[...defaultStyle, ...(modifiers ?? [])]}
-      />
-    </Column>
+    <NativeListItem
+      {...props}
+      onPress={disabled ? undefined : onPress}
+      modifiers={[
+        ...nativeFillWidth,
+        ...(modifiers ?? []),
+        ...(disabled ? [nativeDisabled()] : []),
+      ]}
+    />
   );
 }
 

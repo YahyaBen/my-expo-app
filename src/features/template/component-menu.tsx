@@ -34,7 +34,7 @@ export function ComponentMenu({
     <UniversalHost
       matchContents={false}
       ignoreSafeArea="all"
-      pointerEvents="box-none"
+      pointerEvents="none"
       style={{ position: 'absolute', inset: 0 }}
     >
       <BottomSheet

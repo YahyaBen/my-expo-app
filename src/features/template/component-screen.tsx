@@ -1,9 +1,13 @@
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme';
+import { showAlert } from '@/lib/alerts';
 import {
   AuthScreenFrame,
   Badge,
   BottomSheet,
   Button,
   ButtonContent,
+  Text as ButtonText,
   Checkbox,
   CircularCarousel,
   Collapsible,
@@ -40,12 +44,10 @@ import {
   StoryList,
   Switch,
   TabNavigationBar,
-  Text as ButtonText,
+  UniversalTextContent as Text,
   TextInput,
   UniversalHost,
-  UniversalTextContent as Text,
   VerificationCodeFace,
-  nativeCenteredMinHeight,
   nativeFillWidth,
   pageFormModifiers,
   useHostColorScheme,
@@ -60,11 +62,8 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { screenContentMaxWidth, spacing } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme';
-import { showAlert } from '@/lib/alerts';
-import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
 import { ChipExamples } from './chip-examples';
+import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
 import { FormExamples } from './form-examples';
 import { SliderExamples } from './slider-examples';
 import { TableExamples } from './table-examples';
@@ -136,12 +135,10 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
           {id === 'list' ? (
             <List testID="component-list">{rows}</List>
           ) : (
-            <FieldGroup
-              modifiers={pageFormModifiers}
-              style={{ backgroundColor: 'red' }}
-              testID="component-field-group"
-            >
-              <FieldGroup.Section title={title}>{rows}</FieldGroup.Section>
+            <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
+              <FieldGroup.Section style={{ backgroundColor: 'red' }} title={title}>
+                {rows}
+              </FieldGroup.Section>
             </FieldGroup>
           )}
         </UniversalHost>
@@ -286,16 +283,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           </>
         );
       case 'icon':
-        return (
-          <Row spacing={spacing.xl}>
-            <Icon name={{ ios: 'star', android: 'star' }} size={32} accessibilityLabel={title} />
-            <Icon
-              name={{ ios: 'heart', android: 'favorite' }}
-              size={32}
-              accessibilityLabel={t('common.favoritesOnly')}
-            />
-          </Row>
-        );
+        return <IconExamples />;
       case 'shape':
         return (
           <Row spacing={spacing.lg}>
@@ -483,6 +471,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
             >
               <Column spacing={spacing.lg} style={{ padding: spacing.xl, width }}>
                 <Text variant="title">{title}</Text>
+                <IconExamples />
                 <ButtonContent
                   variant="secondary"
                   label={t('common.close')}
@@ -623,16 +612,29 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
   );
 }
 
+function IconExamples() {
+  const { t } = useTranslation();
+  return (
+    <Row spacing={spacing.xl}>
+      <Icon
+        name={{ ios: 'star', android: 'star' }}
+        size={32}
+        accessibilityLabel={t('componentCatalog.names.icon')}
+      />
+      <Icon
+        name={{ ios: 'heart', android: 'favorite' }}
+        size={32}
+        accessibilityLabel={t('common.favoritesOnly')}
+      />
+    </Row>
+  );
+}
+
 function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
   const { t } = useTranslation();
   const icon = Icon.select({ ios: 'star.fill', android: 'star' });
   const iconOnlyLabel = t('showcase.buttonGallery.iconOnly');
-  // Minimum content heights keep native button minimums from flattening the size steps.
-  const sizes = [
-    { size: 'sm', minHeight: 48 },
-    { size: 'md', minHeight: 56 },
-    { size: 'lg', minHeight: 64 },
-  ] as const;
+  const sizes = ['sm', 'md', 'lg'] as const;
   const variants = [
     'primary',
     'secondary',
@@ -653,12 +655,13 @@ function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
         return (
           <Column key={variant} spacing={spacing.md} modifiers={nativeFillWidth}>
             <Text variant="subtitle">{variantLabel}</Text>
-            {sizes.map(({ size, minHeight }) => (
+            {sizes.map((size) => (
               <ButtonContent
                 key={size}
                 variant={variant}
+                size={size}
+                label={t(`showcase.buttonGallery.sizes.${size}`)}
                 accessibilityLabel={`${variantLabel}: ${t(`showcase.buttonGallery.sizes.${size}`)}`}
-                contentPadding={0}
                 fullWidth
                 onPress={onPress}
                 testID={
@@ -668,17 +671,13 @@ function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
                       : `component-button-${variant}`
                     : `component-button-${variant}-${size}`
                 }
-              >
-                <Column alignment="center" modifiers={nativeCenteredMinHeight(minHeight)}>
-                  <ButtonText>{t(`showcase.buttonGallery.sizes.${size}`)}</ButtonText>
-                </Column>
-              </ButtonContent>
+              />
             ))}
             <Row spacing={spacing.md} alignment="center">
               <ButtonContent
                 variant={variant}
                 accessibilityLabel={`${variantLabel}: ${iconOnlyLabel}`}
-                contentPadding={spacing.md}
+                circular
                 onPress={onPress}
                 testID={`component-button-${variant}-icon-only`}
               >
@@ -735,7 +734,6 @@ function LoadingButtonExample({ onComplete }: Readonly<{ onComplete: () => void 
       <ButtonContent
         variant="primary"
         accessibilityLabel={label}
-        contentPadding={spacing.md}
         fullWidth
         disabled={pending}
         testID="component-button-loading"

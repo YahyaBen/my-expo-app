@@ -23,16 +23,21 @@ export function Icon({
   color,
   accessibilityLabel,
   type,
+  style,
   ...props
 }: Readonly<IconProps>) {
   const colors = useThemeColors(useHostColorScheme());
   const inheritedColor = useContext(IconColorContext);
 
   return (
-    <Row {...props} alignment="center" spacing={0}>
-      <RNHostView matchContents>
-        {/* Keep a real RN container: the entire hosted subtree must leave taps to the native action. */}
-        <View collapsable={false} pointerEvents="none" style={{ width: size, height: size }}>
+    <Row {...props} alignment="center" spacing={0} style={{ width: size, height: size, ...style }}>
+      {/* Give the bridge a native viewport before it lays out the symbol. */}
+      <RNHostView>
+        <View
+          collapsable={false}
+          pointerEvents="none"
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <SymbolView
             name={name}
             size={size}

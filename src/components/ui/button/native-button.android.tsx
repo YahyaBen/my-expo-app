@@ -1,11 +1,13 @@
 import { Button, OutlinedButton, Shape, Text, TextButton } from '@expo/ui/jetpack-compose';
 import {
+  defaultMinSize,
   fillMaxWidth,
   semantics,
+  size as nativeSize,
   testID as nativeTestID,
 } from '@expo/ui/jetpack-compose/modifiers';
 import { IconColorContext } from '../icon/icon-color-context';
-import type { ButtonContentProps } from './button';
+import type { NativeButtonProps } from './native-button';
 
 export function NativeButton({
   variant,
@@ -16,39 +18,43 @@ export function NativeButton({
   disabled,
   testID,
   fullWidth,
+  circular,
+  minHeight,
   borderRadius,
   contentPadding,
   color,
   contentColor,
-}: Readonly<ButtonContentProps>) {
+}: Readonly<NativeButtonProps>) {
   let NativeControl = Button;
   if (variant === 'secondary' || variant === 'glass') NativeControl = OutlinedButton;
   if (variant === 'tertiary' || variant === 'link') NativeControl = TextButton;
   const filled = NativeControl === Button;
+  const radius = circular && minHeight !== undefined ? minHeight / 2 : borderRadius;
+  const padding = circular ? 0 : contentPadding;
   return (
     <NativeControl
       onClick={disabled ? undefined : onPress}
       enabled={!disabled}
       shape={
-        borderRadius === undefined
+        radius === undefined
           ? undefined
           : Shape.RoundedCorner({
               cornerRadii: {
-                topStart: borderRadius,
-                topEnd: borderRadius,
-                bottomStart: borderRadius,
-                bottomEnd: borderRadius,
+                topStart: radius,
+                topEnd: radius,
+                bottomStart: radius,
+                bottomEnd: radius,
               },
             })
       }
       contentPadding={
-        contentPadding === undefined
+        padding === undefined
           ? undefined
           : {
-              start: contentPadding,
-              end: contentPadding,
-              top: contentPadding,
-              bottom: contentPadding,
+              start: padding,
+              end: padding,
+              top: padding,
+              bottom: padding,
             }
       }
       colors={
@@ -60,7 +66,10 @@ export function NativeButton({
             }
       }
       modifiers={[
-        ...(fullWidth ? [fillMaxWidth()] : []),
+        ...(fullWidth && !circular ? [fillMaxWidth()] : []),
+        ...(minHeight === undefined
+          ? []
+          : [circular ? nativeSize(minHeight, minHeight) : defaultMinSize({ minHeight })]),
         ...(testID ? [nativeTestID(testID)] : []),
         ...(accessibilityLabel ? [semantics({ contentDescription: accessibilityLabel })] : []),
       ]}

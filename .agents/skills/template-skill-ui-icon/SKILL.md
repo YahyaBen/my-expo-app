@@ -20,7 +20,8 @@ const starIcon = Icon.select({
 
 - `Icon.select` keeps both names for `SymbolView`; a plain `{ ios, android }`
   object is also supported. Do not use XML assets or `@expo/ui`'s `Icon`.
-- `size` defaults to 24. `color` overrides the native button foreground, then
+- `size` defaults to 24 and gives the native row a bounded viewport for the
+  hosted symbol. `color` overrides the native button foreground, then
   the owning Host's themed text color.
   Native `style`, `modifiers`, disabled state and test selectors stay on the
   native wrapper; `type` selects iOS symbol rendering.

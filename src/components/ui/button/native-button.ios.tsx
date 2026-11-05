@@ -13,7 +13,7 @@ import {
   tint,
 } from '@expo/ui/swift-ui/modifiers';
 import { IconColorContext } from '../icon/icon-color-context';
-import type { ButtonContentProps } from './button';
+import type { NativeButtonProps } from './native-button';
 
 /** Internal renderer; callers resolve theme colors before reaching the native control. */
 export function NativeButton({
@@ -25,16 +25,28 @@ export function NativeButton({
   disabled,
   testID,
   fullWidth,
+  circular,
+  minHeight,
   borderRadius,
   contentPadding,
   color,
   contentColor,
-}: Readonly<ButtonContentProps>) {
+}: Readonly<NativeButtonProps>) {
   let style: Parameters<typeof buttonStyle>[0] = 'borderedProminent';
   if (variant === 'secondary') style = 'bordered';
   if (variant === 'tertiary' || variant === 'link') style = 'plain';
   if (variant === 'glass') style = 'glass';
   const labelColor = contentColor ?? (style === 'borderedProminent' ? undefined : color);
+  // SwiftUI's bordered and glass styles add their own vertical insets around the label.
+  const labelMinHeight = minHeight === undefined || style === 'plain' ? minHeight : minHeight - 12;
+  const borderModifiers = circular
+    ? [buttonBorderShape('circle')]
+    : borderRadius === undefined
+      ? []
+      : [
+          buttonBorderShape('roundedRectangle', borderRadius),
+          clipShape('roundedRectangle', borderRadius),
+        ];
   return (
     <Button
       testID={testID}
@@ -45,22 +57,19 @@ export function NativeButton({
         ...(accessibilityLabel ? [nativeAccessibilityLabel(accessibilityLabel)] : []),
         ...(color === undefined ? [] : [tint(color)]),
         nativeDisabled(Boolean(disabled)),
-        ...(borderRadius === undefined
-          ? []
-          : [
-              buttonBorderShape('roundedRectangle', borderRadius),
-              clipShape('roundedRectangle', borderRadius),
-            ]),
+        ...borderModifiers,
       ]}
     >
       <VStack
         spacing={0}
         modifiers={[
-          ...(fullWidth ? [frame({ maxWidth: Infinity })] : []),
           ...(labelColor === undefined ? [] : [foregroundStyle(labelColor)]),
-          ...(contentPadding === undefined ? [] : [padding({ all: contentPadding })]),
+          ...(contentPadding === undefined || circular ? [] : [padding({ all: contentPadding })]),
+          ...(circular
+            ? [frame({ width: labelMinHeight, height: labelMinHeight })]
+            : [frame({ maxWidth: fullWidth ? Infinity : undefined, minHeight: labelMinHeight })]),
           // Include empty artwork slots and spacing in the native button's tap area.
-          contentShape(shapes.rectangle()),
+          contentShape(circular ? shapes.circle() : shapes.rectangle()),
         ]}
       >
         <IconColorContext.Provider value={labelColor}>

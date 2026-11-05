@@ -34,7 +34,7 @@ and Android outlined styling. Destructive also sets the iOS role.
 
 Optional common props: `label`, native `children`, `onPress`, `disabled`,
 `accessibilityLabel`, `testID`, `fullWidth`, `color`, `contentColor`, `borderRadius`,
-`contentPadding`. Standalone-only: `colorScheme`, `cornerRadii`.
+`contentPadding`, `size`, `circular`. Standalone-only: `colorScheme`, `cornerRadii`.
 
 - Children replace the label when non-nullish. For icon/text content, use native
   `Row`, `Icon`, `Text`; native Text can inherit the button foreground.
@@ -51,6 +51,13 @@ Optional common props: `label`, native `children`, `onPress`, `disabled`,
 
 ## Colors and geometry
 
+- `sm`, `md` and `lg` use 44, 48 and 56 pt/dp sizing targets. The default is
+  `md`. Native styles can add their own insets, and text can grow past the
+  minimum. Explicit `contentPadding` without a size keeps intrinsic sizing.
+- Use `circular` for icon-only actions with a translated `accessibilityLabel`.
+  The selected size determines the circle's geometry. It takes priority over
+  `fullWidth`, `borderRadius` and `contentPadding`. Standalone `cornerRadii`
+  take priority over the circle.
 - Defaults: primary/onPrimary; secondary/onSecondary; muted/muted tertiary;
   tint/tint link; paired status colors; error/onError destructive;
   surfaceVariant/text glass.

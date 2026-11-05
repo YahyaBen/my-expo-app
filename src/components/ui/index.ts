@@ -35,7 +35,6 @@ export * from './icon/icon';
 export * from './ios-home-grid/ios-home-grid';
 export * from './launch-screen/launch-screen';
 export * from './list-item/list-item';
-export * from './list-item/list-item-action';
 export * from './list/list';
 export * from './loading/empty-state';
 export * from './loading/loading-indicator';
