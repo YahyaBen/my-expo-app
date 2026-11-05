@@ -675,7 +675,6 @@
     "storyListTitle": "Liste de stories",
     "stackedCarouselTitle": "Carrousel empilé",
     "circularCarouselTitle": "Carrousel circulaire",
-    "circularCarouselScale": "Agrandir les photos",
     "homeGridTitle": "Grille d’accueil iOS",
     "homeGridHint": "Touchez une photo pour l’agrandir. Glissez vers le bas ou touchez Fermer pour revenir.",
     "homeGridPhoto": "Photo {{number}}",

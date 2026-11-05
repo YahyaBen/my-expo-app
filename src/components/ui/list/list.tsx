@@ -1,9 +1,9 @@
-import { List as NativeList, type ListProps } from '@expo/ui';
-import { usePendingRefresh } from '../refreshable-scroll-view/use-pending-refresh';
+import { List as NativeList, type ListProps as NativeListProps } from '@expo/ui';
 
-export function List({ onRefresh, ...props }: Readonly<ListProps>) {
-  const refresh = usePendingRefresh(onRefresh);
-  return <NativeList {...props} onRefresh={onRefresh ? refresh : undefined} />;
+export type ListProps = Omit<NativeListProps, 'onRefresh'>;
+
+export function List({ children, testID }: Readonly<ListProps>) {
+  return <NativeList testID={testID}>{children}</NativeList>;
 }
 
-export { ListForEach, type ListForEachProps, type ListProps } from '@expo/ui';
+export { ListForEach, type ListForEachProps } from '@expo/ui';

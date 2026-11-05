@@ -2,13 +2,7 @@ import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { Column, RNHostView, Spacer } from '@expo/ui';
-import Animated, {
-  ReduceMotion,
-  useAnimatedStyle,
-  useDerivedValue,
-  withSpring,
-  type SharedValue,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { UniversalTextContent } from '../text/universal-text';
 import { ButtonContent } from '../button/button';
 import { Icon, type IconName } from '../icon/icon';
@@ -25,7 +19,8 @@ import { PhotoScrollView } from '../photo/photo-scroll-view';
 import { usePhotoSelection } from '../photo/use-photo-selection';
 
 const motionInput = [-2, -1, 0, 1, 2] as const;
-const scaleOutput = [0.5, 0.9, 1.2, 0.9, 0.5] as const;
+const selectedScale = 1.2;
+const scaleOutput = [0.5, 0.9, selectedScale, 0.9, 0.5] as const;
 const opacityOutput = [0.5, 1, 1, 1, 0.5] as const;
 
 export type CircularCarouselIconItem = { id: string; label: string; icon: IconName };
@@ -50,7 +45,6 @@ export type CircularCarouselProps<T extends CircularCarouselItem = PhotoItem> = 
   onScrollBeginDrag?: () => void;
   /** Runs when a user scroll settles, including a return to the same item. */
   onSelectionSettled?: (index: number, item: T) => void;
-  scaleEnabled?: boolean;
   testID?: string;
 };
 
@@ -70,7 +64,6 @@ function CircularCarouselContent<T extends CircularCarouselItem>({
   width: availableWidth,
   height: requestedHeight,
   itemSize: requestedItemSize,
-  scaleEnabled = false,
 
   accessibilityLabel,
   getPositionLabel,
@@ -86,11 +79,11 @@ function CircularCarouselContent<T extends CircularCarouselItem>({
 
   const width = Math.max(1, availableWidth);
   const cardWidth = Math.max(1, Math.min(width, requestedItemSize ?? width / 4));
-  const cardHeight = cardWidth;
   const height = Math.max(1, requestedHeight ?? cardWidth * 3);
   const {
     scrollRef,
     selectedIndex,
+    activeIndex,
     scrollOffset,
     updateSelection,
     positionLabel,
@@ -104,16 +97,6 @@ function CircularCarouselContent<T extends CircularCarouselItem>({
     onIndexChange,
     onItemPress,
     onSelectionFeedback: () => triggerHaptic('selection'),
-  });
-
-  const scaleProgress = useDerivedValue<number>(() => {
-    if (reducedMotion) return 0;
-    return withSpring(scaleEnabled ? 1 : 0, {
-      duration: 400,
-      dampingRatio: 1,
-      // The live app preference is already checked above.
-      reduceMotion: ReduceMotion.Never,
-    });
   });
 
   return (
@@ -150,12 +133,11 @@ function CircularCarouselContent<T extends CircularCarouselItem>({
                 item={item}
                 index={index}
                 width={cardWidth}
-                height={cardHeight}
                 inset={(width - cardWidth) / 2}
                 scrollOffset={scrollOffset}
                 sceneWidth={width}
                 sceneHeight={height}
-                scaleProgress={scaleProgress}
+                isSelected={index === activeIndex}
                 rtl={rtl}
                 reducedMotion={reducedMotion}
                 onPress={onItemPress ? () => onItemPress(index, item) : undefined}
@@ -180,12 +162,11 @@ function PhotoCard({
   item,
   index,
   width,
-  height,
   inset,
   scrollOffset,
-  scaleProgress,
   sceneWidth,
   sceneHeight,
+  isSelected,
   rtl,
   reducedMotion,
   testID,
@@ -194,25 +175,26 @@ function PhotoCard({
   item: CircularCarouselItem;
   index: number;
   width: number;
-  height: number;
   inset: number;
   scrollOffset: SharedValue<number>;
-  scaleProgress: SharedValue<number>;
   sceneWidth: number;
   sceneHeight: number;
+  isSelected: boolean;
   rtl: boolean;
   reducedMotion: boolean;
   testID: string;
   onPress?: () => void;
 }>) {
   const colors = useThemeColors(useHostColorScheme());
-  // Interactive cells stay inside their own horizontal touch frame. Content
-  // padding centers the first/last cell instead of overflowing a narrow cell.
-  const insetX = (onPress ? 0 : inset) + spacing.sm;
-  const diameter = Math.max(1, width - spacing.lg);
-  const viewportInset = inset + spacing.sm;
+  // Even at the selected scale, interactive circles fit their cell's touch frame.
+  const baseDiameter = Math.max(1, width - spacing.lg);
+  const diameter = onPress ? Math.min(baseDiameter, width / selectedScale) : baseDiameter;
+  const padding = (width - diameter) / 2;
+  const insetX = (onPress ? 0 : inset) + padding;
+  const viewportInset = inset + padding;
   const left = rtl ? sceneWidth - viewportInset - diameter : viewportInset;
-  const radius = diameter * 0.6;
+  const radius = (diameter * selectedScale) / 2;
+  const settledScale = isSelected ? selectedScale : 1;
   const translateYOutput = useMemo(() => [0, -width / 3, -width / 2, -width / 3, 0], [width]);
   const animatedStyle = useAnimatedStyle(() => {
     const position = scrollOffset.get() / width;
@@ -222,7 +204,6 @@ function PhotoCard({
     // of its artwork can still enter the viewport.
     const centerX = left + diameter / 2 + translateX;
     if (centerX + radius <= 0 || centerX - radius >= sceneWidth) return { opacity: 0 };
-    const scale = interpolatePhotoMotion(distance, motionInput, scaleOutput);
     return {
       opacity: reducedMotion ? 1 : interpolatePhotoMotion(distance, motionInput, opacityOutput),
       transform: [
@@ -231,7 +212,11 @@ function PhotoCard({
             ? 0
             : interpolatePhotoMotion(distance, motionInput, translateYOutput),
         },
-        { scale: 1 + (scale - 1) * scaleProgress.get() },
+        {
+          scale: reducedMotion
+            ? settledScale
+            : interpolatePhotoMotion(distance, motionInput, scaleOutput),
+        },
       ],
     };
   });
@@ -240,11 +225,11 @@ function PhotoCard({
       style={[
         {
           position: 'absolute',
-          top: (sceneHeight - width) / 2 + spacing.sm,
+          top: (sceneHeight - diameter) / 2,
           left: rtl ? undefined : insetX,
           right: rtl ? insetX : undefined,
-          width: Math.max(1, width - spacing.lg),
-          height: Math.max(1, height - spacing.lg),
+          width: diameter,
+          height: diameter,
           borderRadius: radii.pill,
           borderWidth: onPress ? 0 : 2,
           borderColor: colors.background,

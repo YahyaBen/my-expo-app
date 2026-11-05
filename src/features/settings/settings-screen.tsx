@@ -1,37 +1,37 @@
+import { getBrandHeadingFont } from '@/config/brand-assets';
 import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
-import { useState, type ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, View, useWindowDimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  BottomSheet,
-  Column,
-  ColorSchemeControl,
-  FieldGroup,
-  Icon,
-  ListItem,
-  nativeFillWidth,
-  nativeRowWeight,
-  PageFrame,
-  PageSection,
-  pageFormModifiers,
-  Row,
-  Switch,
-  ButtonContent,
-  UniversalHost,
-  UniversalTextContent as Text,
-  usePageHeaderInset,
-} from '@components/ui';
 import { useLanguage } from '@/context/language.context';
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useMotionSettings } from '@/context/theme.context';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
-import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
-import { HeaderMotionPicker } from './header-motion-picker';
+import { screenInsets } from '@/lib/screen-insets';
+import {
+  BottomSheet,
+  ButtonContent,
+  ColorSchemeControl,
+  Column,
+  FieldGroup,
+  Icon,
+  ListItem,
+  nativeFillWidth,
+  nativeRowWeight,
+  pageFormModifiers,
+  PageFrame,
+  PageSection,
+  Row,
+  Switch,
+  UniversalTextContent as Text,
+  UniversalHost,
+  usePageHeaderInset,
+} from '@components/ui';
+import { useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Platform, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppIconPicker } from './app-icon-picker';
-import { getBrandHeadingFont } from '@/config/brand-assets';
+import { HeaderMotionPicker } from './header-motion-picker';
 import { useDeviceLocation } from './use-device-location';
 import { useDevicePermissions } from './use-device-permissions';
 
@@ -81,6 +81,7 @@ function SettingsPage({
   const { colors, design } = useAppTheme();
   const { height: windowHeight } = useWindowDimensions();
   const languageListHeight = Math.min(320, windowHeight * 0.45);
+  const changeLanguage = languageReady ? onLanguageChange : undefined;
   const [languageOpen, setLanguageOpen] = useState(false);
   const device = useDevicePermissions();
   const location = useDeviceLocation(device.permissions.location);
@@ -151,12 +152,9 @@ function SettingsPage({
                 </Row>
               ) : null}
               <ReducedMotionControl />
-              <ListItem
+              <ListItem.FieldRow
                 testID="app-settings-language"
-                disabled={!languageReady || !onLanguageChange}
-                onPress={() => {
-                  if (languageReady && onLanguageChange) setLanguageOpen(true);
-                }}
+                onPress={changeLanguage ? () => setLanguageOpen(true) : undefined}
                 trailing={
                   <Row alignment="center" spacing={spacing.sm}>
                     <Text textStyle={{ color: colors.muted }}>{languageLabel(language)}</Text>
@@ -165,7 +163,7 @@ function SettingsPage({
                 }
               >
                 <Text>{t('common.language')}</Text>
-              </ListItem>
+              </ListItem.FieldRow>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('settings.permissions.title')} titleUppercase>
               <FieldGroup.SectionHeader>
@@ -302,33 +300,44 @@ function SettingsPage({
             isPresented={languageOpen}
             onDismiss={() => setLanguageOpen(false)}
             testID="app-settings-language-sheet"
-          >
-            <PageSection>
+            title={
               <Text
                 variant="title"
                 tone="primary"
+                numberOfLines={2}
+                modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
                 textStyle={{ fontFamily: getBrandHeadingFont(language) }}
                 testID="app-settings-language-title"
               >
                 {t('common.language')}
               </Text>
+            }
+            headerAction={{
+              icon: Icon.select({ ios: 'xmark', android: 'close' }),
+              accessibilityLabel: t('common.close'),
+              onPress: () => setLanguageOpen(false),
+              testID: 'app-settings-language-close',
+            }}
+          >
+            <PageSection>
               <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
                 <FieldGroup
                   modifiers={pageFormModifiers}
-                  style={{ backgroundColor: 'transparent' }}
+                  //style={{ backgroundColor: 'transparent' }}
                   testID="app-settings-language-options"
                 >
                   <FieldGroup.Section>
                     {SUPPORTED_LANGUAGES.map((value) => (
-                      <ListItem
+                      <ListItem.FieldRow
                         key={value}
                         testID={`app-settings-language-${value}`}
-                        disabled={!languageReady || !onLanguageChange}
-                        onPress={() => {
-                          if (!languageReady || !onLanguageChange) return;
-                          onLanguageChange(value);
-                          setLanguageOpen(false);
-                        }}
+                        onPress={
+                          changeLanguage &&
+                          (() => {
+                            changeLanguage(value);
+                            setLanguageOpen(false);
+                          })
+                        }
                         trailing={
                           language === value ? (
                             <Icon
@@ -343,17 +352,11 @@ function SettingsPage({
                         }
                       >
                         <Text>{languageLabel(value)}</Text>
-                      </ListItem>
+                      </ListItem.FieldRow>
                     ))}
                   </FieldGroup.Section>
                 </FieldGroup>
               </Column>
-              <ButtonContent
-                variant="link"
-                label={t('common.close')}
-                testID="app-settings-language-close"
-                onPress={() => setLanguageOpen(false)}
-              />
             </PageSection>
           </BottomSheet>
         </UniversalHost>

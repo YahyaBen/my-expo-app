@@ -17,7 +17,9 @@ presentation; the caller owns images, translated labels, data and surrounding la
   unique stable string IDs and translated labels. A photo supplies `source`
   (Expo Image URI/object/bundled asset); an icon supplies typed `icon` names.
   The generic props infer the item/callback type; existing photo callers remain valid.
-- `itemSize` changes the image step/diameter; `height` is the artwork viewport height. `scaleEnabled` defaults to false; the caller owns any Scale switch.
+- `itemSize` changes the image step/diameter; `height` is the artwork viewport
+  height. The selected circle is always larger. With Reduce Motion, size changes
+  when selection settles.
 - `getPositionLabel(index, total)` formats a zero-based index for the optional
   caption and spoken value. Without it, accessibility uses the item's label.
 - `onIndexChange(index, item)` runs once for a changed user selection. Initial

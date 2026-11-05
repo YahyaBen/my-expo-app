@@ -31,12 +31,12 @@ export function Icon({
 
   return (
     <Row {...props} alignment="center" spacing={0} style={{ width: size, height: size, ...style }}>
-      {/* Give the bridge a native viewport before it lays out the symbol. */}
-      <RNHostView>
+      {/* Size the artwork before SwiftUI measures it in a ListItem accessory. */}
+      <RNHostView matchContents>
         <View
           collapsable={false}
           pointerEvents="none"
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}
         >
           <SymbolView
             name={name}

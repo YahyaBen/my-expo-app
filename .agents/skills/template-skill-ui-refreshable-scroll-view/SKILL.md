@@ -14,8 +14,11 @@ Source: [refreshable-scroll-view/](../../../src/components/ui/refreshable-scroll
 - The async callback owns work and user-visible error feedback.
 - Repeated gestures share the pending promise. Release the native indicator
   on settlement, including rejection, so a later gesture can recover.
-- Keep shared coordination in use-pending-refresh.ts. Android supplies the
-  spinner state callback; iOS needs no added JS spinner state.
+- `usePullToRefresh` in `src/hooks/` coalesces pending work. Android supplies
+  the spinner state callback. iOS awaits the shared promise.
+- For TanStack Query data, call `useScreenRefresh([queryKey])` in the screen and
+  pass its result to `PageScreen` or `RefreshableScrollView` as `onRefresh`.
+  Use the exact keys for the displayed queries.
 - Preserve native indicator colors and disabled/hidden interaction guards.
 - Check callback changes during pending work, duplicate gestures, rejection,
   recovery and retained content.

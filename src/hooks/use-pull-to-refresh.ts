@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 
 /** Coalesce native refresh gestures and always release the indicator after settlement. */
-export function usePendingRefresh(
+export function usePullToRefresh(
   onRefresh: (() => Promise<void>) | undefined,
   onRefreshingChange?: (refreshing: boolean) => void,
 ) {

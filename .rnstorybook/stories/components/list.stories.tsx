@@ -24,9 +24,7 @@ type DemoProps = UniversalListProps & {
   showLeading: boolean;
   showTrailing: boolean;
   disabledRows: boolean;
-  refreshable: boolean;
   onRowPress: (row: number) => void;
-  onRefreshRequested: () => void;
 };
 
 function ListDemo({
@@ -35,31 +33,17 @@ function ListDemo({
   showLeading,
   showTrailing,
   disabledRows,
-  refreshable,
   onRowPress,
-  onRefreshRequested,
   ...args
 }: Readonly<DemoProps>) {
   const colors = useThemeColors(args.colorScheme);
   const [selected, setSelected] = useState<number | null>(null);
-  const [refreshCount, setRefreshCount] = useState(0);
   return (
     <View style={{ gap: 16 }}>
       <RNText testID={args.testID ? `${args.testID}-status` : undefined}>
-        {`Selected row: ${selected ?? 'None'} · Refresh count: ${refreshCount}`}
+        {`Selected row: ${selected ?? 'None'}`}
       </RNText>
-      <UniversalList
-        {...args}
-        onRefresh={
-          refreshable
-            ? async () => {
-                onRefreshRequested();
-                await new Promise<void>((resolve) => setTimeout(resolve, 600));
-                setRefreshCount((count) => count + 1);
-              }
-            : undefined
-        }
-      >
+      <UniversalList {...args}>
         {itemCount === 0 ? (
           <ListItem testID={args.testID ? `${args.testID}-empty` : undefined}>
             <EmptyState
@@ -121,11 +105,9 @@ const meta = {
     showLeading: true,
     showTrailing: true,
     disabledRows: false,
-    refreshable: false,
     viewportHeight: 400,
     colorScheme: 'dark',
     onRowPress: action('list row pressed'),
-    onRefreshRequested: action('list refresh requested'),
     example: 'list',
   },
   argTypes: {
@@ -135,21 +117,14 @@ const meta = {
     showLeading: { control: 'boolean' },
     showTrailing: { control: 'boolean' },
     disabledRows: { control: 'boolean' },
-    refreshable: { control: 'boolean' },
     viewportHeight: { control: { type: 'number', min: 200, max: 600 } },
     children: { control: false },
-    onRefresh: { control: false },
     onRowPress: { control: false },
-    onRefreshRequested: { control: false },
     example: { control: 'select', options: ['list', 'compound-slots'] },
   },
   render: ({ example, ...args }) => (
     <NativeStoryFrame {...args}>
-      {example === 'compound-slots' ? (
-        <CompoundSlotsDemo {...args} />
-      ) : (
-        <ListDemo key={String(args.refreshable)} {...args} />
-      )}
+      {example === 'compound-slots' ? <CompoundSlotsDemo {...args} /> : <ListDemo {...args} />}
     </NativeStoryFrame>
   ),
 } satisfies Meta<DemoProps & { example: 'list' | 'compound-slots' }>;

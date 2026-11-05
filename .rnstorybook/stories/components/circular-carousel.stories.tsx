@@ -18,7 +18,6 @@ type Props = AnimatedComponentPreviewProps & {
   items: readonly PhotoItem[];
   width: number;
   height?: number;
-  scaleEnabled?: boolean;
   dataset?: keyof typeof photoDatasets;
   artwork?: 'photos' | 'icons' | 'mixed';
 };
@@ -27,7 +26,6 @@ function CircularCarouselDemo({
   items: initialItems,
   width,
   height,
-  scaleEnabled,
   dataset = 'photos',
   artwork = 'photos',
   ...preview
@@ -38,7 +36,6 @@ function CircularCarouselDemo({
         {...preview}
         width={width}
         height={height}
-        scaleEnabled={scaleEnabled}
         mixed={artwork === 'mixed'}
       />
     );
@@ -53,7 +50,6 @@ function CircularCarouselDemo({
         <CircularCarousel
           {...photoProps}
           height={height}
-          scaleEnabled={scaleEnabled}
           accessibilityLabel="Circular Carousel photos"
           testID="story-circular-carousel"
         />
@@ -65,14 +61,12 @@ function CircularCarouselDemo({
 function InteractiveCircularCarouselDemo({
   width: requestedWidth,
   height,
-  scaleEnabled,
   mixed,
   ...preview
 }: Readonly<
   AnimatedComponentPreviewProps & {
     width: number;
     height?: number;
-    scaleEnabled?: boolean;
     mixed: boolean;
   }
 >) {
@@ -102,7 +96,6 @@ function InteractiveCircularCarouselDemo({
         items={items}
         width={width}
         height={height}
-        scaleEnabled={scaleEnabled}
         accessibilityLabel="Component pages"
         onPreviewIndexChange={(_, item) => setPreviewName(item.label)}
         onIndexChange={(_, item) => setSelected(item.label)}
@@ -132,13 +125,11 @@ const meta = {
     width: 300,
     colorScheme: 'light',
     rtl: false,
-    scaleEnabled: false,
     artwork: 'photos',
   },
   argTypes: {
     rtl: { control: 'boolean' },
     width: { control: { type: 'range', min: 160, max: 600, step: 10 } },
-    scaleEnabled: { control: 'boolean' },
     items: { control: 'object' },
     artwork: { control: 'select', options: ['photos', 'icons', 'mixed'] },
     dataset: { control: 'select', options: ['photos', 'large-200', 'large-1000'] },

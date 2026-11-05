@@ -15,7 +15,7 @@ export function BottomSheetHeader({
   return (
     <Row alignment="center" spacing={12} modifiers={nativeFillWidth}>
       <Column modifiers={nativeRowWeight}>
-        {title ? (
+        {title && typeof title === 'string' ? (
           <UniversalTextContent
             variant="subtitle"
             fontWeight="600"
@@ -24,7 +24,9 @@ export function BottomSheetHeader({
           >
             {title}
           </UniversalTextContent>
-        ) : null}
+        ) : (
+          title || null
+        )}
       </Column>
       {headerAction ? (
         <ButtonContent

@@ -1,4 +1,5 @@
 import type { NativeStoryTheme } from '../../components/native-story-frame';
+import { useScreenRefresh } from '@/hooks/use-screen-refresh';
 import {
   Column,
   RefreshableScrollView,
@@ -8,6 +9,7 @@ import {
   nativeFillWidth,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 
@@ -19,7 +21,18 @@ type Props = NativeStoryTheme & {
   layoutDirection: 'leftToRight' | 'rightToLeft';
 };
 
-function RefreshDemo({
+const refreshCountKey = ['storybook', 'refresh-count'] as const;
+
+function RefreshDemo(props: Readonly<Props>) {
+  const [client] = useState(() => new QueryClient());
+  return (
+    <QueryClientProvider client={client}>
+      <RefreshDemoContent {...props} />
+    </QueryClientProvider>
+  );
+}
+
+function RefreshDemoContent({
   colorScheme,
   seedColor,
   disabled,
@@ -29,33 +42,35 @@ function RefreshDemo({
   layoutDirection,
 }: Readonly<Props>) {
   const completion = useRef<(() => void) | null>(null);
-  const active = useRef(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [count, setCount] = useState(0);
-  const [status, setStatus] = useState('Pull down on the list.');
-  useEffect(() => {
-    active.current = true;
-    return () => {
-      active.current = false;
-      completion.current?.();
-    };
-  }, []);
+  useEffect(() => () => completion.current?.(), []);
 
-  async function refresh() {
-    setRefreshing(true);
-    setStatus('Refreshing. Press Complete refresh to settle the work.');
-    await new Promise<void>((resolve) => {
-      completion.current = resolve;
-    });
-    completion.current = null;
-    if (!active.current) return;
-    setRefreshing(false);
-    if (outcome === 'error') {
-      setStatus('Refresh failed. Saved content is retained. Pull again to retry.');
-      throw new Error('Preview refresh failure');
-    }
-    setCount((previous) => previous + 1);
-    setStatus('Refresh complete. Pull again to repeat.');
+  const {
+    data: count,
+    isFetching,
+    isRefetchError,
+  } = useQuery({
+    queryKey: refreshCountKey,
+    initialData: 0,
+    staleTime: Infinity,
+    retry: false,
+    networkMode: 'always',
+    queryFn: async ({ client }) => {
+      await new Promise<void>((resolve) => {
+        completion.current = resolve;
+      });
+      completion.current = null;
+      if (outcome === 'error') throw new Error('Preview refresh failure');
+      return (client.getQueryData<number>(refreshCountKey) ?? 0) + 1;
+    },
+  });
+  const onRefresh = useScreenRefresh([refreshCountKey]);
+  let status = 'Pull down to refetch the counter.';
+  if (isFetching) {
+    status = 'Refreshing. Press Complete refresh to settle the work.';
+  } else if (isRefetchError) {
+    status = 'Refresh failed. Saved content is retained. Pull again to retry.';
+  } else if (count > 0) {
+    status = 'Refresh complete. Pull again to repeat.';
   }
 
   return (
@@ -71,7 +86,7 @@ function RefreshDemo({
             variant="primary"
             label="Complete refresh"
             testID="refresh-demo-complete"
-            disabled={!refreshing}
+            disabled={!isFetching}
             onPress={() => completion.current?.()}
           />
         </Column>
@@ -86,7 +101,7 @@ function RefreshDemo({
           testID="refresh-demo-scroll"
           disabled={disabled}
           hidden={hidden}
-          onRefresh={refresh}
+          onRefresh={onRefresh}
         >
           <Column spacing={16} modifiers={nativeFillWidth} style={{ padding: 24 }}>
             <Text testID="refresh-demo-count">{`Successful refreshes: ${count}`}</Text>

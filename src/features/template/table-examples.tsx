@@ -44,7 +44,6 @@ export function TableExamples({
   const [search, setSearch] = useState('');
   const [selectedKeys, setSelectedKeys] = useState<readonly string[]>([]);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
-  const [tableOpen, setTableOpen] = useState(true);
   const [popoverId, setPopoverId] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ email: string; status: PaymentStatus } | null>(null);
@@ -138,6 +137,7 @@ export function TableExamples({
 
   return (
     <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
+      <Text variant="heading">{t('componentCatalog.tables.title')}</Text>
       <Text variant="caption" tone="muted">
         {t('componentCatalog.tables.hint')}
       </Text>
@@ -160,130 +160,121 @@ export function TableExamples({
           total: payments.length,
         })}
       </Text>
-      <Collapsible
-        label={t('componentCatalog.tables.title')}
-        isOpen={tableOpen}
-        onOpenChange={(open) => {
-          setTableOpen(open);
-          setPopoverId(null);
+      <Table
+        rows={visiblePayments}
+        columns={columns}
+        keyExtractor={(payment) => payment.id}
+        selection={{
+          selectedKeys,
+          disabled: readOnly,
+          selectAllLabel: t('componentCatalog.tables.selectAll'),
+          rowLabel: (payment) => t('componentCatalog.tables.selectRow', { email: payment.email }),
+          onSelectRow: (payment, selected) => {
+            if (readOnly) return;
+            setSelectedKeys((current) =>
+              selected
+                ? current.includes(payment.id)
+                  ? current
+                  : [...current, payment.id]
+                : current.filter((id) => id !== payment.id),
+            );
+          },
+          onSelectAll: (rows, selected) => {
+            if (readOnly) return;
+            const visibleKeys = rows.map((row) => row.id);
+            setSelectedKeys((current) => {
+              const hiddenKeys = current.filter((id) => !visibleKeys.includes(id));
+              return selected ? [...hiddenKeys, ...visibleKeys] : hiddenKeys;
+            });
+          },
         }}
-      >
-        <Table
-          rows={visiblePayments}
-          columns={columns}
-          keyExtractor={(payment) => payment.id}
-          selection={{
-            selectedKeys,
-            disabled: readOnly,
-            selectAllLabel: t('componentCatalog.tables.selectAll'),
-            rowLabel: (payment) => t('componentCatalog.tables.selectRow', { email: payment.email }),
-            onSelectRow: (payment, selected) => {
-              if (readOnly) return;
-              setSelectedKeys((current) =>
-                selected
-                  ? current.includes(payment.id)
-                    ? current
-                    : [...current, payment.id]
-                  : current.filter((id) => id !== payment.id),
-              );
-            },
-            onSelectAll: (rows, selected) => {
-              if (readOnly) return;
-              const visibleKeys = rows.map((row) => row.id);
-              setSelectedKeys((current) => {
-                const hiddenKeys = current.filter((id) => !visibleKeys.includes(id));
-                return selected ? [...hiddenKeys, ...visibleKeys] : hiddenKeys;
-              });
-            },
-          }}
-          emptyState={
-            <EmptyState
-              icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
-              title={t('componentCatalog.tables.empty')}
-              description={t('query.searchEmptyHint')}
-              primaryAction={{
-                label: t('showcase.tableGallery.clearFilters'),
-                onPress: () => setSearch(''),
-                testID: 'component-table-empty-reset',
-              }}
-              testID="component-table-empty-content"
-            />
-          }
-          actionsWidth={80}
-          testID="component-table"
-          renderActions={(payment) => (
-            <Popover
-              isPresented={popoverId === payment.id}
-              onIsPresentedChange={(open) =>
-                setPopoverId((current) =>
-                  open ? payment.id : current === payment.id ? null : current,
-                )
-              }
-              testID={'component-table-popover-' + payment.id}
-              trigger={
-                <ButtonContent
-                  variant="tertiary"
-                  color={colors.tableText}
-                  contentColor={colors.tableText}
-                  contentPadding={0}
-                  disabled={readOnly}
-                  accessibilityLabel={t('componentCatalog.tables.actionsFor', {
-                    email: payment.email,
-                  })}
-                  onPress={() => setPopoverId(payment.id)}
-                  testID={'component-table-actions-' + payment.id}
-                >
-                  <Icon name={Icon.select({ ios: 'ellipsis', android: 'more_horiz' })} size={18} />
-                </ButtonContent>
-              }
-            >
-              <Column
-                spacing={spacing.md}
-                style={{ width: Math.min(280, contentWidth), padding: spacing.lg }}
+        emptyState={
+          <EmptyState
+            icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
+            title={t('componentCatalog.tables.empty')}
+            description={t('query.searchEmptyHint')}
+            primaryAction={{
+              label: t('showcase.tableGallery.clearFilters'),
+              onPress: () => setSearch(''),
+              testID: 'component-table-empty-reset',
+            }}
+            testID="component-table-empty-content"
+          />
+        }
+        actionsWidth={80}
+        testID="component-table"
+        renderActions={(payment) => (
+          <Popover
+            isPresented={popoverId === payment.id}
+            onIsPresentedChange={(open) =>
+              setPopoverId((current) =>
+                open ? payment.id : current === payment.id ? null : current,
+              )
+            }
+            testID={'component-table-popover-' + payment.id}
+            trigger={
+              <ButtonContent
+                variant="tertiary"
+                color={colors.tableText}
+                contentColor={colors.tableText}
+                contentPadding={0}
+                disabled={readOnly}
+                accessibilityLabel={t('componentCatalog.tables.actionsFor', {
+                  email: payment.email,
+                })}
+                onPress={() => setPopoverId(payment.id)}
+                testID={'component-table-actions-' + payment.id}
               >
-                <Text variant="label">{payment.email}</Text>
-                <Collapsible
-                  label={t('componentCatalog.tables.detailsFor', { id: payment.id })}
-                  isOpen={detailsId === payment.id}
-                  onOpenChange={(open) => setDetailsId(open ? payment.id : null)}
+                <Icon name={Icon.select({ ios: 'ellipsis', android: 'more_horiz' })} size={18} />
+              </ButtonContent>
+            }
+          >
+            <Column
+              spacing={spacing.md}
+              style={{ width: Math.min(280, contentWidth), padding: spacing.lg }}
+            >
+              <Text variant="label">{payment.email}</Text>
+              <Collapsible
+                label={t('componentCatalog.tables.detailsFor', { id: payment.id })}
+                isOpen={detailsId === payment.id}
+                onOpenChange={(open) => setDetailsId(open ? payment.id : null)}
+              >
+                <Column
+                  spacing={spacing.sm}
+                  modifiers={nativeFillWidth}
+                  testID={'component-table-details-' + payment.id}
                 >
-                  <Column
-                    spacing={spacing.sm}
-                    modifiers={nativeFillWidth}
-                    testID={'component-table-details-' + payment.id}
-                  >
-                    <Text variant="caption">
-                      {t('componentCatalog.tables.detailsSummary', {
-                        id: payment.id,
-                        amount: currency.format(payment.amount),
-                        status: t('componentCatalog.tables.statuses.' + payment.status),
-                      })}
-                    </Text>
-                  </Column>
-                </Collapsible>
-                {(['success', 'processing', 'failed'] as const).map((status) => (
-                  <ButtonContent
-                    key={status}
-                    variant="tertiary"
-                    label={t('componentCatalog.tables.actions.' + status)}
-                    disabled={payment.status === status}
-                    fullWidth
-                    onPress={() => updateStatus(payment, status)}
-                    testID={'component-table-' + status + '-' + payment.id}
-                  />
-                ))}
+                  <Text variant="caption">
+                    {t('componentCatalog.tables.detailsSummary', {
+                      id: payment.id,
+                      amount: currency.format(payment.amount),
+                      status: t('componentCatalog.tables.statuses.' + payment.status),
+                    })}
+                  </Text>
+                </Column>
+              </Collapsible>
+              {(['success', 'processing', 'failed'] as const).map((status) => (
                 <ButtonContent
+                  key={status}
                   variant="tertiary"
-                  label={t('common.close')}
+                  label={t('componentCatalog.tables.actions.' + status)}
+                  disabled={payment.status === status}
                   fullWidth
-                  onPress={() => setPopoverId(null)}
-                  testID={'component-table-close-' + payment.id}
+                  onPress={() => updateStatus(payment, status)}
+                  testID={'component-table-' + status + '-' + payment.id}
                 />
-              </Column>
-            </Popover>
-          )}
-        />
-      </Collapsible>
+              ))}
+              <ButtonContent
+                variant="tertiary"
+                label={t('common.close')}
+                fullWidth
+                onPress={() => setPopoverId(null)}
+                testID={'component-table-close-' + payment.id}
+              />
+            </Column>
+          </Popover>
+        )}
+      />
       <Text variant="caption" tone="muted" testID="component-table-selection-count">
         {t('componentCatalog.tables.selectionCount', {
           selected: visibleSelectedCount,
@@ -318,7 +309,6 @@ export function TableExamples({
           setSearch('');
           setSelectedKeys([]);
           setSortDirection(null);
-          setTableOpen(true);
           setPopoverId(null);
           setDetailsId(null);
           setFeedback(null);

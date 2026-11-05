@@ -8,15 +8,12 @@ import {
   IosHomeGrid,
   StackedCarousel,
   StoryList,
-  Switch,
   UniversalTextContent,
   VerificationCodeFace,
   nativeFillWidth,
-  type PhotoItem,
   type VerificationCodeFaceStatus,
 } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
-import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { photoFixtures } from './photo-fixtures';
 
 /** Demo content and validation stay here; the UI components receive plain props. */
@@ -66,7 +63,13 @@ export function HomeComponents() {
         title={t('starter.circularCarouselTitle')}
         hint={t('starter.storyListHint')}
       >
-        <CircularPreview items={carouselPhotos} width={width} positionLabel={positionLabel} />
+        <CircularCarousel
+          items={carouselPhotos}
+          width={width}
+          accessibilityLabel={t('starter.circularCarouselTitle')}
+          getPositionLabel={positionLabel}
+          testID="home-circular-carousel"
+        />
       </ComponentSection>
       <ComponentSection title={t('starter.homeGridTitle')} hint={t('starter.homeGridHint')}>
         <IosHomeGrid
@@ -108,39 +111,6 @@ function VerificationPreview() {
       resetLabel={t('starter.verificationFaceReset')}
       testID="home-verification-face"
     />
-  );
-}
-
-function CircularPreview({
-  items,
-  width,
-  positionLabel,
-}: Readonly<{
-  items: readonly PhotoItem[];
-  width: number;
-  positionLabel: (index: number, total: number) => string;
-}>) {
-  const { t } = useTranslation();
-  const [scaleEnabled, setScaleEnabled] = useState(false);
-  const reducedMotion = useAppReducedMotion();
-  return (
-    <>
-      <Switch
-        label={t('starter.circularCarouselScale')}
-        value={scaleEnabled}
-        onValueChange={setScaleEnabled}
-        disabled={reducedMotion}
-        testID="home-circular-carousel-scale"
-      />
-      <CircularCarousel
-        items={items}
-        width={width}
-        scaleEnabled={scaleEnabled}
-        accessibilityLabel={t('starter.circularCarouselTitle')}
-        getPositionLabel={positionLabel}
-        testID="home-circular-carousel"
-      />
-    </>
   );
 }
 

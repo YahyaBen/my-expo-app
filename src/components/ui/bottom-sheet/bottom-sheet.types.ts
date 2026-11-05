@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import type { IconName } from '../icon/icon';
 
 export type BottomSheetHeaderAction = {
@@ -12,7 +12,8 @@ export type BottomSheetBaseProps = {
   children?: ReactNode;
   isPresented: boolean;
   onDismiss: () => void;
-  title?: string;
+  /** A native text element can supply custom typography and its own test ID. */
+  title?: string | ReactElement;
   headerAction?: BottomSheetHeaderAction;
   testID?: string;
 };

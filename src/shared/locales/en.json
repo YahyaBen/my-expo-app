@@ -673,7 +673,6 @@
     "storyListTitle": "Story list",
     "stackedCarouselTitle": "Stacked carousel",
     "circularCarouselTitle": "Circular carousel",
-    "circularCarouselScale": "Scale photos",
     "homeGridTitle": "iOS home grid",
     "homeGridHint": "Tap a photo to expand it. Drag down or tap Close to return.",
     "homeGridPhoto": "Photo {{number}}",

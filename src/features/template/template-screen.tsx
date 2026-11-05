@@ -34,6 +34,9 @@ function DeferredSettingsScreen(props: Readonly<SettingsScreenProps>) {
 
 type ContentTabId = Exclude<TabNavigationItemId, 'more'>;
 
+const searchIcon = Icon.select({ ios: 'magnifyingglass', android: 'search' });
+const clearIcon = Icon.select({ ios: 'xmark.circle.fill', android: 'cancel' });
+
 /** Native template shell and its local component-navigation menu. */
 export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
   const { t } = useTranslation();
@@ -54,6 +57,10 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
       return closeMenu;
     }, [closeMenu]),
   );
+
+  function clearSearch() {
+    setSearch('');
+  }
 
   function navigateToComponent(id: ComponentId) {
     if (navigating.current) return;
@@ -112,9 +119,14 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
               <PageSection>
                 {contentId === 'search' ? (
                   <TextInput
-                    label={t('template.search')}
+                    accessibilityLabel={titles.search}
+                    placeholder={titles.search}
                     value={search}
                     onChangeText={setSearch}
+                    leftIcon={searchIcon}
+                    rightIcon={search.length > 0 ? clearIcon : undefined}
+                    onRightIconPress={clearSearch}
+                    rightIconAccessibilityLabel={t('query.clearSearch')}
                     testID="template-component-search"
                   />
                 ) : null}
@@ -132,10 +144,10 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
                 </Column>
                 {components.length === 0 ? (
                   <EmptyState
-                    icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
+                    icon={searchIcon}
                     title={t('template.noComponents')}
                     description={t('query.searchEmptyHint')}
-                    primaryAction={{ label: t('query.clearSearch'), onPress: () => setSearch('') }}
+                    primaryAction={{ label: t('query.clearSearch'), onPress: clearSearch }}
                     testID="template-components-empty"
                   />
                 ) : null}
@@ -154,7 +166,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
           </Activity>
         ) : null}
       </View>
-      <ComponentMenu isPresented={menuOpen} onClose={closeMenu} onNavigate={navigateToComponent} />
+      <ComponentMenu isPresented={menuOpen} onClose={closeMenu} />
       <TabNavigationBar
         activeId={activeId}
         onSelect={selectTab}

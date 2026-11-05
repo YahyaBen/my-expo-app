@@ -1,4 +1,4 @@
-import { ListItem as NativeListItem } from '@expo/ui';
+import { ListItem as NativeListItem, type ListItemProps as NativeListItemProps } from '@expo/ui';
 import { disabled as nativeDisabled } from '@expo/ui/swift-ui/modifiers';
 import { nativeFillWidth } from '../native/native-fill-width';
 import type { ListItemProps } from './list-item';
@@ -22,6 +22,9 @@ export function ListItem({
   );
 }
 
+ListItem.FieldRow = function FieldRow(props: Readonly<NativeListItemProps>) {
+  return <ListItem {...props} disabled={!props.onPress} />;
+};
 ListItem.Leading = NativeListItem.Leading;
 ListItem.Supporting = NativeListItem.Supporting;
 ListItem.Trailing = NativeListItem.Trailing;

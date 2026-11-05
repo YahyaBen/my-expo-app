@@ -671,7 +671,6 @@
     "storyListTitle": "قائمة القصص",
     "stackedCarouselTitle": "عارض البطاقات المتراصة",
     "circularCarouselTitle": "عارض الصور الدائري",
-    "circularCarouselScale": "تكبير الصور",
     "homeGridTitle": "شبكة الشاشة الرئيسية لـ iOS",
     "homeGridHint": "اضغط على صورة لتكبيرها. اسحب للأسفل أو اضغط على إغلاق للعودة.",
     "homeGridPhoto": "الصورة {{number}}",

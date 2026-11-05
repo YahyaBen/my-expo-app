@@ -19,14 +19,13 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
 - Place `SectionHeader` / `SectionFooter` markers directly in their section.
   A custom header replaces the title. Keep markers visible to native parsing,
   with one header/footer per section.
-- Both platforms directly re-export Expo UI's universal `FieldGroup` from one file.
-  Keep native section and row markers visible; do not hide them behind opaque
-  custom React wrappers.
+- Both platforms re-export Expo UI's universal `FieldGroup`. Keep the native
+  section, header and footer markers visible to Expo.
 
 ## Screen composition
 
-- Put navigation/detail `ListItem` rows directly in a section. Keep independently
-  interactive pickers/switches in passive native layout, outside clickable rows.
+- Put navigation/detail `ListItem.FieldRow` rows directly in a section. Keep
+  independently interactive pickers/switches in passive native layout.
 - Reuse `pageFormModifiers` to hide the system form canvas. Clearing only the
   background does not hide iOS Form's canvas.
 - Use one fill Host and the existing safe-area/keyboard owners. FieldGroup owns
