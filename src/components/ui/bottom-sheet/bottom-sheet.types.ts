@@ -1,20 +1,9 @@
-import type { ReactElement, ReactNode } from 'react';
-import type { IconName } from '../icon/icon';
-
-export type BottomSheetHeaderAction = {
-  icon: IconName;
-  accessibilityLabel: string;
-  onPress: () => void;
-  testID?: string;
-};
+import type { ReactNode } from 'react';
 
 export type BottomSheetBaseProps = {
   children?: ReactNode;
   isPresented: boolean;
   onDismiss: () => void;
-  /** A native text element can supply custom typography and its own test ID. */
-  title?: string | ReactElement;
-  headerAction?: BottomSheetHeaderAction;
   testID?: string;
 };
 

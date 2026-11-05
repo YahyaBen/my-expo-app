@@ -1,9 +1,9 @@
 import { useThemeColors } from '@/hooks/use-theme';
-import { RNHostView, Row, type RowProps } from '@expo/ui';
-import { SymbolView, type AndroidSymbol, type SFSymbol, type SymbolViewProps } from 'expo-symbols';
+import { Row, type RowProps } from '@expo/ui';
+import type { AndroidSymbol, SFSymbol, SymbolViewProps } from 'expo-symbols';
 import { useContext } from 'react';
-import { View } from 'react-native';
 import { useHostColorScheme } from '../host/universal-host';
+import { IconArtwork } from './icon-artwork';
 import { IconColorContext } from './icon-color-context';
 
 export type IconName = { ios: SFSymbol; android: AndroidSymbol };
@@ -16,7 +16,7 @@ export type IconProps = Omit<RowProps, 'children' | 'onPress' | 'alignment' | 's
   type?: SymbolViewProps['type'];
 };
 
-/** Expo Symbols artwork bridged into an existing SwiftUI or Compose tree. */
+/** Platform symbol artwork inside an existing SwiftUI or Compose tree. */
 export function Icon({
   name,
   size = 24,
@@ -31,27 +31,16 @@ export function Icon({
 
   return (
     <Row {...props} alignment="center" spacing={0} style={{ width: size, height: size, ...style }}>
-      {/* Size the artwork before SwiftUI measures it in a ListItem accessory. */}
-      <RNHostView matchContents>
-        <View
-          collapsable={false}
-          pointerEvents="none"
-          style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}
-        >
-          <SymbolView
-            name={name}
-            size={size}
-            tintColor={color ?? inheritedColor ?? colors.text}
-            type={type}
-            accessible={Boolean(accessibilityLabel)}
-            accessibilityLabel={accessibilityLabel}
-            pointerEvents="none"
-          />
-        </View>
-      </RNHostView>
+      <IconArtwork
+        name={name}
+        size={size}
+        color={color ?? inheritedColor ?? colors.text}
+        accessibilityLabel={accessibilityLabel}
+        type={type}
+      />
     </Row>
   );
 }
 
-/** Keep both typed names so SymbolView can choose the native symbol library. */
+/** Keep both typed names for the platform renderers. */
 Icon.select = (names: IconName): IconName => names;

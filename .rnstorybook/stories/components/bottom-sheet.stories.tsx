@@ -7,7 +7,6 @@ import {
   UniversalTextContent,
   Button,
   nativeFillWidth,
-  Icon,
   TabNavigationBar,
   UniversalHost,
   type TabNavigationItemId,
@@ -20,8 +19,9 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { action } from 'storybook/actions';
 import { NativeStoryFrame } from '../../components/native-story-frame';
 
-type DemoProps = BottomSheetProps & {
-  example: 'modal' | 'inline' | 'custom-action';
+type DemoProps = Pick<BottomSheetProps, 'isPresented' | 'onDismiss' | 'testID'> & {
+  example: 'modal' | 'inline';
+  contentHeight?: number;
   colorScheme: 'light' | 'dark';
   title: string;
   content: string;
@@ -29,68 +29,61 @@ type DemoProps = BottomSheetProps & {
   onClose: () => void;
 };
 
-function BottomSheetDemo({ example, ...args }: Readonly<DemoProps>) {
-  return example === 'modal' ? (
-    <ModalSheetDemo example={example} {...args} />
-  ) : (
-    <InlineSheetDemo example={example} {...args} />
-  );
+function BottomSheetDemo(args: Readonly<DemoProps>) {
+  return args.example === 'modal' ? <ModalSheetDemo {...args} /> : <InlineSheetDemo {...args} />;
 }
 
-function ModalSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<DemoProps>) {
-  const [isPresented, setIsPresented] = useState(args.isPresented);
-  const [controlledPresentation, setControlledPresentation] = useState(args.isPresented);
-  if (controlledPresentation !== args.isPresented) {
-    setControlledPresentation(args.isPresented);
-    setIsPresented(args.isPresented);
+function ModalSheetDemo({
+  title,
+  content,
+  colorScheme,
+  contentHeight,
+  isPresented: requestedPresentation,
+  testID,
+  onOpen,
+  onClose,
+  onDismiss,
+}: Readonly<DemoProps>) {
+  const [isPresented, setIsPresented] = useState(requestedPresentation);
+  const [controlledPresentation, setControlledPresentation] = useState(requestedPresentation);
+  if (controlledPresentation !== requestedPresentation) {
+    setControlledPresentation(requestedPresentation);
+    setIsPresented(requestedPresentation);
   }
   return (
     <View style={{ gap: 20 }}>
       <Button
         variant="secondary"
-        testID={args.testID ? `${args.testID}-open` : undefined}
+        testID={testID ? `${testID}-open` : undefined}
         label="Open bottom sheet"
-        colorScheme={args.colorScheme}
+        colorScheme={colorScheme}
         onPress={() => {
           setIsPresented(true);
           onOpen();
         }}
       />
-      <UniversalText
-        testID={args.testID ? `${args.testID}-state` : undefined}
-        colorScheme={args.colorScheme}
-      >
+      <UniversalText testID={testID ? `${testID}-state` : undefined} colorScheme={colorScheme}>
         {`State: ${isPresented ? 'Open' : 'Closed'}. Swipe down or tap Close to dismiss.`}
       </UniversalText>
-      <UniversalText colorScheme={args.colorScheme}>
-        The sheet uses the active theme surface color and native dismissal. The iOS drag indicator
-        is hidden.
-      </UniversalText>
       <BottomSheet
-        {...args}
+        testID={testID}
+        contentHeight={contentHeight}
         isPresented={isPresented}
         onDismiss={() => {
           setIsPresented(false);
-          args.onDismiss();
-        }}
-        title={title}
-        headerAction={{
-          icon: Icon.select({ ios: 'xmark', android: 'close' }),
-          accessibilityLabel: 'Close sheet',
-          testID: `${args.testID}-header-close`,
-          onPress: () => {
-            setIsPresented(false);
-            onClose();
-          },
+          onDismiss();
         }}
       >
         <Column
-          testID={args.testID ? `${args.testID}-content` : undefined}
+          testID={testID ? `${testID}-content` : undefined}
           spacing={16}
           modifiers={nativeFillWidth}
         >
+          <UniversalTextContent variant="subtitle" testID={testID ? `${testID}-title` : undefined}>
+            {title}
+          </UniversalTextContent>
           <UniversalTextContent
-            testID={args.testID ? `${args.testID}-description` : undefined}
+            testID={testID ? `${testID}-description` : undefined}
             textStyle={{ fontSize: 16 }}
           >
             {content}
@@ -98,7 +91,7 @@ function ModalSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<D
           <ButtonContent
             variant="secondary"
             fullWidth
-            testID={args.testID ? `${args.testID}-close` : undefined}
+            testID={testID ? `${testID}-close` : undefined}
             label="Close"
             onPress={() => {
               setIsPresented(false);
@@ -112,7 +105,6 @@ function ModalSheetDemo({ title, content, onOpen, onClose, ...args }: Readonly<D
 }
 
 function InlineSheetDemo({
-  example,
   title,
   content,
   colorScheme,
@@ -133,11 +125,11 @@ function InlineSheetDemo({
         <UniversalHost colorScheme={colorScheme}>
           <Column spacing={12} modifiers={nativeFillWidth}>
             <UniversalTextContent>
-              Drag the header or tap the handle. The dock stays interactive above the sheet.
+              Drag or tap the handle. The dock stays interactive above the sheet.
             </UniversalTextContent>
             <UniversalTextContent
               testID={`${testID}-action-count`}
-            >{`Custom action presses: ${presses}. Selected tab: ${activeId}.`}</UniversalTextContent>
+            >{`Action presses: ${presses}. Selected tab: ${activeId}.`}</UniversalTextContent>
             <ButtonContent
               variant="secondary"
               label="Reopen sheet"
@@ -156,7 +148,6 @@ function InlineSheetDemo({
             setIsPresented(false);
             onDismiss();
           }}
-          title={title}
           height={400}
           collapsedHeight={240}
           expanded={expanded}
@@ -170,25 +161,10 @@ function InlineSheetDemo({
             </UniversalTextContent>
           }
           testID={testID}
-          headerAction={
-            example === 'custom-action'
-              ? {
-                  icon: Icon.select({ ios: 'bookmark', android: 'bookmark' }),
-                  accessibilityLabel: 'Run custom action without closing',
-                  onPress: () => setPresses((current) => current + 1),
-                  testID: `${testID}-custom-action`,
-                }
-              : {
-                  icon: Icon.select({ ios: 'xmark', android: 'close' }),
-                  accessibilityLabel: 'Close sheet',
-                  onPress: () => {
-                    setIsPresented(false);
-                    onClose();
-                  },
-                  testID: `${testID}-header-close`,
-                }
-          }
         >
+          <UniversalTextContent variant="subtitle" testID={testID ? `${testID}-title` : undefined}>
+            {title}
+          </UniversalTextContent>
           <UniversalTextContent>{content}</UniversalTextContent>
           {Array.from({ length: 8 }, (_, index) => (
             <UniversalTextContent
@@ -201,6 +177,15 @@ function InlineSheetDemo({
             label="Final action"
             testID={`${testID}-final-action`}
             onPress={() => setPresses((current) => current + 1)}
+          />
+          <ButtonContent
+            variant="link"
+            label="Close"
+            testID={testID ? `${testID}-header-close` : undefined}
+            onPress={() => {
+              setIsPresented(false);
+              onClose();
+            }}
           />
         </BottomSheet>
       </View>
@@ -230,7 +215,7 @@ const meta = {
   title: 'Components/Bottom Sheet',
   component: BottomSheetDemo,
   args: {
-    example: 'inline',
+    example: 'modal',
     testID: 'expo-ui-bottom-sheet',
     isPresented: false,
     title: 'A native bottom sheet',
@@ -241,12 +226,11 @@ const meta = {
     onDismiss: action('sheet dismissed'),
   },
   argTypes: {
-    example: { control: 'select', options: ['modal', 'inline', 'custom-action'] },
+    example: { control: 'select', options: ['modal', 'inline'] },
     isPresented: { control: 'boolean' },
     title: { control: 'text' },
     content: { control: 'text' },
     contentHeight: { control: { type: 'number', min: 1 } },
-    children: { control: false },
     onOpen: { control: false },
     onClose: { control: false },
     onDismiss: { control: false },

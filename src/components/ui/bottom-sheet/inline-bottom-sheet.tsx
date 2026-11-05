@@ -19,8 +19,9 @@ import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
 import { nativeFillWidth } from '../native/native-fill-width';
-import { BottomSheetHeader } from './bottom-sheet-header';
 import type { InlineBottomSheetProps } from './bottom-sheet.types';
+
+const handleHeight = 40;
 
 /** An in-screen surface: no modal window, portal, backdrop or navigation owner. */
 export function InlineBottomSheet({
@@ -36,8 +37,6 @@ export function InlineBottomSheet({
   bottomClearance = 0,
   dismissOnCollapse = false,
   collapsedContent,
-  title,
-  headerAction,
   testID,
 }: Readonly<InlineBottomSheetProps>) {
   const colors = useThemeColors(useHostColorScheme());
@@ -45,12 +44,11 @@ export function InlineBottomSheet({
   if (isPresented && !rendered) setRendered(true);
   const presented = useRef(isPresented);
   const motionEnabled = useMotionEnabled(rendered);
-  const [headerHeight, setHeaderHeight] = useState(96);
   const sheetHeight = Math.max(1, Number.isFinite(height) ? height : 1);
   const clearance = Math.max(0, bottomClearance);
   const peekHeight = Math.min(
     sheetHeight,
-    Math.max(Number.isFinite(collapsedHeight) ? collapsedHeight : 0, headerHeight + clearance + 64),
+    Math.max(Number.isFinite(collapsedHeight) ? collapsedHeight : 0, handleHeight + clearance + 64),
   );
   const travel = sheetHeight - peekHeight;
   const dragDistance = dismissOnCollapse ? sheetHeight : travel;
@@ -61,7 +59,7 @@ export function InlineBottomSheet({
   const startExpanded = useSharedValue(expanded);
   const dragging = useSharedValue(false);
   // Keep the native scroll viewport stable throughout a drag; the screen clips the peek.
-  const bodyHeight = Math.max(1, sheetHeight - headerHeight - clearance);
+  const bodyHeight = Math.max(1, sheetHeight - handleHeight - clearance);
   const hideWhenClosed = useCallback(() => {
     if (!presented.current) setRendered(false);
   }, []);
@@ -233,10 +231,7 @@ export function InlineBottomSheet({
         ]}
       >
         <GestureDetector gesture={pan}>
-          <View
-            collapsable={false}
-            onLayout={({ nativeEvent }) => setHeaderHeight(nativeEvent.layout.height)}
-          >
+          <View collapsable={false}>
             <GestureDetector gesture={tap}>
               <View
                 collapsable={false}
@@ -264,7 +259,7 @@ export function InlineBottomSheet({
                 hitSlop={{ bottom: 8 }}
                 style={{
                   width: 96,
-                  height: 40,
+                  height: handleHeight,
                   alignSelf: 'center',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -276,15 +271,6 @@ export function InlineBottomSheet({
                 />
               </View>
             </GestureDetector>
-            <UniversalHost ignoreSafeArea="all">
-              <Column
-                spacing={0}
-                modifiers={nativeFillWidth}
-                style={{ paddingHorizontal: 16, paddingBottom: 8 }}
-              >
-                <BottomSheetHeader title={title} headerAction={headerAction} testID={testID} />
-              </Column>
-            </UniversalHost>
           </View>
         </GestureDetector>
         <View style={{ height: bodyHeight }}>

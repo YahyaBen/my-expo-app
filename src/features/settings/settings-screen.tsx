@@ -116,7 +116,12 @@ function SettingsPage({
           matchContents={false}
           useViewportSizeMeasurement={Platform.OS === 'android'}
           ignoreSafeArea="all"
-          style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
+          style={{
+            flex: 1,
+            maxWidth: screenContentMaxWidth,
+            alignSelf: 'center',
+            marginBottom: tab ? tabBarRaisedHeight : 0,
+          }}
           testID="app-settings-content"
         >
           <FieldGroup
@@ -212,11 +217,7 @@ function SettingsPage({
                 testID="app-settings-system-permissions"
               />
             </FieldGroup.Section>
-            <FieldGroup.Section
-              title={t('settings.location.title')}
-              titleUppercase
-              style={{ paddingBottom: tab ? tabBarRaisedHeight : 0 }}
-            >
+            <FieldGroup.Section title={t('settings.location.title')} titleUppercase>
               <FieldGroup.SectionHeader>
                 <SettingsSectionHeading label={t('settings.location.title')} language={language} />
               </FieldGroup.SectionHeader>
@@ -300,32 +301,13 @@ function SettingsPage({
             isPresented={languageOpen}
             onDismiss={() => setLanguageOpen(false)}
             testID="app-settings-language-sheet"
-            title={
-              <Text
-                variant="title"
-                tone="primary"
-                numberOfLines={2}
-                modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
-                textStyle={{ fontFamily: getBrandHeadingFont(language) }}
-                testID="app-settings-language-title"
-              >
-                {t('common.language')}
-              </Text>
-            }
-            headerAction={{
-              icon: Icon.select({ ios: 'xmark', android: 'close' }),
-              accessibilityLabel: t('common.close'),
-              onPress: () => setLanguageOpen(false),
-              testID: 'app-settings-language-close',
-            }}
           >
             <PageSection>
+              <Text variant="title" testID="app-settings-language-title">
+                {t('common.language')}
+              </Text>
               <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
-                <FieldGroup
-                  modifiers={pageFormModifiers}
-                  //style={{ backgroundColor: 'transparent' }}
-                  testID="app-settings-language-options"
-                >
+                <FieldGroup modifiers={pageFormModifiers} testID="app-settings-language-options">
                   <FieldGroup.Section>
                     {SUPPORTED_LANGUAGES.map((value) => (
                       <ListItem.FieldRow
@@ -357,6 +339,12 @@ function SettingsPage({
                   </FieldGroup.Section>
                 </FieldGroup>
               </Column>
+              <ButtonContent
+                variant="link"
+                label={t('common.close')}
+                onPress={() => setLanguageOpen(false)}
+                testID="app-settings-language-close"
+              />
             </PageSection>
           </BottomSheet>
         </UniversalHost>

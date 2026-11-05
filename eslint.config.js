@@ -5,7 +5,7 @@ const prettierConfig = require('eslint-config-prettier/flat');
 const expoSymbolIcons = {
   selector: String.raw`:matches(ImportDeclaration[source.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], ImportExpression[source.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], CallExpression[callee.name='require'][arguments.0.value=/^@expo\u002Fmaterial-symbols(?:\u002F|$)/], ImportDeclaration[source.value=/^@expo\u002Fui(?:\u002F|$)/] > ImportSpecifier[imported.name=/^(?:Icon|IconName|IconProps)$/])`,
   message:
-    'Use the shared Icon backed by expo-symbols, with typed iOS and Android symbol names. UI implementations import the icon sibling; consumers use @components/ui.',
+    'Use the shared Icon with typed iOS and Android symbol names. UI implementations import the icon sibling; consumers use @components/ui.',
 };
 const nativeControlImports = [
   {
