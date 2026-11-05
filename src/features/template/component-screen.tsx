@@ -136,7 +136,11 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
           {id === 'list' ? (
             <List testID="component-list">{rows}</List>
           ) : (
-            <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
+            <FieldGroup
+              modifiers={pageFormModifiers}
+              style={{ backgroundColor: 'red' }}
+              testID="component-field-group"
+            >
               <FieldGroup.Section title={title}>{rows}</FieldGroup.Section>
             </FieldGroup>
           )}
