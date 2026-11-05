@@ -5,7 +5,7 @@ import { useWindowDimensions } from 'react-native';
 import { ButtonContent, type ButtonContentProps } from '../button/button';
 import { useHostColorScheme } from '../host/universal-host';
 import { Icon, type IconName } from '../icon/icon';
-import { nativeCenteredMinHeight, nativeFillWidth } from '../native/native-fill-width';
+import { nativeCenteredMinHeight, nativeFillWidthCenter } from '../native/native-fill-width';
 import { UniversalTextContent as Text } from '../text/universal-text';
 
 export type EmptyStateAction = Pick<
@@ -67,7 +67,7 @@ export function EmptyState({
       >
         <Icon name={icon} size={16} />
       </Column>
-      <Column alignment="center" spacing={spacing.sm} modifiers={nativeFillWidth}>
+      <Column alignment="center" spacing={spacing.sm} modifiers={nativeFillWidthCenter}>
         <Text
           variant="label"
           textStyle={{ textAlign: 'center' }}
@@ -93,9 +93,6 @@ export function EmptyState({
             <ButtonContent
               {...primaryAction}
               variant="primary"
-              color={colors.text}
-              contentColor={colors.surface}
-              borderRadius={radii.sm}
               testID={primaryAction.testID ?? `${testID}-primary`}
             />
           ) : null}
@@ -103,9 +100,6 @@ export function EmptyState({
             <ButtonContent
               {...secondaryAction}
               variant="secondary"
-              color={colors.text}
-              contentColor={colors.text}
-              borderRadius={radii.sm}
               testID={secondaryAction.testID ?? `${testID}-secondary`}
             />
           ) : null}

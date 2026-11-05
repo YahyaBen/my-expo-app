@@ -9,7 +9,6 @@ import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import { screenInsets } from '@/lib/screen-insets';
 import {
   BottomSheet,
-  ButtonContent,
   ColorSchemeControl,
   Column,
   FieldGroup,
@@ -85,7 +84,9 @@ function SettingsPage({
   const [languageOpen, setLanguageOpen] = useState(false);
   const device = useDevicePermissions();
   const location = useDeviceLocation(device.permissions.location);
-  const deviceControlsDisabled = !device.ready || device.pending !== null || location.pending;
+  const permissionActionPending = device.pending !== null || location.pending;
+  const deviceControlsDisabled = !device.ready || permissionActionPending;
+  const locationRequestDisabled = permissionActionPending || !location.enabled;
   const locationBlocked =
     location.permission?.canAskAgain === false && !location.permission.granted;
   const locationStatus = !location.enabled
@@ -209,13 +210,15 @@ function SettingsPage({
                   {t(`settings.permissions.${device.error ?? 'saveFailed'}`)}
                 </Text>
               ) : null}
-              <ButtonContent
-                variant="link"
-                label={t('settings.permissions.systemSettings')}
-                disabled={deviceControlsDisabled}
-                onPress={() => void device.openSettings()}
+              <ListItem.FieldRow
+                onPress={deviceControlsDisabled ? undefined : () => void device.openSettings()}
+                trailing={chevron}
                 testID="app-settings-system-permissions"
-              />
+              >
+                <Text tone={deviceControlsDisabled ? 'disabled' : 'default'}>
+                  {t('settings.permissions.systemSettings')}
+                </Text>
+              </ListItem.FieldRow>
             </FieldGroup.Section>
             <FieldGroup.Section title={t('settings.location.title')} titleUppercase>
               <FieldGroup.SectionHeader>
@@ -266,28 +269,33 @@ function SettingsPage({
                   </>
                 ) : null}
               </Column>
-              <ButtonContent
-                variant="secondary"
-                label={t(
-                  location.pending
-                    ? 'settings.location.locating'
-                    : locationBlocked
-                      ? 'settings.location.openSettings'
-                      : location.permission?.granted && location.servicesEnabled
-                        ? 'settings.location.getLocation'
-                        : 'settings.location.enableLocation',
-                )}
-                disabled={location.pending || !location.enabled || device.pending !== null}
-                onPress={() => void location.requestLocation()}
+              <ListItem.FieldRow
+                onPress={
+                  locationRequestDisabled ? undefined : () => void location.requestLocation()
+                }
                 testID="app-settings-get-location"
-              />
-              <ButtonContent
-                variant="link"
-                label={t('settings.location.openSettings')}
-                disabled={location.pending || device.pending !== null}
-                onPress={() => void location.openSettings()}
+              >
+                <Text tone={locationRequestDisabled ? 'disabled' : 'default'}>
+                  {t(
+                    location.pending
+                      ? 'settings.location.locating'
+                      : locationBlocked
+                        ? 'settings.location.openSettings'
+                        : location.permission?.granted && location.servicesEnabled
+                          ? 'settings.location.getLocation'
+                          : 'settings.location.enableLocation',
+                  )}
+                </Text>
+              </ListItem.FieldRow>
+              <ListItem.FieldRow
+                onPress={permissionActionPending ? undefined : () => void location.openSettings()}
+                trailing={chevron}
                 testID="app-settings-location-open-settings"
-              />
+              >
+                <Text tone={permissionActionPending ? 'disabled' : 'default'}>
+                  {t('settings.location.openSettings')}
+                </Text>
+              </ListItem.FieldRow>
             </FieldGroup.Section>
           </FieldGroup>
         </UniversalHost>
@@ -339,12 +347,9 @@ function SettingsPage({
                   </FieldGroup.Section>
                 </FieldGroup>
               </Column>
-              <ButtonContent
-                variant="link"
-                label={t('common.close')}
-                onPress={() => setLanguageOpen(false)}
-                testID="app-settings-language-close"
-              />
+              <ListItem onPress={() => setLanguageOpen(false)} testID="app-settings-language-close">
+                <Text tone="primary">{t('common.close')}</Text>
+              </ListItem>
             </PageSection>
           </BottomSheet>
         </UniversalHost>

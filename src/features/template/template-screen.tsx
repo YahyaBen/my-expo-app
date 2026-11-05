@@ -1,8 +1,6 @@
 import {
-  Column,
   EmptyState,
   Icon,
-  ListItem,
   PageScreen,
   PageSection,
   SkeletonContent,
@@ -18,6 +16,7 @@ import { Keyboard, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAppBrand } from '@/config/brand';
 import { componentCatalog, type ComponentId } from './component-catalog';
+import { ComponentList } from './component-list';
 import { ComponentMenu } from './component-menu';
 
 type SettingsScreenProps = ComponentProps<
@@ -47,10 +46,13 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     contentId: ContentTabId;
     settingsOpened: boolean;
   }>({ activeId: 'home', contentId: 'home', settingsOpened: false });
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuState, setMenuState] = useState<'unopened' | 'open' | 'closed'>('unopened');
+  const menuOpen = menuState === 'open';
   const [search, setSearch] = useState('');
   const navigating = useRef(false);
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const closeMenu = useCallback(() => {
+    setMenuState((state) => (state === 'open' ? 'closed' : state));
+  }, []);
   useFocusEffect(
     useCallback(() => {
       navigating.current = false;
@@ -130,19 +132,13 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
                     testID="template-component-search"
                   />
                 ) : null}
-                <Column spacing={0}>
-                  {components.map(({ id, icon }) => (
-                    <ListItem
-                      key={id}
-                      leading={<Icon name={icon} />}
-                      onPress={() => navigateToComponent(id)}
-                      testID={`template-component-${id}`}
-                    >
-                      {t(`componentCatalog.names.${id}`)}
-                    </ListItem>
-                  ))}
-                </Column>
-                {components.length === 0 ? (
+                {components.length > 0 ? (
+                  <ComponentList
+                    items={components}
+                    onSelect={navigateToComponent}
+                    testIDPrefix="template-component"
+                  />
+                ) : (
                   <EmptyState
                     icon={searchIcon}
                     title={t('template.noComponents')}
@@ -150,7 +146,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
                     primaryAction={{ label: t('query.clearSearch'), onPress: clearSearch }}
                     testID="template-components-empty"
                   />
-                ) : null}
+                )}
               </PageSection>
             )}
           </PageScreen>
@@ -166,7 +162,9 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
           </Activity>
         ) : null}
       </View>
-      <ComponentMenu isPresented={menuOpen} onClose={closeMenu} />
+      {menuState !== 'unopened' ? (
+        <ComponentMenu isPresented={menuOpen} onClose={closeMenu} onSelect={navigateToComponent} />
+      ) : null}
       <TabNavigationBar
         activeId={activeId}
         onSelect={selectTab}
@@ -192,7 +190,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
           label: t('template.openComponents'),
           onPress: () => {
             Keyboard.dismiss();
-            setMenuOpen(true);
+            setMenuState('open');
           },
           testID: 'template-component-menu-toggle',
         }}
