@@ -3,7 +3,8 @@
   "name": "Mobile Template",
   "slug": "expo-mobile-template",
   "scheme": "expomobiletemplate",
-  "icon": "./assets/AppIcon.icon/Assets/icon.png",
+  "icon": "./assets/AppIcon-Dark.icon/Assets/icon.png",
+  "lightIcon": "./assets/AppIcon-Light.icon/Assets/icon.png",
   "presentation": {
     "palette": "ux",
     "header": "default",
@@ -12,20 +13,21 @@
     "launchArtwork": "bluePepe"
   },
   "ios": {
-    "icon": "./assets/AppIcon.icon",
-    "bundleIdentifier": "com.hyrkul.mobiletemplate"
+    "bundleIdentifier": "com.hyrkul.mobiletemplate",
+    "icon": "./assets/AppIcon-Dark.icon"
   },
   "android": {
     "package": "com.hyrkul.mobiletemplate",
     "adaptiveIcon": {
-      "backgroundColor": "#ffffff",
-      "foregroundImage": "./assets/adaptive-foreground.png"
-    }
+      "foregroundImage": "./assets/adaptive-foreground-dark.png",
+      "backgroundColor": "#ffffff"
+    },
+    "lightIconForeground": "./assets/adaptive-foreground-light.png"
   },
   "splash": {
-    "image": "./assets/images/splash-icon.png",
-    "backgroundColor": "#F2F2F7",
-    "darkBackgroundColor": "#121212"
+    "image": "./assets/AppIcon-Dark.icon/Assets/icon.png",
+    "backgroundColor": "#FFFFFF",
+    "darkBackgroundColor": "#0A0A0A"
   },
   "eas": {
     "projectId": "c8cca991-ec77-476f-b759-3ea8bd075309"

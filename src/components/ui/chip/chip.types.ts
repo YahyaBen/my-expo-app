@@ -4,6 +4,8 @@ type ChipBaseProps = {
   disabled?: boolean;
   testID?: string;
   accessibilityLabel?: string;
+  /** Opaque native surfaces for chips displayed over maps or artwork. */
+  appearance?: 'native' | 'filled';
 };
 
 /** Selection and token removal belong to the caller. */

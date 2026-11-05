@@ -51,7 +51,7 @@ Optional common props: `label`, native `children`, `onPress`, `disabled`,
 
 ## Colors and geometry
 
-- Defaults: primary/onPrimary; secondary/secondary; muted/muted tertiary;
+- Defaults: primary/onPrimary; secondary/onSecondary; muted/muted tertiary;
   tint/tint link; paired status colors; error/onError destructive;
   surfaceVariant/text glass.
 - Supplying either color prop skips both semantic defaults. Supply a coherent

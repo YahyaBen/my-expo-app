@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useWindowDimensions } from 'react-native';
 import { spacing } from '@/constants/layout';
+import { useThemeColors } from '@/hooks/use-theme';
 import { componentCatalog, type ComponentId } from './component-catalog';
 
 /** Keep the native presenter mounted while the component menu opens and dismisses. */
@@ -25,6 +26,7 @@ export function ComponentMenu({
   onNavigate: (id: ComponentId) => void;
 }>) {
   const { t } = useTranslation();
+  const colors = useThemeColors();
   const { height } = useWindowDimensions();
   const contentHeight = Math.min(560, height * 0.65);
 
@@ -56,6 +58,7 @@ export function ComponentMenu({
               {componentCatalog.map(({ id, icon }) => (
                 <ListItem
                   key={id}
+                  colors={{ containerColor: colors.surface, contentColor: colors.text }}
                   leading={<Icon name={icon} />}
                   onPress={() => onNavigate(id)}
                   testID={`template-component-menu-${id}`}

@@ -40,10 +40,17 @@ remain shared native capabilities. Native stack transitions use the existing
 platform options.
 
 Notification presentation is configured by Storybook. Template loads its Settings
-feature on first opening the tab, keeping camera/location/notification helpers
-out of Home startup. Settings reads permission state while visible, and requests
+and map features when their tabs first open, keeping native maps and device helpers
+out of Home module evaluation. Search shows a native map with local sample places;
+its embedded sheet stays below the existing dock. Component search lives in the
+Components tab. On Search, the center component menu also uses an inline sheet,
+keeps the map/search controls visible and temporarily replaces the places sheet.
+Retained tab activities keep drafts and selection while cleaning
+up hidden effects. Settings reads permission state while visible, and requests
 OS access or a one-shot location only after the matching action. The same feature
 serves the Preferences story under its isolated appearance provider.
+The map reuses that location owner for explicit recenter requests and displays a
+static position marker without subscribing to continuous location updates.
 
 Optional auth/query/service helpers are retained for future features and are not
 mounted by the starter. A consuming auth flow supplies its own verification

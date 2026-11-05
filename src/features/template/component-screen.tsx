@@ -1,5 +1,6 @@
 import {
   AuthScreenFrame,
+  Badge,
   BottomSheet,
   Button,
   ButtonContent,
@@ -9,6 +10,7 @@ import {
   ColorSchemeControl,
   Column,
   DateTimePicker,
+  EmptyState,
   FieldGroup,
   FloatingAction,
   FormSubmit,
@@ -63,8 +65,10 @@ import { useThemeColors } from '@/hooks/use-theme';
 import { showAlert } from '@/lib/alerts';
 import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
 import { ChipExamples } from './chip-examples';
+import { FormExamples } from './form-examples';
 import { SliderExamples } from './slider-examples';
 import { TableExamples } from './table-examples';
+import { TextInputExamples } from './text-input-examples';
 
 const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
@@ -167,17 +171,17 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
     {
       id: 'first',
       label: t('componentCatalog.first'),
-      source: require('../../../assets/images/icon.png'),
+      source: require('../../../assets/AppIcon-Dark.icon/Assets/icon.png'),
     },
     {
       id: 'second',
       label: t('componentCatalog.second'),
-      source: require('../../../assets/images/splash-icon.png'),
+      source: require('../../../assets/AppIcon-Light.icon/Assets/icon.png'),
     },
     {
       id: 'third',
       label: t('componentCatalog.third'),
-      source: require('../../../assets/adaptive-foreground.png'),
+      source: require('../../../assets/adaptive-foreground-dark.png'),
     },
   ];
   const actionLabel = t('componentCatalog.tryAction');
@@ -203,6 +207,27 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
             label={title}
             testID="component-checkbox"
           />
+        );
+      case 'badge':
+        return (
+          <Column spacing={12}>
+            <Badge label={t('componentCatalog.badges.default')} testID="component-badge-default" />
+            <Badge
+              label={t('componentCatalog.badges.secondary')}
+              variant="secondary"
+              testID="component-badge-secondary"
+            />
+            <Badge
+              label={t('componentCatalog.badges.destructive')}
+              variant="destructive"
+              testID="component-badge-destructive"
+            />
+            <Badge
+              label={t('componentCatalog.badges.outline')}
+              variant="outline"
+              testID="component-badge-outline"
+            />
+          </Column>
         );
       case 'switch':
         return (
@@ -242,17 +267,9 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
       case 'date-time-picker':
         return <DateTimePickerExample />;
       case 'text-input':
-        return (
-          <TextInput
-            value={text}
-            onChangeText={setText}
-            label={title}
-            placeholder={t('auth.firstName')}
-            testID="component-text-input"
-          />
-        );
+        return <TextInputExamples />;
       case 'form':
-        return <FormExample />;
+        return <FormExamples />;
       case 'text':
         return (
           <>
@@ -482,6 +499,30 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
             testID="component-alert-trigger"
           />
         );
+      case 'empty-state':
+        return (
+          <>
+            <EmptyState
+              title={t('componentCatalog.emptyState.title')}
+              description={t('componentCatalog.emptyState.description')}
+              primaryAction={{
+                label: t('componentCatalog.emptyState.create'),
+                onPress: countAction,
+              }}
+              secondaryAction={{
+                label: t('componentCatalog.emptyState.import'),
+                onPress: countAction,
+              }}
+              footerAction={{
+                label: t('componentCatalog.emptyState.learnMore'),
+                onPress: countAction,
+                external: true,
+              }}
+              testID="component-empty-state"
+            />
+            {result}
+          </>
+        );
       case 'loading':
         return (
           <>
@@ -562,7 +603,11 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
     <View style={{ flex: 1 }}>
       <PageScreen
         title={title}
-        description={t('componentCatalog.tryComponent')}
+        description={t(
+          id === 'text-input'
+            ? 'componentCatalog.inputs.description'
+            : 'componentCatalog.tryComponent',
+        )}
         onRefresh={id === 'refreshable-scroll-view' ? async () => countAction() : undefined}
       >
         <PageSection testID={`component-page-${id}`}>{content()}</PageSection>

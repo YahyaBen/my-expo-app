@@ -81,8 +81,8 @@ The neutral template does not reference those Firebase apps.
 `android.googleServicesFile` is optional and validated against the selected
 package when enabled. iOS Firebase autolinking remains intentionally excluded.
 Enabling Firebase later needs the matching config/plugins and a new native build.
-Firebase files and package-restricted Google Maps keys must support the resolved
-variant ID, including its suffix. The resolver validates Firebase against that ID.
+Firebase files must match the resolved variant ID, including its suffix. The
+resolver validates Firebase against that ID.
 
 EAS Update is not provisioned by this template. Configure its URL, runtime policy
 and channels deliberately before shipping updates. Build/sign/submit and updates

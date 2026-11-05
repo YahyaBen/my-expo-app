@@ -16,6 +16,7 @@ const brandSchema = z.strictObject({
   slug: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
   scheme: z.string().regex(/^[a-z][a-z0-9+.-]*$/),
   icon: asset,
+  lightIcon: asset.optional(),
   presentation: z.strictObject({
     palette: z.literal('ux'),
     header: z.enum(['default', 'dunes', 'ribbon', 'rain']),
@@ -29,13 +30,17 @@ const brandSchema = z.strictObject({
   }),
   android: z.strictObject({
     package: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+$/),
+    icon: asset.optional(),
+    lightIconForeground: asset.optional(),
     googleServicesFile: asset.optional(),
-    adaptiveIcon: z.strictObject({
-      backgroundColor: color,
-      foregroundImage: asset,
-      backgroundImage: asset.optional(),
-      monochromeImage: asset.optional(),
-    }),
+    adaptiveIcon: z
+      .strictObject({
+        backgroundColor: color,
+        foregroundImage: asset,
+        backgroundImage: asset.optional(),
+        monochromeImage: asset.optional(),
+      })
+      .optional(),
   }),
   splash: z.strictObject({
     image: asset,
@@ -97,11 +102,16 @@ function resolveBrand(env = process.env) {
   brand.scheme += identitySuffix;
 
   requireAsset(brand.icon, 'icon');
+  if (brand.lightIcon) requireAsset(brand.lightIcon, 'lightIcon');
   if (brand.ios.icon) {
     const iconFile = brand.ios.icon.endsWith('.icon')
       ? `${brand.ios.icon}/icon.json`
       : brand.ios.icon;
     requireAsset(iconFile, 'ios.icon');
+  }
+  if (brand.android.icon) requireAsset(brand.android.icon, 'android.icon');
+  if (brand.android.lightIconForeground) {
+    requireAsset(brand.android.lightIconForeground, 'android.lightIconForeground');
   }
   requireAsset(brand.splash.image, 'splash.image');
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
@@ -109,7 +119,7 @@ function resolveBrand(env = process.env) {
   if (headingFont.file) requireAsset(headingFont.file, 'presentation.headingFont');
   requireAsset(launchArtwork.file, 'presentation.launchArtwork');
   for (const field of ['foregroundImage', 'backgroundImage', 'monochromeImage']) {
-    const image = brand.android.adaptiveIcon[field];
+    const image = brand.android.adaptiveIcon?.[field];
     if (image) requireAsset(image, `android.adaptiveIcon.${field}`);
   }
   if (brand.android.googleServicesFile) {

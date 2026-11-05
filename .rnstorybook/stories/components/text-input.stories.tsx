@@ -64,6 +64,7 @@ const meta = {
   },
   argTypes: {
     label: { control: 'text' },
+    accessibilityLabel: { control: 'text' },
     placeholder: { control: 'text' },
     defaultValue: {
       control: 'text',
@@ -133,7 +134,15 @@ const meta = {
     onContentSizeChange: { action: 'size changed' },
     example: {
       control: 'select',
-      options: ['input', 'controlled', 'filtered', 'clear-icon', 'password', 'imperative'],
+      options: [
+        'input',
+        'controlled',
+        'filtered',
+        'clear-icon',
+        'unlabelled-search',
+        'password',
+        'imperative',
+      ],
     },
   },
   decorators: [
@@ -155,6 +164,17 @@ const meta = {
         return <FilteredControlledInputDemo key={key} {...args} testID="filtered-input" />;
       case 'clear-icon':
         return <IconInputDemo key={`${key}-${args.disabled}`} {...args} />;
+      case 'unlabelled-search':
+        return (
+          <IconInputDemo
+            key={key}
+            {...args}
+            label={undefined}
+            accessibilityLabel="Search places"
+            placeholder="Search places"
+            helperText={undefined}
+          />
+        );
       case 'password':
         return <PasswordVisibilityDemo key={key} {...args} />;
       case 'imperative':
@@ -174,7 +194,14 @@ const meta = {
   },
 } satisfies Meta<
   TextInputProps & {
-    example: 'input' | 'controlled' | 'filtered' | 'clear-icon' | 'password' | 'imperative';
+    example:
+      | 'input'
+      | 'controlled'
+      | 'filtered'
+      | 'clear-icon'
+      | 'unlabelled-search'
+      | 'password'
+      | 'imperative';
   }
 >;
 

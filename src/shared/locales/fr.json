@@ -158,6 +158,9 @@
     "tab": "Réglages",
     "title": "Paramètres de l’application",
     "appearance": "Apparence",
+    "appIcon": "Icône de l’application",
+    "appIconFailed": "Impossible de changer l’icône. Réessayez.",
+    "appIconPending": "La nouvelle icône apparaîtra après avoir quitté l’application.",
     "socialNotifications": "Notifications sociales",
     "chat": "Chat",
     "chatDescription": "Messages directs, messages de groupe et invitations de groupe.",
@@ -218,6 +221,9 @@
   "query": {
     "disabled": "Le contenu sera disponible lorsque les conditions seront remplies.",
     "empty": "Aucun résultat.",
+    "emptyHint": "Il n’y a encore rien à afficher ici.",
+    "searchEmptyHint": "Essayez une autre recherche ou effacez les filtres pour voir tous les résultats.",
+    "clearSearch": "Effacer la recherche",
     "failed": "Le contenu n’a pas pu être chargé. Réessayez.",
     "refreshFailed": "L’actualisation a échoué. Affichage du contenu enregistré.",
     "offline": "Hors ligne. Reconnectez-vous pour charger le contenu.",
@@ -722,6 +728,69 @@
     "noComponents": "Aucun composant trouvé."
   },
   "componentCatalog": {
+    "emptyState": {
+      "title": "Aucun projet pour le moment",
+      "description": "Vous n'avez pas encore créé de projet.\nCommencez par créer votre premier projet.",
+      "create": "Créer un projet",
+      "import": "Importer un projet",
+      "learnMore": "En savoir plus"
+    },
+    "badges": {
+      "default": "Badge",
+      "secondary": "Secondaire",
+      "destructive": "Destructif",
+      "outline": "Contour"
+    },
+    "forms": {
+      "examples": "Exemples de formulaires",
+      "liveForm": "Profil",
+      "fieldStates": "États des champs",
+      "title": "Créez votre profil",
+      "description": "Le nom, l’e-mail, le mot de passe et le consentement sont obligatoires. Utilisez des données fictives pour valider et prévisualiser votre profil. Cet aperçu n’est pas enregistré.",
+      "account": "Informations du compte",
+      "name": "Nom complet",
+      "namePlaceholder": "Ex. : Alex Morgan",
+      "nameRequired": "Saisissez votre nom complet.",
+      "emailHint": "Utilisez une adresse e-mail fictive pour cet aperçu.",
+      "passwordHint": "Au moins 8 caractères. Utilisez un mot de passe fictif.",
+      "about": "À propos de vous",
+      "role": "Votre rôle",
+      "roles": { "design": "Design", "engineering": "Ingénierie", "other": "Autre" },
+      "bio": "Courte biographie (facultatif)",
+      "bioPlaceholder": "Présentez-vous en quelques mots…",
+      "bioHint": "280 caractères maximum. Plusieurs lignes sont possibles.",
+      "bioTooLong": "Limitez votre biographie à 280 caractères.",
+      "preferences": "Préférences",
+      "updates": "Je souhaite recevoir les nouveautés du produit",
+      "consent": "J’accepte d’utiliser des données fictives pour cet aperçu",
+      "consentRequired": "Confirmez que vous utilisez des données fictives pour continuer.",
+      "submit": "Vérifier le profil",
+      "complete": "Votre profil est valide. Vérifiez les informations ci-dessous.",
+      "review": "Aperçu du profil",
+      "updatesOn": "Nouveautés du produit : activées",
+      "updatesOff": "Nouveautés du produit : désactivées",
+      "fill": "Remplir avec un exemple",
+      "reset": "Réinitialiser le formulaire",
+      "sampleBio": "J’aime créer des expériences mobiles soignées et accessibles.",
+      "statesHint": "Comparez six états natifs. Ces exemples sont visuels : la saisie ne déclenche pas de validation.",
+      "draftHint": "Votre brouillon reste disponible lorsque vous revenez au formulaire.",
+      "states": {
+        "default": "Normal",
+        "success": "Succès",
+        "warning": "Avertissement",
+        "error": "Erreur",
+        "disabled": "Désactivé",
+        "readOnly": "Lecture seule"
+      },
+      "stateHints": {
+        "default": "Un champ modifiable avec un texte d’aide.",
+        "success": "Cette adresse fictive est prête à être utilisée.",
+        "warning": "Vérifiez cette adresse avant de continuer.",
+        "error": "Saisissez une adresse e-mail complète.",
+        "disabled": "La modification de ce champ est indisponible.",
+        "readOnly": "Vous pouvez sélectionner et copier cette référence."
+      }
+    },
     "tables": {
       "title": "Paiements",
       "hint": "Sélectionnez des lignes avec les cases à cocher. Triez par e-mail, puis faites défiler jusqu’à la dernière colonne pour les actions et les détails repliables de chaque paiement.",
@@ -752,6 +821,22 @@
         "failed": "Marquer comme échoué"
       },
       "reset": "Réinitialiser le tableau"
+    },
+    "inputs": {
+      "description": "Comparez les styles de champs, les états et les claviers natifs. Essayez chaque exemple avec du texte fictif.",
+      "styles": "Styles et icônes",
+      "stylesHint": "Explorez un champ avec contour, un fond rempli avec une icône et un champ de recherche arrondi.",
+      "outlined": "Avec contour",
+      "filled": "Fond rempli avec icône",
+      "searchHint": "Saisissez une recherche fictive, puis utilisez l’action pour l’effacer.",
+      "passwordPlaceholder": "Saisissez un mot de passe fictif",
+      "passwordHint": "Utilisez l’œil pour afficher ou masquer votre mot de passe fictif sans l’effacer.",
+      "keyboards": "Claviers e-mail, téléphone et décimal",
+      "keyboardsHint": "Suivant passe de l’e-mail au téléphone. Utilisez Fermer le clavier pour les claviers sans touche de retour.",
+      "phone": "Numéro de téléphone",
+      "multiline": "Plusieurs lignes et limite de caractères",
+      "availability": "Lecture seule et désactivé",
+      "availabilityHint": "L’action d’information en lecture seule incrémente le compteur. Le champ désactivé bloque la saisie et son action."
     },
     "sliders": {
       "hint": "Ajustez ces aperçus locaux. Le volume, la luminosité et les réglages de texte de l’appareil restent inchangés.",
@@ -830,6 +915,7 @@
       "button": "Bouton",
       "checkbox": "Case à cocher",
       "chip": "Puce",
+      "badge": "Badge",
       "switch": "Interrupteur",
       "slider": "Curseur",
       "picker": "Sélecteur",
@@ -859,6 +945,7 @@
       "bottom-sheet": "Panneau inférieur",
       "alert": "Alerte",
       "loading": "Chargement",
+      "empty-state": "État vide",
       "skeleton": "Squelette",
       "appearance": "Apparence",
       "auth": "Cadre d’authentification",

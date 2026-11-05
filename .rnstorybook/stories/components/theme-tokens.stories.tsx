@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         story:
-          'Production theme tokens and native controls. UX uses neutral surfaces with a purple accent; native tones follow the Host seed. Inspect text hierarchy, line heights, disabled text and surface contrast. Toggle field and submit errors to inspect icon-and-text feedback. Enabled actions increment the count; the disabled action does not. Drafts and error state remain local to the preview.',
+          'Production theme tokens and native controls. UX uses the official shadcn/ui Neutral light/dark palette; native tones follow the Host seed. Inspect text hierarchy, line heights, disabled text, input/focus colors and surface contrast. Toggle field and submit errors to inspect icon-and-text feedback. Enabled actions increment the count; the disabled action does not. Drafts and error state remain local to the preview.',
       },
     },
   },

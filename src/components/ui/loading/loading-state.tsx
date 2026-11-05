@@ -13,6 +13,7 @@ import { nativeFillSize } from '../native/native-fill-width';
 import { PageFrame } from '../page/page-frame';
 import { PageSection } from '../page/page-section';
 import { UniversalTextContent as Text } from '../text/universal-text';
+import { EmptyState } from './empty-state';
 import { LoadingIndicator } from './loading-indicator';
 
 export function LoadingContent({
@@ -69,11 +70,11 @@ export type ContentQuery<T> = Pick<
 function resolvedQueryContent(
   data: unknown,
   empty: boolean | undefined,
-  emptyLabel: string,
+  emptyContent: ReactNode,
   children: ReactNode,
 ) {
   if (data === undefined) return null;
-  if (empty) return <Text>{emptyLabel}</Text>;
+  if (empty) return emptyContent;
   return children;
 }
 
@@ -83,12 +84,15 @@ export function QueryContent<T>({
   children,
   disabledMessage,
   emptyMessage,
+  emptyState,
   testID,
 }: Readonly<{
   query: ContentQuery<T>;
   empty?: boolean;
   disabledMessage?: string;
   emptyMessage?: string;
+  /** Optional feature-specific empty presentation, including caller-owned actions. */
+  emptyState?: ReactNode;
   /** Prefix for this composition's status and retry controls. */
   testID?: string;
   children: ReactNode;
@@ -128,7 +132,18 @@ export function QueryContent<T>({
           {query.isEnabled ? t('query.waiting') : (disabledMessage ?? t('query.disabled'))}
         </Text>
       ) : null}
-      {resolvedQueryContent(query.data, empty, emptyMessage ?? t('query.empty'), children)}
+      {resolvedQueryContent(
+        query.data,
+        empty,
+        emptyState ?? (
+          <EmptyState
+            title={emptyMessage ?? t('query.empty')}
+            description={t('query.emptyHint')}
+            testID={testID ? `${testID}-empty` : 'query-empty'}
+          />
+        ),
+        children,
+      )}
     </Column>
   );
 }

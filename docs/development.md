@@ -52,7 +52,6 @@ still handled by EAS. See [build profiles](eas-development-builds.md).
 | `APP_VARIANT`                   | `development` (default), `preview` or `production`                                  |
 | `EXPO_PUBLIC_STORYBOOK_ENABLED` | Development defaults to enabled; exact `false` disables it; release always disabled |
 | `EXPO_PUBLIC_API_URL`           | Optional backend for retained API helpers; production requires HTTPS when set       |
-| `GOOGLE_MAPS_ANDROID_API_KEY`   | Optional package-restricted Maps key                                                |
 
 No `.env.local` is required. The launch scripts override only their own child
 process's preview flags and development variant. EAS profiles select their own

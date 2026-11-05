@@ -45,7 +45,9 @@ The wrapper owns a native observable but accepts a plain string `value`.
 
 ## Styling and accessibility
 
-- Host/theme tokens supply surface, border, text and semantic colors.
+- Host/theme tokens supply surface, input border, ring focus outline, text and
+  semantic colors. Custom palettes may supply `input` and `ring`; omitting them
+  retains their `border` and `tint` fallbacks.
   Status colors precede focus styling; explicit caller colors may override them.
 - `style` targets the outer field Row; width also constrains its label/helper
   Column. `textStyle` targets editable text and `modifiers` the inner input.
@@ -54,8 +56,9 @@ The wrapper owns a native observable but accepts a plain string `value`.
   Avoid fixed heights that clip large text.
 - Content-size callbacks measure the inner native view, not the full wrapper
   or pure text height.
-- The visible label also names the native editable field. There is no public
-  `accessibilityLabel` prop; selectors are not spoken names. Android's upstream
+- Optional `accessibilityLabel` names the native editable field without showing
+  a label. It takes precedence over `label`, which otherwise supplies the name.
+  Give unlabeled fields an explicit translated name; selectors are not spoken names. Android's upstream
   read-only mapping does not prove a distinct disabled announcement.
 - Labels/helpers use semantic type presets; error helpers include an icon and
   readable words. Allow wrapping. Check

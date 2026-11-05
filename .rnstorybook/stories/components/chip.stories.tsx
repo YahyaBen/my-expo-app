@@ -19,6 +19,7 @@ type Props = NativeStoryTheme & {
   selected: boolean;
   disabled: boolean;
   layoutDirection: 'leftToRight' | 'rightToLeft';
+  appearance: 'native' | 'filled';
 };
 
 const chipOptions = [
@@ -47,6 +48,7 @@ function ChipDemo({ colorScheme, seedColor, layoutDirection, ...args }: Readonly
               const props = {
                 label: chip.id === 'nearby' ? args.label : chip.label,
                 disabled: args.disabled,
+                appearance: args.appearance,
                 testID: chip.id === 'nearby' ? 'chip-demo-control' : `chip-demo-control-${chip.id}`,
                 onPress: () => {
                   action('chip pressed')({ variant: args.variant, id: chip.id });
@@ -110,9 +112,11 @@ const meta = {
     disabled: false,
     colorScheme: 'dark',
     layoutDirection: 'leftToRight',
+    appearance: 'native',
   },
   argTypes: {
     variant: { control: 'select', options: ['assist', 'filter', 'input', 'suggestion'] },
+    appearance: { control: 'select', options: ['native', 'filled'] },
     colorScheme: { control: 'select', options: ['light', 'dark'] },
     layoutDirection: { control: 'select', options: ['leftToRight', 'rightToLeft'] },
     seedColor: { control: 'color' },

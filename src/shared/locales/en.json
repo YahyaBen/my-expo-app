@@ -158,6 +158,9 @@
     "tab": "Settings",
     "title": "App Settings",
     "appearance": "Appearance",
+    "appIcon": "App icon",
+    "appIconFailed": "The app icon couldn’t be changed. Try again.",
+    "appIconPending": "The new icon will appear after you leave the app.",
     "socialNotifications": "Social notifications",
     "chat": "Chat",
     "chatDescription": "Direct messages, group messages and group invitations.",
@@ -216,6 +219,9 @@
   "query": {
     "disabled": "Content is unavailable until its requirements are met.",
     "empty": "No results found.",
+    "emptyHint": "There’s nothing to show here yet.",
+    "searchEmptyHint": "Try another search or clear your filters to see all results.",
+    "clearSearch": "Clear search",
     "failed": "Content couldn’t load. Please try again.",
     "refreshFailed": "Refresh failed. Showing your saved content.",
     "offline": "Offline. Reconnect to load content.",
@@ -720,6 +726,69 @@
     "noComponents": "No components found."
   },
   "componentCatalog": {
+    "emptyState": {
+      "title": "No Projects Yet",
+      "description": "You haven't created any projects yet.\nGet started by creating your first project.",
+      "create": "Create Project",
+      "import": "Import Project",
+      "learnMore": "Learn More"
+    },
+    "badges": {
+      "default": "Badge",
+      "secondary": "Secondary",
+      "destructive": "Destructive",
+      "outline": "Outline"
+    },
+    "forms": {
+      "examples": "Form examples",
+      "liveForm": "Profile form",
+      "fieldStates": "Field states",
+      "title": "Create your profile",
+      "description": "Name, email, password and consent are required. Use sample details to try validation and review your profile. This preview isn't saved.",
+      "account": "Account details",
+      "name": "Full name",
+      "namePlaceholder": "e.g. Alex Morgan",
+      "nameRequired": "Enter your full name.",
+      "emailHint": "Use a sample email address for this preview.",
+      "passwordHint": "At least 8 characters. Use a sample password.",
+      "about": "About you",
+      "role": "Your role",
+      "roles": { "design": "Design", "engineering": "Engineering", "other": "Other" },
+      "bio": "Short bio (optional)",
+      "bioPlaceholder": "Tell us a little about yourself…",
+      "bioHint": "Up to 280 characters. Multiple lines are welcome.",
+      "bioTooLong": "Keep your bio to 280 characters or fewer.",
+      "preferences": "Preferences",
+      "updates": "I'd like to receive product updates",
+      "consent": "I agree to use sample data for this preview",
+      "consentRequired": "Confirm that you're using sample data to continue.",
+      "submit": "Review profile",
+      "complete": "Your profile passed validation. Review your details below.",
+      "review": "Profile preview",
+      "updatesOn": "Product updates: on",
+      "updatesOff": "Product updates: off",
+      "fill": "Fill with sample details",
+      "reset": "Reset form",
+      "sampleBio": "I enjoy creating thoughtful, accessible mobile experiences.",
+      "statesHint": "Compare six native field states. These are visual examples; editing them doesn't run validation.",
+      "draftHint": "Your profile draft stays available when you switch back to the form.",
+      "states": {
+        "default": "Default",
+        "success": "Success",
+        "warning": "Warning",
+        "error": "Error",
+        "disabled": "Disabled",
+        "readOnly": "Read only"
+      },
+      "stateHints": {
+        "default": "A standard editable field with helper text.",
+        "success": "This sample email is ready to use.",
+        "warning": "Check this address before continuing.",
+        "error": "Enter a complete email address.",
+        "disabled": "Editing is unavailable for this field.",
+        "readOnly": "You can select and copy this reference."
+      }
+    },
     "tables": {
       "title": "Payments",
       "hint": "Select rows with the checkboxes. Sort by email, then swipe to the last column for each payment’s actions and collapsible details.",
@@ -750,6 +819,22 @@
         "failed": "Mark failed"
       },
       "reset": "Reset table example"
+    },
+    "inputs": {
+      "description": "Compare text field styles, feedback and native keyboards. Try each example with sample text.",
+      "styles": "Styles and icons",
+      "stylesHint": "Explore an outlined field, a filled surface with a leading icon and a rounded search field.",
+      "outlined": "Outlined",
+      "filled": "Filled with an icon",
+      "searchHint": "Type a sample query, then use the clear action.",
+      "passwordPlaceholder": "Enter a sample password",
+      "passwordHint": "Use the eye to show or hide your sample password without clearing it.",
+      "keyboards": "Email, phone and decimal keyboards",
+      "keyboardsHint": "Next advances from email to phone. Use Dismiss keyboard for keyboards without a return key.",
+      "phone": "Phone number",
+      "multiline": "Multiline and character limit",
+      "availability": "Read-only and disabled",
+      "availabilityHint": "The read-only information action updates the counter. The disabled field blocks editing and its action."
     },
     "sliders": {
       "hint": "Adjust these local previews. Device volume, brightness and text settings stay unchanged.",
@@ -828,6 +913,7 @@
       "button": "Button",
       "checkbox": "Checkbox",
       "chip": "Chip",
+      "badge": "Badge",
       "switch": "Switch",
       "slider": "Slider",
       "picker": "Picker",
@@ -857,6 +943,7 @@
       "bottom-sheet": "Bottom sheet",
       "alert": "Alert",
       "loading": "Loading",
+      "empty-state": "Empty state",
       "skeleton": "Skeleton",
       "appearance": "Appearance",
       "auth": "Authentication frame",

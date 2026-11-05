@@ -5,7 +5,6 @@ module.exports = ({ config }) => {
   const { brand, variant } = resolveBrand();
   const nameSuffix = { development: ' Dev', preview: ' Preview', production: '' }[variant];
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
-  const androidMapsApiKey = process.env.GOOGLE_MAPS_ANDROID_API_KEY?.trim();
 
   return {
     ...config,
@@ -21,7 +20,7 @@ module.exports = ({ config }) => {
     },
     android: {
       ...config.android,
-      icon: brand.icon,
+      icon: brand.android.icon ?? brand.icon,
       package: brand.android.package,
       adaptiveIcon: brand.android.adaptiveIcon,
       googleServicesFile: brand.android.googleServicesFile,
@@ -35,6 +34,25 @@ module.exports = ({ config }) => {
       ...(config.plugins ?? []),
       ['expo-dev-client', { addGeneratedScheme: variant === 'development' }],
       ['expo-font', { fonts: headingFont.file ? [headingFont.file] : [] }],
+      ...(brand.lightIcon
+        ? [
+            [
+              'expo-awesome-app-icon',
+              {
+                icons: {
+                  light: {
+                    ios: { light: brand.lightIcon },
+                    android: {
+                      image: brand.lightIcon,
+                      foregroundImage: brand.android.lightIconForeground,
+                      backgroundColor: brand.android.adaptiveIcon?.backgroundColor,
+                    },
+                  },
+                },
+              },
+            ],
+          ]
+        : []),
       [
         'expo-splash-screen',
         {
@@ -45,9 +63,6 @@ module.exports = ({ config }) => {
           resizeMode: 'contain',
         },
       ],
-      ...(androidMapsApiKey
-        ? [['react-native-maps', { androidGoogleMapsApiKey: androidMapsApiKey }]]
-        : []),
     ],
   };
 };

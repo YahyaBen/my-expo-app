@@ -31,7 +31,10 @@
 - UX retains the default mobile type ramp and native shapes. Read current source
   values before changing a palette; do not introduce a new palette as part of a
   structural refactor.
-- UX uses neutral light/dark surfaces, purple accents and semantic feedback.
+- UX maps the official shadcn/ui default Neutral light/dark colors to the existing
+  native token names. Keep upstream OKLCH colors converted to native sRGB hex,
+  including translucent dark borders. `input` owns field borders and `ring` owns
+  focus outlines. App-only feedback and state roles remain explicit extensions.
   Its header artwork stays disabled. It follows the common native seed/tint
   flow; no palette-specific color-role mapping belongs in the Host.
 - Reserve `textDisabled` for unavailable content; `muted` remains readable

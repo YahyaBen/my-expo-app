@@ -2,6 +2,7 @@ import {
   ButtonContent,
   Collapsible,
   Column,
+  EmptyState,
   Icon,
   Popover,
   Row,
@@ -196,15 +197,17 @@ export function TableExamples({
             },
           }}
           emptyState={
-            <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-              <Text>{t('componentCatalog.tables.empty')}</Text>
-              <ButtonContent
-                variant="secondary"
-                label={t('showcase.tableGallery.clearFilters')}
-                onPress={() => setSearch('')}
-                testID="component-table-empty-reset"
-              />
-            </Column>
+            <EmptyState
+              icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
+              title={t('componentCatalog.tables.empty')}
+              description={t('query.searchEmptyHint')}
+              primaryAction={{
+                label: t('showcase.tableGallery.clearFilters'),
+                onPress: () => setSearch(''),
+                testID: 'component-table-empty-reset',
+              }}
+              testID="component-table-empty-content"
+            />
           }
           actionsWidth={80}
           testID="component-table"

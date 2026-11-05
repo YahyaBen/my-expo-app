@@ -16,6 +16,10 @@ Source: [chip/](../../../src/components/ui/chip/).
   does not remove itself and has no separate trailing removal target.
 - Disabled chips suppress callbacks. The label supplies the accessible name;
   use accessibilityLabel only when a different spoken name is needed.
+- Use `appearance="filled"` over maps or artwork for an opaque native
+  container and contrasting selected colors from the Host theme. The default
+  `native` appearance keeps platform styling. Do not paint a wrapper around
+  native touch padding to simulate a filled chip.
 - Preserve native sizing, large text and Host appearance. These adapters provide
   equivalent interactions; native shape, padding and colors differ.
 

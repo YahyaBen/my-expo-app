@@ -4,6 +4,7 @@ import { screenInsets } from '@/lib/screen-insets';
 import { Column, RNHostView, Spacer } from '@expo/ui';
 import Constants from 'expo-constants';
 import { Image } from 'expo-image';
+import { version as expoVersion } from 'expo/package.json';
 import LottieView from 'lottie-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -224,7 +225,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
                 textStyle={{ textAlign: 'center' }}
                 testID="app-brand-version"
               >
-                {t('common.appVersion', { version })}
+                {`${t('common.appVersion', { version })}\nExpo ${expoVersion}`}
               </UniversalTextContent>
             ) : null}
           </Column>

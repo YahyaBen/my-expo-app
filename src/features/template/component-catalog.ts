@@ -3,6 +3,7 @@ import type { IconName } from '@components/ui';
 /** App destinations, independent of Storybook registration and translated names. */
 export const componentIds = [
   'button',
+  'badge',
   'checkbox',
   'chip',
   'switch',
@@ -34,6 +35,7 @@ export const componentIds = [
   'bottom-sheet',
   'alert',
   'loading',
+  'empty-state',
   'skeleton',
   'appearance',
   'auth',
@@ -57,6 +59,7 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   table: { ios: 'tablecells', android: 'table_chart' },
   'circular-carousel': { ios: 'photo.circle', android: 'photo' },
   alert: { ios: 'exclamationmark.circle', android: 'error_outline' },
+  'empty-state': { ios: 'folder', android: 'folder_open' },
   appearance: { ios: 'circle.lefthalf.filled', android: 'contrast' },
   auth: { ios: 'lock', android: 'lock' },
 };

@@ -1,5 +1,6 @@
 import {
   Column,
+  EmptyState,
   Icon,
   ListItem,
   PageScreen,
@@ -82,13 +83,13 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     search: t('template.search'),
     recipes: t('template.components'),
   };
-  const components = componentCatalog.filter(
-    ({ id }) =>
-      contentId !== 'search' ||
-      t(`componentCatalog.names.${id}`)
-        .toLocaleLowerCase()
-        .includes(search.toLocaleLowerCase().trim()),
-  );
+  const searchTerm = search.trim().toLocaleLowerCase();
+  const components =
+    contentId === 'search' && searchTerm
+      ? componentCatalog.filter(({ id }) =>
+          t(`componentCatalog.names.${id}`).toLocaleLowerCase().includes(searchTerm),
+        )
+      : componentCatalog;
 
   return (
     <View style={{ flex: 1 }}>
@@ -130,9 +131,13 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
                   ))}
                 </Column>
                 {components.length === 0 ? (
-                  <UniversalTextContent tone="muted">
-                    {t('template.noComponents')}
-                  </UniversalTextContent>
+                  <EmptyState
+                    icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
+                    title={t('template.noComponents')}
+                    description={t('query.searchEmptyHint')}
+                    primaryAction={{ label: t('query.clearSearch'), onPress: () => setSearch('') }}
+                    testID="template-components-empty"
+                  />
                 ) : null}
               </PageSection>
             )}
@@ -141,7 +146,11 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         {/* Do not render hidden Settings at startup: Activity also prerenders hidden children. */}
         {settingsOpened ? (
           <Activity mode={activeId === 'more' ? 'visible' : 'hidden'}>
-            <DeferredSettingsScreen tab onBack={showBack ? () => router.back() : undefined} />
+            <DeferredSettingsScreen
+              allowAppIconChange
+              tab
+              onBack={showBack ? () => router.back() : undefined}
+            />
           </Activity>
         ) : null}
       </View>

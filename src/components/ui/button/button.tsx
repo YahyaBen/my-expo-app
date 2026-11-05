@@ -55,7 +55,7 @@ function useButtonTheme({
     case 'primary':
       return { color: colors.primary, contentColor: colors.onPrimary, borderRadius };
     case 'secondary':
-      return { color: colors.secondary, contentColor: colors.secondary, borderRadius };
+      return { color: colors.secondary, contentColor: colors.onSecondary, borderRadius };
     case 'tertiary':
       return { color: colors.muted, contentColor: colors.muted, borderRadius };
     case 'link':

@@ -1,6 +1,8 @@
 import { spacing } from '@/constants/layout';
 import {
   Column,
+  EmptyState,
+  Icon,
   PageScreen,
   PageSection,
   Picker,
@@ -166,18 +168,18 @@ export function TableDemo({
           </Column>
         }
         emptyState={
-          <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-            <Text fontWeight="600" testID={`${testID}-empty-title`}>
-              {t('showcase.tableGallery.empty')}
-            </Text>
-            <Text tone="muted">{t('showcase.tableGallery.emptyHint')}</Text>
-            <ButtonContent
-              variant="secondary"
-              label={t('showcase.tableGallery.clearFilters')}
-              onPress={clearFilters}
-              testID={`${testID}-empty-reset`}
-            />
-          </Column>
+          <EmptyState
+            icon={Icon.select({ ios: 'magnifyingglass', android: 'search' })}
+            title={t('showcase.tableGallery.empty')}
+            description={t('showcase.tableGallery.emptyHint')}
+            primaryAction={{
+              label: t('showcase.tableGallery.clearFilters'),
+              onPress: clearFilters,
+              testID: `${testID}-empty-reset`,
+            }}
+            testID={`${testID}-empty-content`}
+            titleTestID={`${testID}-empty-title`}
+          />
         }
         actionsHeader={t('showcase.tableGallery.actions')}
         actionsWidth={140}

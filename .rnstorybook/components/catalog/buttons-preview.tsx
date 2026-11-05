@@ -431,7 +431,7 @@ function SemanticColorButtons({ onPress }: Readonly<{ onPress: (labelKey: string
       {(
         [
           { variant: 'primary', color: colors.primary, contentColor: colors.onPrimary },
-          { variant: 'secondary', color: colors.secondary, contentColor: colors.secondary },
+          { variant: 'secondary', color: colors.secondary, contentColor: colors.onSecondary },
           { variant: 'success', color: colors.success, contentColor: colors.onSuccess },
           { variant: 'warning', color: colors.warning, contentColor: colors.onWarning },
           { variant: 'info', color: colors.info, contentColor: colors.onInfo },

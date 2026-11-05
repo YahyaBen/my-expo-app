@@ -6,11 +6,34 @@ stay in `src/constants/themes/`. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
 
-UX uses the reference palette's neutral surfaces and purple accent: `#F2F2F7`
-and white in light appearance, `#121212` with progressively lighter surfaces in
-dark appearance, and `#6200EE` / `#BB86FC` accents. Normal and supporting text
-use separate readable colors; faint text is reserved for unavailable content.
-Its configured splash backgrounds match the page background in each appearance.
+UX uses the [official shadcn/ui default Neutral theme](https://ui.shadcn.com/docs/theming#default-theme-css)
+in both appearances. The upstream OKLCH colors are converted to sRGB hex and
+rounded to 8-bit channels for native UI. The existing native token names map to
+shadcn's semantic roles:
+
+| Native token                | shadcn token           | Light     | Dark        |
+| --------------------------- | ---------------------- | --------- | ----------- |
+| `background`                | `background`           | `#FFFFFF` | `#0A0A0A`   |
+| `text`                      | `foreground`           | `#0A0A0A` | `#FAFAFA`   |
+| `surface` / `surfaceRaised` | `card` / `popover`     | `#FFFFFF` | `#171717`   |
+| `primary` / `tint`          | `primary`              | `#171717` | `#E5E5E5`   |
+| `onPrimary`                 | `primary-foreground`   | `#FAFAFA` | `#171717`   |
+| `secondary`                 | `secondary`            | `#F5F5F5` | `#262626`   |
+| `onSecondary`               | `secondary-foreground` | `#171717` | `#FAFAFA`   |
+| `surfaceVariant`            | `muted`                | `#F5F5F5` | `#262626`   |
+| `muted`                     | `muted-foreground`     | `#737373` | `#A1A1A1`   |
+| `selection`                 | `accent`               | `#F5F5F5` | `#262626`   |
+| `border` / `divider`        | `border`               | `#E5E5E5` | `#FFFFFF1A` |
+| `input`                     | `input`                | `#E5E5E5` | `#FFFFFF26` |
+| `ring`                      | `ring`                 | `#A1A1A1` | `#737373`   |
+| `error`                     | `destructive`          | `#E7000B` | `#FF6467`   |
+
+Dark borders and input borders retain upstream white transparency (10% and 15%,
+rounded to 8-bit alpha). The existing app-only roles for disabled text, pressed
+actions, feedback containers, success, warning and info remain extensions.
+Normal and supporting text use separate colors; faint text is reserved for
+unavailable content. Configured splash backgrounds match the page background
+in each appearance; changing the native splash requires a new app build.
 
 `useAppTheme` also exposes `design` for component owners. UX uses the default
 mobile type ramp and native geometry. Native lists, toggles, pickers, padding
@@ -187,8 +210,10 @@ timing or frame rates.
 ## Text foregrounds and verification
 
 Primary text uses the foreground accent `tint`. Filled primary buttons still use
-`primary`/`onPrimary`; the UX palette intentionally keeps a black fill and white
-label in both appearances. An explicit appearance color overrides a text tone,
+`primary`/`onPrimary`: dark fill with light text in Light, and light fill with dark
+text in Dark. Secondary buttons use `secondary`/`onSecondary`. Inputs use `input`
+for their border and `ring` while focused; validation and explicit style overrides
+retain priority. An explicit appearance color overrides a text tone,
 and final `textStyle.color` overrides both.
 
 Use **Components/Text/Playground** with `example: theme-comparison` to inspect

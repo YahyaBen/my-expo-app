@@ -1,6 +1,8 @@
 import { AssistChip, FilterChip, InputChip, SuggestionChip, Text } from '@expo/ui/jetpack-compose';
 import { semantics, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
 import type { ChipProps } from './chip.types';
+import { useThemeColors } from '@/hooks/use-theme';
+import { useHostColorScheme } from '../host/universal-host';
 
 export type { ChipProps } from './chip.types';
 
@@ -12,8 +14,19 @@ export function Chip({
   onPress,
   testID,
   accessibilityLabel,
+  appearance = 'native',
 }: Readonly<ChipProps>) {
+  const colors = useThemeColors(useHostColorScheme());
+  const surface =
+    appearance === 'filled'
+      ? { containerColor: colors.surfaceRaised, labelColor: colors.text }
+      : undefined;
+  const selection = surface
+    ? { ...surface, selectedContainerColor: colors.primary, selectedLabelColor: colors.onPrimary }
+    : undefined;
   const props = {
+    colors: surface,
+    border: surface ? { width: 0, color: colors.surfaceRaised } : undefined,
     enabled: !disabled,
     onClick: () => {
       if (!disabled) onPress();
@@ -25,7 +38,7 @@ export function Chip({
   };
   if (variant === 'filter') {
     return (
-      <FilterChip {...props} selected={Boolean(selected)}>
+      <FilterChip {...props} colors={selection} selected={Boolean(selected)}>
         <FilterChip.Label>
           <Text>{label}</Text>
         </FilterChip.Label>
@@ -34,7 +47,7 @@ export function Chip({
   }
   if (variant === 'input') {
     return (
-      <InputChip {...props} selected={selected}>
+      <InputChip {...props} colors={selection} selected={selected}>
         <InputChip.Label>
           <Text>{label}</Text>
         </InputChip.Label>

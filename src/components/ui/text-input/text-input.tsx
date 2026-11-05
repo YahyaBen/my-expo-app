@@ -25,6 +25,8 @@ export interface TextInputProps extends Omit<ExpoTextInputProps, 'value'> {
   /** Controlled text. Native observable state is managed by this component. */
   value?: string;
   label?: string;
+  /** Spoken field name when the design omits a visible label. */
+  accessibilityLabel?: string;
   helperText?: string;
   status?: InputStatus;
   disabled?: boolean;
@@ -42,6 +44,8 @@ export interface TextInputProps extends Omit<ExpoTextInputProps, 'value'> {
     tint: string;
     surface: string;
     border: string;
+    input?: string;
+    ring?: string;
     error: string;
     success: string;
     warning: string;
@@ -54,6 +58,7 @@ export function TextInput({
   value,
   defaultValue,
   label,
+  accessibilityLabel,
   helperText,
   status = 'default',
   disabled = false,
@@ -92,7 +97,9 @@ export function TextInput({
     backgroundColor: colors.surface,
     borderRadius: design.shape.inputRadius,
     borderWidth: 1,
-    borderColor: semanticColor ?? (focused && !disabled ? colors.tint : colors.border),
+    borderColor:
+      semanticColor ??
+      (focused && !disabled ? (colors.ring ?? colors.tint) : (colors.input ?? colors.border)),
     ...style,
   });
   const input = (
@@ -105,7 +112,7 @@ export function TextInput({
       }}
       modifiers={[
         ...inputRowFlex,
-        ...inputAccessibilityModifiers(label),
+        ...inputAccessibilityModifiers(accessibilityLabel ?? label),
         ...(inputProps.modifiers ?? []),
       ]}
       readOnly={readOnly}

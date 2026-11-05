@@ -6,7 +6,8 @@ description: Present loading, query results and retry states while preserving ca
 # Loading and recovery
 
 Import `LoadingContent`, `LoadingScreen`, `QueryContent`, `ContentQuery`
-and `ScreenError` from `@components/ui`.
+and `ScreenError` from `@components/ui`. Import `EmptyState`, `EmptyStateProps` and
+`EmptyStateAction` for resolved empty pages and lists.
 Source: [loading/](../../../src/components/ui/loading/).
 
 ## State ownership
@@ -19,9 +20,29 @@ Source: [loading/](../../../src/components/ui/loading/).
 - Preserve cached content during refresh and refresh failure.
 - Show persistent errors with retry. Disable retry while fetching, prerequisite
   disabled or paused offline.
-- Render an empty message after data resolves and the caller marks it empty.
+- Render `EmptyState` after data resolves and the caller marks it empty.
+  `emptyMessage` overrides its default title; `emptyState` replaces the presentation
+  with feature-specific content while preserving query state selection.
 - Native progress rendering belongs in the existing iOS/Android adapters;
   shared state selection belongs in `loading-state.tsx`.
+
+## Empty pages and lists
+
+- Compose `EmptyState` in the existing Host and scroll/list owner. It adds no
+  Host, navigation, data writes or loading work.
+- Supply a translated `title`, optional `description` and typed `icon`; the
+  default is a folder. The centered layout uses semantic light/dark colors.
+- Optional `primaryAction`, `secondaryAction` and `footerAction` receive a label,
+  callback, disabled state, accessible name and stable selector. Set the footer's
+  `external` flag only when its arrow is appropriate. Actions belong to the caller.
+- Paired actions stack on narrow screens, at large text sizes or for long labels.
+  Content can grow beyond its centered minimum height inside the owning scroller.
+- Root `testID` defaults to `empty-state`; descendants append `-title`,
+  `-description`, `-primary`, `-secondary` and `-footer`. Use `titleTestID` and
+  action `testID` overrides to preserve existing selectors during adoption.
+- The native Empty State stories cover paired actions, no actions, search results
+  and dark appearance. Verify RTL, large text, touch bounds and disabled actions
+  on matching iOS and Android builds.
 
 ## Native indicators
 
@@ -48,9 +69,9 @@ rendering and accessibility separately on iOS and Android.
 ## Instance selectors
 
 Give simultaneous `QueryContent` instances distinct stable `testID` prefixes.
-Owned nodes append `-error`, `-retry`, `-offline`, `-loading` and `-idle`.
+Owned nodes append `-error`, `-retry`, `-offline`, `-loading`, `-idle` and `-empty`.
 Without a prefix, preserve `query-error`, `query-retry`, `query-offline`,
-`query-idle` and `loading-state`. Selectors must be independent of translations.
+`query-idle`, `query-empty` and `loading-state`. Selectors must be independent of translations.
 
 Check initial error, cached error, offline/disabled states, pending retry
 suppression and independent activation using the

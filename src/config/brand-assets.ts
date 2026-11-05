@@ -12,7 +12,7 @@ const fontSources: Record<HeadingFontId, FontSource | undefined> = {
 };
 const artworkSources: Record<LaunchArtworkId, number> = {
   bluePepe,
-  templateIcon: require('@assets/images/icon.png'),
+  templateIcon: require('@assets/AppIcon-Dark.icon/Assets/icon.png'),
 };
 
 /** Stable build-time selection; the root loads only the selected font map. */

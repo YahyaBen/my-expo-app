@@ -1,6 +1,7 @@
 import { useThemeColors } from '@/hooks/use-theme';
 import {
   Icon,
+  EmptyState,
   ListItem,
   UniversalTextContent as Text,
   UniversalText as RNText,
@@ -61,9 +62,12 @@ function ListDemo({
       >
         {itemCount === 0 ? (
           <ListItem testID={args.testID ? `${args.testID}-empty` : undefined}>
-            <Text testID={args.testID ? `${args.testID}-empty-text` : undefined}>
-              No items available
-            </Text>
+            <EmptyState
+              title="No items available"
+              description="There’s nothing to show here yet."
+              testID={args.testID ? `${args.testID}-empty-content` : undefined}
+              titleTestID={args.testID ? `${args.testID}-empty-text` : undefined}
+            />
           </ListItem>
         ) : null}
         {Array.from({ length: itemCount }, (_, i) => (
@@ -186,3 +190,5 @@ function CompoundSlotsDemo(args: Readonly<DemoProps>) {
 }
 
 export const Playground: Story = {};
+
+export const Empty: Story = { args: { itemCount: 0 } };

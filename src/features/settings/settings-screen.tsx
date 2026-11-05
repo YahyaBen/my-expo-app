@@ -30,6 +30,7 @@ import { useAppTheme } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import { HeaderMotionPicker } from './header-motion-picker';
+import { AppIconPicker } from './app-icon-picker';
 import { getBrandHeadingFont } from '@/config/brand-assets';
 import { useDeviceLocation } from './use-device-location';
 import { useDevicePermissions } from './use-device-permissions';
@@ -42,15 +43,17 @@ const languageKeys: Record<Language, string> = {
 const languageLabel = (language: Language) => i18n.getFixedT(language)(languageKeys[language]);
 
 export default function SettingsScreen({
+  allowAppIconChange = false,
   tab = false,
   onBack,
-}: Readonly<{ tab?: boolean; onBack?: () => void }>) {
+}: Readonly<{ allowAppIconChange?: boolean; tab?: boolean; onBack?: () => void }>) {
   const { language, setLanguage, ready } = useLanguage();
   return (
     <SettingsPage
       language={language}
       onLanguageChange={setLanguage}
       languageReady={ready}
+      allowAppIconChange={allowAppIconChange}
       tab={tab}
       onBack={onBack}
     />
@@ -62,12 +65,14 @@ function SettingsPage({
   language,
   onLanguageChange,
   languageReady,
+  allowAppIconChange,
   onBack,
   tab,
 }: Readonly<{
   language: Language;
   onLanguageChange?: (language: Language) => void;
   languageReady: boolean;
+  allowAppIconChange: boolean;
   onBack?: () => void;
   tab: boolean;
 }>) {
@@ -136,6 +141,7 @@ function SettingsPage({
                 </Column>
                 <ColorSchemeControl testID="app-settings-color-scheme-picker" />
               </Row>
+              {allowAppIconChange ? <AppIconPicker /> : null}
               {design.header.artwork ? (
                 <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
                   <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>

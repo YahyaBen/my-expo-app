@@ -21,6 +21,10 @@ export interface SemanticColors {
   /** Unavailable content only; ordinary secondary text uses muted. */
   textDisabled: string;
   border: string;
+  /** Form-control border, separate from the ordinary surface border. */
+  input: string;
+  /** Focus outline. */
+  ring: string;
   divider: string;
   tableSurface: string;
   tableHeader: string;
@@ -89,7 +93,7 @@ export function createColorTokens(colors: SemanticColors) {
     controlOnSelected: colors.text,
     controlSurface: colors.surfaceRaised,
     controlTrack: colors.surfaceVariant,
-    controlBorder: colors.border,
+    controlBorder: colors.input,
     controlDisabledContent: colors.textDisabled,
     controlDisabledSurface: colors.surface,
     controlDisabledActive: `${colors.tint}33`,
