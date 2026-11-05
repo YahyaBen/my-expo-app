@@ -3,12 +3,11 @@ const assets = require('./config/brand-assets.json');
 
 module.exports = ({ config }) => {
   const { brand, variant } = resolveBrand();
-  const nameSuffix = { development: ' Dev', preview: ' Preview', production: '' }[variant];
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
 
   return {
     ...config,
-    name: `${brand.name}${nameSuffix}`,
+    name: brand.name,
     slug: brand.slug,
     scheme: brand.scheme,
     icon: brand.icon,

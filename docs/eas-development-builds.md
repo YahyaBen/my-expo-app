@@ -2,10 +2,10 @@
 
 ## Link a clone
 
-Set `eas.projectId` in `config/brands/template.json` to an EAS project UUID owned
-by an account you can access. Use slug `expo-mobile-template` for that project
-to match the starter. No other repository setting is needed for the unchanged
-template. An empty ID is allowed locally; production validation rejects it.
+Set `eas.owner` and `eas.projectId` in `config/brands/template.json` to the
+account and UUID of your EAS project. Use the slug `hyrkul-wlui-template` to
+match the starter. Production requires a project ID. Local development accepts
+an empty ID.
 
 ```sh
 npm ci
@@ -28,11 +28,9 @@ for platform credentials.
 | `preview`            | Internal release APK / signed iOS internal build      | Disabled; neutral wireframe     |
 | `production`         | Store binaries with remote version increment          | Disabled; neutral wireframe     |
 
-The installed app name uses the brand manifest's `name`: production keeps the base
-name, preview adds ` Preview`, and both development profiles add ` Dev`.
-`app.config.js` selects the suffix using each profile's `APP_VARIANT`. Changing
-the name requires a new native build and installation; Metro reloads and OTA
-updates cannot rename an installed app.
+All profiles use the brand manifest's `name` as the installed app name. The
+default brand displays `Expo Template`. Install a new native build to apply a
+name change.
 
 ```sh
 npx eas-cli@latest build --platform ios --profile development

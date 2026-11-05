@@ -163,7 +163,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         ) : null}
       </View>
       {menuState !== 'unopened' ? (
-        <ComponentMenu isPresented={menuOpen} onClose={closeMenu} onSelect={navigateToComponent} />
+        <ComponentMenu isPresented={menuOpen} onClose={closeMenu} />
       ) : null}
       <TabNavigationBar
         activeId={activeId}

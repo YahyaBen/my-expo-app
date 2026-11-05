@@ -42,10 +42,10 @@ roles in [tokens.ts](src/constants/themes/tokens.ts), spacing/radii in
 
 ## Build your clone with EAS
 
-Change only `eas.projectId` in [config/brands/template.json](config/brands/template.json)
-to your own EAS project UUID. Create that EAS project with slug
-`expo-mobile-template` to match this starter. You can clear the ID to use local
-Storybook without linking an EAS project.
+Set `eas.owner` and `eas.projectId` in
+[config/brands/template.json](config/brands/template.json) to your EAS account
+and project UUID. Use the slug `hyrkul-wlui-template` to match this starter.
+You can clear the ID to use local Storybook without linking an EAS project.
 
 ```sh
 npx eas-cli@latest login
