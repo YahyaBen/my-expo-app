@@ -1,18 +1,25 @@
 import { requireOptionalNativeModule } from 'expo';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppState, Platform } from 'react-native';
+import { AppState, Platform, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-  Column,
-  nativeFillWidth,
-  nativeRowWeight,
-  Picker,
-  Row,
+  ButtonContent,
+  CircularCarousel,
+  PageScreen,
+  PageSection,
   UniversalTextContent as Text,
+  type PhotoItem,
 } from '@components/ui';
-import { spacing } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 
 type AppIconChoice = 'light' | 'dark';
+type AppIconPhoto = PhotoItem & { id: AppIconChoice };
+
+const iconSources = {
+  light: require('@assets/AppIcon-Light.icon/Assets/icon.png'),
+  dark: require('@assets/AppIcon-Dark.icon/Assets/icon.png'),
+};
 
 function loadAppIcons(): typeof import('expo-awesome-app-icon') | null {
   if (!requireOptionalNativeModule('AwesomeAppIcon')) return null;
@@ -25,8 +32,20 @@ function loadAppIcons(): typeof import('expo-awesome-app-icon') | null {
 
 export function AppIconPicker() {
   const { t } = useTranslation();
+  const { width: windowWidth } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const width = Math.max(
+    1,
+    Math.min(screenContentMaxWidth, windowWidth - insets.left - insets.right) - spacing.lg * 2,
+  );
+  const itemSize = Math.min(160, width / 2.4);
   const [icons] = useState(loadAppIcons);
   const [iconState, setIconState] = useState(() => icons?.getAppIconState());
+  // The carousel starts on its first item; keep this order stable while applying changes.
+  const [firstChoice] = useState<AppIconChoice>(() =>
+    iconState?.selected === 'light' ? 'light' : 'dark',
+  );
+  const [draft, setDraft] = useState(firstChoice);
   const [changing, setChanging] = useState(false);
   const [failed, setFailed] = useState(false);
   const changeInFlight = useRef(false);
@@ -40,16 +59,21 @@ export function AppIconPicker() {
     return () => subscription.remove();
   }, [icons, isPending]);
 
-  if (!icons) return null;
   const selected = iconState?.selected === 'light' ? 'light' : 'dark';
+  const choices: AppIconChoice[] = [firstChoice, firstChoice === 'dark' ? 'light' : 'dark'];
+  const items: AppIconPhoto[] = choices.map((id) => ({
+    id,
+    source: iconSources[id],
+    label: t(`appearance.${id}`),
+  }));
 
-  async function changeIcon(value: AppIconChoice) {
-    if (!icons || changeInFlight.current || value === selected) return;
+  async function applyIcon() {
+    if (!icons || changeInFlight.current || draft === selected) return;
     changeInFlight.current = true;
     setChanging(true);
     setFailed(false);
     try {
-      await icons.setAppIcon(value === 'light' ? 'light' : null, {
+      await icons.setAppIcon(draft === 'light' ? 'light' : null, {
         deferUntilBackground: Platform.OS === 'android',
       });
       setIconState(icons.getAppIconState());
@@ -62,30 +86,47 @@ export function AppIconPicker() {
   }
 
   return (
-    <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
-      <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
-        <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
-          <Text>{t('settings.appIcon')}</Text>
-        </Column>
-        <Picker<AppIconChoice>
-          selectedValue={selected}
-          onValueChange={(value) => void changeIcon(value)}
-          enabled={!changing}
+    <PageScreen title={t('settings.appIcon')} description={t('settings.appIconHint')}>
+      <PageSection alignment="center" testID="app-settings-app-icon-page">
+        <CircularCarousel
+          items={items}
+          width={width}
+          itemSize={itemSize}
+          height={itemSize * 2.4}
+          accessibilityLabel={t('settings.appIcon')}
+          getPositionLabel={(index) => t('common.selectedValue', { value: items[index].label })}
+          onIndexChange={(_, item) => {
+            setDraft(item.id);
+            setFailed(false);
+          }}
           testID="app-settings-app-icon-picker"
-        >
-          <Picker.Item label={t('appearance.light')} value="light" />
-          <Picker.Item label={t('appearance.dark')} value="dark" />
-        </Picker>
-      </Row>
-      {failed ? (
-        <Text tone="error" testID="app-settings-app-icon-error">
-          {t('settings.appIconFailed')}
-        </Text>
-      ) : isPending ? (
-        <Text tone="muted" testID="app-settings-app-icon-pending">
-          {t('settings.appIconPending')}
-        </Text>
-      ) : null}
-    </Column>
+        />
+        <ButtonContent
+          variant="primary"
+          label={t(changing ? 'common.wait' : 'settings.appIconApply')}
+          disabled={!icons || changing || draft === selected}
+          onPress={() => void applyIcon()}
+          fullWidth
+          testID="app-settings-app-icon-apply"
+        />
+        {!icons ? (
+          <Text tone="muted" testID="app-settings-app-icon-unavailable">
+            {t('settings.appIconUnavailable')}
+          </Text>
+        ) : failed ? (
+          <Text tone="error" testID="app-settings-app-icon-error">
+            {t('settings.appIconFailed')}
+          </Text>
+        ) : isPending ? (
+          <Text tone="muted" testID="app-settings-app-icon-pending">
+            {t('settings.appIconPending')}
+          </Text>
+        ) : draft === selected ? (
+          <Text tone="muted" testID="app-settings-app-icon-current">
+            {t('settings.appIconCurrent')}
+          </Text>
+        ) : null}
+      </PageSection>
+    </PageScreen>
   );
 }

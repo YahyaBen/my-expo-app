@@ -1,24 +1,22 @@
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useActiveMotionTime } from '@/hooks/use-active-motion-time';
-import { DEFAULT_HEADER_SHAPE, type PageHeaderShape } from '@/constants/header-motion';
+import type { PageHeaderShape } from '@/constants/header-motion';
 import { usePathValue, type Transforms3d } from '@shopify/react-native-skia';
-import { useMemo, useState } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { drawVectorPath, headerContour } from './page-header-shapes';
 import { drawHeaderDetails } from './page-header-details';
-import type { PageWave, PageWaveContextValue } from './page-wave-context';
+import type { PageWave } from './page-motion-context';
 
 const HEADER_WAVE_WIDTH = 1000;
 const HEADER_WAVE_HEIGHT = 100;
 
 /** One motion source keeps header artwork and native blur masks aligned. */
-export function usePageWaveMotion(animate: boolean, shape: PageHeaderShape = DEFAULT_HEADER_SHAPE) {
+export function usePageWaveMotion(animate: boolean, shape: PageHeaderShape, height: number) {
   const direction = useLayoutDirection();
-  const { height: windowHeight } = useWindowDimensions();
-  const [height, setHeaderHeight] = useState(80);
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const time = useActiveMotionTime(animate);
-  const width = useSharedValue(0);
+  const width = useSharedValue(windowWidth);
   const scaleY = height / HEADER_WAVE_HEIGHT;
   const translateX = direction === 'rtl' ? -HEADER_WAVE_WIDTH : 0;
   const scaleX = useDerivedValue(
@@ -44,21 +42,17 @@ export function usePageWaveMotion(animate: boolean, shape: PageHeaderShape = DEF
     'worklet';
     drawHeaderDetails(builder, shape, time.get(), scaleX.get(), scaleY);
   });
-  const wave = useMemo<PageWave>(
-    () => ({
-      height,
-      scaleX,
-      scaleY,
-      translateX,
-      transform,
-      frontPath,
-      backPath,
-      frontContour,
-      backContour,
-    }),
-    [height, scaleX, scaleY, translateX, transform, frontPath, backPath, frontContour, backContour],
-  );
-  const context = useMemo<PageWaveContextValue>(() => ({ wave, setHeaderHeight }), [wave]);
+  const wave: PageWave = {
+    height,
+    scaleX,
+    scaleY,
+    translateX,
+    transform,
+    frontPath,
+    backPath,
+    frontContour,
+    backContour,
+  };
 
-  return { context, detailPath, width };
+  return { wave, detailPath, width };
 }

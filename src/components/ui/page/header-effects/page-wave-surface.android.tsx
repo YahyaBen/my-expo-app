@@ -5,7 +5,12 @@ import { StyleSheet } from 'react-native';
 import type { PageWaveSurfaceProps } from './page-wave-surface.types';
 import { pageBlurProps } from './page-blur';
 
-export function PageWaveSurface({ wave, blurTarget, colorScheme }: Readonly<PageWaveSurfaceProps>) {
+export function PageWaveSurface({
+  wave,
+  blurKey,
+  blurTarget,
+  colorScheme,
+}: Readonly<PageWaveSurfaceProps>) {
   return (
     <MaskedView
       testID="page-wave-blur-mask"
@@ -24,6 +29,8 @@ export function PageWaveSurface({ wave, blurTarget, colorScheme }: Readonly<Page
       }
     >
       <BlurView
+        // Native blur may rebind after Back; its Compose mask and Skia paths stay mounted.
+        key={blurKey}
         {...pageBlurProps(colorScheme)}
         testID="page-header-blur"
         pointerEvents="none"

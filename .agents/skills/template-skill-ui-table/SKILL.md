@@ -36,6 +36,19 @@ Private platform adapters add spoken labels to the existing native Checkbox;
 iOS retains its native toggle appearance. Never draw replacement checkbox artwork.
 Selectors append `-select-all` and `-row-{key}-select` to the Table testID.
 
+## Row navigation
+
+Set `onRowPress` to make each data region one native `ListItem`. Supply a
+translated `rowAccessibilityLabel` for its destination. The consumer owns routing;
+keep cells passive and selection checkboxes/action menus outside the row button.
+Without `onRowPress`, rows retain their passive layout. Platform adapters reserve
+native ListItem insets in the header so fixed columns stay aligned. The existing
+`-row-{key}` selector belongs to the actual ListItem when navigation is enabled.
+
+The payment example opens `/table/[id]` with native Detail/History segments and
+status badges. Its history is a local demo snapshot, including status changes;
+Back returns to the table's retained search, sorting and selection.
+
 ## Row actions
 
 Set `renderActions` and translated `actionsHeader`; action width defaults to 112.

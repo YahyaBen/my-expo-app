@@ -3,10 +3,8 @@ import {
   Icon,
   PageScreen,
   PageSection,
-  SkeletonContent,
   TabNavigationBar,
   TextInput,
-  UniversalTextContent,
   type TabNavigationItemId,
 } from '@components/ui';
 import { router, useFocusEffect } from 'expo-router';
@@ -15,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAppBrand } from '@/config/brand';
+import HomeScreen from '@/features/home/home-screen';
 import { componentCatalog, type ComponentId } from './component-catalog';
 import { ComponentList } from './component-list';
 import { ComponentMenu } from './component-menu';
@@ -104,20 +103,16 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
-        <Activity mode={activeId === 'more' ? 'hidden' : 'visible'}>
-          <PageScreen tab title={titles[contentId]} showBack={showBack}>
-            {contentId === 'home' ? (
-              <PageSection testID="template-wireframe">
-                <UniversalTextContent variant="title">{t('template.title')}</UniversalTextContent>
-                <UniversalTextContent tone="muted">
-                  {t('template.description')}
-                </UniversalTextContent>
-                <SkeletonContent style={{ height: 160 }} testID="template-card-placeholder" />
-                <SkeletonContent style={{ height: 20 }} />
-                <SkeletonContent style={{ height: 16 }} />
-                <SkeletonContent style={{ height: 16 }} />
-              </PageSection>
-            ) : (
+        <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
+          <HomeScreen
+            title={titles.home}
+            showBack={showBack}
+            onBrowseComponents={() => selectTab('recipes')}
+          />
+        </Activity>
+        <Activity mode={activeId === 'more' || activeId === 'home' ? 'hidden' : 'visible'}>
+          {contentId !== 'home' ? (
+            <PageScreen tab title={titles[contentId]} showBack={showBack}>
               <PageSection>
                 {contentId === 'search' ? (
                   <TextInput
@@ -148,8 +143,8 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
                   />
                 )}
               </PageSection>
-            )}
-          </PageScreen>
+            </PageScreen>
+          ) : null}
         </Activity>
         {/* Do not render hidden Settings at startup: Activity also prerenders hidden children. */}
         {settingsOpened ? (

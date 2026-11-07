@@ -143,7 +143,8 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
   return (
     <ThemeProvider value={theme}>
       <Stack
-        activityEnabled={Platform.OS === 'android' ? 1 : false}
+        // Keep the previous scene laid out for Back; hide deeper Android scenes.
+        activityEnabled={Platform.OS === 'android'}
         screenOptions={{
           ...stackMotionOptions(reducedMotion),
           contentStyle: { backgroundColor: colors.background, direction },
@@ -152,6 +153,8 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="components/[id]" />
+        <Stack.Screen name="settings/app-icon" />
+        <Stack.Screen name="table/[id]" />
         <Stack.Protected guard={storybookEnabled}>
           <Stack.Screen name="storybook" />
         </Stack.Protected>

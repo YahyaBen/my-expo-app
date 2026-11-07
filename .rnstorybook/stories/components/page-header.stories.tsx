@@ -287,7 +287,7 @@ function NativeBackReturnHeaderDemo({ colorScheme }: Readonly<{ colorScheme?: 'l
   const [presses, setPresses] = useState(0);
   return (
     <PageFrame
-      title="Retained header"
+      title={'Retained header\nwith a taller title'}
       colorScheme={colorScheme}
       headerMode="scroll"
       onBack={() => setPresses((value) => value + 1)}

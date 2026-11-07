@@ -1,6 +1,6 @@
 import {
+  Badge,
   ButtonContent,
-  Collapsible,
   Column,
   EmptyState,
   Icon,
@@ -13,26 +13,17 @@ import {
   useHostColorScheme,
   type TableColumn,
 } from '@components/ui';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
-
-type PaymentStatus = 'success' | 'processing' | 'failed';
-type ExamplePayment = {
-  id: string;
-  email: string;
-  amount: number;
-  status: PaymentStatus;
-};
-
-const initialPayments: readonly ExamplePayment[] = [
-  { id: '1042', email: 'ken99@example.com', amount: 316, status: 'success' },
-  { id: '1041', email: 'abe45@example.com', amount: 242, status: 'success' },
-  { id: '1040', email: 'monserrat44@example.com', amount: 837, status: 'processing' },
-  { id: '1039', email: 'silas22@example.com', amount: 874, status: 'success' },
-  { id: '1038', email: 'carmella@example.com', amount: 721, status: 'failed' },
-];
+import {
+  initialPayments,
+  paymentBadgeVariants,
+  type ExamplePayment,
+  type PaymentStatus,
+} from './table-payments';
 
 export function TableExamples({
   contentWidth,
@@ -45,7 +36,6 @@ export function TableExamples({
   const [selectedKeys, setSelectedKeys] = useState<readonly string[]>([]);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>(null);
   const [popoverId, setPopoverId] = useState<string | null>(null);
-  const [detailsId, setDetailsId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ email: string; status: PaymentStatus } | null>(null);
   const query = search.trim().toLocaleLowerCase();
   const filteredPayments = payments.filter((payment) =>
@@ -74,17 +64,20 @@ export function TableExamples({
     {
       id: 'status',
       header: t('showcase.tableGallery.status'),
-      width: 112,
+      width: 176,
       renderCell: (payment) => (
-        <Text
-          variant="body"
-          fontSize={14}
-          textStyle={{ color: colors.tableText }}
+        <Badge
+          label={t('componentCatalog.tables.statuses.' + payment.status)}
+          variant={paymentBadgeVariants[payment.status]}
           testID={'component-table-status-' + payment.id}
-        >
-          {t('componentCatalog.tables.statuses.' + payment.status)}
-        </Text>
+        />
       ),
+    },
+    {
+      id: 'payment',
+      header: t('componentCatalog.tables.payment'),
+      width: 112,
+      renderCell: (payment) => `#${payment.id}`,
     },
     {
       id: 'email',
@@ -127,12 +120,22 @@ export function TableExamples({
   ];
 
   function updateStatus(payment: ExamplePayment, status: PaymentStatus) {
-    if (readOnly) return;
+    if (readOnly || payment.status === status) return;
     setPayments((current) =>
-      current.map((row) => (row.id === payment.id ? { ...row, status } : row)),
+      current.map((row) =>
+        row.id === payment.id ? { ...row, status, history: [...row.history, status] } : row,
+      ),
     );
     setFeedback({ email: payment.email, status });
     setPopoverId(null);
+  }
+
+  function openDetails(payment: ExamplePayment) {
+    setPopoverId(null);
+    router.push({
+      pathname: '/table/[id]',
+      params: { id: payment.id, history: payment.history.join(',') },
+    });
   }
 
   return (
@@ -164,6 +167,10 @@ export function TableExamples({
         rows={visiblePayments}
         columns={columns}
         keyExtractor={(payment) => payment.id}
+        onRowPress={readOnly ? undefined : openDetails}
+        rowAccessibilityLabel={(payment) =>
+          t('componentCatalog.tables.openDetails', { id: payment.id, email: payment.email })
+        }
         selection={{
           selectedKeys,
           disabled: readOnly,
@@ -234,25 +241,13 @@ export function TableExamples({
               style={{ width: Math.min(280, contentWidth), padding: spacing.lg }}
             >
               <Text variant="label">{payment.email}</Text>
-              <Collapsible
+              <ButtonContent
+                variant="tertiary"
                 label={t('componentCatalog.tables.detailsFor', { id: payment.id })}
-                isOpen={detailsId === payment.id}
-                onOpenChange={(open) => setDetailsId(open ? payment.id : null)}
-              >
-                <Column
-                  spacing={spacing.sm}
-                  modifiers={nativeFillWidth}
-                  testID={'component-table-details-' + payment.id}
-                >
-                  <Text variant="caption">
-                    {t('componentCatalog.tables.detailsSummary', {
-                      id: payment.id,
-                      amount: currency.format(payment.amount),
-                      status: t('componentCatalog.tables.statuses.' + payment.status),
-                    })}
-                  </Text>
-                </Column>
-              </Collapsible>
+                fullWidth
+                onPress={() => openDetails(payment)}
+                testID={'component-table-details-' + payment.id}
+              />
               {(['success', 'processing', 'failed'] as const).map((status) => (
                 <ButtonContent
                   key={status}
@@ -310,7 +305,6 @@ export function TableExamples({
           setSelectedKeys([]);
           setSortDirection(null);
           setPopoverId(null);
-          setDetailsId(null);
           setFeedback(null);
         }}
         testID="component-table-reset"

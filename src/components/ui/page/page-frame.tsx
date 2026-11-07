@@ -1,10 +1,8 @@
 import { usePageLayout } from '@/hooks/use-page-layout';
 import { useThemeColors } from '@/hooks/use-theme';
 import { BlurTargetView } from 'expo-blur';
-import { useFocusEffect } from 'expo-router';
 import {
   createContext,
-  useCallback,
   useContext,
   useMemo,
   useRef,
@@ -18,7 +16,6 @@ import { PageHeader } from './page-header';
 import { PageHeaderBackground } from './header-effects/page-header-background';
 import { PAGE_HEADER_MIN_HEIGHT } from './page-header-layout';
 import { PageHeaderTouchShield } from './header-effects/page-header-touch-shield';
-import { PageWaveContext } from './header-effects/page-wave-context';
 
 const PageHeaderInsetContext = createContext(0);
 
@@ -55,12 +52,6 @@ export function PageFrame({
   const headerHeight = title ? insets.top + headerContentHeight : 0;
   const mode = !title && headerMode === 'scroll' ? 'fixed' : headerMode;
   const reservedTop = title ? headerHeight : insets.top;
-  const setWaveHeight = useContext(PageWaveContext)?.setHeaderHeight;
-  useFocusEffect(
-    useCallback(() => {
-      if (headerHeight > 0) setWaveHeight?.(headerHeight);
-    }, [headerHeight, setWaveHeight]),
-  );
   const blurTarget = useRef<ViewInstance | null>(null);
   const contentTop = mode === 'overlay' ? insets.top : 0;
   const contentInsets = useMemo(
@@ -88,11 +79,12 @@ export function PageFrame({
         </PageHeaderInsetContext.Provider>
       </SafeAreaInsetsContext.Provider>
       {/* Android blur mounts after its capture target. Title and Back stay above it. */}
-      {headerBlur && title ? (
+      {title ? (
         <PageHeaderBackground
           blurTarget={blurTarget}
           colorScheme={colorScheme}
           height={headerHeight}
+          blur={headerBlur}
         />
       ) : null}
       <View

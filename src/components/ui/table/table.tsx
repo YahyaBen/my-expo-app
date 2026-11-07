@@ -6,6 +6,7 @@ import { useHostColorScheme } from '../host/universal-host';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
 import { TableCheckbox } from './table-checkbox';
+import { TableRow, tableRowInsets } from './table-row';
 
 export interface TableColumn<T> {
   id: string;
@@ -40,6 +41,9 @@ export interface TableProps<T> {
   actionsHeader?: string;
   actionsWidth?: number;
   selection?: TableSelection<T>;
+  /** Makes the data cells one native ListItem; selection and actions remain separate. */
+  onRowPress?: (row: T) => void;
+  rowAccessibilityLabel?: (row: T) => string;
   testID?: string;
 }
 
@@ -64,13 +68,15 @@ export function Table<T>({
   actionsHeader,
   actionsWidth = 112,
   selection,
+  onRowPress,
+  rowAccessibilityLabel,
   testID,
 }: Readonly<TableProps<T>>) {
   const colors = useThemeColors(useHostColorScheme());
-  const tableWidth =
-    columns.reduce((total, column) => total + (column.width ?? 144), 0) +
-    (renderActions ? actionsWidth : 0) +
-    (selection ? 64 : 0);
+  const rowInsets = onRowPress ? tableRowInsets : { start: 0, end: 0 };
+  const dataWidth = columns.reduce((total, column) => total + (column.width ?? 144), 0);
+  const rowWidth = dataWidth + rowInsets.start + rowInsets.end;
+  const tableWidth = rowWidth + (renderActions ? actionsWidth : 0) + (selection ? 64 : 0);
   const cellStyle = { paddingHorizontal: spacing.md, paddingVertical: spacing.sm };
   const selectionStyle = { width: 64, paddingHorizontal: spacing.xs };
   const actionStyle = { width: actionsWidth, paddingHorizontal: spacing.sm };
@@ -114,6 +120,7 @@ export function Table<T>({
                   />
                 </Column>
               )}
+              {rowInsets.start > 0 && <Column style={{ width: rowInsets.start }} />}
               {columns.map((column) => (
                 <Column
                   key={column.id}
@@ -133,6 +140,7 @@ export function Table<T>({
                   )}
                 </Column>
               ))}
+              {rowInsets.end > 0 && <Column style={{ width: rowInsets.end }} />}
               {renderActions && (
                 <Column style={actionStyle}>
                   <UniversalTextContent variant="label" textStyle={{ color: colors.tableText }}>
@@ -144,13 +152,28 @@ export function Table<T>({
             {rows.map((row) => {
               const rowKey = keyExtractor(row);
               const rowID = testID ? `${testID}-row-${rowKey}` : undefined;
+              const cells = columns.map((column) => (
+                <Column
+                  key={column.id}
+                  alignment={column.align}
+                  style={{ ...cellStyle, width: column.width ?? 144 }}
+                  testID={rowID ? `${rowID}-cell-${column.id}` : undefined}
+                >
+                  {cellContent(column.renderCell(row), colors.tableText)}
+                </Column>
+              ));
               return (
                 <Column key={rowKey} spacing={0} modifiers={nativeFillWidth}>
                   <Column
                     modifiers={nativeFillWidth}
                     style={{ height: 1, backgroundColor: colors.tableBorder }}
                   />
-                  <Row alignment="center" spacing={0} modifiers={nativeFillWidth} testID={rowID}>
+                  <Row
+                    alignment="center"
+                    spacing={0}
+                    modifiers={nativeFillWidth}
+                    testID={onRowPress ? undefined : rowID}
+                  >
                     {selection && (
                       <Column alignment="center" style={selectionStyle}>
                         <TableCheckbox
@@ -162,16 +185,21 @@ export function Table<T>({
                         />
                       </Column>
                     )}
-                    {columns.map((column) => (
-                      <Column
-                        key={column.id}
-                        alignment={column.align}
-                        style={{ ...cellStyle, width: column.width ?? 144 }}
-                        testID={rowID ? `${rowID}-cell-${column.id}` : undefined}
-                      >
-                        {cellContent(column.renderCell(row), colors.tableText)}
+                    {onRowPress ? (
+                      <Column style={{ width: rowWidth }}>
+                        <TableRow
+                          onPress={() => onRowPress(row)}
+                          accessibilityLabel={rowAccessibilityLabel?.(row)}
+                          testID={rowID}
+                        >
+                          <Row alignment="center" spacing={0} style={{ width: dataWidth }}>
+                            {cells}
+                          </Row>
+                        </TableRow>
                       </Column>
-                    ))}
+                    ) : (
+                      cells
+                    )}
                     {renderActions && (
                       <Column alignment="center" style={actionStyle}>
                         {renderActions(row)}

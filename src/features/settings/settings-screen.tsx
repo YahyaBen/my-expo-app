@@ -15,7 +15,6 @@ import {
   Icon,
   ListItem,
   nativeFillWidth,
-  nativeRowWeight,
   pageFormModifiers,
   PageFrame,
   PageSection,
@@ -25,12 +24,13 @@ import {
   UniversalHost,
   usePageHeaderInset,
 } from '@components/ui';
+import { router } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppIconPicker } from './app-icon-picker';
 import { HeaderMotionPicker } from './header-motion-picker';
+import { SettingsPickerRow } from './settings-picker-row';
 import { useDeviceLocation } from './use-device-location';
 import { useDevicePermissions } from './use-device-permissions';
 
@@ -78,7 +78,8 @@ function SettingsPage({
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors, design } = useAppTheme();
-  const { height: windowHeight } = useWindowDimensions();
+  const { width, height: windowHeight, fontScale } = useWindowDimensions();
+  const stackPickers = Platform.OS === 'android' && (width < 360 || fontScale > 1.2);
   const languageListHeight = Math.min(320, windowHeight * 0.45);
   const changeLanguage = languageReady ? onLanguageChange : undefined;
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -142,20 +143,22 @@ function SettingsPage({
                   first
                 />
               </FieldGroup.SectionHeader>
-              <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
-                <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
-                  <Text>{t('common.colorScheme')}</Text>
-                </Column>
+              <SettingsPickerRow label={t('common.colorScheme')} stacked={stackPickers}>
                 <ColorSchemeControl testID="app-settings-color-scheme-picker" />
-              </Row>
-              {allowAppIconChange ? <AppIconPicker /> : null}
+              </SettingsPickerRow>
+              {allowAppIconChange ? (
+                <ListItem.FieldRow
+                  onPress={() => router.push('/settings/app-icon')}
+                  trailing={chevron}
+                  testID="app-settings-app-icon"
+                >
+                  <Text>{t('settings.appIcon')}</Text>
+                </ListItem.FieldRow>
+              ) : null}
               {design.header.artwork ? (
-                <Row alignment="center" spacing={spacing.lg} modifiers={nativeFillWidth}>
-                  <Column modifiers={Platform.OS === 'ios' ? nativeFillWidth : nativeRowWeight}>
-                    <Text>{t('settings.headerMotion')}</Text>
-                  </Column>
+                <SettingsPickerRow label={t('settings.headerMotion')} stacked={stackPickers}>
                   <HeaderMotionPicker />
-                </Row>
+                </SettingsPickerRow>
               ) : null}
               <ReducedMotionControl />
               <ListItem.FieldRow

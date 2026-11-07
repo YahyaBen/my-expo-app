@@ -3,8 +3,8 @@ import { BlurView } from 'expo-blur';
 import { AccessibilityInfo, Platform, View, type ViewInstance } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../../host/universal-host';
-import { PageWaveContext } from './page-wave-context';
-import { PageWaveSurface } from './page-wave-surface';
+import { PageMotionContext } from './page-motion-context';
+import { PageHeaderArtwork } from './page-header-artwork';
 import { pageBlurProps } from './page-blur';
 import { usePageBlurKey } from './use-page-blur-key';
 
@@ -13,14 +13,16 @@ export function PageHeaderBackground({
   blurTarget,
   colorScheme,
   height = 0,
+  blur = true,
 }: Readonly<{
   blurTarget: RefObject<ViewInstance | null>;
   colorScheme?: 'light' | 'dark';
   height?: number;
+  blur?: boolean;
 }>) {
-  const scheme = useHostColorScheme(colorScheme);
+  const motion = useContext(PageMotionContext);
+  const scheme = useHostColorScheme(colorScheme ?? motion?.colorScheme);
   const colors = useThemeColors(scheme);
-  const wave = useContext(PageWaveContext)?.wave;
   const blurKey = usePageBlurKey();
   const [reduceTransparency, setReduceTransparency] = useState(false);
 
@@ -44,9 +46,10 @@ export function PageHeaderBackground({
     };
   }, []);
 
-  if (!wave) {
+  let backdrop = null;
+  if (blur && (!motion || !motion.visible)) {
     const style = { position: 'absolute' as const, top: 0, left: 0, right: 0, height };
-    return reduceTransparency ? (
+    backdrop = reduceTransparency ? (
       <View
         key={blurKey}
         testID="page-header-solid-background"
@@ -72,13 +75,20 @@ export function PageHeaderBackground({
   }
 
   return (
-    <PageWaveSurface
-      key={blurKey}
-      wave={wave}
-      blurTarget={blurTarget}
-      colorScheme={scheme}
-      backgroundColor={colors.background}
-      reduceTransparency={reduceTransparency}
-    />
+    <>
+      {backdrop}
+      {motion ? (
+        <PageHeaderArtwork
+          motion={motion}
+          height={height}
+          blur={blur}
+          blurKey={blurKey}
+          blurTarget={blurTarget}
+          colorScheme={scheme}
+          backgroundColor={colors.background}
+          reduceTransparency={reduceTransparency}
+        />
+      ) : null}
+    </>
   );
 }
