@@ -19,13 +19,15 @@
       "ios": {
         "image": "auto",
         "simulator": true
-      }
+      },
+      "channel": "development"
     },
     "development-device": {
       "extends": "development",
       "ios": {
         "simulator": false
-      }
+      },
+      "channel": "development-device"
     },
     "preview": {
       "distribution": "internal",
@@ -40,11 +42,15 @@
       },
       "android": {
         "buildType": "apk"
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "autoIncrement": true,
       "environment": "production",
+      "android": {
+        "credentialsSource": "local"
+      },
       "ios": {
         "image": "auto"
       },
@@ -52,7 +58,8 @@
         "APP_BRAND": "template",
         "APP_VARIANT": "production",
         "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {

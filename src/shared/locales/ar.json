@@ -2,8 +2,6 @@
   "home": {
     "eyebrow": "قليل من الإلهام، كل يوم",
     "search": "ابحث عن قصص وأماكن وإلهام…",
-    "quickActions": "أهلًا بك في مساحتك",
-    "explore": "استكشف",
     "savedCount": "المحفوظة · {{count}}",
     "featured": "قصة اليوم",
     "editorsPick": "اختيار المحرر",
@@ -32,6 +30,44 @@
       "nature": "الطبيعة",
       "spaces": "مساحات",
       "coast": "بجوار الماء"
+    }
+  },
+  "updates": {
+    "title": "تحديثات التطبيق",
+    "installed": "الإصدار المثبّت",
+    "installedVersion": "الإصدار {{version}} (البنية {{build}})",
+    "unknown": "غير معروف",
+    "improvements": "تحسينات التطبيق",
+    "storeBuild": "البنية {{version}}",
+    "storeVersion": "الإصدار {{version}}",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "check": "التحقق من وجود تحديثات",
+    "checking": "جارٍ التحقق من التحديثات…",
+    "openingStore": "جارٍ فتح المتجر…",
+    "updateApp": "تحديث التطبيق",
+    "downloading": "جارٍ التنزيل…",
+    "restarting": "جارٍ إعادة التشغيل…",
+    "restart": "إعادة التشغيل للتطبيق",
+    "download": "تنزيل التحسينات",
+    "later": "لاحقًا",
+    "newVersion": "يتوفر إصدار جديد",
+    "improvementsReady": "تتوفر تحسينات جديدة",
+    "storeHint": "حدّث التطبيق من المتجر للحصول على أحدث إصدار.",
+    "downloadHint": "نزّل أحدث التحسينات. يمكنك إعادة التشغيل عندما تكون مستعدًا.",
+    "restartHint": "التحسينات جاهزة. أعد تشغيل التطبيق لتطبيقها.",
+    "status": {
+      "unchecked": "لم يتم التحقق بعد",
+      "current": "محدّث",
+      "available": "يتوفر تحديث",
+      "ready": "جاهز لإعادة التشغيل",
+      "unavailable": "غير متاح في هذه النسخة",
+      "error": "تعذّر التحقق. حاول مجددًا."
+    },
+    "errors": {
+      "download": "تعذّر تنزيل التحسينات. حاول مجددًا.",
+      "restart": "تعذّرت إعادة تشغيل التطبيق. حاول مجددًا.",
+      "store": "تعذّر فتح تحديث المتجر. حاول مجددًا."
     }
   },
   "common": {

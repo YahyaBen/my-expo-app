@@ -1,7 +1,7 @@
 {
   "id": "template",
   "name": "Expo Template",
-  "slug": "hyrkul-wlui-template",
+  "slug": "expo-mobile-template",
   "scheme": "expomobiletemplate",
   "icon": "./assets/AppIcon-Dark.icon/Assets/icon.png",
   "lightIcon": "./assets/AppIcon-Light.icon/Assets/icon.png",
@@ -31,6 +31,6 @@
   },
   "eas": {
     "owner": "hyrkul",
-    "projectId": "b1fcaa0d-3cff-4a07-bd6d-06dcfc01e757"
+    "projectId": "c8cca991-ec77-476f-b759-3ea8bd075309"
   }
 }

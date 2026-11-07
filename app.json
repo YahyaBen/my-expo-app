@@ -1,6 +1,6 @@
 {
   "expo": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "platforms": ["ios", "android"],
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -81,6 +81,12 @@
     },
     "extra": {
       "router": {}
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "checkAutomatically": "ON_ERROR_RECOVERY"
     }
   }
 }

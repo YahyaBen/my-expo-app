@@ -25,6 +25,8 @@ import { useAppActive, useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import { useDevicePreferencesReady } from '@/lib/device-preferences';
 import { configurePerformance, markStartupMilestone, PerformanceRoot } from '@/lib/performance';
+import { AppUpdatesProvider } from '@/features/updates/app-updates';
+import { AppUpdatePrompt } from '@/features/updates/app-update-prompt';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -93,29 +95,32 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   if (!fontsReady) return null;
 
   return (
-    <View
-      testID={interactive ? 'app-ready' : undefined}
-      collapsable={false}
-      style={{ flex: 1, backgroundColor: colors.background }}
-    >
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <AppPageMotionOverlay animate={!showLaunchScreen}>
-        <PerformanceReadyContext.Provider value={interactive}>
-          <StartupLayoutContext.Provider value={onInitialLayout}>
-            <AppNavigator ready={resourcesReady} />
-          </StartupLayoutContext.Provider>
-        </PerformanceReadyContext.Provider>
-      </AppPageMotionOverlay>
-      {showLaunchScreen && appearanceReady ? (
-        <LaunchScreen
-          mode={brand.presentation.launch}
-          exiting={resourcesReady && initialLayoutReady}
-          onReady={revealLaunchScreen}
-          onExitComplete={finishLaunchScreen}
-        />
-      ) : null}
-      {!showLaunchScreen && <AlertHost />}
-    </View>
+    <AppUpdatesProvider ready={interactive && active}>
+      <View
+        testID={interactive ? 'app-ready' : undefined}
+        collapsable={false}
+        style={{ flex: 1, backgroundColor: colors.background }}
+      >
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        <AppPageMotionOverlay animate={!showLaunchScreen}>
+          <PerformanceReadyContext.Provider value={interactive}>
+            <StartupLayoutContext.Provider value={onInitialLayout}>
+              <AppNavigator ready={resourcesReady} />
+            </StartupLayoutContext.Provider>
+          </PerformanceReadyContext.Provider>
+        </AppPageMotionOverlay>
+        {showLaunchScreen && appearanceReady ? (
+          <LaunchScreen
+            mode={brand.presentation.launch}
+            exiting={resourcesReady && initialLayoutReady}
+            onReady={revealLaunchScreen}
+            onExitComplete={finishLaunchScreen}
+          />
+        ) : null}
+        {!showLaunchScreen && <AlertHost />}
+        <AppUpdatePrompt ready={interactive && active} />
+      </View>
+    </AppUpdatesProvider>
   );
 }
 

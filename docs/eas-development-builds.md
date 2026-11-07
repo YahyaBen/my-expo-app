@@ -82,9 +82,10 @@ Enabling Firebase later needs the matching config/plugins and a new native build
 Firebase files must match the resolved variant ID, including its suffix. The
 resolver validates Firebase against that ID.
 
-EAS Update is not provisioned by this template. Configure its URL, runtime policy
-and channels deliberately before shipping updates. Build/sign/submit and updates
-run through EAS; no build or store submission is performed by cloning the repo.
+[App updates](app-updates.md) use the selected brand's EAS project, an app-version
+runtime policy and profile-specific channels. Store updates use the installed
+native identity. Build/sign/submit and OTA publishing run through EAS; no build,
+store submission or update publication is performed by cloning the repo.
 
 ## Verification scope
 

@@ -11,15 +11,17 @@ import {
   RNHostView,
   Row,
   ScrollView,
-  Text,
+  StackedCarousel,
+  StoryList,
   TextInput,
   UniversalTextContent,
   nativeFillWidth,
   nativeRowWeight,
   useHostColorScheme,
+  type PhotoItem,
 } from '@components/ui';
 import { Image } from 'expo-image';
-import { useState, type ComponentProps } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -30,12 +32,18 @@ import { homeCategories, homeStories, type HomeCategory, type HomeStory } from '
 const icons = {
   search: Icon.select({ ios: 'magnifyingglass', android: 'search' }),
   clear: Icon.select({ ios: 'xmark.circle.fill', android: 'cancel' }),
-  explore: Icon.select({ ios: 'safari', android: 'explore' }),
   bookmark: Icon.select({ ios: 'bookmark', android: 'bookmark_border' }),
   saved: Icon.select({ ios: 'bookmark.fill', android: 'bookmark' }),
   components: Icon.select({ ios: 'square.grid.2x2', android: 'widgets' }),
   photo: Icon.select({ ios: 'photo', android: 'image' }),
 };
+
+const storyPhotos: readonly PhotoItem[] = homeStories.map((story) => ({
+  id: story.id,
+  source: `https://picsum.photos/id/${story.photoId}/900/650`,
+  label: story.title,
+}));
+const latestPhotos = storyPhotos.slice(1);
 
 /** Product-style sample home, composed in the existing native page and dock. */
 export default function HomeScreen({
@@ -60,6 +68,7 @@ export default function HomeScreen({
   const [selectedStory, setSelectedStory] = useState<HomeStory>(homeStories[0]);
   const [storyOpen, setStoryOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [latestIndex, setLatestIndex] = useState(0);
   const query = search.trim().toLocaleLowerCase();
   const filteredStories = homeStories.filter(
     (story) =>
@@ -72,7 +81,7 @@ export default function HomeScreen({
   );
   const browsingCollection = query.length > 0 || savedOnly;
   const recommended = showAll || browsingCollection ? filteredStories : filteredStories.slice(0, 2);
-  const featured = homeStories[0];
+  const latest = homeStories[latestIndex + 1];
 
   function openStory(story: HomeStory) {
     Keyboard.dismiss();
@@ -129,81 +138,13 @@ export default function HomeScreen({
           testID="home-search"
         />
 
-        <Column spacing={12} modifiers={nativeFillWidth}>
-          <UniversalTextContent variant="caption" tone="muted">
-            {t('home.quickActions')}
-          </UniversalTextContent>
-          <QuickActions
-            compact={compact}
-            actions={[
-              {
-                id: 'explore',
-                label: t('home.explore'),
-                icon: icons.explore,
-                onPress: resetFilters,
-              },
-              {
-                id: 'saved',
-                label: t('home.savedCount', { count: savedIds.length }),
-                icon: savedOnly ? icons.saved : icons.bookmark,
-                onPress: () => {
-                  setSavedOnly((value) => !value);
-                  setCategory('all');
-                  setSearch('');
-                },
-                selected: savedOnly,
-              },
-              {
-                id: 'components',
-                label: t('template.components'),
-                icon: icons.components,
-                onPress: onBrowseComponents,
-              },
-            ]}
-          />
-        </Column>
-
         {!browsingCollection ? (
-          <Column spacing={16} modifiers={nativeFillWidth} testID="home-featured">
-            <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
-              <Column modifiers={nativeRowWeight}>
-                <UniversalTextContent variant="subtitle">{t('home.featured')}</UniversalTextContent>
-              </Column>
-              <Badge label={t('home.editorsPick')} variant="secondary" />
-            </Row>
-            <HomePhoto
-              photoId={featured.photoId}
-              width={contentWidth}
-              height={220}
-              testID="template-card-placeholder"
-            />
-            <Column spacing={8} modifiers={nativeFillWidth}>
-              <UniversalTextContent variant="caption" tone="muted">
-                {`${t('home.categories.nature')} · ${t('home.readTime', { count: featured.minutes })}`}
-              </UniversalTextContent>
-              <UniversalTextContent variant="title">{featured.title}</UniversalTextContent>
-              <UniversalTextContent variant="body" tone="muted">
-                {featured.description}
-              </UniversalTextContent>
-            </Column>
-            <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
-              <Column modifiers={nativeRowWeight}>
-                <ButtonContent
-                  variant="primary"
-                  fullWidth
-                  label={t('home.readStory')}
-                  onPress={() => openStory(featured)}
-                  testID="home-featured-open"
-                />
-              </Column>
-              <SaveButton
-                story={featured}
-                saved={savedIds.includes(featured.id)}
-                onPress={() => toggleSaved(featured)}
-                testID="home-featured-save"
-              />
-            </Row>
-          </Column>
+          <FeaturedStories
+            width={contentWidth}
+            savedIds={savedIds}
+            onOpen={openStory}
+            onToggleSaved={toggleSaved}
+          />
         ) : null}
       </PageSection>
 
@@ -239,6 +180,13 @@ export default function HomeScreen({
           testID="home-category-filters"
         >
           <Row spacing={8} alignment="center">
+            <Chip
+              variant="filter"
+              label={t('home.savedCount', { count: savedIds.length })}
+              selected={savedOnly}
+              onPress={() => setSavedOnly((value) => !value)}
+              testID="home-filter-saved"
+            />
             {homeCategories.map((id) => (
               <Chip
                 key={id}
@@ -314,37 +262,26 @@ export default function HomeScreen({
             {'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
           </UniversalTextContent>
         </Column>
-        {homeStories.slice(2).map((story, index) => (
-          <Column key={story.id} spacing={16} modifiers={nativeFillWidth}>
-            <Row spacing={16} alignment="start" modifiers={nativeFillWidth}>
-              <HomePhoto
-                photoId={story.photoId}
-                width={80}
-                height={92}
-                testID={`home-latest-photo-${story.id}`}
-              />
-              <Column spacing={6} modifiers={nativeRowWeight}>
-                <UniversalTextContent variant="caption" tone="muted">
-                  {t('home.readTime', { count: story.minutes })}
-                </UniversalTextContent>
-                <UniversalTextContent variant="subtitle">{story.title}</UniversalTextContent>
-                <ButtonContent
-                  variant="link"
-                  size="sm"
-                  label={t('home.readStory')}
-                  onPress={() => openStory(story)}
-                  testID={`home-latest-${story.id}`}
-                />
-              </Column>
-            </Row>
-            {index === 0 ? (
-              <Column
-                modifiers={nativeFillWidth}
-                style={{ height: 1, backgroundColor: colors.divider }}
-              />
-            ) : null}
-          </Column>
-        ))}
+        <StoryList
+          items={latestPhotos}
+          width={contentWidth}
+          height={240}
+          accessibilityLabel={t('home.latest')}
+          onIndexChange={(index) => setLatestIndex(index)}
+          testID="home-story-list"
+        />
+        <Column spacing={8} modifiers={nativeFillWidth}>
+          <UniversalTextContent variant="subtitle">{latest.title}</UniversalTextContent>
+          <UniversalTextContent variant="body" tone="muted">
+            {latest.description}
+          </UniversalTextContent>
+          <ButtonContent
+            variant="link"
+            label={t('home.readStory')}
+            onPress={() => openStory(latest)}
+            testID={`home-latest-${latest.id}`}
+          />
+        </Column>
         <Column
           spacing={12}
           modifiers={nativeFillWidth}
@@ -416,40 +353,67 @@ export default function HomeScreen({
   );
 }
 
-type QuickAction = {
-  id: string;
-  label: string;
-  icon: ComponentProps<typeof Icon>['name'];
-  onPress: () => void;
-  selected?: boolean;
-};
+/** Keep the caption and actions in the same selection lifecycle as the carousel. */
+function FeaturedStories({
+  width,
+  savedIds,
+  onOpen,
+  onToggleSaved,
+}: Readonly<{
+  width: number;
+  savedIds: readonly string[];
+  onOpen: (story: HomeStory) => void;
+  onToggleSaved: (story: HomeStory) => void;
+}>) {
+  const { t } = useTranslation();
+  const [index, setIndex] = useState(0);
+  const story = homeStories[index];
 
-function QuickActions({
-  compact,
-  actions,
-}: Readonly<{ compact: boolean; actions: readonly QuickAction[] }>) {
-  const Layout = compact ? Column : Row;
   return (
-    <Layout spacing={8} modifiers={nativeFillWidth}>
-      {actions.map((action) => (
-        <Column key={action.id} modifiers={compact ? nativeFillWidth : nativeRowWeight}>
-          <ButtonContent
-            variant={action.selected ? 'primary' : 'secondary'}
-            fullWidth
-            contentPadding={12}
-            borderRadius={16}
-            accessibilityLabel={action.label}
-            onPress={action.onPress}
-            testID={`home-quick-${action.id}`}
-          >
-            <Column spacing={8} alignment="center">
-              <Icon name={action.icon} size={22} />
-              <Text textStyle={{ textAlign: 'center' }}>{action.label}</Text>
-            </Column>
-          </ButtonContent>
+    <Column spacing={16} modifiers={nativeFillWidth} testID="home-featured">
+      <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+        <Column modifiers={nativeRowWeight}>
+          <UniversalTextContent variant="subtitle">{t('home.featured')}</UniversalTextContent>
         </Column>
-      ))}
-    </Layout>
+        <Badge label={t('home.editorsPick')} variant="secondary" />
+      </Row>
+      <Column modifiers={nativeFillWidth} testID="template-card-placeholder">
+        <StackedCarousel
+          items={storyPhotos}
+          width={width}
+          height={280}
+          accessibilityLabel={t('home.featured')}
+          onIndexChange={(nextIndex) => setIndex(nextIndex)}
+          testID="home-stacked-carousel"
+        />
+      </Column>
+      <Column spacing={8} modifiers={nativeFillWidth}>
+        <UniversalTextContent variant="caption" tone="muted">
+          {`${t(`home.categories.${story.category}`)} · ${t('home.readTime', { count: story.minutes })}`}
+        </UniversalTextContent>
+        <UniversalTextContent variant="title">{story.title}</UniversalTextContent>
+        <UniversalTextContent variant="body" tone="muted">
+          {story.description}
+        </UniversalTextContent>
+      </Column>
+      <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+        <Column modifiers={nativeRowWeight}>
+          <ButtonContent
+            variant="primary"
+            fullWidth
+            label={t('home.readStory')}
+            onPress={() => onOpen(story)}
+            testID="home-featured-open"
+          />
+        </Column>
+        <SaveButton
+          story={story}
+          saved={savedIds.includes(story.id)}
+          onPress={() => onToggleSaved(story)}
+          testID="home-featured-save"
+        />
+      </Row>
+    </Column>
   );
 }
 

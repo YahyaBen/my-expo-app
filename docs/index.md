@@ -27,4 +27,5 @@ Maintained guides are listed below. Component contracts belong to independent sk
 ## Builds and engineering
 
 - [EAS development builds](eas-development-builds.md)
+- [App updates](app-updates.md)
 - [Native performance](performance.md)

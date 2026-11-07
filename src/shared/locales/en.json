@@ -2,8 +2,6 @@
   "home": {
     "eyebrow": "A LITTLE INSPIRATION, EVERY DAY",
     "search": "Search stories, places, inspiration…",
-    "quickActions": "MAKE YOURSELF AT HOME",
-    "explore": "Explore",
     "savedCount": "Saved · {{count}}",
     "featured": "Featured today",
     "editorsPick": "Editor's pick",
@@ -32,6 +30,44 @@
       "nature": "Nature",
       "spaces": "Spaces",
       "coast": "By the water"
+    }
+  },
+  "updates": {
+    "title": "App updates",
+    "installed": "Installed version",
+    "installedVersion": "Version {{version}} (build {{build}})",
+    "unknown": "Unknown",
+    "improvements": "App improvements",
+    "storeBuild": "Build {{version}}",
+    "storeVersion": "Version {{version}}",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "check": "Check for updates",
+    "checking": "Checking for updates…",
+    "openingStore": "Opening store…",
+    "updateApp": "Update app",
+    "downloading": "Downloading…",
+    "restarting": "Restarting…",
+    "restart": "Restart to apply",
+    "download": "Download improvements",
+    "later": "Later",
+    "newVersion": "A new version is available",
+    "improvementsReady": "New improvements are available",
+    "storeHint": "Update through your app store to get the latest version.",
+    "downloadHint": "Download the latest improvements. You can restart when you’re ready.",
+    "restartHint": "Your improvements are ready. Restart the app to apply them.",
+    "status": {
+      "unchecked": "Not checked yet",
+      "current": "Up to date",
+      "available": "Update available",
+      "ready": "Ready to restart",
+      "unavailable": "Not available in this build",
+      "error": "Couldn’t verify. Try again."
+    },
+    "errors": {
+      "download": "Couldn’t download the improvements. Please try again.",
+      "restart": "Couldn’t restart the app. Please try again.",
+      "store": "Couldn’t open the store update. Please try again."
     }
   },
   "common": {

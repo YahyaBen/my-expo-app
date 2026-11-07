@@ -3,6 +3,7 @@ import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/
 import { useLanguage } from '@/context/language.context';
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useMotionSettings } from '@/context/theme.context';
+import { useAppUpdates } from '@/features/updates/app-updates';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
@@ -25,6 +26,7 @@ import {
   usePageHeaderInset,
 } from '@components/ui';
 import { router } from 'expo-router';
+import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application';
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, useWindowDimensions, View } from 'react-native';
@@ -85,6 +87,11 @@ function SettingsPage({
   const [languageOpen, setLanguageOpen] = useState(false);
   const device = useDevicePermissions();
   const location = useDeviceLocation(device.permissions.location);
+  const updates = useAppUpdates();
+  const updatesDisabled = updates?.pending !== null;
+  const updateCheckDisabled =
+    updatesDisabled ||
+    (updates?.otaStatus === 'unavailable' && updates.storeStatus === 'unavailable');
   const permissionActionPending = device.pending !== null || location.pending;
   const deviceControlsDisabled = !device.ready || permissionActionPending;
   const locationRequestDisabled = permissionActionPending || !location.enabled;
@@ -300,6 +307,97 @@ function SettingsPage({
                 </Text>
               </ListItem.FieldRow>
             </FieldGroup.Section>
+            {updates ? (
+              <FieldGroup.Section
+                title={t('updates.title')}
+                titleUppercase
+                testID="app-settings-updates"
+              >
+                <FieldGroup.SectionHeader>
+                  <SettingsSectionHeading label={t('updates.title')} language={language} />
+                </FieldGroup.SectionHeader>
+                <ListItem.FieldRow
+                  supportingText={t('updates.installedVersion', {
+                    version: nativeApplicationVersion ?? t('updates.unknown'),
+                    build: nativeBuildVersion ?? t('updates.unknown'),
+                  })}
+                  testID="app-settings-installed-version"
+                >
+                  <Text>{t('updates.installed')}</Text>
+                </ListItem.FieldRow>
+                <ListItem.FieldRow
+                  supportingText={t(`updates.status.${updates.otaStatus}`)}
+                  testID="app-settings-update-status"
+                >
+                  <Text>{t('updates.improvements')}</Text>
+                </ListItem.FieldRow>
+                <ListItem.FieldRow
+                  supportingText={
+                    updates.storeVersion
+                      ? `${t(`updates.status.${updates.storeStatus}`)} · ${t(
+                          Platform.OS === 'android' ? 'updates.storeBuild' : 'updates.storeVersion',
+                          { version: updates.storeVersion },
+                        )}`
+                      : t(`updates.status.${updates.storeStatus}`)
+                  }
+                  testID="app-settings-store-status"
+                >
+                  <Text>
+                    {t(Platform.OS === 'android' ? 'updates.googlePlay' : 'updates.appStore')}
+                  </Text>
+                </ListItem.FieldRow>
+                {updates.actionError ? (
+                  <Text tone="error" testID="app-settings-update-error">
+                    {t(`updates.errors.${updates.actionError}`)}
+                  </Text>
+                ) : null}
+                <ListItem.FieldRow
+                  onPress={updateCheckDisabled ? undefined : () => void updates.checkForUpdates()}
+                  testID="app-settings-check-updates"
+                >
+                  <Text tone={updateCheckDisabled ? 'disabled' : 'primary'}>
+                    {t(updates.pending === 'check' ? 'updates.checking' : 'updates.check')}
+                  </Text>
+                </ListItem.FieldRow>
+                {updates.storeStatus === 'available' ? (
+                  <ListItem.FieldRow
+                    onPress={updatesDisabled ? undefined : () => void updates.openStore()}
+                    testID="app-settings-store-update"
+                  >
+                    <Text tone={updatesDisabled ? 'disabled' : 'primary'}>
+                      {t(
+                        updates.pending === 'store' ? 'updates.openingStore' : 'updates.updateApp',
+                      )}
+                    </Text>
+                  </ListItem.FieldRow>
+                ) : null}
+                {updates.otaStatus === 'available' || updates.otaStatus === 'ready' ? (
+                  <ListItem.FieldRow
+                    onPress={
+                      updatesDisabled
+                        ? undefined
+                        : () =>
+                            void (updates.otaStatus === 'ready'
+                              ? updates.restartApp()
+                              : updates.downloadUpdate())
+                    }
+                    testID="app-settings-apply-update"
+                  >
+                    <Text tone={updatesDisabled ? 'disabled' : 'primary'}>
+                      {t(
+                        updates.pending === 'download'
+                          ? 'updates.downloading'
+                          : updates.pending === 'restart'
+                            ? 'updates.restarting'
+                            : updates.otaStatus === 'ready'
+                              ? 'updates.restart'
+                              : 'updates.download',
+                      )}
+                    </Text>
+                  </ListItem.FieldRow>
+                ) : null}
+              </FieldGroup.Section>
+            ) : null}
           </FieldGroup>
         </UniversalHost>
         {/* A sheet owns a Host; isolate its presentation from the form's native hit-testing tree. */}

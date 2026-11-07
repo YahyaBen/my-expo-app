@@ -12,6 +12,10 @@ module.exports = ({ config }) => {
     scheme: brand.scheme,
     icon: brand.icon,
     owner: brand.eas?.owner,
+    updates: {
+      ...config.updates,
+      url: brand.eas?.projectId ? `https://u.expo.dev/${brand.eas.projectId}` : undefined,
+    },
     ios: {
       ...config.ios,
       icon: brand.ios.icon ?? brand.icon,

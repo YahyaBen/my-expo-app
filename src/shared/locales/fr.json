@@ -2,8 +2,6 @@
   "home": {
     "eyebrow": "UN PEU D’INSPIRATION, CHAQUE JOUR",
     "search": "Rechercher des récits, des lieux…",
-    "quickActions": "FAITES COMME CHEZ VOUS",
-    "explore": "Explorer",
     "savedCount": "Favoris · {{count}}",
     "featured": "À la une aujourd’hui",
     "editorsPick": "Notre sélection",
@@ -32,6 +30,44 @@
       "nature": "Nature",
       "spaces": "Espaces",
       "coast": "Au bord de l’eau"
+    }
+  },
+  "updates": {
+    "title": "Mises à jour",
+    "installed": "Version installée",
+    "installedVersion": "Version {{version}} (build {{build}})",
+    "unknown": "Inconnue",
+    "improvements": "Améliorations de l’app",
+    "storeBuild": "Build {{version}}",
+    "storeVersion": "Version {{version}}",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "check": "Rechercher des mises à jour",
+    "checking": "Recherche de mises à jour…",
+    "openingStore": "Ouverture de la boutique…",
+    "updateApp": "Mettre à jour l’app",
+    "downloading": "Téléchargement…",
+    "restarting": "Redémarrage…",
+    "restart": "Redémarrer pour appliquer",
+    "download": "Télécharger les améliorations",
+    "later": "Plus tard",
+    "newVersion": "Une nouvelle version est disponible",
+    "improvementsReady": "De nouvelles améliorations sont disponibles",
+    "storeHint": "Mettez l’app à jour depuis votre boutique pour obtenir la dernière version.",
+    "downloadHint": "Téléchargez les dernières améliorations. Vous pourrez redémarrer quand vous le souhaitez.",
+    "restartHint": "Vos améliorations sont prêtes. Redémarrez l’app pour les appliquer.",
+    "status": {
+      "unchecked": "Pas encore vérifié",
+      "current": "À jour",
+      "available": "Mise à jour disponible",
+      "ready": "Prêt à redémarrer",
+      "unavailable": "Indisponible dans cette version",
+      "error": "Vérification impossible. Réessayez."
+    },
+    "errors": {
+      "download": "Impossible de télécharger les améliorations. Veuillez réessayer.",
+      "restart": "Impossible de redémarrer l’app. Veuillez réessayer.",
+      "store": "Impossible d’ouvrir la mise à jour en boutique. Veuillez réessayer."
     }
   },
   "common": {
