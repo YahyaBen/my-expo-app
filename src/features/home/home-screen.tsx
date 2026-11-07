@@ -444,7 +444,7 @@ function QuickActions({
           >
             <Column spacing={8} alignment="center">
               <Icon name={action.icon} size={22} />
-              <Text textStyle={{ fontSize: 13, textAlign: 'center' }}>{action.label}</Text>
+              <Text textStyle={{ textAlign: 'center' }}>{action.label}</Text>
             </Column>
           </ButtonContent>
         </Column>
