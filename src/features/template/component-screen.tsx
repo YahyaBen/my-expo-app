@@ -136,9 +136,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
             <List testID="component-list">{rows}</List>
           ) : (
             <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
-              <FieldGroup.Section style={{ backgroundColor: 'red' }} title={title}>
-                {rows}
-              </FieldGroup.Section>
+              <FieldGroup.Section title={title}>{rows}</FieldGroup.Section>
             </FieldGroup>
           )}
         </UniversalHost>
