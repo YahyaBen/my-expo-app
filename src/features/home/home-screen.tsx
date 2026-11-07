@@ -2,9 +2,7 @@ import {
   Badge,
   BottomSheet,
   ButtonContent,
-  Chip,
   Column,
-  EmptyState,
   Icon,
   PageScreen,
   PageSection,
@@ -13,7 +11,6 @@ import {
   ScrollView,
   StackedCarousel,
   StoryList,
-  TextInput,
   UniversalTextContent,
   nativeFillWidth,
   nativeRowWeight,
@@ -23,17 +20,13 @@ import {
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Keyboard, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
-import { homeCategories, homeStories, type HomeCategory, type HomeStory } from './home-stories';
+import { homeStories, type HomeStory } from './home-stories';
 
 const icons = {
-  search: Icon.select({ ios: 'magnifyingglass', android: 'search' }),
-  clear: Icon.select({ ios: 'xmark.circle.fill', android: 'cancel' }),
-  bookmark: Icon.select({ ios: 'bookmark', android: 'bookmark_border' }),
-  saved: Icon.select({ ios: 'bookmark.fill', android: 'bookmark' }),
   components: Icon.select({ ios: 'square.grid.2x2', android: 'widgets' }),
   photo: Icon.select({ ios: 'photo', android: 'image' }),
 };
@@ -44,6 +37,7 @@ const storyPhotos: readonly PhotoItem[] = homeStories.map((story) => ({
   label: story.title,
 }));
 const latestPhotos = storyPhotos.slice(1);
+const recommendationPreviewCount = 6;
 
 /** Product-style sample home, composed in the existing native page and dock. */
 export default function HomeScreen({
@@ -60,92 +54,39 @@ export default function HomeScreen({
     Math.min(width - insets.left - insets.right, screenContentMaxWidth) - 32,
   );
   const compact = contentWidth < 340 || fontScale > 1.3;
-  const tileWidth = compact ? contentWidth : (contentWidth - 16) / 2;
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<HomeCategory>('all');
-  const [savedIds, setSavedIds] = useState<readonly string[]>([]);
-  const [savedOnly, setSavedOnly] = useState(false);
   const [selectedStory, setSelectedStory] = useState<HomeStory>(homeStories[0]);
   const [storyOpen, setStoryOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [latestIndex, setLatestIndex] = useState(0);
-  const query = search.trim().toLocaleLowerCase();
-  const filteredStories = homeStories.filter(
-    (story) =>
-      (!savedOnly || savedIds.includes(story.id)) &&
-      (category === 'all' || story.category === category) &&
-      (!query ||
-        `${story.title} ${story.description} ${t(`home.categories.${story.category}`)}`
-          .toLocaleLowerCase()
-          .includes(query)),
-  );
-  const browsingCollection = query.length > 0 || savedOnly;
-  const recommended = showAll || browsingCollection ? filteredStories : filteredStories.slice(0, 2);
+  const recommended = showAll ? homeStories : homeStories.slice(0, recommendationPreviewCount);
   const latest = homeStories[latestIndex + 1];
 
   function openStory(story: HomeStory) {
-    Keyboard.dismiss();
     setSelectedStory(story);
     setStoryOpen(true);
-  }
-
-  function toggleSaved(story: HomeStory) {
-    setSavedIds((current) =>
-      current.includes(story.id) ? current.filter((id) => id !== story.id) : [...current, story.id],
-    );
-  }
-
-  function resetFilters() {
-    setSearch('');
-    setCategory('all');
-    setSavedOnly(false);
-    setShowAll(false);
   }
 
   return (
     <PageScreen tab title={title} showBack={showBack}>
       <PageSection testID="template-wireframe" spacing={24}>
-        {!browsingCollection ? (
-          <Column spacing={8} modifiers={nativeFillWidth}>
-            <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
-              {t('home.eyebrow')}
-            </UniversalTextContent>
-            <UniversalTextContent
-              variant="heading"
-              fontSize={34}
-              fontWeight="700"
-              testID="home-title"
-            >
-              {'Lorem ipsum,\ndolor sit amet.'}
-            </UniversalTextContent>
-            <UniversalTextContent variant="body" tone="muted">
-              {'Consectetur adipiscing elit. Ut enim ad minim veniam.'}
-            </UniversalTextContent>
-          </Column>
-        ) : null}
+        <Column spacing={8} modifiers={nativeFillWidth}>
+          <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
+            {t('home.eyebrow')}
+          </UniversalTextContent>
+          <UniversalTextContent
+            variant="heading"
+            fontSize={34}
+            fontWeight="700"
+            testID="home-title"
+          >
+            {'Lorem ipsum,\ndolor sit amet.'}
+          </UniversalTextContent>
+          <UniversalTextContent variant="body" tone="muted">
+            {'Consectetur adipiscing elit. Ut enim ad minim veniam.'}
+          </UniversalTextContent>
+        </Column>
 
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          autoCapitalize="none"
-          returnKeyType="search"
-          placeholder={t('home.search')}
-          accessibilityLabel={t('home.search')}
-          leftIcon={icons.search}
-          rightIcon={search ? icons.clear : undefined}
-          onRightIconPress={() => setSearch('')}
-          rightIconAccessibilityLabel={t('query.clearSearch')}
-          testID="home-search"
-        />
-
-        {!browsingCollection ? (
-          <FeaturedStories
-            width={contentWidth}
-            savedIds={savedIds}
-            onOpen={openStory}
-            onToggleSaved={toggleSaved}
-          />
-        ) : null}
+        <FeaturedStories width={contentWidth} onOpen={openStory} />
       </PageSection>
 
       <PageSection
@@ -155,14 +96,12 @@ export default function HomeScreen({
       >
         <Row alignment="center" spacing={8} modifiers={nativeFillWidth}>
           <Column spacing={4} modifiers={nativeRowWeight}>
-            <UniversalTextContent variant="title">
-              {t(savedOnly ? 'home.savedStories' : 'home.forYou')}
-            </UniversalTextContent>
+            <UniversalTextContent variant="title">{t('home.forYou')}</UniversalTextContent>
             <UniversalTextContent variant="caption" tone="muted">
-              {t('home.collectionCount', { count: filteredStories.length })}
+              {t('home.collectionCount', { count: homeStories.length })}
             </UniversalTextContent>
           </Column>
-          {!browsingCollection && filteredStories.length > 2 ? (
+          {homeStories.length > recommendationPreviewCount ? (
             <ButtonContent
               variant="link"
               size="sm"
@@ -173,86 +112,12 @@ export default function HomeScreen({
           ) : null}
         </Row>
 
-        <ScrollView
-          direction="horizontal"
-          showsIndicators={false}
-          style={{ width: contentWidth }}
-          testID="home-category-filters"
-        >
-          <Row spacing={8} alignment="center">
-            <Chip
-              variant="filter"
-              label={t('home.savedCount', { count: savedIds.length })}
-              selected={savedOnly}
-              onPress={() => setSavedOnly((value) => !value)}
-              testID="home-filter-saved"
-            />
-            {homeCategories.map((id) => (
-              <Chip
-                key={id}
-                variant="filter"
-                label={t(`home.categories.${id}`)}
-                selected={category === id}
-                onPress={() => setCategory(id)}
-                testID={`home-category-${id}`}
-              />
-            ))}
-          </Row>
-        </ScrollView>
-
-        {recommended.length === 0 ? (
-          <EmptyState
-            icon={savedOnly ? icons.bookmark : icons.search}
-            title={t(savedOnly ? 'home.noSaved' : 'home.noResults')}
-            description={t(savedOnly ? 'home.noSavedHint' : 'home.noResultsHint')}
-            primaryAction={{
-              label: t('home.exploreAll'),
-              onPress: resetFilters,
-              testID: 'home-reset-filters',
-            }}
-            testID="home-empty"
-          />
-        ) : (
-          <Column spacing={24} modifiers={nativeFillWidth}>
-            {Array.from({ length: Math.ceil(recommended.length / (compact ? 1 : 2)) }, (_, row) => (
-              <Row key={row} spacing={16} modifiers={nativeFillWidth}>
-                {recommended
-                  .slice(row * (compact ? 1 : 2), (row + 1) * (compact ? 1 : 2))
-                  .map((story) => (
-                    <Column key={story.id} spacing={10} style={{ width: tileWidth }}>
-                      <HomePhoto
-                        photoId={story.photoId}
-                        width={tileWidth}
-                        height={compact ? 200 : 148}
-                        testID={`home-photo-${story.id}`}
-                      />
-                      <UniversalTextContent variant="caption" tone="muted">
-                        {t(`home.categories.${story.category}`)}
-                      </UniversalTextContent>
-                      <UniversalTextContent variant="subtitle">{story.title}</UniversalTextContent>
-                      <Row alignment="center" spacing={4} modifiers={nativeFillWidth}>
-                        <Column modifiers={nativeRowWeight}>
-                          <ButtonContent
-                            variant="link"
-                            size="sm"
-                            label={t('common.details')}
-                            onPress={() => openStory(story)}
-                            testID={`home-story-${story.id}`}
-                          />
-                        </Column>
-                        <SaveButton
-                          story={story}
-                          saved={savedIds.includes(story.id)}
-                          onPress={() => toggleSaved(story)}
-                          testID={`home-save-${story.id}`}
-                        />
-                      </Row>
-                    </Column>
-                  ))}
-              </Row>
-            ))}
-          </Column>
-        )}
+        <StoryGrid
+          stories={recommended}
+          width={contentWidth}
+          compact={compact}
+          onOpen={openStory}
+        />
       </PageSection>
 
       <PageSection spacing={20} style={{ paddingVertical: 24 }} testID="home-latest">
@@ -339,13 +204,6 @@ export default function HomeScreen({
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.'
               }
             </UniversalTextContent>
-            <ButtonContent
-              variant={savedIds.includes(selectedStory.id) ? 'secondary' : 'primary'}
-              fullWidth
-              label={t(savedIds.includes(selectedStory.id) ? 'home.removeSaved' : 'home.saveStory')}
-              onPress={() => toggleSaved(selectedStory)}
-              testID="home-story-toggle-save"
-            />
           </Column>
         </ScrollView>
       </BottomSheet>
@@ -353,17 +211,59 @@ export default function HomeScreen({
   );
 }
 
+function StoryGrid({
+  stories,
+  width,
+  compact,
+  onOpen,
+}: Readonly<{
+  stories: readonly HomeStory[];
+  width: number;
+  compact: boolean;
+  onOpen: (story: HomeStory) => void;
+}>) {
+  const { t } = useTranslation();
+  const columns = compact ? 1 : 2;
+  const tileWidth = compact ? width : (width - 16) / 2;
+
+  return (
+    <Column spacing={24} modifiers={nativeFillWidth}>
+      {Array.from({ length: Math.ceil(stories.length / columns) }, (_, row) => (
+        <Row key={row} spacing={16} modifiers={nativeFillWidth}>
+          {stories.slice(row * columns, (row + 1) * columns).map((story) => (
+            <Column key={story.id} spacing={10} style={{ width: tileWidth }}>
+              <HomePhoto
+                photoId={story.photoId}
+                width={tileWidth}
+                height={compact ? 200 : 148}
+                testID={`home-photo-${story.id}`}
+              />
+              <UniversalTextContent variant="caption" tone="muted">
+                {t(`home.categories.${story.category}`)}
+              </UniversalTextContent>
+              <UniversalTextContent variant="subtitle">{story.title}</UniversalTextContent>
+              <ButtonContent
+                variant="link"
+                size="sm"
+                label={t('common.details')}
+                onPress={() => onOpen(story)}
+                testID={`home-story-${story.id}`}
+              />
+            </Column>
+          ))}
+        </Row>
+      ))}
+    </Column>
+  );
+}
+
 /** Keep the caption and actions in the same selection lifecycle as the carousel. */
 function FeaturedStories({
   width,
-  savedIds,
   onOpen,
-  onToggleSaved,
 }: Readonly<{
   width: number;
-  savedIds: readonly string[];
   onOpen: (story: HomeStory) => void;
-  onToggleSaved: (story: HomeStory) => void;
 }>) {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
@@ -396,45 +296,14 @@ function FeaturedStories({
           {story.description}
         </UniversalTextContent>
       </Column>
-      <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
-        <Column modifiers={nativeRowWeight}>
-          <ButtonContent
-            variant="primary"
-            fullWidth
-            label={t('home.readStory')}
-            onPress={() => onOpen(story)}
-            testID="home-featured-open"
-          />
-        </Column>
-        <SaveButton
-          story={story}
-          saved={savedIds.includes(story.id)}
-          onPress={() => onToggleSaved(story)}
-          testID="home-featured-save"
-        />
-      </Row>
+      <ButtonContent
+        variant="primary"
+        fullWidth
+        label={t('home.readStory')}
+        onPress={() => onOpen(story)}
+        testID="home-featured-open"
+      />
     </Column>
-  );
-}
-
-function SaveButton({
-  story,
-  saved,
-  onPress,
-  testID,
-}: Readonly<{ story: HomeStory; saved: boolean; onPress: () => void; testID: string }>) {
-  const { t } = useTranslation();
-  return (
-    <ButtonContent
-      variant="tertiary"
-      circular
-      size="sm"
-      accessibilityLabel={t(saved ? 'home.unsaveNamed' : 'home.saveNamed', { title: story.title })}
-      onPress={onPress}
-      testID={testID}
-    >
-      <Icon name={saved ? icons.saved : icons.bookmark} size={20} />
-    </ButtonContent>
   );
 }
 

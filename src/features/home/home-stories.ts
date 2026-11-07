@@ -1,11 +1,8 @@
-export const homeCategories = ['all', 'nature', 'spaces', 'coast'] as const;
-export type HomeCategory = (typeof homeCategories)[number];
-
 export type HomeStory = {
   id: string;
   title: string;
   description: string;
-  category: Exclude<HomeCategory, 'all'>;
+  category: 'nature' | 'spaces' | 'coast';
   photoId: number;
   minutes: number;
 };
@@ -47,5 +44,76 @@ export const homeStories: readonly HomeStory[] = [
     category: 'nature',
     photoId: 1015,
     minutes: 6,
+  },
+  {
+    id: 'veniam',
+    title: 'Ut enim ad minim veniam.',
+    description:
+      'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    category: 'nature',
+    photoId: 1016,
+    minutes: 4,
+  },
+  {
+    id: 'commodo',
+    title: 'Aliquip ex ea commodo.',
+    description:
+      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.',
+    category: 'coast',
+    photoId: 1022,
+    minutes: 5,
+  },
+  {
+    id: 'voluptate',
+    title: 'In voluptate velit esse.',
+    description: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+    category: 'nature',
+    photoId: 1035,
+    minutes: 3,
+  },
+  {
+    id: 'cillum',
+    title: 'Cillum dolore eu fugiat.',
+    description:
+      'Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.',
+    category: 'nature',
+    photoId: 1036,
+    minutes: 6,
+  },
+  {
+    id: 'perspiciatis',
+    title: 'Sed ut perspiciatis unde.',
+    description:
+      'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.',
+    category: 'nature',
+    photoId: 1039,
+    minutes: 4,
+  },
+  {
+    id: 'inventore',
+    title: 'Veritatis et quasi architecto.',
+    description:
+      'Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae.',
+    category: 'spaces',
+    photoId: 1040,
+    minutes: 5,
+  },
+  {
+    id: 'voluptas',
+    title: 'Omnis voluptas assumenda.',
+    description:
+      'Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.',
+    category: 'coast',
+    photoId: 1041,
+    minutes: 3,
+  },
+  {
+    id: 'tempora',
+    title: 'Quis autem vel eum iure.',
+    description:
+      'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.',
+    category: 'nature',
+    photoId: 1043,
+    minutes: 4,
   },
 ];

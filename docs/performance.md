@@ -15,6 +15,12 @@ clean up React effects; they do not establish native idle behavior. Settings is
 not prerendered or imported before that first visit. Compare retained memory and
 hidden native work as well as tab-switch frame costs.
 
+The root stack enables [Expo Router Activity](https://docs.expo.dev/router/advanced/react-activity/)
+on iOS and Android. A route hides when two screens are above it, preserving the
+previous scene for Back transitions. Hidden routes retain state and clean up
+effects until revealed. SDK 58's native stack does not use `freezeOnBlur`; Activity
+owns this lifecycle. Native transition and resource measurements remain pending.
+
 Current code isolates palette, appearance, header and motion subscriptions,
 virtualizes carousel images, supports bounded grid rows and limits stacked
 indicators. Controlled inputs reconcile changed text; OTP errors derive from

@@ -4,7 +4,7 @@ import { Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
-import { Appearance, Platform, View } from 'react-native';
+import { Appearance, View } from 'react-native';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
 import { storybookEnabled } from '@/config/developer-tools';
@@ -148,8 +148,8 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
   return (
     <ThemeProvider value={theme}>
       <Stack
-        // Keep the previous scene laid out for Back; hide deeper Android scenes.
-        activityEnabled={Platform.OS === 'android'}
+        // Keep the previous scene laid out for Back; hide deeper scenes on iOS and Android.
+        activityEnabled
         screenOptions={{
           ...stackMotionOptions(reducedMotion),
           contentStyle: { backgroundColor: colors.background, direction },
