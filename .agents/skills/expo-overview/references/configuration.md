@@ -25,8 +25,8 @@ for operator commands. Keep configuration in these existing owners:
   profiles select their own manifest explicitly; never reuse another client's project.
 - Native modules read only public metadata. Do not import Node resolution,
   filesystem, full manifests or private environment values into the app.
-- Presentation selects registered palette, heading font, launch artwork, initial
-  header style and launch mode. Saved user preferences retain precedence where
+- Presentation selects registered palette, heading font, launch artwork and
+  launch mode. Saved user preferences retain precedence where
   supported. Add manifest fields only when an implementation consumes them.
 - Register palettes in `src/constants/themes/` and the resolver's supported IDs.
   The root brand palette is fixed; isolated previews do not persist changes.

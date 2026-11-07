@@ -30,18 +30,18 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   story renders that same feature with isolated appearance; it adds no parallel
   preference owner.
 
-## Header and motion preferences
+## Motion preferences
 
-- `appHeaderMotion` and `appReducedMotion` use the existing serialized preference
-  writes. `persistHeaderMotion` restores both and joins launch readiness.
-- UX exposes Default, Dunes, Ribbon, Rain, Halloween, Ramadan and New Year in
-  Settings. Seasonal choices are available year-round. Default uses rectangular
-  blur. Use `headerBlur={false}` to disable blur on a frame. Old `appHeaderBlur`
-  values are ignored.
+- `appReducedMotion` uses the existing serialized preference writes.
+  Root `persistMotion` restores it and exposes `motionReady` for launch readiness
+  and controls. Isolated previews keep motion preferences in memory.
+- Headers use the shared rectangular blur. There is no saved header style or
+  Settings picker. Obsolete `appHeaderMotion` and `appHeaderBlur` values are
+  ignored; do not add startup storage work to migrate them.
 - Reduce Motion observes the live system value until explicitly selected.
   Use `useAppReducedMotion` / `useMotionEnabled`; retain activity checks.
-- Keep `ThemePicker` local to Text previews and `HeaderMotionPicker` local to
-  Settings. Storybook and Text preview providers must not persist root preferences.
+- Keep `ThemePicker` local to Text previews. Storybook and Text preview providers
+  must not persist root preferences.
 
 Verify restart restoration, failed storage, live System changes,
 open language-sheet interaction and RTL on native devices.

@@ -106,7 +106,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it. Changing tabs gives a subtle tick; reselecting the active tab stays silent. The center action uses stronger feedback. The disabled action stays silent and does not increment its count. Enable longContent to check scrolling and the final action clear the raised button, including with zero bottom inset.',
+          'A subtle theme-derived gradient fills the dock, with a fine accent highlight along its top edge. Check UX in light/dark; RTL mirrors the surface gradient. Tap all four destinations and the center action: decorative gradients must never capture touches. Selected icons retain their rounded highlight and labels stay outside it. Selecting a tab gently scales its icon over 160 ms and gives a subtle tick; reselecting the active tab stays still and silent. Rapidly change tabs to check interrupted animations. Enable system/app Reduce Motion to verify icons stay static. The center action uses stronger feedback. The disabled action stays silent and does not increment its count. Enable longContent to check scrolling and the final action clear the raised button, including with zero bottom inset.',
       },
     },
   },

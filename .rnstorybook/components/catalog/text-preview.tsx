@@ -111,7 +111,6 @@ function TextPreviewTheme({ children }: Readonly<PropsWithChildren>) {
     <ThemePreferencesProvider
       initialTheme={preferences.themeId}
       initialColorScheme={preferences.colorScheme}
-      initialHeaderShape={preferences.headerShape}
       initialReducedMotion={preferences.reducedMotion}
       allowThemeSelection
     >

@@ -1,15 +1,18 @@
 import { Icon } from '../icon/icon';
 import { Column, Text } from '@expo/ui/jetpack-compose';
 import {
+  animated,
   background,
   clip,
   fillMaxWidth,
   height,
+  graphicsLayer,
   selectable,
   semantics,
   Shapes,
   size,
   testID as nativeTestID,
+  tween,
 } from '@expo/ui/jetpack-compose/modifiers';
 import type { NavigationTabProps } from './navigation-tab';
 
@@ -17,11 +20,15 @@ export function NavigationTab({
   icon,
   label,
   selected,
+  motionEnabled,
   color,
   selectedBackgroundColor,
   testID,
   onPress,
 }: Readonly<NavigationTabProps>) {
+  const scale = motionEnabled
+    ? animated(selected ? 1.1 : 1, tween({ durationMillis: 160, easing: 'linearOutSlowIn' }))
+    : 1;
   return (
     <Column
       horizontalAlignment="center"
@@ -44,7 +51,12 @@ export function NavigationTab({
             background(selected ? selectedBackgroundColor : 'transparent'),
           ]}
         >
-          <Icon name={icon} size={22} color={color} />
+          <Icon
+            name={icon}
+            size={22}
+            color={color}
+            modifiers={[graphicsLayer({ scaleX: scale, scaleY: scale })]}
+          />
         </Column>
         <Text
           color={color}

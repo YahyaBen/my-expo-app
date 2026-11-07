@@ -5,8 +5,8 @@ description: Compose page frames, sections and header insets without duplicating
 
 # Pages
 
-Import `PageScreen`, `PageFrame`, `PageHeader`, `PageSection`,
-`PageMotionOverlay` and `pageFormModifiers` from `@components/ui`.
+Import `PageScreen`, `PageFrame`, `PageHeader`, `PageSection` and
+`pageFormModifiers` from `@components/ui`.
 Source: [page/](../../../src/components/ui/page/).
 
 ## Frame and content
@@ -21,7 +21,7 @@ Source: [page/](../../../src/components/ui/page/).
 - Wrap ordinary content in `PageSection`: 16-point symmetric padding and gap.
   Use `inset={false}` when full-width content owns its gutters.
 - Native content Hosts cap at `screenContentMaxWidth` (640 points), centered on
-  wide displays. Keep frame backgrounds, header blur and artwork edge-to-edge.
+  wide displays. Keep frame backgrounds and header blur edge-to-edge.
 - Bounded Android page/form Hosts use `useViewportSizeMeasurement` to supply a
   nonzero initial Compose proposal before Yoga settles their viewport. Keep
   explicit bounds and the width cap; do not enable it for intrinsic inline Hosts.
@@ -33,8 +33,9 @@ Source: [page/](../../../src/components/ui/page/).
 
 ## Header
 
-Titled frames blur underlying content by default. `headerBlur={false}` opts out.
-Artwork eligibility and saved motion choice are independent of blur.
+Titled frames use one rectangular native blur backdrop by default.
+`headerBlur={false}` opts out. Header geometry has no decorative variants or
+saved style preference.
 
 `headerMode` selects one layout: `fixed` (default) reserves measured header
 height, `scroll` callers put `usePageHeaderInset()` inside scroll content, and
@@ -50,8 +51,8 @@ for controls such as maps. Untitled `scroll` frames reserve only the top safe ar
 - Preserve draft, scroll and native content identity when title presence, blur or
   header mode changes. The capture target stays mounted in every mode.
 
-Read [header rendering and motion](references/page-guide.md) when changing blur,
-artwork or retained-screen behavior. Check actual native Back round trips,
+Read [header rendering](references/page-guide.md) when changing blur or
+retained-screen behavior. Check actual native Back round trips,
 safe-area changes, RTL, large text and shield hit testing using
 [page-header stories](../../../.rnstorybook/stories/components/page-header.stories.tsx).
 Static checks do not establish native blur or gesture behavior.

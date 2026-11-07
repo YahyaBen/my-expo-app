@@ -40,9 +40,9 @@
 - Reserve `textDisabled` for unavailable content; `muted` remains readable
   supporting text. Pair `errorContainer` with `onErrorContainer`, rather than
   reusing filled-action `onError` or the ordinary page foreground.
-- `design.header.artwork` controls colored waves, not header blur or launch
-  artwork. Preserve title clearance, safe areas and touch shielding when artwork
-  is absent. `headerBlur={false}` remains an explicit opt-out.
+- Header blur has one rectangular native presentation, independent of theme
+  tokens and launch artwork. Preserve title clearance, safe areas and touch
+  shielding. `headerBlur={false}` remains an explicit opt-out.
 
 Preview changes with production tokens, explicit light/dark state and native
 controls. Check rendered contrast and override behavior; token names and seed

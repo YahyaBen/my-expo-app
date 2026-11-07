@@ -1,9 +1,9 @@
-import { AlertHost, LaunchScreen, PageMotionOverlay } from '@components/ui';
+import { AlertHost, LaunchScreen } from '@components/ui';
 import { useFonts } from 'expo-font';
 import { Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, View } from 'react-native';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
@@ -17,8 +17,7 @@ import { StartupLayoutContext } from '@/context/startup-layout.context';
 import {
   ThemePreferencesProvider,
   useAppearanceSettings,
-  useHeaderMotionReady,
-  useHeaderSettings,
+  useMotionReady,
 } from '@/context/theme.context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAppActive, useAppReducedMotion } from '@/hooks/use-motion-enabled';
@@ -51,8 +50,7 @@ export default function RootLayout() {
         <LanguageProvider>
           <ThemePreferencesProvider
             initialTheme={brand.presentation.palette}
-            initialHeaderShape={brand.presentation.header}
-            persistHeaderMotion
+            persistMotion
             persistAppearance
           >
             <RootLayoutContent fontsReady={fontsReady} />
@@ -66,7 +64,7 @@ export default function RootLayout() {
 function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const devicePreferencesReady = useDevicePreferencesReady();
   const { colorScheme: appearance, appearanceReady } = useAppearanceSettings();
-  const headerMotionReady = useHeaderMotionReady();
+  const motionReady = useMotionReady();
   const { ready: languageReady } = useLanguage();
   const colorScheme = useColorScheme();
   const { colors } = useAppTheme(colorScheme);
@@ -77,7 +75,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const finishLaunchScreen = useCallback(() => setShowLaunchScreen(false), []);
   const revealLaunchScreen = useCallback(() => SplashScreen.hide(), []);
   const preferencesReady =
-    appearanceReady && languageReady && headerMotionReady && devicePreferencesReady;
+    appearanceReady && languageReady && motionReady && devicePreferencesReady;
   const resourcesReady = fontsReady && preferencesReady;
   const interactive = resourcesReady && initialLayoutReady && !showLaunchScreen;
 
@@ -102,13 +100,11 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
         style={{ flex: 1, backgroundColor: colors.background }}
       >
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        <AppPageMotionOverlay animate={!showLaunchScreen}>
-          <PerformanceReadyContext.Provider value={interactive}>
-            <StartupLayoutContext.Provider value={onInitialLayout}>
-              <AppNavigator ready={resourcesReady} />
-            </StartupLayoutContext.Provider>
-          </PerformanceReadyContext.Provider>
-        </AppPageMotionOverlay>
+        <PerformanceReadyContext.Provider value={interactive}>
+          <StartupLayoutContext.Provider value={onInitialLayout}>
+            <AppNavigator ready={resourcesReady} />
+          </StartupLayoutContext.Provider>
+        </PerformanceReadyContext.Provider>
         {showLaunchScreen && appearanceReady ? (
           <LaunchScreen
             mode={brand.presentation.launch}
@@ -121,19 +117,6 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
         <AppUpdatePrompt ready={interactive && active} />
       </View>
     </AppUpdatesProvider>
-  );
-}
-
-/** Header choices update decoration without rebuilding the navigation children. */
-function AppPageMotionOverlay({
-  children,
-  animate,
-}: Readonly<PropsWithChildren<{ animate: boolean }>>) {
-  const { headerShape } = useHeaderSettings();
-  return (
-    <PageMotionOverlay shape={headerShape} animate={animate}>
-      {children}
-    </PageMotionOverlay>
   );
 }
 

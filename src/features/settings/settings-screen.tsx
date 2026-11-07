@@ -31,7 +31,6 @@ import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { HeaderMotionPicker } from './header-motion-picker';
 import { SettingsPickerRow } from './settings-picker-row';
 import { useDeviceLocation } from './use-device-location';
 import { useDevicePermissions } from './use-device-permissions';
@@ -79,7 +78,7 @@ function SettingsPage({
 }>) {
   const { t } = useTranslation();
   const direction = useLayoutDirection();
-  const { colors, design } = useAppTheme();
+  const { colors } = useAppTheme();
   const { width, height: windowHeight, fontScale } = useWindowDimensions();
   const stackPickers = Platform.OS === 'android' && (width < 360 || fontScale > 1.2);
   const languageListHeight = Math.min(320, windowHeight * 0.45);
@@ -161,11 +160,6 @@ function SettingsPage({
                 >
                   <Text>{t('settings.appIcon')}</Text>
                 </ListItem.FieldRow>
-              ) : null}
-              {design.header.artwork ? (
-                <SettingsPickerRow label={t('settings.headerMotion')} stacked={stackPickers}>
-                  <HeaderMotionPicker />
-                </SettingsPickerRow>
               ) : null}
               <ReducedMotionControl />
               <ListItem.FieldRow
@@ -462,14 +456,14 @@ function SettingsPage({
 /** Motion changes update this control without rebuilding the settings form. */
 function ReducedMotionControl() {
   const { t } = useTranslation();
-  const { setReducedMotion, headerMotionReady } = useMotionSettings();
+  const { setReducedMotion, motionReady } = useMotionSettings();
   const reducedMotion = useAppReducedMotion();
   return (
     <Switch
       label={t('settings.reduceMotion')}
       value={reducedMotion}
       onValueChange={setReducedMotion}
-      disabled={!headerMotionReady}
+      disabled={!motionReady}
       modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
       testID="app-settings-reduce-motion"
     />

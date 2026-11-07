@@ -1,5 +1,6 @@
 {
   "home": {
+    "ramadanGreeting": "Ramadan Kareem",
     "eyebrow": "A LITTLE INSPIRATION, EVERY DAY",
     "featured": "Featured today",
     "editorsPick": "Editor's pick",
@@ -217,6 +218,7 @@
     "title": "App Settings",
     "appearance": "Appearance",
     "appIcon": "App icon",
+    "appIconRed": "Red",
     "appIconHint": "Swipe to choose an icon, then tap Apply.",
     "appIconApply": "Apply",
     "appIconCurrent": "This is your current icon.",
@@ -230,16 +232,6 @@
     "invitationsDescription": "Friend requests and invitations to a group.",
     "about": "About",
     "appVersion": "App version",
-    "headerMotion": "Header motion",
-    "headerShapes": {
-      "default": "Default",
-      "dunes": "Dunes",
-      "ribbon": "Ribbon",
-      "rain": "Rain",
-      "halloween": "Halloween",
-      "ramadan": "Ramadan",
-      "new-year": "New Year"
-    },
     "reduceMotion": "Reduce motion",
     "location": {
       "title": "Location",

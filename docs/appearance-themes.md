@@ -40,28 +40,25 @@ mobile type ramp and native geometry. Native lists, toggles, pickers, padding
 and interaction feedback remain platform-owned.
 
 `ThemePreferencesProvider` remains the single state and persistence owner. Its
-palette, appearance, header and motion subscriptions have independent values:
+palette, appearance and motion subscriptions have independent values:
 `useAppTheme` reads palette and appearance, while animation hooks read motion.
-Header or motion selections do not invalidate color-only subscriptions. Startup
-reads header/motion hydration separately from their selected values; header
-decoration and native transition settings subscribe below the root layout.
+Motion selections do not invalidate color-only subscriptions. Startup reads
+motion hydration separately from its selected value; native transition settings
+subscribe below the root layout.
 Full `useThemePreferences` / `useThemeSettings` snapshots are reserved for seeding
-isolated previews. Controls use their matching palette, appearance, header or
+isolated previews. Controls use their matching palette, appearance or
 motion settings hook.
 
 In **Components/Theme Tokens/Playground**, choose `example: subscriptions` to
 inspect independent preference updates. After startup settles, the development
-console logs `[theme-subscription]` commits for each probe. Header changes should
-commit only the header probe; motion changes commit motion and motion-gate;
-appearance changes commit appearance and colors. The fixed palette probe stays
+console logs `[theme-subscription]` commits for each probe. Motion changes commit
+motion and motion-gate; appearance changes commit appearance and colors. The fixed palette probe stays
 unchanged. Probe logs count their component commits, not descendant native style
 updates, and do not establish device frame-rate improvements.
 
-Titled page frames blur the content beneath their headers by default. The title
-and Back remain sharp above that native backdrop. In **Settings → Appearance →
-Header motion**, choose Default, Dunes, Ribbon, Rain, Halloween, Ramadan or
-New Year. The selected effect applies to shared page headers and is saved across
-app restarts. Seasonal styles are available year-round.
+Titled page frames use one rectangular native blur backdrop. The title
+and Back remain sharp above it. Headers have no decorative variants or saved
+style selection.
 Explicit `headerBlur={false}` still opts a frame out of blur, and native Reduce
 Transparency retains its existing solid-background fallback.
 Android uses the published `expo-blur` defaults for tint, intensity and reduction
@@ -79,20 +76,20 @@ send backend requests. Native font scaling, RTL, rendered contrast and keyboard
 behavior still require verification on matching iOS and Android builds.
 
 The **Wireframes/Preferences** story offers system/light/dark appearance,
-supported header effects, Reduce Motion, language, device permissions, haptic
-feedback, device location and app version. Template's Settings tab exposes that
+Reduce Motion, language, device permissions, haptic feedback, device location and
+app version. Template's Settings tab exposes that
 same page using the root's saved preferences; the app has no account screen.
 
 ## Theme values
 
 Theme values are edited directly in TypeScript:
 
-| Owner                                          | Responsibility                                                   |
-| ---------------------------------------------- | ---------------------------------------------------------------- |
-| [ux.ts](../src/constants/themes/ux.ts)         | Primitive colors and semantic light/dark palettes                |
-| [tokens.ts](../src/constants/themes/tokens.ts) | Typed color contract and derived navigation/control roles        |
-| [layout.ts](../src/constants/layout.ts)        | Shared spacing, radii and content dimensions                     |
-| [design.ts](../src/constants/themes/design.ts) | Typography presets, native shape defaults and header eligibility |
+| Owner                                          | Responsibility                                            |
+| ---------------------------------------------- | --------------------------------------------------------- |
+| [ux.ts](../src/constants/themes/ux.ts)         | Primitive colors and semantic light/dark palettes         |
+| [tokens.ts](../src/constants/themes/tokens.ts) | Typed color contract and derived navigation/control roles |
+| [layout.ts](../src/constants/layout.ts)        | Shared spacing, radii and content dimensions              |
+| [design.ts](../src/constants/themes/design.ts) | Typography presets and native shape defaults              |
 
 Components keep using the existing useAppTheme() and layout exports. Change a
 primitive color to update the roles sharing it, or change a semantic mapping for
@@ -138,8 +135,7 @@ settings. Coordinates stay in screen state and are acquired only on request.
 The existing `expo-location` native module and foreground permission configuration
 must be present in the installed development build.
 
-Settings owns its [header-effect picker](../src/features/settings/header-motion-picker.tsx). The
-shared [color-scheme control](../src/components/ui/appearance/color-scheme-control.tsx)
+The shared [color-scheme control](../src/components/ui/appearance/color-scheme-control.tsx)
 serves Settings and login.
 Its System/Light/Dark picker applies appearance changes immediately through the
 existing saved preference provider. System follows the device; explicit Light or
@@ -173,23 +169,23 @@ Selecting System again clears the app's fixed native appearance override.
 
 Missing/invalid saved values and read failures keep the initial System choice.
 Selections update the current session immediately; writes are serialized with
-the existing header/motion writes. If saving fails, the session keeps its new
+the existing motion writes. If saving fails, the session keeps its new
 appearance and the next launch reads the last successfully saved value. Pickers
 and callbacks wait for restoration, preventing a late read from replacing a new
 selection. A remounted root reads after earlier queued writes have finished.
 
 The root waits for appearance restoration before mounting its custom launch
 overlay. That overlay's first native layout hides the native splash; language,
-header/motion and the initial page frame's native layout
-govern its exit. This gates the first
-app presentation; the OS's initial native splash appearance remains native.
+motion and the initial page frame's native layout govern its exit. This gates the
+first app presentation; the OS's initial native splash appearance remains native.
 Explicit component and Host scheme overrides retain their existing priority.
 
-Language uses its existing saved provider. Header effect and the explicit motion
-choice restore before launch completion. Missing or unsupported saved header
-values use the manifest's initial style (Default for the template). Default uses
-rectangular native blur without mounting the artwork. Reduce Motion pauses the
-artwork. Persistence remains opt-in, with preview preferences held in memory.
+Language uses its existing saved provider. Root `persistMotion` restores the
+explicit `appReducedMotion` choice before launch completion and exposes
+`motionReady`. Reduce Motion follows the live system value until explicitly
+selected, and applies to the app's existing animation consumers. Persistence
+remains opt-in, with preview preferences held in memory. Obsolete `appHeaderMotion`
+values are ignored without startup migration work.
 
 Header blur strength stays fixed on both platforms. There is no numeric Settings
 control or saved blur-level preference; older `appHeaderBlur` values are ignored.

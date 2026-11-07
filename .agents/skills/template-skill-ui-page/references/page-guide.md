@@ -1,6 +1,6 @@
-# Header rendering and motion
+# Header rendering
 
-Use this reference when changing page blur, artwork or native screen retention.
+Use this reference when changing page blur or native screen retention.
 Source: [page implementation](../../../../src/components/ui/page/).
 
 ## Blur and retained screens
@@ -11,47 +11,43 @@ Source: [page implementation](../../../../src/components/ui/page/).
 - On Android, `header-effects/use-page-blur-key.ts` refreshes only the backdrop after a retained route
   regains focus and again after its incoming transition. Preserve page, content,
   target and scroll identity. Put the refresh key on `BlurView`, never on the
-  enclosing mask, Canvas or artwork: remounting those at transition end flashes.
+  page or header container.
 - Stack transition events contain data.closing; tab events may omit data.
   Read data?.closing, coalesce same-frame events and cancel pending work on blur.
 - Ordinary rerenders and header resizing must not refresh the backdrop. Blur
   lifecycle belongs to the backdrop; PageFrame keeps its capture target mounted.
-- iOS rectangular headers use systemUltraThinMaterial; artwork uses SwiftUI
-  ultraThin material masked inside SwiftUI. Masking an ancestor UIKit effect
-  view disables blur. Keep the native mask explicitly sized.
-- Android uses the existing MaskedView/Skia mask and expo-blur defaults:
-  default tint, intensity 50, reduction factor 4. SDK31Plus policy uses native blur
-  on Android 12+ and translucent fallback below it.
+- Headers use one rectangular native backdrop with no mask, artwork Canvas or
+  header animation clock. iOS uses systemUltraThinMaterial. Android uses expo-blur
+  defaults: default tint, intensity 50, reduction factor 4. SDK31Plus policy uses
+  native blur on Android 12+ and translucent fallback below it.
 - iOS Reduce Transparency replaces blur with theme background. Blur ignores touches;
-  the page-local shield covers its own measured header height. Artwork geometry
-  must not expand another page's blocked area or cover untitled content.
+  the page-local shield covers its own measured header height. Untitled pages
+  have no header shield area.
 - Keep blur strength system-owned. There is no user-facing numeric blur preference.
 
-## Artwork lifecycle
+## Layout ownership
 
-- Root `PageMotionOverlay` shares style, animation and visibility settings through
-  `PageMotionContext`. It owns no drawing surface or header measurements.
-  `PageFrame` owns geometry; its `PageHeaderArtwork` owns the page-local clock,
-  paths, native blur mask and tint Canvas. They travel with the native screen.
-  Focus must not publish header height or replace another page's geometry.
-- Android's stack keeps its immediately previous scene visible to React Activity;
+- `PageFrame` owns measured header geometry and safe areas. `PageHeader` owns
+  title and Back, while `PageHeaderBackground` owns the rectangular native blur
+  and accessibility fallback. Focus does not replace another page's geometry.
+- The stack keeps its immediately previous scene visible to React Activity;
   deeper scenes can hide. Do not hide the previous scene on focus loss: Back needs
   its native layout ready throughout the transition.
-- Default uses rectangular blur. Seasonal motifs reuse the Dunes contour and
-  stay in the trailing portion of the header.
-- Theme `design.header.artwork=false` overrides saved artwork choice. Launch
-  artwork is owned separately by `launch-screen/launch-wave.tsx`.
-- Default retains provider/children identity while mounting no wave hook,
-  frame clock, canvas or SVG mask. Switching back to artwork starts a fresh phase.
-- Pausing/hiding existing artwork preserves phase. Focus, visibility, activity and
-  effective reduced motion gate `useActiveMotionTime`; retained story canvases
-  also gate motion through PerformanceReadyContext.
-- The clock runs on the UI thread, wraps after 120 seconds and clamps a delayed
-  frame's advance to 64 ms. No animation frame updates React state.
-- Skia paths use numeric builders. Only iOS surface useAnimatedProps serializes
-  SVG mask paths; Android and splash must not do so per frame.
-- Mirror artwork for RTL and keep its leading 40% level beneath title/Back.
-- Storybook-local preference providers must not access saved app preferences.
+- Header style is not a brand token or saved preference. App-wide Reduce Motion
+  remains owned by the existing motion preferences; launch artwork remains
+  independent in `launch-screen/launch-wave.tsx`.
+
+## Decorative screen artwork
+
+Home's [Ramadan banner](../../../../src/features/home/ramadan-banner.tsx) is static
+screen content in its first `PageSection`, below the default header. Its decorative
+SVG is hidden from accessibility; the translated greeting uses native text. The
+banner scrolls with content and owns no header geometry, mask or animation clock.
+
+Keep native blur, title and Back rectangular and outside decorative artwork.
+Any future mask may affect artwork alone; decoration must not change header
+measurements, capture targets or navigation lifecycle. Verify both native platforms
+before adding motion.
 
 ## Content and readiness
 
@@ -66,9 +62,9 @@ Source: [page implementation](../../../../src/components/ui/page/).
   appearing through incoming navigation scenes.
 - Use `native-back-return` with its multiline title, a scrolled page and a draft.
   Push the shorter wireframe header, then return repeatedly using both Back
-  controls. Check the transition's final frame, retained title height and mask,
-  then repeat with Default, motion paused, RTL and large text.
+  controls. Check the transition's final frame, retained title height and blur,
+  then repeat with Reduce Motion, RTL and large text.
 - Check Back round trips, retained drafts/scroll, live blur restoration, Reduce
-  Transparency, effect changes and covered/uncovered taps on both platforms.
+  Transparency, layout changes and covered/uncovered taps on both platforms.
 - Use the `change-header-style` story to toggle title presence, blur and header
   mode without resetting its native content, draft, counters or scroll state.

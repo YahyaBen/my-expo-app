@@ -41,7 +41,7 @@ export function PageFrame({
     colorScheme?: 'light' | 'dark';
     /** Fixed reserves space; scroll publishes an inset; overlay retains device insets. */
     headerMode?: PageHeaderMode;
-    /** Blur content behind titled headers by default, independently of theme artwork. */
+    /** Blur content behind titled headers by default. */
     headerBlur?: boolean;
   }>
 >) {
@@ -79,12 +79,11 @@ export function PageFrame({
         </PageHeaderInsetContext.Provider>
       </SafeAreaInsetsContext.Provider>
       {/* Android blur mounts after its capture target. Title and Back stay above it. */}
-      {title ? (
+      {headerBlur && title ? (
         <PageHeaderBackground
           blurTarget={blurTarget}
           colorScheme={colorScheme}
           height={headerHeight}
-          blur={headerBlur}
         />
       ) : null}
       <View

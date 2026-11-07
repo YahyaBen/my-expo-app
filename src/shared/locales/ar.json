@@ -1,5 +1,6 @@
 {
   "home": {
+    "ramadanGreeting": "رمضان كريم",
     "eyebrow": "قليل من الإلهام، كل يوم",
     "featured": "قصة اليوم",
     "editorsPick": "اختيار المحرر",
@@ -217,6 +218,7 @@
     "title": "إعدادات التطبيق",
     "appearance": "المظهر",
     "appIcon": "أيقونة التطبيق",
+    "appIconRed": "أحمر",
     "appIconHint": "اسحب لاختيار أيقونة، ثم اضغط على تطبيق.",
     "appIconApply": "تطبيق",
     "appIconCurrent": "هذه أيقونتك الحالية.",
@@ -230,16 +232,6 @@
     "invitationsDescription": "طلبات الصداقة والدعوات إلى مجموعة.",
     "about": "حول التطبيق",
     "appVersion": "إصدار التطبيق",
-    "headerMotion": "حركة الترويسة",
-    "headerShapes": {
-      "default": "افتراضي",
-      "dunes": "كثبان",
-      "ribbon": "شريط",
-      "rain": "مطر",
-      "halloween": "الهالوين",
-      "ramadan": "رمضان",
-      "new-year": "رأس السنة"
-    },
     "reduceMotion": "تقليل الحركة",
     "location": {
       "title": "الموقع",

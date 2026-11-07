@@ -13,21 +13,21 @@ import {
 } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 
-type AppIconChoice = 'light' | 'dark';
+const iconChoices = ['dark', 'light', 'red'] as const;
+type AppIconChoice = (typeof iconChoices)[number];
 type AppIconPhoto = PhotoItem & { id: AppIconChoice };
 
 const iconSources = {
   light: require('@assets/AppIcon-Light.icon/Assets/icon.png'),
   dark: require('@assets/AppIcon-Dark.icon/Assets/icon.png'),
+  red: require('@assets/AppIcon-Red.icon/Assets/icon.png'),
 };
 
 function loadAppIcons(): typeof import('expo-awesome-app-icon') | null {
   if (!requireOptionalNativeModule('AwesomeAppIcon')) return null;
   // eslint-disable-next-line @typescript-eslint/no-require-imports -- The package requires a matching native build at import time.
   const icons: typeof import('expo-awesome-app-icon') = require('expo-awesome-app-icon');
-  return icons.supportsAlternateIcons() && icons.getAvailableIcons().includes('light')
-    ? icons
-    : null;
+  return icons.supportsAlternateIcons() ? icons : null;
 }
 
 export function AppIconPicker() {
@@ -42,10 +42,16 @@ export function AppIconPicker() {
   const [icons] = useState(loadAppIcons);
   const [iconState, setIconState] = useState(() => icons?.getAppIconState());
   // The carousel starts on its first item; keep this order stable while applying changes.
-  const [firstChoice] = useState<AppIconChoice>(() =>
-    iconState?.selected === 'light' ? 'light' : 'dark',
-  );
-  const [draft, setDraft] = useState(firstChoice);
+  const [choices] = useState(() => {
+    const available = icons?.getAvailableIcons();
+    // Older native builds may not contain every artwork bundled in JavaScript.
+    const supported = iconChoices.filter(
+      (id) => id === 'dark' || !icons || available?.includes(id),
+    );
+    const first = supported.find((id) => id === iconState?.selected) ?? 'dark';
+    return [first, ...supported.filter((id) => id !== first)];
+  });
+  const [draft, setDraft] = useState(choices[0]);
   const [changing, setChanging] = useState(false);
   const [failed, setFailed] = useState(false);
   const changeInFlight = useRef(false);
@@ -59,12 +65,11 @@ export function AppIconPicker() {
     return () => subscription.remove();
   }, [icons, isPending]);
 
-  const selected = iconState?.selected === 'light' ? 'light' : 'dark';
-  const choices: AppIconChoice[] = [firstChoice, firstChoice === 'dark' ? 'light' : 'dark'];
+  const selected = iconChoices.find((id) => id === iconState?.selected) ?? 'dark';
   const items: AppIconPhoto[] = choices.map((id) => ({
     id,
     source: iconSources[id],
-    label: t(`appearance.${id}`),
+    label: id === 'red' ? t('settings.appIconRed') : t(`appearance.${id}`),
   }));
 
   async function applyIcon() {
@@ -73,7 +78,7 @@ export function AppIconPicker() {
     setChanging(true);
     setFailed(false);
     try {
-      await icons.setAppIcon(draft === 'light' ? 'light' : null, {
+      await icons.setAppIcon(draft === 'dark' ? null : draft, {
         deferUntilBackground: Platform.OS === 'android',
       });
       setIconState(icons.getAppIconState());

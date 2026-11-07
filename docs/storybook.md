@@ -22,7 +22,7 @@ is saved by Storybook. Use its sidebar to browse:
 - **Wireframes/Component Gallery**: complete interactive native compositions, including camera.
 - **Wireframes/Preferences**: the shared app Settings page with isolated appearance.
 - **Wireframes/Template**: the Template page, native dock and circular component menu.
-- **Motion/Transitions**: native push/Back, header styles and reduced motion.
+- **Motion/Transitions**: native push/Back, retained blur and reduced motion.
 
 `npm run start:app` explicitly disables Storybook to work on Template and its component pages.
 `EXPO_PUBLIC_STORYBOOK_ENABLED=false` also disables the catalog for a direct Expo
@@ -48,7 +48,7 @@ loader decodes their payload as Base64. Keep encoding in the preview fixture
 helper so production photo components continue to receive ordinary image sources.
 
 Existing animation families include carousels, photo grid expansion/dismissal,
-sheets, skeletons, launch reveal, decorative headers and OTP face feedback.
+sheets, skeletons, launch reveal and OTP face feedback.
 Motion respects background activity and reduced-motion settings. Inspect light,
 dark, RTL, large text, disabled controls and touch bounds on both native platforms.
 Content motion also waits for launch completion and pauses on retained unfocused
@@ -105,4 +105,4 @@ The `change-header-style` example also toggles blur, title presence and header
 layout. Enter a draft, increment its content counter and scroll before changing
 these controls; check that the same native content and draft survive each change.
 After hiding the title, check that the first content controls remain interactive;
-another retained page's artwork height must not leave an invisible touch blocker.
+the page's header shield must not leave an invisible touch blocker.

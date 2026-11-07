@@ -43,7 +43,6 @@ export * from './loading/progress-indicator';
 export * from './native/native-fill-width';
 export * from './navigation/tab-navigation-bar';
 export * from './otp-bottom-sheet/otp-bottom-sheet';
-export * from './page/header-effects/page-motion-overlay';
 export * from './page/page-form-modifiers';
 export * from './page/page-frame';
 export * from './page/page-header';

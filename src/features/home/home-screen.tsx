@@ -25,6 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
 import { homeStories, type HomeStory } from './home-stories';
+import { RamadanBanner } from './ramadan-banner';
 
 const icons = {
   components: Icon.select({ ios: 'square.grid.2x2', android: 'widgets' }),
@@ -69,6 +70,7 @@ export default function HomeScreen({
   return (
     <PageScreen tab title={title} showBack={showBack}>
       <PageSection testID="template-wireframe" spacing={24}>
+        <RamadanBanner width={contentWidth} />
         <Column spacing={8} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
             {t('home.eyebrow')}

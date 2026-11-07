@@ -17,9 +17,9 @@ const brandSchema = z.strictObject({
   scheme: z.string().regex(/^[a-z][a-z0-9+.-]*$/),
   icon: asset,
   lightIcon: asset.optional(),
+  redIcon: asset.optional(),
   presentation: z.strictObject({
     palette: z.literal('ux'),
-    header: z.enum(['default', 'dunes', 'ribbon', 'rain', 'halloween', 'ramadan', 'new-year']),
     launch: z.enum(['minimal', 'branded']),
     headingFont: z.string().refine((id) => Object.hasOwn(assets.headingFonts, id)),
     launchArtwork: z.string().refine((id) => Object.hasOwn(assets.launchArtworks, id)),
@@ -32,6 +32,7 @@ const brandSchema = z.strictObject({
     package: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+$/),
     icon: asset.optional(),
     lightIconForeground: asset.optional(),
+    redIconForeground: asset.optional(),
     googleServicesFile: asset.optional(),
     adaptiveIcon: z
       .strictObject({
@@ -103,6 +104,7 @@ function resolveBrand(env = process.env) {
 
   requireAsset(brand.icon, 'icon');
   if (brand.lightIcon) requireAsset(brand.lightIcon, 'lightIcon');
+  if (brand.redIcon) requireAsset(brand.redIcon, 'redIcon');
   if (brand.ios.icon) {
     const iconFile = brand.ios.icon.endsWith('.icon')
       ? `${brand.ios.icon}/icon.json`
@@ -112,6 +114,9 @@ function resolveBrand(env = process.env) {
   if (brand.android.icon) requireAsset(brand.android.icon, 'android.icon');
   if (brand.android.lightIconForeground) {
     requireAsset(brand.android.lightIconForeground, 'android.lightIconForeground');
+  }
+  if (brand.android.redIconForeground) {
+    requireAsset(brand.android.redIconForeground, 'android.redIconForeground');
   }
   requireAsset(brand.splash.image, 'splash.image');
   const headingFont = assets.headingFonts[brand.presentation.headingFont];

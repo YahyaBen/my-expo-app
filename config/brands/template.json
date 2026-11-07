@@ -5,9 +5,9 @@
   "scheme": "expomobiletemplate",
   "icon": "./assets/AppIcon-Dark.icon/Assets/icon.png",
   "lightIcon": "./assets/AppIcon-Light.icon/Assets/icon.png",
+  "redIcon": "./assets/AppIcon-Red.icon/Assets/icon.png",
   "presentation": {
     "palette": "ux",
-    "header": "default",
     "launch": "branded",
     "headingFont": "system",
     "launchArtwork": "bluePepe"
@@ -22,7 +22,8 @@
       "foregroundImage": "./assets/adaptive-foreground-dark.png",
       "backgroundColor": "#ffffff"
     },
-    "lightIconForeground": "./assets/adaptive-foreground-light.png"
+    "lightIconForeground": "./assets/adaptive-foreground-light.png",
+    "redIconForeground": "./assets/adaptive-foreground-red.png"
   },
   "splash": {
     "image": "./assets/AppIcon-Dark.icon/Assets/icon.png",

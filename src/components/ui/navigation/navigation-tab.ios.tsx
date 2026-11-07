@@ -3,6 +3,8 @@ import { Button, Text, VStack } from '@expo/ui/swift-ui';
 import {
   accessibilityAddTraits,
   accessibilityLabel,
+  animation,
+  Animation,
   background,
   buttonStyle,
   contentShape,
@@ -10,6 +12,7 @@ import {
   foregroundStyle,
   frame,
   lineLimit,
+  scaleEffect,
   shapes,
   truncationMode,
 } from '@expo/ui/swift-ui/modifiers';
@@ -19,6 +22,7 @@ export function NavigationTab({
   icon,
   label,
   selected,
+  motionEnabled,
   color,
   selectedBackgroundColor,
   testID,
@@ -47,6 +51,8 @@ export function NavigationTab({
           size={22}
           color={color}
           modifiers={[
+            scaleEffect(motionEnabled && selected ? 1.1 : 1),
+            ...(motionEnabled ? [animation(Animation.easeOut({ duration: 0.16 }), selected)] : []),
             frame({ width: 44, height: 28 }),
             background(selected ? selectedBackgroundColor : 'transparent', shapes.capsule()),
           ]}

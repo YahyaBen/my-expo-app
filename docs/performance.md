@@ -21,7 +21,7 @@ previous scene for Back transitions. Hidden routes retain state and clean up
 effects until revealed. SDK 58's native stack does not use `freezeOnBlur`; Activity
 owns this lifecycle. Native transition and resource measurements remain pending.
 
-Current code isolates palette, appearance, header and motion subscriptions,
+Current code isolates palette, appearance and motion subscriptions,
 virtualizes carousel images, supports bounded grid rows and limits stacked
 indicators. Controlled inputs reconcile changed text; OTP errors derive from
 status. These are implementation facts. Native startup, frame and memory
@@ -61,9 +61,9 @@ availability; it does not establish device results.
 | Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return.                        |
 
 Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion.
-Check keyboard and safe areas after layout changes. Compare Default with an
-animated header effect to measure the artwork's cost. Check whether native blur
-and mask consumers idle when React freezes a screen.
+Check keyboard and safe areas after layout changes. Headers use one rectangular
+native blur backdrop with no artwork clock or mask. Check native blur behavior
+when React Activity hides and reveals retained screens.
 
 The [photo viewport](../src/components/ui/photo/photo-scroll-view.tsx) owns the carousel
 window and geometry alignment. Measure its initial and retained windows rather
@@ -94,13 +94,13 @@ events occur once per JS runtime; `elapsedMs` starts at performance-module
 evaluation, not process creation. `getStartupTimings()` retains a bounded snapshot
 without native metrics.
 
-| Event                         | Milestone                                                   |
-| ----------------------------- | ----------------------------------------------------------- |
-| app.startup.fonts_ready       | Selected fonts resolved, including fallback                 |
-| app.startup.preferences_ready | Appearance, language and header/device preferences hydrated |
-| app.startup.page_layout_ready | Initial usable page reported native layout                  |
-| app.startup.content_ready     | Fonts, preferences and layout ready beneath the overlay     |
-| app.startup.interactive       | Overlay exited and usable content is foregrounded           |
+| Event                         | Milestone                                                    |
+| ----------------------------- | ------------------------------------------------------------ |
+| app.startup.fonts_ready       | Selected fonts resolved, including fallback                  |
+| app.startup.preferences_ready | Appearance, language, motion and device preferences hydrated |
+| app.startup.page_layout_ready | Initial usable page reported native layout                   |
+| app.startup.content_ready     | Fonts, preferences and layout ready beneath the overlay      |
+| app.startup.interactive       | Overlay exited and usable content is foregrounded            |
 
 [PageFrame](../src/components/ui/page/page-frame.tsx) uses
 [usePageLayout](../src/hooks/use-page-layout.ts) after focus, foreground,

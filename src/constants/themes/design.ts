@@ -4,10 +4,6 @@ export type ThemeTextVariant = 'heading' | 'title' | 'subtitle' | 'body' | 'labe
 
 /** App-owned geometry and opt-in type presets; native controls keep platform behavior. */
 export interface ThemeDesign {
-  header: {
-    /** Decorative header waves are independent of the native backdrop blur. */
-    artwork: boolean;
-  };
   typography: Record<
     ThemeTextVariant,
     { fontSize: number; lineHeight: number; fontWeight: '400' | '500' | '600' | '700' }
@@ -20,7 +16,6 @@ export interface ThemeDesign {
 }
 
 export const nativeDesign: ThemeDesign = {
-  header: { artwork: true },
   typography: {
     heading: { fontSize: 36, lineHeight: 40, fontWeight: '700' },
     title: { fontSize: 26, lineHeight: 32, fontWeight: '600' },

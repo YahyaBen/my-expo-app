@@ -13,6 +13,10 @@ before navigation, on outside taps and on Android Back. Component IDs/icons belo
 to `src/features/template/component-catalog.ts`; translated names belong to the locales.
 Unknown URLs use the existing not-found fallback.
 
+Home's static [Ramadan banner](../src/features/home/ramadan-banner.tsx) belongs to
+the feature's scrollable content, inside its first `PageSection`. Shared page
+components retain ownership of the default rectangular blurred header and Back.
+
 | Responsibility                          | Owner                                                                           |
 | --------------------------------------- | ------------------------------------------------------------------------------- |
 | Routes and native stack                 | `src/app/`                                                                      |
@@ -31,7 +35,7 @@ Unknown URLs use the existing not-found fallback.
 
 ## Startup
 
-The root restores fonts, appearance, header/motion preferences, language and device
+The root restores fonts, appearance, motion preferences, language and device
 feature preferences. It waits for the initial usable page layout before completing
 the configured minimal/branded launch. `app-ready` follows resource readiness,
 layout and overlay exit. It does not restore an auth session, contact a backend,

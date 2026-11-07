@@ -37,20 +37,36 @@ module.exports = ({ config }) => {
       ...(config.plugins ?? []),
       ['expo-dev-client', { addGeneratedScheme: variant === 'development' }],
       ['expo-font', { fonts: headingFont.file ? [headingFont.file] : [] }],
-      ...(brand.lightIcon
+      ...(brand.lightIcon || brand.redIcon
         ? [
             [
               'expo-awesome-app-icon',
               {
                 icons: {
-                  light: {
-                    ios: { light: brand.lightIcon },
-                    android: {
-                      image: brand.lightIcon,
-                      foregroundImage: brand.android.lightIconForeground,
-                      backgroundColor: brand.android.adaptiveIcon?.backgroundColor,
-                    },
-                  },
+                  ...(brand.lightIcon
+                    ? {
+                        light: {
+                          ios: { light: brand.lightIcon },
+                          android: {
+                            image: brand.lightIcon,
+                            foregroundImage: brand.android.lightIconForeground,
+                            backgroundColor: brand.android.adaptiveIcon?.backgroundColor,
+                          },
+                        },
+                      }
+                    : {}),
+                  ...(brand.redIcon
+                    ? {
+                        red: {
+                          ios: { light: brand.redIcon },
+                          android: {
+                            image: brand.redIcon,
+                            foregroundImage: brand.android.redIconForeground,
+                            backgroundColor: brand.android.adaptiveIcon?.backgroundColor,
+                          },
+                        },
+                      }
+                    : {}),
                 },
               },
             ],

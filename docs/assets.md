@@ -21,6 +21,14 @@ The template image is an existing Expo placeholder. Replace it with client artwo
 before distribution. Native app/adaptive icons and the native splash are separate
 manifest fields; changing in-app artwork does not update those assets.
 
+The App Icon picker offers Dark, Light and Red. The brand manifest registers
+alternate artwork and padded Android foregrounds; `app.config.js` declares the
+Light and Red native resources through `expo-awesome-app-icon`. Red uses the same
+metallic design with a ruby/crimson palette in `assets/AppIcon-Red.icon/`.
+The picker only enables choices bundled into the installed native build.
+Adding an icon requires a new native build and app version under the current
+`appVersion` runtime policy; it cannot be delivered as a launcher icon through OTA.
+
 ## Fonts
 
 `app.config.js` derives the `expo-font` plugin's files from the selected font.
@@ -81,10 +89,8 @@ Metro can bundle all statically registered sources, even when only one is
 selected. This registry does not promise per-brand asset removal or runtime
 tenant switching.
 
-Header paths for the decorative and seasonal styles are generated in the shared page geometry;
-they need no bundled SVG snapshots. The iOS SVG material mask remains in source.
 The branded launch edge keeps cached paths and its drift;
 minimal launch does not mount artwork or that edge. The existing
-[page](../.agents/skills/template-skill-ui-page/references/page-guide.md) and
-[launch](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) skills own these
-presentation contracts.
+[launch skill](../.agents/skills/template-skill-ui-launch-screen/SKILL.md) owns that
+presentation. Page headers use the shared rectangular native blur and need no
+artwork assets or generated mask paths.

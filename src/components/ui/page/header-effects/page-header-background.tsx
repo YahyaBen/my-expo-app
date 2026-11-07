@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState, type RefObject } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 import { BlurView } from 'expo-blur';
 import { AccessibilityInfo, Platform, View, type ViewInstance } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../../host/universal-host';
-import { PageMotionContext } from './page-motion-context';
-import { PageHeaderArtwork } from './page-header-artwork';
 import { pageBlurProps } from './page-blur';
 import { usePageBlurKey } from './use-page-blur-key';
 
@@ -12,16 +10,13 @@ import { usePageBlurKey } from './use-page-blur-key';
 export function PageHeaderBackground({
   blurTarget,
   colorScheme,
-  height = 0,
-  blur = true,
+  height,
 }: Readonly<{
   blurTarget: RefObject<ViewInstance | null>;
   colorScheme?: 'light' | 'dark';
-  height?: number;
-  blur?: boolean;
+  height: number;
 }>) {
-  const motion = useContext(PageMotionContext);
-  const scheme = useHostColorScheme(colorScheme ?? motion?.colorScheme);
+  const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const blurKey = usePageBlurKey();
   const [reduceTransparency, setReduceTransparency] = useState(false);
@@ -46,49 +41,27 @@ export function PageHeaderBackground({
     };
   }, []);
 
-  let backdrop = null;
-  if (blur && (!motion || !motion.visible)) {
-    const style = { position: 'absolute' as const, top: 0, left: 0, right: 0, height };
-    backdrop = reduceTransparency ? (
-      <View
-        key={blurKey}
-        testID="page-header-solid-background"
-        pointerEvents="none"
-        accessible={false}
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-        style={{ ...style, backgroundColor: colors.background }}
-      />
-    ) : (
-      <BlurView
-        key={blurKey}
-        {...pageBlurProps(scheme)}
-        testID="page-header-blur"
-        pointerEvents="none"
-        accessible={false}
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-        blurTarget={blurTarget}
-        style={style}
-      />
-    );
-  }
-
-  return (
-    <>
-      {backdrop}
-      {motion ? (
-        <PageHeaderArtwork
-          motion={motion}
-          height={height}
-          blur={blur}
-          blurKey={blurKey}
-          blurTarget={blurTarget}
-          colorScheme={scheme}
-          backgroundColor={colors.background}
-          reduceTransparency={reduceTransparency}
-        />
-      ) : null}
-    </>
+  const style = { position: 'absolute' as const, top: 0, left: 0, right: 0, height };
+  return reduceTransparency ? (
+    <View
+      testID="page-header-solid-background"
+      pointerEvents="none"
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={{ ...style, backgroundColor: colors.background }}
+    />
+  ) : (
+    <BlurView
+      key={blurKey}
+      {...pageBlurProps(scheme)}
+      testID="page-header-blur"
+      pointerEvents="none"
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      blurTarget={blurTarget}
+      style={style}
+    />
   );
 }

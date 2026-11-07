@@ -76,7 +76,7 @@ function useMotionState(visible: boolean) {
   const preferences = useMotionPreferences();
   return {
     active: state.active,
-    ready: preferences?.headerMotionReady ?? true,
+    ready: preferences?.motionReady ?? true,
     reducedMotion: preferences?.reducedMotion ?? state.reducedMotion ?? initialReducedMotion,
   };
 }

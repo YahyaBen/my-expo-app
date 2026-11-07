@@ -4,6 +4,7 @@ export type NavigationTabProps = {
   icon: IconName;
   label: string;
   selected: boolean;
+  motionEnabled: boolean;
   color: string;
   selectedBackgroundColor: string;
   testID: string;

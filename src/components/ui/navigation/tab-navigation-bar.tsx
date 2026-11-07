@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, type IconName } from '../icon/icon';
 import { StyleSheet, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
+import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 import { triggerHaptic } from '@/lib/haptics';
 import {
@@ -64,6 +65,7 @@ export function TabNavigationBar({
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection();
+  const motionEnabled = useMotionEnabled();
   const left = leftInset;
   const right = rightInset;
 
@@ -75,6 +77,7 @@ export function TabNavigationBar({
           icon={item.icon ?? (item.id === 'home' && selected ? selectedHome : icons[item.id])}
           label={item.label}
           selected={selected}
+          motionEnabled={motionEnabled}
           color={selected ? colors.tabBarActive : colors.tabBarInactive}
           selectedBackgroundColor={colors.tabBarSelectedBackground}
           testID={item.testID ?? `tab-${item.id}`}

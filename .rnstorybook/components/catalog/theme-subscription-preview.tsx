@@ -11,7 +11,6 @@ import {
 import {
   ThemePreferencesProvider,
   useAppearanceSettings,
-  useHeaderSettings,
   useMotionSettings,
   usePaletteSettings,
 } from '@/context/theme.context';
@@ -36,14 +35,13 @@ export function ThemeSubscriptionPreview() {
           <Column spacing={spacing.lg} modifiers={nativeFillWidth} style={{ padding: spacing.lg }}>
             <Text variant="title">Theme subscriptions</Text>
             <Text>
-              After startup settles, watch [theme-subscription] in the console. Header changes
-              commit the header probe; motion changes commit motion and motion-gate; appearance
-              changes commit appearance and colors. Palette stays unchanged.
+              After startup settles, watch [theme-subscription] in the console. Motion changes
+              commit motion and motion-gate; appearance changes commit appearance and colors.
+              Palette stays unchanged.
             </Text>
             <PaletteProbe />
             <ColorProbe />
             <AppearanceProbe />
-            <HeaderProbe />
             <MotionProbe />
             <MotionGateProbe />
           </Column>
@@ -74,19 +72,6 @@ function AppearanceProbe() {
       label={`Appearance: ${colorScheme}`}
       onPress={() => setColorScheme(colorScheme === 'light' ? 'dark' : 'light')}
       testID="theme-subscription-appearance"
-    />
-  );
-}
-
-function HeaderProbe() {
-  const { headerShape, setHeaderShape } = useHeaderSettings();
-  useCommitLog('header');
-  return (
-    <ButtonContent
-      variant="secondary"
-      label={`Header: ${headerShape}`}
-      onPress={() => setHeaderShape(headerShape === 'default' ? 'dunes' : 'default')}
-      testID="theme-subscription-header"
     />
   );
 }
