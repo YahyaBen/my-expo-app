@@ -60,7 +60,7 @@ const meta = {
   component: StackedCarouselDemo,
   args: {
     items: photoFixtures,
-    width: 300,
+    width: 400,
     colorScheme: 'light',
     rtl: false,
     dataset: 'photos',

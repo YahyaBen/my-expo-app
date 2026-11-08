@@ -64,8 +64,8 @@ function StoryListContent({
   const reducedMotion = useAppReducedMotion();
 
   const width = Math.max(1, availableWidth);
-  const cardWidth = Math.max(1, Math.min(width, requestedItemWidth ?? width * 0.78));
-  const height = Math.max(1, requestedHeight ?? Math.min(width * 1.05, 420));
+  const cardWidth = Math.max(1, Math.min(width, requestedItemWidth ?? width * 0.9));
+  const height = Math.max(1, requestedHeight ?? Math.min(width * 1.15, 480));
   const cardHeight = height;
   const {
     scrollRef,

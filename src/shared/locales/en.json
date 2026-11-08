@@ -1,6 +1,5 @@
 {
   "home": {
-    "ramadanGreeting": "Ramadan Kareem",
     "eyebrow": "A LITTLE INSPIRATION, EVERY DAY",
     "featured": "Featured today",
     "editorsPick": "Editor's pick",
@@ -224,7 +223,7 @@
     "appIconCurrent": "This is your current icon.",
     "appIconUnavailable": "App icon changes are unavailable right now.",
     "appIconFailed": "The app icon couldn’t be changed. Try again.",
-    "appIconPending": "The new icon will appear after you leave the app.",
+    "appIconPending": "The previous change is still pending. Tap Apply to try again.",
     "socialNotifications": "Social notifications",
     "chat": "Chat",
     "chatDescription": "Direct messages, group messages and group invitations.",

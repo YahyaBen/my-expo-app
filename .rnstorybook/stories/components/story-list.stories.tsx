@@ -43,7 +43,7 @@ function StoryListDemo({
 const meta = {
   title: 'Components/Story List',
   component: StoryListDemo,
-  args: { items: photoFixtures, width: 300, colorScheme: 'light', rtl: false },
+  args: { items: photoFixtures, width: 400, colorScheme: 'light', rtl: false },
   argTypes: {
     rtl: { control: 'boolean' },
     width: { control: { type: 'range', min: 160, max: 600, step: 10 } },

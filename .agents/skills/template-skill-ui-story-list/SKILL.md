@@ -15,7 +15,7 @@ presentation; the caller owns images, translated labels, data and surrounding la
 - Required: `items: readonly PhotoItem[]`, `width: number`,
   `accessibilityLabel: string`. Items need unique stable string IDs, an Expo
   Image source (URI, object or bundled asset number) and a translated label.
-- `itemWidth` changes the card width; `height` is the artwork viewport height. Cards default to 78% of the supplied width.
+- `itemWidth` changes the card width; `height` is the artwork viewport height. Cards default to 90% of the supplied width, with a height of 115% of that viewport width capped at 480 points/dp.
 - `getPositionLabel(index, total)` formats a zero-based index for the optional
   caption and spoken value. Without it, accessibility uses the item's label.
 - `onIndexChange(index, item)` runs once for a changed user selection. Initial

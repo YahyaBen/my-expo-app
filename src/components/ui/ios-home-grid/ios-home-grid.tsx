@@ -5,6 +5,9 @@ import { Column, RNHostView, Row } from '@expo/ui';
 import { Image } from 'expo-image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, View, useWindowDimensions, type ViewInstance } from 'react-native';
+// Expo UI has no full-screen transparent presenter; controls remain native Expo UI.
+// eslint-disable-next-line no-restricted-imports -- Modal supplies window infrastructure for the measured zoom.
+import { Modal } from 'react-native';
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -21,8 +24,10 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { Button, ButtonContent } from '../button/button';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Button } from '../button/button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { Icon } from '../icon/icon';
 import { nativeFillWidth, nativeRowWeight } from '../native/native-fill-width';
 import type { PhotoItem } from '../photo/photo-item';
 import { UniversalTextContent } from '../text/universal-text';
@@ -52,8 +57,6 @@ type LoadedImageSize = { source: PhotoItem['source']; width: number; height: num
 type Selection = {
   index: number;
   source: Rect;
-  width: number;
-  height: number;
   imageSize?: LoadedImageSize;
 };
 type GridProps = IosHomeGridProps & {
@@ -71,7 +74,7 @@ export function IosHomeGrid({
   testID = 'ios-home-grid',
   ...props
 }: Readonly<IosHomeGridProps>) {
-  const { fontScale } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight, fontScale } = useWindowDimensions();
   const { width, viewportHeight, items } = props;
   if (!Number.isFinite(width) || width <= 0 || items.length === 0) return null;
   if (viewportHeight !== undefined && (!Number.isFinite(viewportHeight) || viewportHeight <= 0))
@@ -87,6 +90,8 @@ export function IosHomeGrid({
   const layoutKey = JSON.stringify([
     width,
     viewportHeight,
+    windowWidth,
+    windowHeight,
     fontScale,
     columnCount,
     safeGap,
@@ -119,7 +124,6 @@ function PhotoGrid({
   onClose,
   testID,
 }: Readonly<GridProps>) {
-  const scene = useRef<ViewInstance>(null);
   const mounted = useRef(false);
   const busy = useRef(false);
   const closeRequested = useRef(false);
@@ -159,24 +163,12 @@ function PhotoGrid({
   }, []);
 
   function open(index: number, rect: Rect, imageSize?: LoadedImageSize) {
-    if (!mounted.current || busy.current || !scene.current) return;
+    if (!mounted.current || busy.current || rect.width <= 0 || rect.height <= 0) return;
     busy.current = true;
-    scene.current.measureInWindow((x, y, sceneWidth, height) => {
-      if (!mounted.current || !scene.current || sceneWidth <= 0 || height <= 0 || rect.width <= 0) {
-        busy.current = false;
-        return;
-      }
-      progress.set(0);
-      setClosing(false);
-      setSelection({
-        index,
-        source: { ...rect, x: rect.x - x, y: rect.y - y },
-        width: sceneWidth,
-        height,
-        imageSize,
-      });
-      onSelect?.(items[index], index);
-    });
+    progress.set(0);
+    setClosing(false);
+    setSelection({ index, source: rect, imageSize });
+    onSelect?.(items[index], index);
   }
 
   function renderRow(row: readonly PhotoItem[], rowIndex: number) {
@@ -205,66 +197,71 @@ function PhotoGrid({
   }
 
   return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth} testID={testID}>
+    <Column modifiers={nativeFillWidth} testID={testID}>
       <RNHostView matchContents>
-        {/* This RN boundary owns the expanding artwork above the native grid. */}
-        <GestureHandlerRootView style={{ width, direction: 'ltr' }}>
-          <View ref={scene} collapsable={false} style={{ width }}>
-            <Animated.View
-              style={gridStyle}
-              pointerEvents={selection ? 'none' : 'auto'}
-              accessibilityElementsHidden={selection !== null}
-              importantForAccessibility={selection ? 'no-hide-descendants' : 'auto'}
-            >
-              {viewportHeight === undefined ? (
-                <UniversalHost layoutDirection="leftToRight">
-                  <Column spacing={gap} modifiers={nativeFillWidth}>
-                    {rows.map(renderRow)}
-                  </Column>
-                </UniversalHost>
-              ) : (
-                <FlatList
-                  data={rows}
-                  keyExtractor={(row) => row[0].id}
-                  renderItem={({ item, index }) => (
-                    <UniversalHost layoutDirection="leftToRight">
-                      {renderRow(item, index)}
-                    </UniversalHost>
-                  )}
-                  ItemSeparatorComponent={<View style={{ height: gap }} />}
-                  initialNumToRender={Math.ceil(viewportHeight / tileSize)}
-                  windowSize={5}
-                  removeClippedSubviews={false}
-                  scrollEnabled={selection === null}
-                  style={{ width, height: viewportHeight }}
-                  testID={`${testID}-scroll`}
-                />
-              )}
-            </Animated.View>
-            {selection && selectedItem ? (
-              <ExpandedPhoto
-                item={selectedItem}
-                selection={selection}
-                progress={progress}
-                closing={closing}
-                borderRadius={borderRadius}
-                closeLabel={closeLabel}
-                dismissHint={dismissHint}
-                onClose={close}
-                onClosed={finish}
-                testID={`${testID}-expanded`}
+        <View style={{ width, direction: 'ltr' }}>
+          <Animated.View
+            style={gridStyle}
+            pointerEvents={selection ? 'none' : 'auto'}
+            accessibilityElementsHidden={selection !== null}
+            importantForAccessibility={selection ? 'no-hide-descendants' : 'auto'}
+          >
+            {viewportHeight === undefined ? (
+              <UniversalHost layoutDirection="leftToRight">
+                <Column spacing={gap} modifiers={nativeFillWidth}>
+                  {rows.map(renderRow)}
+                </Column>
+              </UniversalHost>
+            ) : (
+              <FlatList
+                data={rows}
+                keyExtractor={(row) => row[0].id}
+                renderItem={({ item, index }) => (
+                  <UniversalHost layoutDirection="leftToRight">
+                    {renderRow(item, index)}
+                  </UniversalHost>
+                )}
+                ItemSeparatorComponent={<View style={{ height: gap }} />}
+                initialNumToRender={Math.ceil(viewportHeight / tileSize)}
+                windowSize={5}
+                removeClippedSubviews={false}
+                scrollEnabled={selection === null}
+                style={{ width, height: viewportHeight }}
+                testID={`${testID}-scroll`}
               />
-            ) : null}
-          </View>
-        </GestureHandlerRootView>
+            )}
+          </Animated.View>
+          {selection && selectedItem ? (
+            <Modal
+              transparent
+              animationType="none"
+              presentationStyle="overFullScreen"
+              statusBarTranslucent
+              navigationBarTranslucent
+              supportedOrientations={['portrait', 'portrait-upside-down', 'landscape']}
+              onRequestClose={close}
+            >
+              <GestureHandlerRootView style={styles.viewer}>
+                <SafeAreaProvider>
+                  <ExpandedPhoto
+                    item={selectedItem}
+                    selection={selection}
+                    progress={progress}
+                    closing={closing}
+                    borderRadius={borderRadius}
+                    closeLabel={closeLabel}
+                    dismissHint={dismissHint}
+                    onClose={close}
+                    onClosed={finish}
+                    testID={`${testID}-expanded`}
+                    closeTestID={`${testID}-close`}
+                  />
+                </SafeAreaProvider>
+              </GestureHandlerRootView>
+            </Modal>
+          ) : null}
+        </View>
       </RNHostView>
-      <ButtonContent
-        variant="secondary"
-        label={closeLabel}
-        onPress={close}
-        disabled={!selection || closing}
-        testID={`${testID}-close`}
-      />
     </Column>
   );
 }
@@ -346,18 +343,7 @@ function PhotoTile({
   );
 }
 
-function ExpandedPhoto({
-  item,
-  selection,
-  progress,
-  closing,
-  borderRadius,
-  closeLabel,
-  dismissHint,
-  onClose,
-  onClosed,
-  testID,
-}: Readonly<{
+type ExpandedPhotoProps = Readonly<{
   item: PhotoItem;
   selection: Selection;
   progress: SharedValue<number>;
@@ -368,11 +354,74 @@ function ExpandedPhoto({
   onClose: () => void;
   onClosed: () => void;
   testID: string;
-}>) {
+}>;
+
+function ExpandedPhoto({ closeTestID, ...props }: ExpandedPhotoProps & { closeTestID: string }) {
+  const scene = useRef<ViewInstance>(null);
+  const [viewport, setViewport] = useState<Rect | null>(null);
+  const insets = useSafeAreaInsets();
+  const colors = useThemeColors(useHostColorScheme());
+
+  return (
+    <View
+      ref={scene}
+      collapsable={false}
+      style={styles.viewer}
+      accessibilityViewIsModal
+      onLayout={() => {
+        // Modal bounds include system bars and can differ from the page viewport.
+        scene.current?.measureInWindow((x, y, width, height) => {
+          if (scene.current && width > 0 && height > 0) setViewport({ x, y, width, height });
+        });
+      }}
+    >
+      {viewport ? <ExpandedPhotoArtwork {...props} viewport={viewport} /> : null}
+      <View
+        style={{
+          position: 'absolute',
+          top: insets.top + spacing.md,
+          right: insets.right + spacing.md,
+        }}
+      >
+        <Button
+          variant="primary"
+          circular
+          accessibilityLabel={props.closeLabel}
+          color={colors.surfaceVariant}
+          contentColor={colors.text}
+          onPress={props.onClose}
+          disabled={props.closing}
+          testID={closeTestID}
+        >
+          <Icon name={{ ios: 'xmark', android: 'close' }} size={22} />
+        </Button>
+      </View>
+    </View>
+  );
+}
+
+function ExpandedPhotoArtwork({
+  item,
+  selection,
+  progress,
+  closing,
+  borderRadius,
+  closeLabel,
+  dismissHint,
+  onClose,
+  onClosed,
+  testID,
+  viewport,
+}: ExpandedPhotoProps & { viewport: Rect }) {
   const motionEnabled = useMotionEnabled();
   const colors = useThemeColors(useHostColorScheme());
   const drag = useSharedValue(0);
-  const { source, width, height } = selection;
+  const { width, height } = viewport;
+  const source = {
+    ...selection.source,
+    x: selection.source.x - viewport.x,
+    y: selection.source.y - viewport.y,
+  };
   const [imageSize, setImageSize] = useState(selection.imageSize);
   const [displayedSourceKey, setDisplayedSourceKey] = useState<string>();
   // Equivalent source objects can be recreated by the caller without reloading
@@ -434,7 +483,7 @@ function ExpandedPhoto({
       opacity: imageReady ? 1 : 0,
       width: interpolate(p, [0, 1], [source.width, width]),
       height: interpolate(p, [0, 1], [source.height, height]),
-      borderRadius,
+      borderRadius: interpolate(p, [0, 1], [borderRadius, 0]),
       transform: [
         { translateX: source.x * (1 - p) },
         {
@@ -527,5 +576,6 @@ function ExpandedPhoto({
 }
 
 const styles = StyleSheet.create({
+  viewer: { flex: 1, direction: 'ltr' },
   expanded: { position: 'absolute', top: 0, left: 0, overflow: 'hidden' },
 });

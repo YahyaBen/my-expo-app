@@ -65,12 +65,9 @@ function StackedCarouselContent({
   const width = Math.max(1, availableWidth);
   const cardWidth = Math.max(
     1,
-    Math.min(width, requestedItemWidth ?? Math.min(width - spacing.sm * 2, 320)),
+    Math.min(width, requestedItemWidth ?? Math.min(width - spacing.xs * 2, 480)),
   );
-  const height = Math.max(
-    spacing.xl * 3 + 1,
-    requestedHeight ?? cardWidth * 0.625 + spacing.xl * 3,
-  );
+  const height = Math.max(spacing.xl * 3 + 1, requestedHeight ?? cardWidth * 0.9 + spacing.xl * 3);
   const cardHeight = height - spacing.xl * 3;
   const {
     scrollRef,

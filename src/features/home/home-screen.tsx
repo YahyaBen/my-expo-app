@@ -25,7 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
 import { homeStories, type HomeStory } from './home-stories';
-import { RamadanBanner } from './ramadan-banner';
+import { DateTimeBanner } from './date-time-banner';
 
 const icons = {
   components: Icon.select({ ios: 'square.grid.2x2', android: 'widgets' }),
@@ -70,7 +70,7 @@ export default function HomeScreen({
   return (
     <PageScreen tab title={title} showBack={showBack}>
       <PageSection testID="template-wireframe" spacing={24}>
-        <RamadanBanner width={contentWidth} />
+        <DateTimeBanner />
         <Column spacing={8} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
             {t('home.eyebrow')}
@@ -132,7 +132,6 @@ export default function HomeScreen({
         <StoryList
           items={latestPhotos}
           width={contentWidth}
-          height={240}
           accessibilityLabel={t('home.latest')}
           onIndexChange={(index) => setLatestIndex(index)}
           testID="home-story-list"
@@ -283,7 +282,6 @@ function FeaturedStories({
         <StackedCarousel
           items={storyPhotos}
           width={width}
-          height={280}
           accessibilityLabel={t('home.featured')}
           onIndexChange={(nextIndex) => setIndex(nextIndex)}
           testID="home-stacked-carousel"

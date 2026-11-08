@@ -1,7 +1,7 @@
 import { requireOptionalNativeModule } from 'expo';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppState, Platform, useWindowDimensions } from 'react-native';
+import { AppState, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   ButtonContent,
@@ -65,7 +65,8 @@ export function AppIconPicker() {
     return () => subscription.remove();
   }, [icons, isPending]);
 
-  const selected = iconChoices.find((id) => id === iconState?.selected) ?? 'dark';
+  const installed = iconChoices.find((id) => id === iconState?.installed) ?? 'dark';
+  const isCurrent = !isPending && draft === installed;
   const items: AppIconPhoto[] = choices.map((id) => ({
     id,
     source: iconSources[id],
@@ -73,15 +74,17 @@ export function AppIconPicker() {
   }));
 
   async function applyIcon() {
-    if (!icons || changeInFlight.current || draft === selected) return;
+    if (!icons || changeInFlight.current || isCurrent) return;
     changeInFlight.current = true;
     setChanging(true);
     setFailed(false);
     try {
-      await icons.setAppIcon(draft === 'dark' ? null : draft, {
-        deferUntilBackground: Platform.OS === 'android',
-      });
-      setIconState(icons.getAppIconState());
+      const iconName = draft === 'dark' ? null : draft;
+      // Apply now: a queued Android selection can stay pending after backgrounding.
+      await icons.setAppIcon(iconName);
+      const nextState = icons.getAppIconState();
+      setIconState(nextState);
+      setFailed(nextState.isPending || nextState.installed !== iconName);
     } catch {
       setFailed(true);
     } finally {
@@ -109,7 +112,7 @@ export function AppIconPicker() {
         <ButtonContent
           variant="primary"
           label={t(changing ? 'common.wait' : 'settings.appIconApply')}
-          disabled={!icons || changing || draft === selected}
+          disabled={!icons || changing || isCurrent}
           onPress={() => void applyIcon()}
           fullWidth
           testID="app-settings-app-icon-apply"
@@ -126,7 +129,7 @@ export function AppIconPicker() {
           <Text tone="muted" testID="app-settings-app-icon-pending">
             {t('settings.appIconPending')}
           </Text>
-        ) : draft === selected ? (
+        ) : isCurrent ? (
           <Text tone="muted" testID="app-settings-app-icon-current">
             {t('settings.appIconCurrent')}
           </Text>

@@ -364,7 +364,6 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           <StackedCarousel
             items={photos}
             width={width}
-            height={260}
             accessibilityLabel={title}
             testID="component-stacked-carousel"
           />
@@ -374,7 +373,6 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           <StoryList
             items={photos}
             width={width}
-            height={260}
             accessibilityLabel={title}
             testID="component-story-list"
           />

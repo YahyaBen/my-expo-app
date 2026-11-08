@@ -13,9 +13,11 @@ before navigation, on outside taps and on Android Back. Component IDs/icons belo
 to `src/features/template/component-catalog.ts`; translated names belong to the locales.
 Unknown URLs use the existing not-found fallback.
 
-Home's static [Ramadan banner](../src/features/home/ramadan-banner.tsx) belongs to
-the feature's scrollable content, inside its first `PageSection`. Shared page
-components retain ownership of the default rectangular blurred header and Back.
+Home's [date and time banner](../src/features/home/date-time-banner.tsx) belongs to
+the feature's scrollable content, inside its first `PageSection`. It shows the local
+date and 24-hour time in the app language, refreshing each minute while visible and
+active. Shared page components retain ownership of the default rectangular blurred
+header and Back.
 
 | Responsibility                          | Owner                                                                           |
 | --------------------------------------- | ------------------------------------------------------------------------------- |

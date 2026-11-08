@@ -44,7 +44,7 @@ function IosHomeGridDemo({
           viewportHeight={boundedHeight}
           columns={columns}
           closeLabel="Close photo"
-          dismissHint="Drag down or use Close photo to return."
+          dismissHint="Drag down or use the X button to return."
           onSelect={(item, index) => setEvent(`Selected ${item.label} at index ${index}`)}
           onClose={(item, index) => setEvent(`Closed ${item.label} at index ${index}`)}
           testID="story-ios-home-grid"
@@ -75,7 +75,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'LTR grid with caller-owned photos, labels, width and columns. Counts 200/1000 use a bounded virtualized viewport with no surrounding vertical scroll. Inspect mounted photo selectors while scrolling, open a later row and return, then replace data while expanded. The thumbnail stays visible until the expanded image displays. Also check slow/failed loads, Close before display, callbacks, partial rows, edge taps, large text and Reduce motion. Offline payloads repeat, so this measures view lifetime rather than unique image decoding.',
+          'LTR grid with caller-owned photos, labels, width and columns. Photos expand over the entire screen, including page navigation, with an accessible X button inside the top-right safe area and no inline Close button. Check expansion from the narrow grid, the X before image display, Android Back, drag dismissal, callbacks, partial rows, edge taps, large text and Reduce motion. Counts 200/1000 use a bounded virtualized viewport with no surrounding vertical scroll. Inspect mounted photo selectors while scrolling, open a later row and return, then replace data while expanded using the controls. The thumbnail stays visible until the expanded image displays; also check slow/failed loads. Offline payloads repeat, so this measures view lifetime rather than unique image decoding.',
       },
     },
   },
@@ -85,3 +85,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+export const FullScreenFromNarrowGrid: Story = {
+  args: { contentWidth: 240, columns: 3, itemCount: 11 },
+};

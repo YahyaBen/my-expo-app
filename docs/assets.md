@@ -26,6 +26,10 @@ alternate artwork and padded Android foregrounds; `app.config.js` declares the
 Light and Red native resources through `expo-awesome-app-icon`. Red uses the same
 metallic design with a ruby/crimson palette in `assets/AppIcon-Red.icon/`.
 The picker only enables choices bundled into the installed native build.
+Apply switches the native launcher icon immediately and checks the installed icon
+before marking it current. An older pending Android selection can be reapplied or
+canceled by applying the installed icon. Some Android launchers may close the app
+or take a moment to refresh after an icon switch.
 Adding an icon requires a new native build and app version under the current
 `appVersion` runtime policy; it cannot be delivered as a launcher icon through OTA.
 
