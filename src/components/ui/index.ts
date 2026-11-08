@@ -13,6 +13,7 @@ export {
 
 export * from './alert/alert';
 export * from './appearance/color-scheme-control';
+export * from './appearance/theme-control';
 export * from './auth/auth-screen-frame';
 export * from './badge/badge';
 export * from './bottom-sheet/bottom-sheet';

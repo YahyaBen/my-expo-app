@@ -55,6 +55,7 @@ export function UniversalHost({
   const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection(layoutDirection);
 
+  // An unset System theme tint preserves the platform's default palette.
   return (
     <HostColorSchemeContext.Provider value={scheme}>
       <HostLayoutDirectionContext.Provider value={direction}>

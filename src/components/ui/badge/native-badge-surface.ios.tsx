@@ -11,7 +11,10 @@ export function NativeBadgeSurface({
     <HStack
       spacing={0}
       modifiers={[
-        background(backgroundColor, shapes.capsule()),
+        background(
+          backgroundColor ?? { type: 'hierarchical', style: 'quaternary' },
+          shapes.capsule(),
+        ),
         ...(borderColor
           ? [strokeBorder({ content: borderColor, shape: 'capsule', style: { lineWidth: 1 } })]
           : []),

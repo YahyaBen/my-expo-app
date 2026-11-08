@@ -47,7 +47,7 @@ export interface TableProps<T> {
   testID?: string;
 }
 
-function cellContent(content: ReactNode, color: string) {
+function cellContent(content: ReactNode, color?: string) {
   return typeof content === 'string' || typeof content === 'number' ? (
     <UniversalTextContent variant="body" fontSize={14} textStyle={{ color }}>
       {String(content)}
@@ -92,7 +92,7 @@ export function Table<T>({
         style={{
           backgroundColor: colors.tableSurface,
           borderColor: colors.tableBorder,
-          borderWidth: 1,
+          borderWidth: colors.tableBorder === undefined ? undefined : 1,
           borderRadius: radii.sm,
         }}
       >

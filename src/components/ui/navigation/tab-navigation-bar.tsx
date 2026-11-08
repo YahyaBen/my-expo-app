@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { triggerHaptic } from '@/lib/haptics';
 import {
   FloatingActionButton,
@@ -68,6 +69,17 @@ export function TabNavigationBar({
   const motionEnabled = useMotionEnabled();
   const left = leftInset;
   const right = rightInset;
+  const defaults = navigationTheme(scheme, colors).colors;
+  const dockStyle = {
+    position: 'absolute' as const,
+    top: tabBarRaisedHeight,
+    left,
+    right,
+    bottom: 0,
+    backgroundColor: colors.tabBarBackground ?? defaults.card,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.tabBarBorder ?? defaults.border,
+  };
 
   const tab = (item: TabNavigationItem) => {
     const selected = activeId === item.id;
@@ -103,46 +115,45 @@ export function TabNavigationBar({
         backgroundColor: 'transparent',
       }}
     >
-      <LinearGradient
-        testID="tab-dock-surface"
-        pointerEvents="none"
-        accessibilityElementsHidden
-        importantForAccessibility="no-hide-descendants"
-        colors={[colors.tabBarGradientStart, colors.tabBarBackground, colors.tabBarGradientEnd]}
-        locations={[0, 0.55, 1]}
-        start={{ x: direction === 'rightToLeft' ? 1 : 0, y: 0 }}
-        end={{ x: direction === 'rightToLeft' ? 0 : 1, y: 1 }}
-        style={{
-          position: 'absolute',
-          top: tabBarRaisedHeight,
-          left,
-          right,
-          bottom: 0,
-          backgroundColor: colors.tabBarBackground,
-          borderTopWidth: StyleSheet.hairlineWidth,
-          borderColor: colors.tabBarBorder,
-        }}
-      >
+      {colors.tabBarGradientStart !== undefined &&
+      colors.tabBarBackground !== undefined &&
+      colors.tabBarGradientEnd !== undefined ? (
         <LinearGradient
-          testID="tab-dock-highlight"
+          testID="tab-dock-surface"
           pointerEvents="none"
-          colors={[
-            colors.tabBarHighlightClear,
-            colors.tabBarHighlight,
-            colors.tabBarHighlightClear,
-          ]}
-          locations={[0, 0.5, 1]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 1,
-          }}
-        />
-      </LinearGradient>
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          colors={[colors.tabBarGradientStart, colors.tabBarBackground, colors.tabBarGradientEnd]}
+          locations={[0, 0.55, 1]}
+          start={{ x: direction === 'rightToLeft' ? 1 : 0, y: 0 }}
+          end={{ x: direction === 'rightToLeft' ? 0 : 1, y: 1 }}
+          style={dockStyle}
+        >
+          {colors.tabBarHighlightClear !== undefined && colors.tabBarHighlight !== undefined ? (
+            <LinearGradient
+              testID="tab-dock-highlight"
+              pointerEvents="none"
+              colors={[
+                colors.tabBarHighlightClear,
+                colors.tabBarHighlight,
+                colors.tabBarHighlightClear,
+              ]}
+              locations={[0, 0.5, 1]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 1,
+              }}
+            />
+          ) : null}
+        </LinearGradient>
+      ) : (
+        <View testID="tab-dock-surface" pointerEvents="none" style={dockStyle} />
+      )}
       <View
         testID="tab-dock-controls"
         style={{

@@ -34,7 +34,7 @@ export function NativeFloatingActionButton({
         spacing={0}
         modifiers={[
           frame({ width: 76, height: 76 }),
-          background(color, shapes.circle()),
+          background(color ?? { type: 'material', material: 'regular' }, shapes.circle()),
           contentShape(shapes.circle()),
         ]}
       >

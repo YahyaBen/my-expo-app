@@ -4,7 +4,8 @@ export type SkeletonShapeStyle = {
   width?: number;
   height: number;
   borderRadius: number;
-  backgroundColor: string;
+  backgroundColor?: string;
+  colorScheme: 'light' | 'dark';
   opacity: number;
 };
 

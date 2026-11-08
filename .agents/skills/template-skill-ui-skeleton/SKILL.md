@@ -22,7 +22,9 @@ Source: [skeleton/](../../../src/components/ui/skeleton/).
   fills a constrained parent. Default height is 16.
 - Other percentage sizes, style arrays and arbitrary RN styles are unsupported.
   Keep geometry finite/nonnegative and opacity within 0–1.
-- Defaults use the control radius, theme border fill and 0.72 opacity.
+- Defaults use the control radius, theme border fill and 0.72 opacity. With the
+  System palette, use a native hierarchical fill on iOS and Material's surface
+  variant on Android; explicit background colors retain priority.
 - Standalone motion uses existing Reanimated native keyframes: 900 ms per direction,
   alternating to 45% opacity. Add no timer or second pulse layer.
 - `animate={false}` makes a standalone shape static. Pass route focus when

@@ -1,5 +1,5 @@
 export interface NativeAlertProps {
-  accentColor: string;
+  accentColor?: string;
   title: string;
   message: string;
   confirmLabel: string;

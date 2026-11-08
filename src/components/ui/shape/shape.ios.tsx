@@ -21,10 +21,11 @@ export function Shape({
   accessibilityLabel,
 }: Readonly<ShapeProps>) {
   const colors = useThemeColors(useHostColorScheme());
+  const fill = color ?? colors.tint;
   const props = {
     testID,
     modifiers: [
-      foregroundStyle(color ?? colors.tint),
+      ...(fill === undefined ? [] : [foregroundStyle(fill)]),
       frame({ width, height }),
       accessibilityHidden(!accessibilityLabel),
       ...(accessibilityLabel ? [nativeLabel(accessibilityLabel)] : []),

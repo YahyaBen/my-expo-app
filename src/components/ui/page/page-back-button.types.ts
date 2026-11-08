@@ -1,4 +1,4 @@
 export interface PageBackButtonProps {
-  color: string;
+  color?: string;
   onPress: () => void;
 }

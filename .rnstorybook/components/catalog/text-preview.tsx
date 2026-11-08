@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, type PropsWithChildren } from 'react';
 import {
   ColorSchemeControl,
+  ThemeControl,
   Column,
   PageScreen,
   PageSection,
@@ -19,9 +20,9 @@ import {
 import { useAppTheme } from '@/hooks/use-theme';
 import { ThemePreferencesProvider, useThemeSettings } from '@/context/theme.context';
 import { spacing } from '@/constants/layout';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { DemoSection } from './demo-section';
 import { HostedPreview } from './hosted-preview';
-import { ThemePicker } from './theme-picker';
 
 const variants = [
   'heading',
@@ -126,12 +127,15 @@ function TextColorPreview() {
   const [presses, setPresses] = useState(0);
   return (
     <UniversalHost colorScheme={scheme} ignoreSafeArea="all" testID="demo-text-color-preview">
-      <Column modifiers={nativeFillWidth} style={{ backgroundColor: colors.background }}>
+      <Column
+        modifiers={nativeFillWidth}
+        style={{ backgroundColor: navigationTheme(scheme, colors).colors.background }}
+      >
         <PageSection>
           <Row alignment="center" modifiers={nativeFillWidth}>
             <Text>{t('common.theme')}</Text>
             <Spacer flexible />
-            <ThemePicker />
+            <ThemeControl testID="demo-text-theme-picker" />
           </Row>
           <Row alignment="center" modifiers={nativeFillWidth}>
             <Text>{t('common.colorScheme')}</Text>

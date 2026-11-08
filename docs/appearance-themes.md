@@ -1,7 +1,16 @@
 # App Settings and appearance
 
-The selected brand's `presentation.palette` uses UX Template (`ux`), the only
-bundled palette, in light and dark appearance. Palette colors and semantic tokens
+The selected brand's `presentation.palette` seeds UX Template (`ux`, the
+template default) or System (`system`) in light and dark appearance. Settings
+can override that default with a saved palette choice. System
+defines no app color overrides: Hosts leave their seed/tint unset, and native
+controls use SwiftUI or Material defaults. Explicit caller colors still apply.
+Custom RN surfaces use the navigator's default background when a color is required;
+native shapes and skeletons use platform semantic fills. Palette-only gradients
+and launch waves are omitted. System is a palette choice, independent of the
+System/Light/Dark appearance preference.
+
+Palette colors and semantic tokens
 stay in `src/constants/themes/`. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
 select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
@@ -71,7 +80,7 @@ The **Components/Theme Tokens** story displays the active palette, text hierarch
 type ramp with line heights, surface layers, shapes, shared spacing, working
 button states and an editable field. Toggle the local field/submit error example
 to inspect icon-and-text feedback and paired error-container foregrounds.
-UX has light/dark stories. These previews do not
+Choose `ux` or `system` and light/dark in the story's Controls. These previews do not
 send backend requests. Native font scaling, RTL, rendered contrast and keyboard
 behavior still require verification on matching iOS and Android builds.
 
@@ -87,6 +96,7 @@ Theme values are edited directly in TypeScript:
 | Owner                                          | Responsibility                                            |
 | ---------------------------------------------- | --------------------------------------------------------- |
 | [ux.ts](../src/constants/themes/ux.ts)         | Primitive colors and semantic light/dark palettes         |
+| [system.ts](../src/constants/themes/system.ts) | Empty light/dark overrides for native defaults            |
 | [tokens.ts](../src/constants/themes/tokens.ts) | Typed color contract and derived navigation/control roles |
 | [layout.ts](../src/constants/layout.ts)        | Shared spacing, radii and content dimensions              |
 | [design.ts](../src/constants/themes/design.ts) | Typography presets and native shape defaults              |
@@ -142,9 +152,14 @@ existing saved preference provider. System follows the device; explicit Light or
 Dark remains selected until the user chooses another option. Controls wait for
 appearance restoration before accepting changes.
 
-The configured root palette stays fixed. A user chooses appearance, not another
-client's identity or demo palette. The Text showcase in **Wireframes/Component Gallery** has
-an isolated [theme picker](../.rnstorybook/components/catalog/theme-picker.tsx) and
+Settings > Appearance > Theme offers UX Template and System through the shared
+[theme control](../src/components/ui/appearance/theme-control.tsx). Selection
+applies to the whole app immediately and is saved for the next launch. The
+System palette uses native colors; the separate System appearance option follows
+the device's light/dark setting.
+
+The Text showcase in **Wireframes/Component Gallery** has
+an isolated theme control and
 appearance control; these changes stay in memory and leave saved app preferences
 untouched. Leaving and reopening that page starts from the app's current choices.
 The color-sample area has its own explicit-scheme Host after the RN bridge;
@@ -161,8 +176,10 @@ that story use their real saved settings.
 
 ## Saved appearance
 
-The app root opts into `persistAppearance` on the existing theme provider. It
-restores `appColorScheme` as `system`, `light` or `dark`. System is the default;
+The app root opts into `allowThemeSelection` and `persistAppearance` on the existing
+theme provider. It restores `appTheme` as a registered palette ID and
+`appColorScheme` as `system`, `light` or `dark` in one storage read. A missing or
+invalid saved theme retains the configured brand palette. System appearance is the default;
 it follows live device appearance. Fixed Light/Dark choices last until the user
 selects another option, including across app restarts after a successful save.
 Selecting System again clears the app's fixed native appearance override.
@@ -170,7 +187,7 @@ Selecting System again clears the app's fixed native appearance override.
 Missing/invalid saved values and read failures keep the initial System choice.
 Selections update the current session immediately; writes are serialized with
 the existing motion writes. If saving fails, the session keeps its new
-appearance and the next launch reads the last successfully saved value. Pickers
+appearance or palette and the next launch reads the last successfully saved value. Pickers
 and callbacks wait for restoration, preventing a late read from replacing a new
 selection. A remounted root reads after earlier queued writes have finished.
 

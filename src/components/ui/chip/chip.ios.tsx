@@ -27,6 +27,8 @@ export function Chip({
 }: Readonly<ChipProps>) {
   const colors = useThemeColors(useHostColorScheme());
   const filled = appearance === 'filled';
+  const color = selected ? colors.primary : colors.surfaceRaised;
+  const contentColor = selected ? colors.onPrimary : colors.text;
   return (
     <Button
       testID={testID}
@@ -35,7 +37,7 @@ export function Chip({
       }}
       modifiers={[
         buttonStyle(selected || filled ? 'borderedProminent' : 'bordered'),
-        ...(filled ? [tint(selected ? colors.primary : colors.surfaceRaised)] : []),
+        ...(filled && color !== undefined ? [tint(color)] : []),
         buttonBorderShape('capsule'),
         controlSize('regular'),
         nativeDisabled(disabled),
@@ -46,7 +48,7 @@ export function Chip({
       <Text
         modifiers={[
           frame({ minHeight: 32 }),
-          ...(filled ? [foregroundStyle(selected ? colors.onPrimary : colors.text)] : []),
+          ...(filled && contentColor !== undefined ? [foregroundStyle(contentColor)] : []),
         ]}
       >
         {label}

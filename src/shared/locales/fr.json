@@ -1,4 +1,42 @@
 {
+  "discover": {
+    "title": "Découvrir",
+    "eyebrow": "L’INSPIRATION AU QUOTIDIEN",
+    "headline": "Une nouvelle étincelle.",
+    "description": "Un regard neuf et de petites idées pour un quotidien plus attentif.",
+    "featured": {
+      "badge": "La sélection de la semaine",
+      "title": "Moins de hâte.\nPlus d’espace.",
+      "description": "Un matin paisible, une fenêtre ouverte, une balade sans destination. Faites une petite place à ce qui vous fait du bien.",
+      "caption": "Ralentir commence par un petit instant."
+    },
+    "topicsTitle": "Un monde d’inspiration",
+    "topics": {
+      "outside": { "title": "Prendre l’air", "description": "Grand air et nouveaux chemins" },
+      "spaces": { "title": "Se sentir chez soi", "description": "Des espaces qui ont une âme" },
+      "rituals": {
+        "title": "Rituels du quotidien",
+        "description": "Ces petits instants qui comptent"
+      },
+      "creativity": { "title": "Rester curieux", "description": "Une place pour les idées" }
+    },
+    "ideasTitle": "Un petit pas à essayer",
+    "ideasDescription": "Trois façons simples d’inviter l’inspiration dans votre journée.",
+    "ideas": {
+      "walk": {
+        "title": "Prendre le chemin des découvertes",
+        "description": "Partez dix minutes plus tôt et empruntez une autre rue. Remarquez un détail que vous auriez ignoré d’habitude."
+      },
+      "corner": {
+        "title": "Réinventer un petit coin",
+        "description": "Libérez une étagère, déplacez une plante ou gardez votre livre préféré à portée de main. Un petit changement peut renouveler un lieu familier."
+      },
+      "offline": {
+        "title": "Garder un instant pour soi",
+        "description": "Posez votre téléphone pendant que le café se prépare. Respirez et profitez de quelques minutes sans liste de tâches."
+      }
+    }
+  },
   "home": {
     "eyebrow": "UN PEU D’INSPIRATION, CHAQUE JOUR",
     "featured": "À la une aujourd’hui",

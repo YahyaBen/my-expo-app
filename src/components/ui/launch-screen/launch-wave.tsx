@@ -79,15 +79,18 @@ export function LaunchWave({
     >
       <Canvas pointerEvents="none" style={{ width: '100%', flex: 1 }}>
         <Group transform={transform}>
-          {WAVE_LAYERS.map((layer) => (
-            <LaunchWaveLayer
-              key={layer.color}
-              layer={layer}
-              color={colors[layer.color]}
-              time={time}
-              horizontalDirection={horizontalDirection}
-            />
-          ))}
+          {WAVE_LAYERS.map((layer) => {
+            const color = colors[layer.color];
+            return color === undefined ? null : (
+              <LaunchWaveLayer
+                key={layer.color}
+                layer={layer}
+                color={color}
+                time={time}
+                horizontalDirection={horizontalDirection}
+              />
+            );
+          })}
         </Group>
       </Canvas>
     </View>

@@ -3,15 +3,23 @@
 | Owner                                                       | Responsibility                                                  |
 | ----------------------------------------------------------- | --------------------------------------------------------------- |
 | `src/constants/themes/ux.ts`                                | Primitive colors and semantic light/dark palettes               |
+| `src/constants/themes/system.ts`                            | Empty color overrides for native platform defaults              |
 | `src/constants/themes/tokens.ts`                            | Typed color contract and derived component roles                |
 | `src/constants/themes/design.ts`, `src/constants/layout.ts` | Typography, native defaults and shared geometry                 |
 | `src/context/theme.context.tsx`                             | Configured root palette, saved appearance and isolated previews |
 | `src/hooks/use-theme.ts`                                    | Theme colors and typography/shape tokens                        |
 | `src/components/ui/host/`                                   | Native scheme/tint inheritance and `useHostColorScheme`         |
 
-- Keep the stable palette ID `ux`, the only bundled palette. The brand selects the
-  root palette; user appearance is system/light/dark. Preview palette changes stay
-  local and never become saved brand identity.
+- Keep the stable palette IDs `ux` and `system`. The brand selects the default
+  palette; Settings lets users save a palette choice through the existing theme
+  provider. User appearance remains system/light/dark. Preview palette changes
+  stay local and never overwrite saved app preferences.
+- `system` defines empty light/dark overrides. Omitted roles preserve native
+  defaults, including the Host seed/tint. Preserve explicit caller overrides;
+  never substitute UX colors or interpolate missing colors into strings.
+  Custom RN surfaces use navigator defaults when an opaque fill is required;
+  native shapes/placeholders use platform semantic fills. Skip palette-only
+  gradients and launch waves. This palette is independent of System appearance.
 - Reuse semantic roles (`background`, `surface`, `text`, `muted`, `border`, `tint`,
   `error`, `success`, `warning`). Keep explicit light/dark colors for intentional
   brand choices in `ux.ts`; `createColorTokens` derives navigation/control roles.

@@ -3,6 +3,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import { screenInsets } from '@/lib/screen-insets';
 import { Column } from '@expo/ui';
 import { router, type Href } from 'expo-router';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -82,6 +83,7 @@ function PageContent({
 }: Readonly<PageContentProps>) {
   const insets = useSafeAreaInsets();
   const headerInset = usePageHeaderInset();
+  const headerHeight = useHeaderHeight();
   return (
     <View
       style={{
@@ -90,7 +92,11 @@ function PageContent({
       }}
     >
       {/* Keep system insets outside the keyboard padding so neither overwrites the other. */}
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={headerHeight}
+        style={{ flex: 1 }}
+      >
         <UniversalHost
           colorScheme={scheme}
           matchContents={false}

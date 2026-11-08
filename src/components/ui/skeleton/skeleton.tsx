@@ -88,11 +88,13 @@ export function SkeletonContent({
   testID,
   style = {},
 }: Readonly<SkeletonContentProps>) {
-  const colors = useThemeColors(useHostColorScheme(colorScheme));
+  const scheme = useHostColorScheme(colorScheme);
+  const colors = useThemeColors(scheme);
   return (
     <Column
       testID={testID}
       modifiers={skeletonModifiers({
+        colorScheme: scheme,
         width: typeof style.width === 'number' ? style.width : undefined,
         height: style.height ?? 16,
         borderRadius: style.borderRadius ?? radii.control,

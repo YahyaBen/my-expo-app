@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { screenContentMaxWidth } from '@/constants/layout';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
@@ -39,7 +40,9 @@ export function InlineBottomSheet({
   collapsedContent,
   testID,
 }: Readonly<InlineBottomSheetProps>) {
-  const colors = useThemeColors(useHostColorScheme());
+  const scheme = useHostColorScheme();
+  const colors = useThemeColors(scheme);
+  const defaults = navigationTheme(scheme, colors).colors;
   const [rendered, setRendered] = useState(isPresented);
   if (isPresented && !rendered) setRendered(true);
   const presented = useRef(isPresented);
@@ -226,7 +229,7 @@ export function InlineBottomSheet({
         testID={testID}
         style={[
           styles.sheet,
-          { height: sheetHeight, backgroundColor: colors.surface },
+          { height: sheetHeight, backgroundColor: colors.surface ?? defaults.card },
           animatedStyle,
         ]}
       >
@@ -267,7 +270,12 @@ export function InlineBottomSheet({
               >
                 <View
                   pointerEvents="none"
-                  style={{ width: 32, height: 4, borderRadius: 2, backgroundColor: colors.muted }}
+                  style={{
+                    width: 32,
+                    height: 4,
+                    borderRadius: 2,
+                    backgroundColor: colors.muted ?? defaults.text,
+                  }}
                 />
               </View>
             </GestureDetector>

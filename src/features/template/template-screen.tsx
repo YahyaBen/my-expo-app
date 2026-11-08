@@ -1,18 +1,17 @@
 import {
-  EmptyState,
   Icon,
   PageScreen,
   PageSection,
   TabNavigationBar,
-  TextInput,
   type TabNavigationItemId,
 } from '@components/ui';
-import { router, useFocusEffect } from 'expo-router';
+import { router, Stack, useFocusEffect } from 'expo-router';
 import { Activity, useCallback, useRef, useState, type ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAppBrand } from '@/config/brand';
+import DiscoverScreen from '@/features/discover/discover-screen';
 import HomeScreen from '@/features/home/home-screen';
 import { componentCatalog, type ComponentId } from './component-catalog';
 import { ComponentList } from './component-list';
@@ -32,9 +31,6 @@ function DeferredSettingsScreen(props: Readonly<SettingsScreenProps>) {
 
 type ContentTabId = Exclude<TabNavigationItemId, 'more'>;
 
-const searchIcon = Icon.select({ ios: 'magnifyingglass', android: 'search' });
-const clearIcon = Icon.select({ ios: 'xmark.circle.fill', android: 'cancel' });
-
 /** Native template shell and its local component-navigation menu. */
 export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
   const { t } = useTranslation();
@@ -47,7 +43,6 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
   }>({ activeId: 'home', contentId: 'home', settingsOpened: false });
   const [menuState, setMenuState] = useState<'unopened' | 'open' | 'closed'>('unopened');
   const menuOpen = menuState === 'open';
-  const [search, setSearch] = useState('');
   const navigating = useRef(false);
   const closeMenu = useCallback(() => {
     setMenuState((state) => (state === 'open' ? 'closed' : state));
@@ -58,10 +53,6 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
       return closeMenu;
     }, [closeMenu]),
   );
-
-  function clearSearch() {
-    setSearch('');
-  }
 
   function navigateToComponent(id: ComponentId) {
     if (navigating.current) return;
@@ -88,19 +79,15 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
 
   const titles = {
     home: brand.name,
-    search: t('template.search'),
+    search: t('discover.title'),
     recipes: t('template.components'),
   };
-  const searchTerm = search.trim().toLocaleLowerCase();
-  const components =
-    contentId === 'search' && searchTerm
-      ? componentCatalog.filter(({ id }) =>
-          t(`componentCatalog.names.${id}`).toLocaleLowerCase().includes(searchTerm),
-        )
-      : componentCatalog;
 
   return (
     <View style={{ flex: 1 }}>
+      <Stack.Screen
+        options={{ title: activeId === 'more' ? t('settings.title') : titles[activeId] }}
+      />
       <View style={{ flex: 1 }}>
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
         <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
@@ -111,37 +98,16 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
           />
         </Activity>
         <Activity mode={activeId === 'more' || activeId === 'home' ? 'hidden' : 'visible'}>
-          {contentId !== 'home' ? (
+          {contentId === 'search' ? (
+            <DiscoverScreen showBack={showBack} />
+          ) : contentId === 'recipes' ? (
             <PageScreen tab title={titles[contentId]} showBack={showBack}>
               <PageSection>
-                {contentId === 'search' ? (
-                  <TextInput
-                    accessibilityLabel={titles.search}
-                    placeholder={titles.search}
-                    value={search}
-                    onChangeText={setSearch}
-                    leftIcon={searchIcon}
-                    rightIcon={search.length > 0 ? clearIcon : undefined}
-                    onRightIconPress={clearSearch}
-                    rightIconAccessibilityLabel={t('query.clearSearch')}
-                    testID="template-component-search"
-                  />
-                ) : null}
-                {components.length > 0 ? (
-                  <ComponentList
-                    items={components}
-                    onSelect={navigateToComponent}
-                    testIDPrefix="template-component"
-                  />
-                ) : (
-                  <EmptyState
-                    icon={searchIcon}
-                    title={t('template.noComponents')}
-                    description={t('query.searchEmptyHint')}
-                    primaryAction={{ label: t('query.clearSearch'), onPress: clearSearch }}
-                    testID="template-components-empty"
-                  />
-                )}
+                <ComponentList
+                  items={componentCatalog}
+                  onSelect={navigateToComponent}
+                  testIDPrefix="template-component"
+                />
               </PageSection>
             </PageScreen>
           ) : null}
@@ -168,7 +134,11 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         rightInset={insets.right}
         items={[
           { id: 'home', label: t('common.home') },
-          { id: 'search', label: t('template.search') },
+          {
+            id: 'search',
+            label: t('discover.title'),
+            icon: Icon.select({ ios: 'safari', android: 'explore' }),
+          },
           {
             id: 'recipes',
             label: t('template.components'),

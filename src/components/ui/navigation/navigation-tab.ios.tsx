@@ -54,13 +54,22 @@ export function NavigationTab({
             scaleEffect(motionEnabled && selected ? 1.1 : 1),
             ...(motionEnabled ? [animation(Animation.easeOut({ duration: 0.16 }), selected)] : []),
             frame({ width: 44, height: 28 }),
-            background(selected ? selectedBackgroundColor : 'transparent', shapes.capsule()),
+            ...(selected
+              ? [
+                  background(
+                    selectedBackgroundColor ?? { type: 'hierarchical', style: 'quaternary' },
+                    shapes.capsule(),
+                  ),
+                ]
+              : []),
           ]}
         />
         <Text
           modifiers={[
             font({ size: 11, weight: 'semibold' }),
-            foregroundStyle(color),
+            foregroundStyle(
+              color ?? { type: 'hierarchical', style: selected ? 'primary' : 'secondary' },
+            ),
             lineLimit(1),
             truncationMode('tail'),
           ]}

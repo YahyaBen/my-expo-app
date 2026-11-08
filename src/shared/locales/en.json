@@ -1,4 +1,39 @@
 {
+  "discover": {
+    "title": "Discover",
+    "eyebrow": "THE EVERYDAY EDIT",
+    "headline": "Find your next spark.",
+    "description": "Fresh perspectives and small ideas for a more thoughtful everyday.",
+    "featured": {
+      "badge": "This week’s collection",
+      "title": "Less rush.\nMore room.",
+      "description": "A quiet morning, an open window, a walk with no destination. Make a little space for the things that feel good.",
+      "caption": "A slower pace starts with one small moment."
+    },
+    "topicsTitle": "A world of inspiration",
+    "topics": {
+      "outside": { "title": "Step outside", "description": "Fresh air & new paths" },
+      "spaces": { "title": "Feel at home", "description": "Spaces with a little soul" },
+      "rituals": { "title": "Daily rituals", "description": "Small moments that matter" },
+      "creativity": { "title": "Stay curious", "description": "Room for a new idea" }
+    },
+    "ideasTitle": "Try a little something",
+    "ideasDescription": "Three simple ways to bring the inspiration into your day.",
+    "ideas": {
+      "walk": {
+        "title": "Take the scenic route",
+        "description": "Leave ten minutes early and choose a different street. Notice something you would usually walk past."
+      },
+      "corner": {
+        "title": "Reset one small corner",
+        "description": "Clear a shelf, move a plant, or put your favorite book within reach. A small change can make a familiar space feel new."
+      },
+      "offline": {
+        "title": "Keep a moment for yourself",
+        "description": "Put your phone aside while your coffee brews. Take a breath and enjoy a few minutes without a to-do list."
+      }
+    }
+  },
   "home": {
     "eyebrow": "A LITTLE INSPIRATION, EVERY DAY",
     "featured": "Featured today",

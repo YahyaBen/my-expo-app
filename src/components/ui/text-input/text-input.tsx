@@ -38,7 +38,7 @@ export interface TextInputProps extends Omit<ExpoTextInputProps, 'value'> {
   onRightIconPress?: () => void;
   /** Supply a screen-reader action label whenever onRightIconPress is set. */
   rightIconAccessibilityLabel?: string;
-  palette?: {
+  palette?: Partial<{
     text: string;
     muted: string;
     tint: string;
@@ -50,7 +50,7 @@ export interface TextInputProps extends Omit<ExpoTextInputProps, 'value'> {
     success: string;
     warning: string;
     selection?: string;
-  };
+  }>;
 }
 
 /** Shared native input; compose inside an existing UniversalHost. */
@@ -92,14 +92,16 @@ export function TextInput({
   const semanticColor = status === 'default' ? undefined : colors[status];
   const contentStyle = { opacity: disabled ? 0.5 : 1 };
   const iconStyle = { width: 20, height: 20, ...contentStyle };
+  const borderColor =
+    style?.borderColor ??
+    semanticColor ??
+    (focused && !disabled ? (colors.ring ?? colors.tint) : (colors.input ?? colors.border));
   const fieldAppearance = inputFieldAppearance({
     paddingHorizontal: style?.paddingHorizontal ?? style?.padding ?? spacing.lg,
     backgroundColor: colors.surface,
     borderRadius: design.shape.inputRadius,
-    borderWidth: 1,
-    borderColor:
-      semanticColor ??
-      (focused && !disabled ? (colors.ring ?? colors.tint) : (colors.input ?? colors.border)),
+    borderWidth: borderColor === undefined ? undefined : 1,
+    borderColor,
     ...style,
   });
   const input = (

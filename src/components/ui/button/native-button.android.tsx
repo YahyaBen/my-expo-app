@@ -1,4 +1,11 @@
-import { Button, OutlinedButton, Shape, Text, TextButton } from '@expo/ui/jetpack-compose';
+import {
+  Button,
+  OutlinedButton,
+  Shape,
+  Text,
+  TextButton,
+  useMaterialColors,
+} from '@expo/ui/jetpack-compose';
 import {
   defaultMinSize,
   fillMaxWidth,
@@ -25,6 +32,7 @@ export function NativeButton({
   color,
   contentColor,
 }: Readonly<NativeButtonProps>) {
+  const nativeColors = useMaterialColors();
   let NativeControl = Button;
   if (variant === 'secondary' || variant === 'glass') NativeControl = OutlinedButton;
   if (variant === 'tertiary' || variant === 'link') NativeControl = TextButton;
@@ -74,7 +82,9 @@ export function NativeButton({
         ...(accessibilityLabel ? [semantics({ contentDescription: accessibilityLabel })] : []),
       ]}
     >
-      <IconColorContext.Provider value={contentColor ?? (filled ? undefined : color)}>
+      <IconColorContext.Provider
+        value={contentColor ?? (filled ? nativeColors.onPrimary : (color ?? nativeColors.primary))}
+      >
         {children ?? <Text>{label ?? ''}</Text>}
       </IconColorContext.Provider>
     </NativeControl>

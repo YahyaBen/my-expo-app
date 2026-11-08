@@ -29,7 +29,8 @@ for operator commands. Keep configuration in these existing owners:
   launch mode. Saved user preferences retain precedence where
   supported. Add manifest fields only when an implementation consumes them.
 - Register palettes in `src/constants/themes/` and the resolver's supported IDs.
-  The root brand palette is fixed; isolated previews do not persist changes.
+  The brand seeds the default palette; Settings saves the user's selection.
+  Isolated previews do not persist changes.
 - Use literal asset imports, never a dynamic `require` from a manifest path.
   Verify native font names and scripts. Arabic and failed/unloaded optional fonts
   use native fallback; brand fonts apply to headings rather than every control.

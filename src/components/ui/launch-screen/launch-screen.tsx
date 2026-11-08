@@ -21,6 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { getAppBrand } from '@/config/brand';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { getBrandHeadingFont, getBrandLaunchArtwork } from '@/config/brand-assets';
 import { useLanguage } from '@/context/language.context';
 import { useAppActive, useAppReducedMotion, useMotionEnabled } from '@/hooks/use-motion-enabled';
@@ -172,7 +173,8 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
         style={{
           height,
           ...screenInsets(insets),
-          backgroundColor: colors.launchWaveBody,
+          backgroundColor:
+            colors.launchWaveBody ?? navigationTheme(scheme, colors).colors.background,
         }}
       >
         <UniversalHost
@@ -231,7 +233,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
           </Column>
         </UniversalHost>
       </View>
-      <LaunchWave colorScheme={scheme} />
+      {colors.launchWaveBody === undefined ? null : <LaunchWave colorScheme={scheme} />}
     </Animated.View>
   );
 }

@@ -9,7 +9,7 @@ Import `AuthScreenFrame` from `@components/ui`.
 Source: [auth/](../../../src/components/ui/auth/).
 
 - The frame owns safe areas, keyboard layout, scrolling and one full-width
-  native Host. Compose native content controls inside it.
+  native Host below the native stack header. Use Router's measured header height for the keyboard vertical offset. Compose native content controls inside it.
 - Content centers within `screenContentMaxWidth` (640 points/dp).
   `PageSection` supplies symmetric 16-point content padding. Preserve available
   keyboard-adjusted minimum height: short forms center; long forms grow/scroll.

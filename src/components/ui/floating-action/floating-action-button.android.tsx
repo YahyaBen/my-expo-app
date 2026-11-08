@@ -1,6 +1,7 @@
-import { Button, Shape } from '@expo/ui/jetpack-compose';
+import { Button, Shape, useMaterialColors } from '@expo/ui/jetpack-compose';
 import { semantics, size, testID } from '@expo/ui/jetpack-compose/modifiers';
 import type { NativeFloatingActionButtonProps } from './floating-action-button';
+import { IconColorContext } from '../icon/icon-color-context';
 
 export function NativeFloatingActionButton({
   children,
@@ -10,6 +11,7 @@ export function NativeFloatingActionButton({
   disabled,
   testID: id,
 }: Readonly<NativeFloatingActionButtonProps>) {
+  const nativeColors = useMaterialColors();
   return (
     <Button
       onClick={disabled ? undefined : onPress}
@@ -17,14 +19,20 @@ export function NativeFloatingActionButton({
       // The installed native ShapeRecord defaults radius to zero, clipping
       // both the icon and the pointer target to the center of the button.
       shape={Shape.Circle({ radius: 1 })}
-      colors={{
-        containerColor: color,
-        disabledContainerColor: color,
-      }}
+      colors={
+        color === undefined
+          ? undefined
+          : {
+              containerColor: color,
+              disabledContainerColor: color,
+            }
+      }
       contentPadding={{ start: 0, end: 0, top: 0, bottom: 0 }}
       modifiers={[size(76, 76), testID(id), semantics({ contentDescription: label })]}
     >
-      {children}
+      <IconColorContext.Provider value={disabled ? nativeColors.onSurface : nativeColors.onPrimary}>
+        {children}
+      </IconColorContext.Provider>
     </Button>
   );
 }

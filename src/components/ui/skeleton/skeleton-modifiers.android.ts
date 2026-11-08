@@ -7,11 +7,14 @@ import {
   size,
 } from '@expo/ui/jetpack-compose/modifiers';
 import { processColor } from 'react-native';
+import { getMaterialColors } from '@expo/ui/jetpack-compose';
 import type { SkeletonShapeStyle } from './skeleton-modifiers';
 
 export function skeletonModifiers(style: SkeletonShapeStyle) {
   // Apply opacity to the only painted content, without allocating a graphics layer.
-  const color = processColor(style.backgroundColor);
+  const backgroundColor =
+    style.backgroundColor ?? getMaterialColors({ scheme: style.colorScheme }).surfaceVariant;
+  const color = processColor(backgroundColor);
   const fill =
     typeof color === 'number'
       ? `#${(color & 0xffffff).toString(16).padStart(6, '0')}${Math.round(
@@ -19,7 +22,7 @@ export function skeletonModifiers(style: SkeletonShapeStyle) {
         )
           .toString(16)
           .padStart(2, '0')}`
-      : style.backgroundColor;
+      : backgroundColor;
   return [
     ...(style.width === undefined
       ? [fillMaxWidth(), height(style.height)]

@@ -12,6 +12,7 @@ import { nativeFillWidthCenter } from '../native/native-fill-width';
 import { useHostColorScheme } from '../host/universal-host';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
+import { navigationTheme } from '@/constants/navigation-theme';
 
 export type VerificationCodeFaceStatus = 'default' | 'success' | 'error';
 
@@ -67,7 +68,13 @@ function AnimatedVerificationFace({
   testID: string;
   visible: boolean;
 }>) {
-  const colors = useThemeColors(useHostColorScheme());
+  const scheme = useHostColorScheme();
+  const colors = useThemeColors(scheme);
+  const defaults = navigationTheme(scheme, colors).colors;
+  const background =
+    colors.primary ?? (typeof defaults.text === 'string' ? defaults.text : undefined);
+  const foreground =
+    colors.onPrimary ?? (typeof defaults.background === 'string' ? defaults.background : undefined);
   const motionEnabled = useMotionEnabled(visible);
   // The live app preference owns both timing durations, including explicit overrides.
   const progress = useDerivedValue(() =>
@@ -109,7 +116,7 @@ function AnimatedVerificationFace({
       style={[
         { width: size, height: size, borderRadius: size / 4 },
         {
-          backgroundColor: colors.primary,
+          backgroundColor: background,
           transform: [
             { perspective: 300 },
             { rotateY: `${motionEnabled ? inputProgress * 45 - 22.5 : 0}deg` },
@@ -127,18 +134,18 @@ function AnimatedVerificationFace({
           <Group transform={faceTransform}>
             <Path
               path={eyebrows}
-              color={colors.onPrimary}
+              color={foreground}
               style="stroke"
               strokeWidth={1.5}
               strokeCap="round"
             />
-            <Circle cx={35} cy={44} r={10} color={colors.onPrimary} />
-            <Circle cx={61} cy={44} r={10} color={colors.onPrimary} />
-            <Circle cx={pupilLeft} cy={47} r={pupilRadius} color={colors.primary} />
-            <Circle cx={pupilRight} cy={47} r={pupilRadius} color={colors.primary} />
+            <Circle cx={35} cy={44} r={10} color={foreground} />
+            <Circle cx={61} cy={44} r={10} color={foreground} />
+            <Circle cx={pupilLeft} cy={47} r={pupilRadius} color={background} />
+            <Circle cx={pupilRight} cy={47} r={pupilRadius} color={background} />
             <Path
               path={mouth}
-              color={colors.onPrimary}
+              color={foreground}
               style="stroke"
               strokeWidth={2}
               strokeCap="round"

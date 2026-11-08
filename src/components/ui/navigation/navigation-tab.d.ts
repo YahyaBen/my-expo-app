@@ -5,8 +5,8 @@ export type NavigationTabProps = {
   label: string;
   selected: boolean;
   motionEnabled: boolean;
-  color: string;
-  selectedBackgroundColor: string;
+  color?: string;
+  selectedBackgroundColor?: string;
   testID: string;
   onPress: () => void;
 };

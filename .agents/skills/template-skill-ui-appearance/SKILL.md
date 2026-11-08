@@ -5,15 +5,21 @@ description: Maintain saved appearance preferences and isolated theme previews.
 
 # Appearance preferences
 
-Use `ColorSchemeControl` from `@components/ui`.
+Use `ThemeControl` and `ColorSchemeControl` from `@components/ui`.
 Sources: [appearance controls](../../../src/components/ui/appearance/) and
 [theme provider](../../../src/context/theme.context.tsx).
 
 ## Preference ownership
 
-- The brand's `presentation.palette` fixes the root palette to `ux`, the only
-  bundled palette. Ordinary Settings has no brand/palette picker.
-  `allowThemeSelection` is an explicit isolated-preview opt-in; it is not saved.
+- The brand's `presentation.palette` seeds the root palette with `ux` (the template
+  default) or `system` (native colors with no app overrides). Settings exposes
+  `ThemeControl` in Appearance; it changes the app's palette immediately.
+  The root opts into `allowThemeSelection`; locked providers reject changes.
+- Root `persistAppearance` restores `appTheme` and `appColorScheme` together.
+  Accept only registered theme IDs; missing/invalid/failed reads retain the brand
+  default. Theme writes share the existing serialized preference queue.
+  `ThemeControl` accepts an optional `testID` and uses
+  `themeSelectionEnabled` to wait for restoration and honor locked providers.
 - System/Light/Dark uses `appColorScheme`. Root `persistAppearance` restores
   accepted values and exposes `appearanceReady`; disable controls until ready.
   Missing/invalid/failed reads keep the initial preference. Writes are queued;
@@ -40,8 +46,8 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   ignored; do not add startup storage work to migrate them.
 - Reduce Motion observes the live system value until explicitly selected.
   Use `useAppReducedMotion` / `useMotionEnabled`; retain activity checks.
-- Keep `ThemePicker` local to Text previews. Storybook and Text preview providers
-  must not persist root preferences.
+- Reuse `ThemeControl` in Text previews. Storybook and Text preview providers
+  must keep palette and appearance changes in memory without persisting root preferences.
 
 Verify restart restoration, failed storage, live System changes,
 open language-sheet interaction and RTL on native devices.

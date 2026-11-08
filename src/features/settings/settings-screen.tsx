@@ -21,6 +21,7 @@ import {
   PageSection,
   Row,
   Switch,
+  ThemeControl,
   UniversalTextContent as Text,
   UniversalHost,
   usePageHeaderInset,
@@ -149,6 +150,9 @@ function SettingsPage({
                   first
                 />
               </FieldGroup.SectionHeader>
+              <SettingsPickerRow label={t('common.theme')} stacked={stackPickers}>
+                <ThemeControl />
+              </SettingsPickerRow>
               <SettingsPickerRow label={t('common.colorScheme')} stacked={stackPickers}>
                 <ColorSchemeControl testID="app-settings-color-scheme-picker" />
               </SettingsPickerRow>

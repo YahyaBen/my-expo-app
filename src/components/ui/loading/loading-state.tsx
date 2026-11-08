@@ -1,4 +1,5 @@
 import { spacing } from '@/constants/layout';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { useThemeColors } from '@/hooks/use-theme';
 import { screenInsets } from '@/lib/screen-insets';
 import { Column, Row, ScrollView, Spacer } from '@expo/ui';
@@ -49,7 +50,11 @@ export function LoadingScreen({
       colorScheme={scheme}
       matchContents={false}
       ignoreSafeArea="all"
-      style={{ flex: 1, backgroundColor: colors.background, ...screenInsets(insets) }}
+      style={{
+        flex: 1,
+        backgroundColor: navigationTheme(scheme, colors).colors.background,
+        ...screenInsets(insets),
+      }}
     >
       <Column alignment="center" modifiers={nativeFillSize}>
         <Spacer flexible />

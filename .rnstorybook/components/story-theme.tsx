@@ -9,7 +9,8 @@ import {
   useAppearanceSettings,
   type ColorSchemePreference,
 } from '@/context/theme.context';
-import { useThemeColors } from '@/hooks/use-theme';
+import { useAppTheme } from '@/hooks/use-theme';
+import { navigationTheme } from '@/constants/navigation-theme';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
 
 export type StoryThemeProps = {
@@ -41,7 +42,7 @@ function StoryCanvas({
   restoreColorScheme,
 }: Readonly<PropsWithChildren<{ restoreColorScheme: ColorSchemePreference }>>) {
   const { colorScheme } = useAppearanceSettings();
-  const colors = useThemeColors();
+  const { colors, scheme } = useAppTheme();
   const focused = useIsFocused();
   const ready = useContext(PerformanceReadyContext);
   // Native presentations also need the selected appearance outside a Host.
@@ -55,7 +56,9 @@ function StoryCanvas({
   }, [colorScheme, restoreColorScheme, focused]);
   return (
     <PerformanceReadyContext.Provider value={ready !== false && focused}>
-      <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
+      <View style={{ flex: 1, backgroundColor: navigationTheme(scheme, colors).colors.background }}>
+        {children}
+      </View>
     </PerformanceReadyContext.Provider>
   );
 }

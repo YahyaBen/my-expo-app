@@ -24,7 +24,7 @@ export function TableActions({
       modifiers={[
         buttonStyle('bordered'),
         controlSize('regular'),
-        tint(colors.tint),
+        ...(colors.tint === undefined ? [] : [tint(colors.tint)]),
         nativeAccessibilityLabel(accessibilityLabel),
         disabled(actions.length === 0),
       ]}

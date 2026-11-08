@@ -1,4 +1,4 @@
-import { Shape as MaterialShape } from '@expo/ui/jetpack-compose';
+import { Shape as MaterialShape, useMaterialColors } from '@expo/ui/jetpack-compose';
 import { semantics, size, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
@@ -16,8 +16,9 @@ export function Shape({
   accessibilityLabel,
 }: Readonly<ShapeProps>) {
   const colors = useThemeColors(useHostColorScheme());
+  const nativeColors = useMaterialColors();
   const props = {
-    color: color ?? colors.tint,
+    color: color ?? colors.tint ?? nativeColors.primary,
     modifiers: [
       size(width, height),
       ...(testID ? [nativeTestID(testID)] : []),

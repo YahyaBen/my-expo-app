@@ -10,11 +10,12 @@ export function LoadingIndicator({
   accessibilityLabel,
 }: Readonly<LoadingIndicatorProps>) {
   const colors = useThemeColors(useHostColorScheme());
+  const indicatorColor = color ?? colors.tint;
   return (
     <ProgressView
       testID={testID}
       modifiers={[
-        tint(color ?? colors.tint),
+        ...(indicatorColor === undefined ? [] : [tint(indicatorColor)]),
         ...(accessibilityLabel ? [nativeLabel(accessibilityLabel)] : []),
       ]}
     />

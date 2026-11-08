@@ -12,6 +12,7 @@ import { themes, type ThemeId } from '@/constants/themes/index';
 import type { AppColorScheme } from '@/constants/themes/tokens';
 const REDUCED_MOTION_STORAGE_KEY = 'appReducedMotion';
 const APPEARANCE_STORAGE_KEY = 'appColorScheme';
+const THEME_STORAGE_KEY = 'appTheme';
 let preferencePersistence = Promise.resolve();
 
 export type ColorSchemePreference = AppColorScheme | 'system';
@@ -20,8 +21,13 @@ function isColorSchemePreference(value: unknown): value is ColorSchemePreference
   return value === 'system' || value === 'light' || value === 'dark';
 }
 
+function isThemeId(value: unknown): value is ThemeId {
+  return typeof value === 'string' && Object.hasOwn(themes, value);
+}
+
 interface ThemeSettings {
   themeId: ThemeId;
+  themeSelectionEnabled: boolean;
   colorScheme: ColorSchemePreference;
   setThemeId: (theme: ThemeId) => void;
   setColorScheme: (scheme: ColorSchemePreference) => void;
@@ -31,9 +37,9 @@ interface ThemeSettings {
   setReducedMotion: (reduced: boolean) => void;
 }
 
-const PaletteContext = createContext<Pick<ThemeSettings, 'themeId' | 'setThemeId'> | undefined>(
-  undefined,
-);
+const PaletteContext = createContext<
+  Pick<ThemeSettings, 'themeId' | 'setThemeId' | 'themeSelectionEnabled'> | undefined
+>(undefined);
 const AppearanceContext = createContext<
   Pick<ThemeSettings, 'colorScheme' | 'setColorScheme' | 'appearanceReady'> | undefined
 >(undefined);
@@ -57,9 +63,9 @@ export function ThemePreferencesProvider({
     initialColorScheme?: ColorSchemePreference;
     initialReducedMotion?: boolean | null;
     persistMotion?: boolean;
-    /** Only the app root persists appearance; isolated previews stay in memory. */
+    /** Only the app root persists palette and appearance; isolated previews stay in memory. */
     persistAppearance?: boolean;
-    /** Explicit opt-in for local component previews, never the app root. */
+    /** Explicit opt-in for the app root and local component previews. */
     allowThemeSelection?: boolean;
   }>
 >) {
@@ -68,14 +74,19 @@ export function ThemePreferencesProvider({
   const [appearanceReady, setAppearanceReady] = useState(!persistAppearance);
   const [reducedMotion, updateReducedMotion] = useState(initialReducedMotion);
   const [motionReady, setMotionReady] = useState(!persistMotion);
+  const themeSelectionEnabled = allowThemeSelection && appearanceReady;
   useEffect(() => {
     if (!persistAppearance) return;
     let active = true;
     // A remounted root must read after any previous selection has finished saving.
     void preferencePersistence
-      .then(() => AsyncStorage.getItem(APPEARANCE_STORAGE_KEY))
-      .then((stored) => {
-        if (active && isColorSchemePreference(stored)) updateColorScheme(stored);
+      .then(() => AsyncStorage.multiGet([APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY]))
+      .then(([appearance, palette]) => {
+        if (!active) return;
+        const storedScheme = appearance?.[1];
+        const storedTheme = palette?.[1];
+        if (isColorSchemePreference(storedScheme)) updateColorScheme(storedScheme);
+        if (allowThemeSelection && isThemeId(storedTheme)) updateThemeId(storedTheme);
       })
       .catch(() => {
         /* Retain the initial appearance when local storage is unavailable. */
@@ -86,7 +97,7 @@ export function ThemePreferencesProvider({
     return () => {
       active = false;
     };
-  }, [persistAppearance]);
+  }, [allowThemeSelection, persistAppearance]);
   useEffect(() => {
     if (!persistMotion) return;
     let active = true;
@@ -108,9 +119,17 @@ export function ThemePreferencesProvider({
   }, [persistMotion]);
   const setThemeId = useCallback(
     (theme: ThemeId) => {
-      if (allowThemeSelection && Object.hasOwn(themes, theme)) updateThemeId(theme);
+      if (!themeSelectionEnabled || !isThemeId(theme)) return;
+      updateThemeId(theme);
+      if (persistAppearance) {
+        preferencePersistence = preferencePersistence
+          .then(() => AsyncStorage.setItem(THEME_STORAGE_KEY, theme))
+          .catch(() => {
+            /* The selected palette remains usable for this session. */
+          });
+      }
     },
-    [allowThemeSelection],
+    [themeSelectionEnabled, persistAppearance],
   );
   const setColorScheme = useCallback(
     (scheme: ColorSchemePreference) => {
@@ -141,7 +160,10 @@ export function ThemePreferencesProvider({
     [motionReady, persistMotion],
   );
   // Each subscription changes only with the preference group it renders.
-  const palette = useMemo(() => ({ themeId, setThemeId }), [themeId, setThemeId]);
+  const palette = useMemo(
+    () => ({ themeId, setThemeId, themeSelectionEnabled }),
+    [themeId, setThemeId, themeSelectionEnabled],
+  );
   const appearance = useMemo(
     () => ({ colorScheme, setColorScheme, appearanceReady }),
     [colorScheme, setColorScheme, appearanceReady],

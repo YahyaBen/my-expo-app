@@ -100,5 +100,6 @@ export function createColorTokens(colors: SemanticColors) {
   };
 }
 
-export type ColorTokens = ReturnType<typeof createColorTokens>;
+/** Omitted roles leave the native component's colors unchanged. */
+export type ColorTokens = Partial<ReturnType<typeof createColorTokens>>;
 export type ThemePalette = Record<AppColorScheme, ColorTokens>;

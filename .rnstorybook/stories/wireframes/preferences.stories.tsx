@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         story:
-          'Appearance stays inside the story. Language and device feature switches use saved preferences; permission, location and notification actions use the real device only when requested.',
+          'Choose UX Template or System in Appearance > Theme to change the preview immediately. Palette and light/dark choices stay inside the story. Language and device feature switches use saved preferences; permission, location and notification actions use the real device only when requested. Check switching themes with a language sheet open, RTL and large text.',
       },
     },
   },

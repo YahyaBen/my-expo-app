@@ -1,4 +1,9 @@
-# Header rendering
+# Retained custom header rendering
+
+The app currently uses Expo Router's default native header. Custom header rendering
+is commented out in PageFrame, and its blur capture target, backdrop and touch
+shield are inactive. The implementation details below describe the retained
+custom header. Configure the active header through Router route options.
 
 Use this reference when changing page blur or native screen retention.
 Source: [page implementation](../../../../src/components/ui/page/).

@@ -70,7 +70,8 @@ request centering in native layout.
   then app preferences. Preserve state when these values change.
 - `useHostColorScheme`/`useHostLayoutDirection` read resolved values.
   Read them in a descendant to inspect a newly created Host's overrides.
-- `seedColor` defaults to the active theme tint for every palette, including UX.
+- `seedColor` defaults to the active theme tint. System leaves it unset so the
+  platform owns its default palette; UX supplies its tint.
   Explicit seeds keep priority; Android derives Material controls and iOS applies
   native tint. Keep brand color choices in theme tokens, outside Host branches.
 - Pass direction through the Host prop. Leave safe-area ownership to the page.

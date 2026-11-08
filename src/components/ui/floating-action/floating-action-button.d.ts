@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 export interface NativeFloatingActionButtonProps {
   children: ReactNode;
-  color: string;
+  color?: string;
   label: string;
   testID: string;
   onPress: () => void;

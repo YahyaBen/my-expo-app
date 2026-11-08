@@ -138,6 +138,11 @@ export default function TokensScreen() {
         ))}
       </DemoSection>
       <DemoSection title={t('showcase.tokenGallery.colors')}>
+        {themeId === 'system' ? (
+          <Text testID="demo-tokens-native-default">
+            {t('showcase.tokenGallery.nativeDefault')}
+          </Text>
+        ) : null}
         {Object.entries(colors).map(([role, value]) => (
           <Row key={role} spacing={spacing.md} alignment="center" modifiers={nativeFillWidth}>
             <Column

@@ -7,12 +7,12 @@ export function navigationTheme(scheme: AppColorScheme, colors: ColorTokens) {
     ...base,
     colors: {
       ...base.colors,
-      primary: colors.tint,
-      background: colors.background,
-      card: colors.background,
-      text: colors.text,
-      border: colors.divider,
-      notification: colors.error,
+      primary: colors.tint ?? base.colors.primary,
+      background: colors.background ?? base.colors.background,
+      card: colors.background ?? base.colors.card,
+      text: colors.text ?? base.colors.text,
+      border: colors.divider ?? base.colors.border,
+      notification: colors.error ?? base.colors.notification,
     },
   };
 }
