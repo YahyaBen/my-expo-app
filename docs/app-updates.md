@@ -1,11 +1,23 @@
 # App updates
 
-The app checks once per launch after its initial screen is interactive. A native
-sheet offers an available update and can be dismissed for the rest of the session.
-Settings keeps a manual **Check for updates** action and separate results for
-app improvements and the store release. Network failures do not block launch or
-count as a successful version check. Checks share one in-flight operation; no
-polling, background task or persisted update state is added.
+The app checks after its initial screen is interactive, then every 15 minutes
+while in the foreground. Returning to the foreground checks immediately if the
+last attempt was at least 15 minutes ago. A manual check resets that countdown;
+failed checks wait for the next eligible attempt. The timer stops in the background
+and waits while another update operation is running. No background task or
+persisted update state is added.
+
+A native sheet offers an available update and can be dismissed for the rest of
+the session. Settings keeps a manual **Check for updates** action and separate
+results for app improvements and the store release. Network failures do not block
+launch or count as a successful version check. Checks and actions share one
+in-flight operation.
+
+The root prompt uses a full-size, non-intercepting native Host rather than sizing
+to modal content, which has no inline height. It can offer an OTA result while
+the store check is still running; update actions wait for that shared check to
+finish. Settings reads the same detection result without starting another check
+when opened.
 
 ## Expo updates
 
@@ -79,6 +91,13 @@ Metro reloads and an OTA publication cannot apply those native changes.
   version; a sideloaded preview APK does not validate Play update availability.
 - Check dismissal, native StoreKit/Play presentation, duplicate taps, interrupted
   downloads, large text and English/French/Arabic layouts on both platforms.
+- On a cold launch with a compatible OTA available, verify the prompt appears on
+  Home without opening Settings, including while the store check is slow. Dismiss
+  it and verify Home stays interactive and Settings retains the update action.
+- Keep the app in the foreground for 15 minutes and verify another check. Verify
+  a manual check resets the countdown, backgrounding stops the timer, returning
+  after the deadline checks once, and update operations never overlap. Later
+  checks must respect a prompt dismissed for the session.
 - Run lint, typecheck and formatting separately from native-device and live-store
   checks. Static checks do not prove store availability or native presentation.
 

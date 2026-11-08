@@ -1,5 +1,4 @@
 import { Column } from '@expo/ui';
-import { useHeaderHeight } from 'expo-router/react-navigation';
 import { useState, type PropsWithChildren, type ReactNode } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -57,7 +56,6 @@ function AuthScreenContent({
   }>
 >) {
   const insets = useSafeAreaInsets();
-  const headerHeight = useHeaderHeight();
   const { language } = useLanguage();
   const brand = getAppBrand();
   const { colors, scheme } = useAppTheme(useHostColorScheme(colorScheme));
@@ -85,7 +83,6 @@ function AuthScreenContent({
     <KeyboardAvoidingView
       testID={testID}
       behavior="padding"
-      keyboardVerticalOffset={headerHeight}
       style={{
         flex: 1,
         ...screenInsets(insets, { tabBarShown: tab }),

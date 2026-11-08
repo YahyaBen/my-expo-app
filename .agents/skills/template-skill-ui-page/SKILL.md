@@ -17,40 +17,25 @@ Source: [page/](../../../src/components/ui/page/).
   introduction. Actions accept readonly arrays of `PageScreenAction`.
   An optional `footer` string stays below the scrollable content as a centered,
   muted caption, within the page's bottom safe area. The caller owns its text.
-- Use `PageFrame` for custom content boundaries below the native stack header; it owns content safe areas and readiness.
+- Use `PageFrame` for custom content boundaries; it owns header safe areas.
 - Wrap ordinary content in `PageSection`: 16-point symmetric padding and gap.
   Use `inset={false}` when full-width content owns its gutters.
 - Native content Hosts cap at `screenContentMaxWidth` (640 points), centered on
-  wide displays. Keep frame backgrounds edge-to-edge.
+  wide displays. Keep frame backgrounds and header blur edge-to-edge.
 - Bounded Android page/form Hosts use `useViewportSizeMeasurement` to supply a
   nonzero initial Compose proposal before Yoga settles their viewport. Keep
   explicit bounds and the width cap; do not enable it for intrinsic inline Hosts.
-- `tab` adds only the 28-point raised-button trailing clearance; the dock owns
-  its row/system inset. Expo Router owns native Back based on navigation history.
-  `showBack` and `onBack` remain compatible props for the disabled custom header;
-  they do not configure the native Back action.
+- `showBack={false}` hides Back without adding tab insets. `tab` adds only the
+  28-point raised-button trailing clearance; the dock owns its row/system inset.
+  Tab pages hide Back by default; explicit `showBack` can retain a pushed
+  Template preview's Back action while keeping dock spacing.
 - Keep system insets outside keyboard padding and avoid nested scroll containers.
 
 ## Header
 
-Expo Router's root `Stack` shows its default native header. Route options own
-translated titles; the template shell updates the title when its active tab
-changes. Configure native header presentation through Router options.
-
-`PageFrame` leaves the native header outside its content tree and passes a zero
-top inset to descendants, retaining bottom and side insets. It mounts no custom
-blur capture target, backdrop, header measurement or touch shield.
-`usePageHeaderInset()` returns zero. Page and authentication keyboard frames use
-`useHeaderHeight` from `expo-router/react-navigation` for their vertical offset.
-
-`title`, `onBack`, `headerMode` and `headerBlur` remain accepted by `PageFrame`
-for source compatibility; they do not configure the active native header.
-The custom header rendering is commented out, and its component files remain.
-Use the page-header story for real route pushes and native Back round trips,
-retained drafts/scroll, keyboard reachability, RTL, large text and safe areas
-on iOS and Android. Static checks do not establish native behavior.
-
-## Retained custom header (disabled)
+The root Expo Router stack hides its default header. `PageFrame` renders the
+shared custom title, Back action, blur backdrop and touch shield, and owns
+header measurement and safe-area geometry.
 
 Titled frames use one rectangular native blur backdrop by default.
 `headerBlur={false}` opts out. Header geometry has no decorative variants or

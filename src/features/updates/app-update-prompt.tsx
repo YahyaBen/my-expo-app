@@ -7,6 +7,7 @@ import {
 } from '@components/ui';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet } from 'react-native';
 import { useAppUpdates } from './app-updates';
 
 /** Offer updates once each session; Settings keeps the actions available after dismissal. */
@@ -21,7 +22,14 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
   const pending = updates?.pending ?? null;
 
   useEffect(() => {
-    if (!ready || offered.current || pending || (!storeAvailable && !otaAvailable)) return;
+    // A slow store check must not hide an OTA result that has already arrived.
+    if (
+      !ready ||
+      offered.current ||
+      (pending !== null && pending !== 'check') ||
+      (!storeAvailable && !otaAvailable)
+    )
+      return;
     offered.current = true;
     setKind(storeAvailable ? 'store' : 'ota');
     setPresented(true);
@@ -45,8 +53,10 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
 
   return (
     <UniversalHost
-      style={{ position: 'absolute' }}
-      pointerEvents="box-none"
+      // Modal content has no inline height; keep its native presenter laid out.
+      matchContents={false}
+      style={StyleSheet.absoluteFill}
+      pointerEvents="none"
       testID="app-update-presentation"
     >
       <BottomSheet

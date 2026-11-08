@@ -30,6 +30,7 @@ interface AppUpdates {
 }
 
 const AppUpdatesContext = createContext<AppUpdates | null>(null);
+const UPDATE_CHECK_INTERVAL_MS = 15 * 60 * 1000;
 
 /** One controller shares automatic detection and Settings actions for this app session. */
 export function AppUpdatesProvider({
@@ -51,7 +52,7 @@ export function AppUpdatesProvider({
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [actionError, setActionError] = useState<AppUpdates['actionError']>(null);
   const operation = useRef<PendingAction | null>(null);
-  const checkedAutomatically = useRef(false);
+  const lastCheckStartedAt = useRef<number | null>(null);
   const mounted = useRef(false);
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export function AppUpdatesProvider({
 
   const checkForUpdates = useCallback(async () => {
     if ((!otaEnabled && !storeEnabled) || !begin('check')) return;
+    lastCheckStartedAt.current = Date.now();
     // Failures are independent: an offline store must not hide an available OTA update.
     await Promise.allSettled([
       ...(otaEnabled
@@ -115,10 +117,15 @@ export function AppUpdatesProvider({
   }, [begin, finish, otaEnabled, storeEnabled]);
 
   useEffect(() => {
-    if (!ready || checkedAutomatically.current) return;
-    checkedAutomatically.current = true;
-    void checkForUpdates();
-  }, [ready, checkForUpdates]);
+    // The root's ready flag includes foreground state; resume overdue checks on return.
+    if (!ready || pending !== null || (!otaEnabled && !storeEnabled)) return;
+    const delay =
+      lastCheckStartedAt.current === null
+        ? 0
+        : Math.max(0, UPDATE_CHECK_INTERVAL_MS - (Date.now() - lastCheckStartedAt.current));
+    const timer = setTimeout(() => void checkForUpdates(), delay);
+    return () => clearTimeout(timer);
+  }, [ready, pending, checkForUpdates, otaEnabled, storeEnabled]);
 
   async function downloadUpdate() {
     if (!otaEnabled || otaStatus !== 'available' || !begin('download')) return;

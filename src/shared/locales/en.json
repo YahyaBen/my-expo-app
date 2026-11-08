@@ -48,6 +48,10 @@
     "discoverMore": "There's more to discover.",
     "browseComponents": "Browse components",
     "retryPhoto": "Retry photo",
+    "testers": {
+      "title": "Thanks for testing the app!",
+      "description": "Every bug you spot and every idea you share helps make the app better. We're glad you're here."
+    },
     "categories": {
       "nature": "Nature",
       "spaces": "Spaces",
@@ -816,6 +820,17 @@
     "noComponents": "No components found."
   },
   "componentCatalog": {
+    "browseCategories": "Choose a category to explore its components.",
+    "categoryCount": "Components: {{count}}",
+    "categories": {
+      "layout": "Layout & typography",
+      "controls": "Controls & forms",
+      "data": "Lists & data",
+      "media": "Media & carousels",
+      "navigation": "Navigation & overlays",
+      "feedback": "Status & feedback",
+      "flows": "App flows"
+    },
     "emptyState": {
       "title": "No Projects Yet",
       "description": "You haven't created any projects yet.\nGet started by creating your first project.",

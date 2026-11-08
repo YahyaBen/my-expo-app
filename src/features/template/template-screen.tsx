@@ -5,7 +5,7 @@ import {
   TabNavigationBar,
   type TabNavigationItemId,
 } from '@components/ui';
-import { router, Stack, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Activity, useCallback, useRef, useState, type ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
@@ -13,8 +13,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAppBrand } from '@/config/brand';
 import DiscoverScreen from '@/features/discover/discover-screen';
 import HomeScreen from '@/features/home/home-screen';
-import { componentCatalog, type ComponentId } from './component-catalog';
-import { ComponentList } from './component-list';
+import type { ComponentCategoryId } from './component-catalog';
+import { ComponentCategoryList } from './component-category-list';
 import { ComponentMenu } from './component-menu';
 
 type SettingsScreenProps = ComponentProps<
@@ -54,12 +54,12 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     }, [closeMenu]),
   );
 
-  function navigateToComponent(id: ComponentId) {
+  function navigateToCategory(id: ComponentCategoryId) {
     if (navigating.current) return;
     navigating.current = true;
     closeMenu();
     Keyboard.dismiss();
-    router.push({ pathname: '/components/[id]', params: { id } });
+    router.push({ pathname: '/components/category/[id]', params: { id } });
   }
 
   function selectTab(id: TabNavigationItemId) {
@@ -85,9 +85,6 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Screen
-        options={{ title: activeId === 'more' ? t('settings.title') : titles[activeId] }}
-      />
       <View style={{ flex: 1 }}>
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
         <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
@@ -101,13 +98,14 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
           {contentId === 'search' ? (
             <DiscoverScreen showBack={showBack} />
           ) : contentId === 'recipes' ? (
-            <PageScreen tab title={titles[contentId]} showBack={showBack}>
+            <PageScreen
+              tab
+              title={titles[contentId]}
+              description={t('componentCatalog.browseCategories')}
+              showBack={showBack}
+            >
               <PageSection>
-                <ComponentList
-                  items={componentCatalog}
-                  onSelect={navigateToComponent}
-                  testIDPrefix="template-component"
-                />
+                <ComponentCategoryList onSelect={navigateToCategory} />
               </PageSection>
             </PageScreen>
           ) : null}

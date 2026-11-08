@@ -5,6 +5,7 @@ import {
   AuthScreenFrame,
   Badge,
   BottomSheet,
+  Button,
   ButtonContent,
   Text as ButtonText,
   Checkbox,
@@ -95,6 +96,14 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
         title={title}
         description={t('componentCatalog.tryComponent')}
         testID="component-auth"
+        topBar={
+          <Button
+            variant="tertiary"
+            label={t('common.goBack')}
+            onPress={goBack}
+            testID="component-auth-back"
+          />
+        }
       >
         <FormExample />
       </AuthScreenFrame>

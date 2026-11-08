@@ -17,12 +17,16 @@ import {
   useHostColorScheme,
   type PhotoItem,
 } from '@components/ui';
+import catAnimation from '@assets/animations/cat.json';
 import { Image } from 'expo-image';
-import { useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import LottieView from 'lottie-react-native';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth } from '@/constants/layout';
+import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 import { homeStories, type HomeStory } from './home-stories';
 import { DateTimeBanner } from './date-time-banner';
@@ -71,6 +75,7 @@ export default function HomeScreen({
     <PageScreen tab title={title} showBack={showBack}>
       <PageSection testID="template-wireframe" spacing={24}>
         <DateTimeBanner />
+        <TesterThanks width={contentWidth} />
         <Column spacing={8} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
             {t('home.eyebrow')}
@@ -209,6 +214,59 @@ export default function HomeScreen({
         </ScrollView>
       </BottomSheet>
     </PageScreen>
+  );
+}
+
+function TesterThanks({ width }: Readonly<{ width: number }>) {
+  const { t } = useTranslation();
+  const colors = useThemeColors(useHostColorScheme());
+  const animate = useMotionEnabled();
+  const animation = useRef<LottieView>(null);
+  const artworkSize = Math.max(1, Math.min(180, width - 40));
+
+  useFocusEffect(
+    useCallback(() => {
+      const artwork = animation.current;
+      if (animate) artwork?.play();
+      else artwork?.pause();
+      return () => artwork?.pause();
+    }, [animate]),
+  );
+
+  return (
+    <Column
+      alignment="center"
+      spacing={12}
+      modifiers={nativeFillWidth}
+      style={{ padding: 20, borderRadius: 24, backgroundColor: colors.surfaceVariant }}
+      testID="home-tester-thanks"
+    >
+      <RNHostView matchContents>
+        <View
+          accessible={false}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          pointerEvents="none"
+          style={{ width: artworkSize, height: artworkSize }}
+        >
+          <LottieView
+            ref={animation}
+            source={catAnimation}
+            autoPlay={false}
+            loop={false}
+            resizeMode="contain"
+            style={{ width: artworkSize, height: artworkSize }}
+            testID="home-tester-cat"
+          />
+        </View>
+      </RNHostView>
+      <UniversalTextContent variant="title" textStyle={{ textAlign: 'center' }}>
+        {t('home.testers.title')}
+      </UniversalTextContent>
+      <UniversalTextContent variant="body" tone="muted" textStyle={{ textAlign: 'center' }}>
+        {t('home.testers.description')}
+      </UniversalTextContent>
+    </Column>
   );
 }
 

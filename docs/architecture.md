@@ -13,6 +13,12 @@ before navigation, on outside taps and on Android Back. Component IDs/icons belo
 to `src/features/template/component-catalog.ts`; translated names belong to the locales.
 Unknown URLs use the existing not-found fallback.
 
+The Components tab lists categories. Each category opens
+`/components/category/[id]` with its own component list; selecting a component
+keeps the existing `/components/[id]` destination. Category membership and icons
+share the component catalog owner, with names and counts translated in all app
+languages. Native Back returns from a demo to its category, then to the tab.
+
 Home's [date and time banner](../src/features/home/date-time-banner.tsx) belongs to
 the feature's scrollable content, inside its first `PageSection`. It shows the local
 date and 24-hour time in the app language, refreshing each minute while visible and

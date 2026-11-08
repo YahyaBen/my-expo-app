@@ -5,7 +5,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
 import { storybookEnabled } from '@/config/developer-tools';
@@ -124,7 +123,6 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
 
 /** Motion preferences belong to the native transition owner, below startup layout. */
 function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
-  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const { colors } = useAppTheme(colorScheme);
   const direction = useLayoutDirection();
@@ -139,17 +137,18 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
         screenOptions={{
           ...stackMotionOptions(reducedMotion),
           contentStyle: { backgroundColor: theme.colors.background, direction },
-          headerShown: true,
+          headerShown: false,
         }}
       >
-        <Stack.Screen name="index" options={{ title: brand.name }} />
+        <Stack.Screen name="index" />
         <Stack.Screen name="components/[id]" />
-        <Stack.Screen name="settings/app-icon" options={{ title: t('settings.appIcon') }} />
+        <Stack.Screen name="components/category/[id]" />
+        <Stack.Screen name="settings/app-icon" />
         <Stack.Screen name="table/[id]" />
         <Stack.Protected guard={storybookEnabled}>
-          <Stack.Screen name="storybook" options={{ title: 'Storybook' }} />
+          <Stack.Screen name="storybook" />
         </Stack.Protected>
-        <Stack.Screen name="+not-found" options={{ title: t('recovery.notFound') }} />
+        <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
   );

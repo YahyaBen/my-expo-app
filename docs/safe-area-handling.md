@@ -5,22 +5,22 @@ The current tab layout uses one Expo Router route with a native Expo UI dock. Se
 
 ## Ownership
 
-| Surface                   | Top                 | Bottom              | Sides               |
-| ------------------------- | ------------------- | ------------------- | ------------------- |
-| Main tab content          | Native stack header | In-flow tab dock    | Screen              |
-| Detail with native header | Native stack header | Screen              | Screen              |
-| Authentication            | Native stack header | Screen              | Screen              |
-| Account screen            | Screen              | Screen              | Screen              |
-| Launch readiness          | Content frame       | Content frame       | Content frame       |
-| Native sheets             | Native presentation | Native presentation | Native presentation |
+| Surface                        | Top                 | Bottom              | Sides               |
+| ------------------------------ | ------------------- | ------------------- | ------------------- |
+| Main tab content               | Screen              | In-flow tab dock    | Screen              |
+| Detail with shared page header | Screen              | Screen              | Screen              |
+| Authentication                 | Screen              | Screen              | Screen              |
+| Account screen                 | Screen              | Screen              | Screen              |
+| Launch readiness               | Content frame       | Content frame       | Content frame       |
+| Native sheets                  | Native presentation | Native presentation | Native presentation |
 
 `screenInsets` describes inset ownership without fixed device sizes. The custom
 dock receives actual bottom/side values from the template screen and adds
 them once. Content does not add another native-tabs `SafeAreaView`.
 Home and the example pages use `PageScreen tab`; Settings uses its tab mode to
-omit bottom system padding. Expo Router renders the native header and Back action.
-Page frames pass zero top inset to content because the stack has already reserved
-the header and status bar; they retain the bottom/side inset values.
+omit bottom system padding and Back. Page frames own the custom header and its
+top safe area; content receives only the insets it still needs. The root stack
+keeps Expo Router's default header hidden.
 
 The dock's 84-point/dp frame contains the entire raised 76-point/dp button and
 the 56-point/dp tab row in one native layout. Its negative 28-point/dp top margin
@@ -40,7 +40,7 @@ inside protected content bounds. Portrait remains the app's configured
 orientation; asymmetric side-inset cases cover possible tablet/window layouts
 and future rotation support without changing that setting.
 
-The page Host opts out of automatic SwiftUI safe areas because the outer frame handles them. RN keyboard padding handles overlap on iOS and Android. Page and authentication keyboard frames use Router's measured header height as their vertical offset. The system-inset frame wraps the keyboard frame so keyboard padding cannot replace its bottom safe area. In the installed Android Expo UI implementation, the Host's keyboard-aware viewport measurement only clamps unbounded constraints; it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom sheets keep their presentation's insets and keyboard behavior. The Host wrapper's global defaults are unchanged.
+The page Host opts out of automatic SwiftUI safe areas because the outer frame handles them. RN keyboard padding handles overlap on iOS and Android. Tab and detail pages use the shared content header, so no native-header keyboard offset is needed. The system-inset frame wraps the keyboard frame so keyboard padding cannot replace its bottom safe area. Authentication uses the same keyboard padding around its native Host. In the installed Android Expo UI implementation, the Host's keyboard-aware viewport measurement only clamps unbounded constraints; it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom sheets keep their presentation's insets and keyboard behavior. The Host wrapper's global defaults are unchanged.
 
 ## Documentation
 
