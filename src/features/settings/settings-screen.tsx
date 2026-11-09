@@ -32,7 +32,7 @@ import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { FirebaseTokenField } from './firebase-token-field';
+import { PushTokenField } from './push-token-field';
 import { SettingsPickerRow } from './settings-picker-row';
 import { useDeviceLocation } from './use-device-location';
 import { useDevicePermissions } from './use-device-permissions';
@@ -215,7 +215,7 @@ function SettingsPage({
               ))}
               <Text tone="muted">{t('settings.permissions.notificationsHint')}</Text>
               {Platform.OS === 'android' ? (
-                <FirebaseTokenField permission={device.permissions.notifications} />
+                <PushTokenField permission={device.permissions.notifications} />
               ) : null}
               {device.error || device.saveFailed ? (
                 <Text tone="error" testID="app-settings-permissions-error">

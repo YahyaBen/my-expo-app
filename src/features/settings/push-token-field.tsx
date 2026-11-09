@@ -10,7 +10,7 @@ import type { DevicePermission } from '@/lib/device-permissions';
 
 type TokenResult = { token: string; status: 'loading' | 'ready' | 'failed' };
 
-export function FirebaseTokenField({
+export function PushTokenField({
   permission,
 }: Readonly<{ permission: DevicePermission | undefined }>) {
   const { t } = useTranslation();
@@ -18,36 +18,26 @@ export function FirebaseTokenField({
   const active = useAppActive();
   const ready = useContext(PerformanceReadyContext);
   const visible = focused && active && ready !== false;
-  const configured = Platform.OS === 'android' && getAppBrand().firebaseMessaging;
+  const configured = Platform.OS === 'android' && getAppBrand().pushNotifications;
   const [revision, setRevision] = useState(0);
   const [result, setResult] = useState<TokenResult>({ token: '', status: 'loading' });
 
   useEffect(() => {
     if (!visible || !configured || !permission?.granted) return;
     let disposed = false;
-    let refreshed = false;
-    let stop: (() => void) | undefined;
-    void import('@/lib/firebase-messaging')
-      .then(async ({ getFirebaseMessagingToken, onFirebaseMessagingTokenRefresh }) => {
+    void import('@/lib/push-notifications')
+      .then(async ({ getExpoPushToken }) => {
         if (disposed) return;
-        stop = onFirebaseMessagingTokenRefresh((token) => {
-          if (disposed) return;
-          refreshed = true;
-          setResult({ token, status: 'ready' });
-        });
-        const token = await getFirebaseMessagingToken();
-        if (!disposed && !refreshed) {
-          setResult({ token: token ?? '', status: token ? 'ready' : 'failed' });
-        }
+        const token = await getExpoPushToken();
+        if (!disposed) setResult({ token: token ?? '', status: token ? 'ready' : 'failed' });
       })
       .catch(() => {
-        if (!disposed && !refreshed) {
+        if (!disposed) {
           setResult((current) => ({ ...current, status: 'failed' }));
         }
       });
     return () => {
       disposed = true;
-      stop?.();
     };
   }, [visible, configured, permission?.granted, revision]);
 
@@ -81,7 +71,7 @@ export function FirebaseTokenField({
           : undefined
       }
       rightIconAccessibilityLabel={t('settings.messaging.refresh')}
-      testID="app-settings-fcm-token"
+      testID="app-settings-expo-push-token"
     />
   );
 }

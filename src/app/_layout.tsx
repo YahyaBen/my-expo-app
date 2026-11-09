@@ -81,19 +81,17 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const interactive = resourcesReady && initialLayoutReady && !showLaunchScreen;
 
   useEffect(() => {
-    if (!interactive || !active || Platform.OS !== 'android' || !brand.firebaseMessaging) return;
+    if (!interactive || Platform.OS !== 'android' || !brand.pushNotifications) return;
     let disposed = false;
-    let stop: (() => void) | undefined;
-    void import('@/lib/firebase-messaging')
-      .then(({ startFirebaseMessaging }) => {
-        if (!disposed) stop = startFirebaseMessaging();
+    void import('@/lib/device-permissions')
+      .then(({ configureNotificationPresentation }) => {
+        if (!disposed) configureNotificationPresentation();
       })
-      .catch(() => console.warn('[FCM] Could not start push notifications.'));
+      .catch(() => console.warn('[Notifications] Could not configure notification presentation.'));
     return () => {
       disposed = true;
-      stop?.();
     };
-  }, [interactive, active]);
+  }, [interactive]);
 
   useEffect(() => {
     if (appearanceReady)

@@ -124,8 +124,10 @@ refreshes automatically on return.
 Photos use the system picker without full-library access. The camera example
 captures still photos; microphone permission is available for video audio.
 Background location and exact-alarm access are unused. Notification setup creates
-the Android channel before requesting permission. Remote push still needs
-FCM/APNs credentials, token registration and a backend.
+the Android channel before requesting permission. Android Settings displays the
+Expo push token after permission is granted, with selection/copy and retry.
+Sending through Expo needs matching platform credentials in EAS; see the
+[push setup guide](eas-development-builds.md#expo-push-notifications).
 
 Preferences use `appDevicePreferences` in AsyncStorage and restore before
 interactive content. New camera, microphone and location consumers must use the

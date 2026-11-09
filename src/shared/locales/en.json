@@ -291,13 +291,13 @@
       "disabledInApp": "Location is disabled in this app. Turn on Use location above to enable it."
     },
     "messaging": {
-      "token": "[FCM] Device token",
-      "ready": "Select the token to copy it.",
-      "loading": "Loading device token…",
+      "token": "[Expo] Push token",
+      "ready": "Select and copy this token into Expo’s push notification tool.",
+      "loading": "Loading Expo push token…",
       "permissionRequired": "Enable Notifications above to register this device.",
-      "unavailable": "Firebase messaging is not configured for this build.",
-      "failed": "Unable to load the token. Check your connection and try again.",
-      "refresh": "Refresh FCM token"
+      "unavailable": "Expo push notifications are not configured for this build.",
+      "failed": "Unable to load the Expo push token. Check your connection and Expo project setup.",
+      "refresh": "Refresh Expo push token"
     },
     "permissions": {
       "title": "Permissions",

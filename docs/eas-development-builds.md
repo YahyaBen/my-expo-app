@@ -71,87 +71,71 @@ each resolved ID; iOS internal builds require device provisioning. Each variant
 has its own app data. Only development registers the generated Expo development
 client URL scheme, so Metro QR codes open the development app.
 
-### Android Firebase messaging
+### Expo push notifications
 
-The template's production Android app uses the root `google-services.json` for
-Firebase project `expo-template-hyrkul`. Development uses
-`google-services.development.json` from project `expo-template-dev-hyrkul`; preview
-has no Firebase file configured yet. In `config/brands/template.json`, `android.googleServicesFile`
-accepts either one file path or a map of paths by variant. Each configured file
-must contain a client matching the resolved Android package; validation fails on
-a mismatch rather than changing the app's identity.
+The app uses `expo-notifications` and Expo Push Service. Settings displays one
+selectable `[Expo] Push token` for testing. Android transport uses FCM underneath
+Expo, so the Google services files and FCM v1 sending credentials remain required.
 
-To test in a development build:
+| Variant     | Android application ID          | Google services file               | Firebase project           |
+| ----------- | ------------------------------- | ---------------------------------- | -------------------------- |
+| Development | `com.hyrkul.mobiletemplate.dev` | `google-services.development.json` | `expo-template-dev-hyrkul` |
+| Production  | `com.hyrkul.mobiletemplate`     | `google-services.json`             | `expo-template-hyrkul`     |
 
-1. When replacing the development configuration, register an Android app with package
-   `com.hyrkul.mobiletemplate.dev`. Download its Google services JSON to the project
-   as `google-services.development.json`. Keep the downloaded package names intact.
-2. Add `"development": "./google-services.development.json"` beside the existing
-   production entry in the brand's `android.googleServicesFile` map. For preview,
-   register `com.hyrkul.mobiletemplate.preview` and add its file under `preview`.
-3. Build and install a new Android development client:
+In `config/brands/template.json`, `android.googleServicesFile` accepts one file
+path or a map by variant. Each file must contain a client matching the resolved
+Android package. Preview has no file configured; register its `.preview` package
+and add its Google services file before enabling remote push for that variant.
+Expo copies the selected file and configures Google services during prebuild.
+
+Configure sending credentials and test:
+
+1. Run `npx eas-cli@latest credentials --platform android`. Select the development
+   or production build profile and manage the Google Service Account Key for Push
+   Notifications (FCM V1). Upload a key from the matching Firebase project shown
+   above. Repeat for the other application identifier. The Google services JSON
+   files are app configuration, not private service-account sending keys. Keep
+   private keys in EAS credential storage and outside the app and repository.
+2. Build and install a new Android client after removing React Native Firebase:
 
    ```sh
    npx eas-cli@latest build --platform android --profile development
    npm run start:app
    ```
 
-4. On the Android device, open Settings in the app and enable Notifications. The
-   `[FCM] Device token` field displays the selectable token, follows token refreshes
-   while Settings is visible, and has a refresh action for retrying a failed read.
-   The development console also prints `[FCM] device token:` after registration.
-   Paste this **FCM token** into the matching Firebase project's Console → Messaging
-   → a notification campaign → Send test message. Include a title and body.
-5. Verify receipt with the app open, in the background, and closed normally.
-   Tap the notification to reopen the app. A force-stopped Android app must be
-   opened manually before testing delivery again.
+   Use `--profile production` for the store build. Existing binaries still contain
+   their previous native modules; Metro reloads and OTA updates cannot replace them.
 
-Expo's built-in Android Google services configuration copies the selected file
-and applies the Google services Gradle plugin. Firebase's native modules autolink
-on Android; its App config plugin is unnecessary for this Android-only setup.
-iOS Firebase autolinking stays excluded and the existing `GoogleService-Info.plist`
-stays inactive. Expo Go cannot run React Native Firebase; Metro reloads and OTA
-updates cannot add these native modules.
+3. Open Settings, enable Notifications, and copy `[Expo] Push token`. Paste the
+   actual token (for example `ExponentPushToken[...]`) into
+   [Expo’s push notification tool](https://expo.dev/notifications). Set the Android
+   channel ID to `default` and send a notification with a title and body.
+4. Verify delivery in foreground, background and closed states. Tap the notification
+   to reopen the app. A force-stopped Android app must be opened manually before
+   testing again. Check permission changes, retry after a network failure, and
+   token display after returning to Settings.
 
-`firebase.json` disables automatic messaging initialization by default. The app
-enables it after notification permission is granted, creates the existing `default`
-Android channel, and reads the token with `getFirebaseMessagingToken()` in
-`src/lib/firebase-messaging.ts`. Startup never requests permission. Already-approved
-devices register after launch and on returning to the foreground. Foreground FCM
-notification payloads use `expo-notifications` for local presentation; background
-notification payloads are displayed by FCM itself. `index.js` registers the
-background handler before Expo Router, without displaying a duplicate alert.
-Data-only messages have no product behavior yet, and notification taps open the
-app without feature-specific routing.
+`src/lib/push-notifications.ts` calls `getExpoPushTokenAsync({ projectId })` after
+checking OS permission and creating the notification channel. The selected EAS
+project ID comes from Expo configuration; the application ID comes from the
+installed binary. Registration runs while Settings is visible. The field rereads
+on resume and supports manual retry; Expo manages native device-token mapping.
+Startup configures foreground presentation after launch without requesting
+permission or registering a new Expo token. Native Expo delivery handles background
+alerts. Notification taps open the app without feature-specific routing; custom
+silent background work is not configured.
 
-After notification permission is granted, production Android installs automatically
-subscribe to the `all-testing` topic during token registration and refresh. Subscription
-runs without delaying token display; failures are logged and registration runs again
-when the app returns to the foreground. Development and preview do not subscribe.
-Existing installs join after launching the updated app; the client cannot enumerate
-or subscribe every historical production token. The topic belongs to the production
-Firebase project. To broadcast to subscribed installs, select that topic in Firebase
-Console or send from a trusted server:
+The application has no React Native Firebase packages, automatic FCM topic
+subscription, custom Android messaging plugin or JavaScript background handler.
+To broadcast through Expo Push Service, a backend must retain the recipient Expo
+push tokens. No push-token backend contract is configured in this template.
 
-```js
-await getMessaging().send({
-  topic: 'all-testing',
-  notification: { title: 'Test notification', body: 'Hello from Firebase' },
-});
-```
-
-This example uses `getMessaging` from `firebase-admin/messaging` in a configured
-server environment. No broadcast is sent as part of app setup. Topics are for public
-broadcasts and are not an authorization boundary; see
-[Firebase topic messaging](https://firebase.google.com/docs/cloud-messaging/topic-messaging).
-
-There is no push-token backend contract configured. When adding per-user server
-delivery, send the current
-token and refreshes through the authenticated session lifecycle, including token
-removal/reassignment on logout or account changes. Send notifications from Firebase
-Console or a trusted server using the Admin SDK/FCM HTTP v1; keep server credentials
-outside the app. See [React Native Firebase messaging](https://rnfirebase.io/messaging/usage)
-and [Expo notification APIs](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/).
+Remote iOS setup remains pending APNs credentials and its own device verification.
+The existing `GoogleService-Info.plist` is unreferenced. Expo Go cannot test Android
+remote push notifications; use a development build. An Expo token alone does not
+prove EAS sending credentials are configured. See
+[Expo notification APIs](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/)
+and [FCM v1 credentials for Expo](https://docs.expo.dev/push-notifications/fcm-credentials/).
 
 [App updates](app-updates.md) use the selected brand's EAS project, an app-version
 runtime policy and profile-specific channels. Store updates use the installed

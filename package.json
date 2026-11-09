@@ -1,6 +1,6 @@
 {
   "name": "hyrkul-wlui-template",
-  "main": "index.js",
+  "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~58.0.25",
@@ -8,8 +8,6 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "9.2.1",
     "@react-native-community/slider": "5.2.1",
-    "@react-native-firebase/app": "^26.4.1",
-    "@react-native-firebase/messaging": "^26.4.1",
     "@shopify/flash-list": "2.3.2",
     "@shopify/react-native-skia": "npm:react-native-skia@2.15.2",
     "@tanstack/react-query": "^5.105.0",
@@ -77,9 +75,6 @@
     "@storybook/react-native-ui-common": "10.7.0",
     "@storybook/react-native-theming": "10.7.0",
     "@storybook/react-dom-shim": "10.6.5",
-    "@firebase/firestore": {
-      "@grpc/grpc-js": "^1.14.5"
-    },
     "@storybook/mcp": {
       "valibot": "^1.5.0"
     },
@@ -116,14 +111,6 @@
       "exclude": [
         "@shopify/react-native-skia"
       ]
-    },
-    "autolinking": {
-      "ios": {
-        "exclude": [
-          "@react-native-firebase/app",
-          "@react-native-firebase/messaging"
-        ]
-      }
     }
   },
   "engines": {

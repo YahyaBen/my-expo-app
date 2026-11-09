@@ -58,11 +58,13 @@ request permissions or check store updates. Reduced motion and activity state
 remain shared native capabilities. Native stack transitions use the existing
 platform options.
 
-Android builds with Firebase configured mount messaging listeners after launch
-while active, without requesting permission. Foreground notifications reuse Expo
-notification presentation; FCM handles background display. The custom `index.js`
-entry registers the background handler before Router. Storybook also configures
-notification presentation for local examples. Template loads Settings
+Android builds with push configured set Expo's notification presentation handler
+after launch without requesting permission or fetching a token. Settings reads a
+selectable Expo push token while visible after notification permission is granted.
+The app uses `expo-notifications` and Expo Push Service; Expo manages the native
+transport and device-token mapping. No custom messaging service, receiver or
+JavaScript background task is configured. Storybook also configures notification
+presentation for local examples. Template loads Settings
 when its tab first opens, keeping device helpers out of Home module evaluation.
 Discover shows offline editorial content. Component search lives in the
 Components tab. The center component menu uses the shared native modal sheet.

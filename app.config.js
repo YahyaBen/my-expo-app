@@ -36,7 +36,7 @@ module.exports = ({ config }) => {
         name: brand.name,
         variant,
         presentation: brand.presentation,
-        firebaseMessaging: Boolean(brand.android.googleServicesFile),
+        pushNotifications: Boolean(brand.android.googleServicesFile),
       },
     },
     plugins: [

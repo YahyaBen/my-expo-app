@@ -10,7 +10,7 @@ const publicBrandSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   variant: z.enum(['development', 'preview', 'production']),
-  firebaseMessaging: z.boolean().default(false),
+  pushNotifications: z.boolean().default(false),
   presentation: z.object({
     launch: z.enum(['minimal', 'branded']),
     palette: z.custom<ThemeId>(

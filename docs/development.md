@@ -62,10 +62,11 @@ For a different product, change the manifest's name, slug, scheme, native IDs an
 assets as needed. The manifest defines production identity; development and preview
 suffix native IDs and URL schemes for side-by-side installation. See
 [native identity and integrations](eas-development-builds.md#native-identity-and-integrations).
-Android Firebase messaging is configured for production. Development and preview
-need Google services files matching their suffixed packages; see the
-[Firebase setup steps](eas-development-builds.md#android-firebase-messaging).
-iOS Firebase stays inactive. No backend, auth restoration, permission prompt or
+Expo push notifications are configured for Android development and production.
+Google services files match those packages because Expo uses FCM underneath on
+Android; preview needs its own file. See the
+[Expo push setup](eas-development-builds.md#expo-push-notifications).
+Remote iOS push setup is pending. No backend, auth restoration, permission prompt or
 store-update check blocks starter startup.
 
 ## App and catalog ownership

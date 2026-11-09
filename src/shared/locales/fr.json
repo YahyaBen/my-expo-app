@@ -294,13 +294,13 @@
       "disabledInApp": "La localisation est désactivée dans cette app. Activez Utiliser la localisation ci-dessus."
     },
     "messaging": {
-      "token": "[FCM] Jeton de l’appareil",
-      "ready": "Sélectionnez le jeton pour le copier.",
-      "loading": "Chargement du jeton…",
+      "token": "[Expo] Jeton push",
+      "ready": "Sélectionnez et copiez ce jeton dans l’outil de notifications push d’Expo.",
+      "loading": "Chargement du jeton push Expo…",
       "permissionRequired": "Activez Notifications ci-dessus pour enregistrer cet appareil.",
-      "unavailable": "Firebase Messaging n’est pas configuré pour cette version.",
-      "failed": "Impossible de charger le jeton. Vérifiez votre connexion et réessayez.",
-      "refresh": "Actualiser le jeton FCM"
+      "unavailable": "Les notifications push Expo ne sont pas configurées pour cette version.",
+      "failed": "Impossible de charger le jeton push Expo. Vérifiez votre connexion et la configuration du projet Expo.",
+      "refresh": "Actualiser le jeton push Expo"
     },
     "permissions": {
       "title": "Autorisations",
