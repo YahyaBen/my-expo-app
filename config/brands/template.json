@@ -10,7 +10,7 @@
     "palette": "ux",
     "launch": "branded",
     "headingFont": "system",
-    "launchArtwork": "bluePepe"
+    "launchArtwork": "et"
   },
   "ios": {
     "bundleIdentifier": "com.hyrkul.mobiletemplate",

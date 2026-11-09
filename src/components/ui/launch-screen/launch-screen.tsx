@@ -71,9 +71,9 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   const { language } = useLanguage();
   const brand = getAppBrand();
   const version = Constants.expoConfig?.version;
-  const launchArtwork = getBrandLaunchArtwork(brand);
   const headingFont = getBrandHeadingFont(language, brand);
   const scheme = useColorScheme();
+  const launchArtwork = getBrandLaunchArtwork(brand, scheme);
   const colors = useThemeColors(scheme);
   const reducedMotion = useAppReducedMotion();
   const active = useAppActive();
@@ -194,9 +194,8 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
               {launchArtwork.type === 'lottie' ? (
                 <LottieView
                   ref={artwork}
-                  // Native Lottie accepts Metro's numeric asset ID; its source type omits it.
-                  source={launchArtwork.source as unknown as string}
-                  autoPlay={false}
+                  source={launchArtwork.source}
+                  autoPlay={animate}
                   loop={animate}
                   style={{ width: artworkSize, height: artworkSize }}
                   testID="app-brand-artwork"

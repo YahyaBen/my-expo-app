@@ -1,6 +1,7 @@
 import { isLoaded, type FontSource } from 'expo-font';
 import { Platform } from 'react-native';
-import bluePepe from '@assets/animations/blue-pepe.lottie';
+import etLight from '@assets/animations/ET-light.lottie';
+import etDark from '@assets/animations/ET-dark.lottie';
 import assets from '../../config/brand-assets.json';
 import { getAppBrand, type AppBrand, type HeadingFontId, type LaunchArtworkId } from './brand';
 
@@ -10,9 +11,9 @@ const fontSources: Record<HeadingFontId, FontSource | undefined> = {
   interBlack: require('@assets/fonts/Inter-Black.otf'),
   urbanistBold: require('@assets/fonts/Urbanist-Bold.ttf'),
 };
-const artworkSources: Record<LaunchArtworkId, number> = {
-  bluePepe,
-  templateIcon: require('@assets/AppIcon-Dark.icon/Assets/icon.png'),
+const artworkSources: Record<LaunchArtworkId, { light: number; dark?: number }> = {
+  et: { light: etLight, dark: etDark },
+  templateIcon: { light: require('@assets/AppIcon-Dark.icon/Assets/icon.png') },
 };
 
 /** Stable build-time selection; the root loads only the selected font map. */
@@ -31,7 +32,14 @@ export function getBrandHeadingFont(language: string, brand: AppBrand = getAppBr
   return (Platform.OS === 'ios' ? font.nativeFamily.ios : font.nativeFamily.android) ?? undefined;
 }
 
-export function getBrandLaunchArtwork(brand: AppBrand = getAppBrand()) {
+export function getBrandLaunchArtwork(
+  brand: AppBrand = getAppBrand(),
+  colorScheme: 'light' | 'dark' = 'light',
+) {
   const id = brand.presentation.launchArtwork;
-  return { type: assets.launchArtworks[id].type, source: artworkSources[id] };
+  const sources = artworkSources[id];
+  return {
+    type: assets.launchArtworks[id].type,
+    source: colorScheme === 'dark' ? (sources.dark ?? sources.light) : sources.light,
+  };
 }

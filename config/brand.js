@@ -123,6 +123,9 @@ function resolveBrand(env = process.env) {
   const launchArtwork = assets.launchArtworks[brand.presentation.launchArtwork];
   if (headingFont.file) requireAsset(headingFont.file, 'presentation.headingFont');
   requireAsset(launchArtwork.file, 'presentation.launchArtwork');
+  if (launchArtwork.darkFile) {
+    requireAsset(launchArtwork.darkFile, 'presentation.launchArtwork.darkFile');
+  }
   for (const field of ['foregroundImage', 'backgroundImage', 'monochromeImage']) {
     const image = brand.android.adaptiveIcon?.[field];
     if (image) requireAsset(image, `android.adaptiveIcon.${field}`);

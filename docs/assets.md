@@ -11,11 +11,18 @@ or full brand manifests.
 
 | Brand      | Heading font             | Registered launch artwork | Launch mode |
 | ---------- | ------------------------ | ------------------------- | ----------- |
-| `template` | Native system typography | `bluePepe`                | Branded     |
+| `template` | Native system typography | `et`                      | Branded     |
 
-`assets/animations/blue-pepe.lottie` remains bundled and registered as `bluePepe`.
-Branded Lottie launch support is retained: a manifest can select
-`presentation.launch: "branded"` and `presentation.launchArtwork: "bluePepe"`.
+`assets/animations/ET.lottie` is the source artwork. Its native exports,
+`ET-light.lottie` and `ET-dark.lottie`, use outlined letters from its embedded
+Cal Sans Bold font and preserve its animation timing. The dark export applies
+the source's `dark` theme ink to the circles, letters and letter glow. This keeps
+the artwork self-contained with the installed `lottie-react-native` player,
+which does not expose dotLottie theme selection or load the embedded font on iOS.
+The launch screen selects the export using the app's resolved Light/Dark/System
+appearance. The registry validates both files and imports them statically.
+A brand selects them with `presentation.launch: "branded"` and
+`presentation.launchArtwork: "et"`.
 
 The template image is an existing Expo placeholder. Replace it with client artwork
 before distribution. Native app/adaptive icons and the native splash are separate

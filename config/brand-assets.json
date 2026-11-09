@@ -20,9 +20,10 @@
     }
   },
   "launchArtworks": {
-    "bluePepe": {
+    "et": {
       "type": "lottie",
-      "file": "./assets/animations/blue-pepe.lottie"
+      "file": "./assets/animations/ET-light.lottie",
+      "darkFile": "./assets/animations/ET-dark.lottie"
     },
     "templateIcon": {
       "type": "image",

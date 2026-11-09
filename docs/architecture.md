@@ -1,16 +1,14 @@
 # Application architecture
 
-The template has a native dock, an on-demand circular component menu, app-facing
+The template has a native dock, a modal component menu, app-facing
 component pages and a development-only Storybook entry.
 `/` redirects to `/storybook` in development unless explicitly disabled.
 `/?preview=true` lets transition stories push the real wireframe and return using
 native Back. Preview/production start at the Template page. Its center action opens
-the component menu; dragging reveals the centered page name in a non-blocking
-native callout and updates it during the swipe. The name panel remains mounted
-while the menu is open, and its local state updates independently of the carousel.
-Tapping explicitly pushes `/components/[id]`. The menu closes
-before navigation, on outside taps and on Android Back. Component IDs/icons belong
-to `src/features/template/component-catalog.ts`; translated names belong to the locales.
+the shared native modal sheet with a translated empty state and Close action.
+The menu presenter stays mounted after its first open so native dismissal can finish.
+Component IDs/icons belong to `src/features/template/component-catalog.ts`;
+translated names belong to the locales.
 Unknown URLs use the existing not-found fallback.
 
 The Components tab lists categories. Each category opens
@@ -18,6 +16,15 @@ The Components tab lists categories. Each category opens
 keeps the existing `/components/[id]` destination. Category membership and icons
 share the component catalog owner, with names and counts translated in all app
 languages. Native Back returns from a demo to its category, then to the tab.
+
+Settings remains a retained dock tab. First-level routes enter right to left in
+LTR and left to right in RTL. Routes pushed two or more levels above the template
+shell slide up from the bottom; for example, Components → Controls → Checkbox.
+Depth is counted in the route's owning navigator below Router's wrapper stack.
+The Button demo uses a native page modal: `pageSheet` on iOS and
+`fullScreenModal` on Android, keeping Android's page scroll outside a draggable
+sheet. Reduced motion disables stack animations; Back reverses the destination's
+transition. The existing `index` anchor keeps a base screen behind deep-linked modals.
 
 Home's [date and time banner](../src/features/home/date-time-banner.tsx) belongs to
 the feature's scrollable content, inside its first `PageSection`. It shows the local
@@ -51,18 +58,14 @@ request permissions or check store updates. Reduced motion and activity state
 remain shared native capabilities. Native stack transitions use the existing
 platform options.
 
-Notification presentation is configured by Storybook. Template loads its Settings
-and map features when their tabs first open, keeping native maps and device helpers
-out of Home module evaluation. Search shows a native map with local sample places;
-its embedded sheet stays below the existing dock. Component search lives in the
-Components tab. On Search, the center component menu also uses an inline sheet,
-keeps the map/search controls visible and temporarily replaces the places sheet.
+Notification presentation is configured by Storybook. Template loads Settings
+when its tab first opens, keeping device helpers out of Home module evaluation.
+Discover shows offline editorial content. Component search lives in the
+Components tab. The center component menu uses the shared native modal sheet.
 Retained tab activities keep drafts and selection while cleaning
 up hidden effects. Settings reads permission state while visible, and requests
 OS access or a one-shot location only after the matching action. The same feature
 serves the Preferences story under its isolated appearance provider.
-The map reuses that location owner for explicit recenter requests and displays a
-static position marker without subscribing to continuous location updates.
 
 Optional auth/query/service helpers are retained for future features and are not
 mounted by the starter. A consuming auth flow supplies its own verification

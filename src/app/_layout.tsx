@@ -1,15 +1,15 @@
 import { AlertHost, LaunchScreen } from '@components/ui';
 import { useFonts } from 'expo-font';
-import { Stack, ThemeProvider } from 'expo-router';
+import { Stack, ThemeProvider, useRootNavigationState } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Appearance, View } from 'react-native';
+import { Appearance, Platform, View } from 'react-native';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
 import { storybookEnabled } from '@/config/developer-tools';
 import { navigationTheme } from '@/constants/navigation-theme';
-import { stackMotionOptions } from '@/constants/navigation-motion';
+import { stackMotionOptions, stackRouteDepth } from '@/constants/navigation-motion';
 import { LanguageProvider, useLanguage } from '@/context/language.context';
 import { LayoutDirectionProvider, useLayoutDirection } from '@/context/layout-direction.context';
 import { PerformanceReadyContext } from '@/context/performance-ready.context';
@@ -127,6 +127,7 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
   const { colors } = useAppTheme(colorScheme);
   const direction = useLayoutDirection();
   const reducedMotion = useAppReducedMotion();
+  const navigationState = useRootNavigationState();
   const theme = useMemo(() => navigationTheme(colorScheme, colors), [colorScheme, colors]);
   if (!ready) return null;
   return (
@@ -134,10 +135,25 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
       <Stack
         // Keep the previous scene laid out for Back; hide deeper scenes on iOS and Android.
         activityEnabled
-        screenOptions={{
-          ...stackMotionOptions(reducedMotion),
-          contentStyle: { backgroundColor: theme.colors.background, direction },
-          headerShown: false,
+        screenOptions={({ route }) => {
+          const depth = stackRouteDepth(navigationState, route.key) ?? 0;
+          const buttonModal =
+            route.name === 'components/[id]' &&
+            route.params != null &&
+            'id' in route.params &&
+            route.params.id === 'button';
+          const fromBottom = depth >= 2 || buttonModal;
+          return {
+            ...stackMotionOptions(reducedMotion, direction, fromBottom),
+            // Keep Android page scrolling outside a draggable form-sheet container.
+            presentation: buttonModal
+              ? Platform.OS === 'ios'
+                ? 'pageSheet'
+                : 'fullScreenModal'
+              : 'card',
+            contentStyle: { backgroundColor: theme.colors.background, direction },
+            headerShown: false,
+          };
         }}
       >
         <Stack.Screen name="index" />

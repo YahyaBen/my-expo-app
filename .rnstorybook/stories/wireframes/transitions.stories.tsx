@@ -28,6 +28,13 @@ function Transitions() {
           Open the wireframe, then use its Back button or Android system Back. Your draft and action
           count stay here.
         </Text>
+        <Text>
+          In Settings, choose English for LTR or Arabic for RTL. Open Components, then a category:
+          entry moves right to left in LTR and left to right in RTL. In Controls, open Checkbox to
+          see a second-level page rise from the bottom. Settings stays in the dock. Button opens as
+          a full-screen modal page on Android and a page sheet on iOS. Scroll to the Glass buttons
+          at the end, then use Back to return. On iOS, Button also supports swipe-down dismissal.
+        </Text>
         <TextInput
           label="Retained draft"
           value={draft}
@@ -54,7 +61,8 @@ function Transitions() {
           testID="motion-transition-reduce"
         />
         <Text tone="muted">
-          Native stack transitions follow the app/device reduced-motion setting.
+          Native stack transitions follow the app/device reduced-motion setting. The switch here
+          previews this story only; use Settings in the wireframe to change navigator motion.
         </Text>
       </PageSection>
     </PageScreen>

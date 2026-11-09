@@ -1,6 +1,6 @@
 ---
 name: template-skill-ui-bottom-sheet
-description: Compose controlled modal and embedded sheets with native content and caller-owned actions.
+description: Compose controlled native modal sheets with caller-owned content and actions.
 ---
 
 # Bottom sheets
@@ -23,7 +23,7 @@ button inside the content.
 - Feature callers own async work, pending controls and stale-result guards.
   Sheets do not guarantee that pending requests prevent dismissal.
 
-## Modal presentation (default)
+## Modal presentation
 
 Omit `presentation` or use `presentation="modal"`. Optional finite positive
 `contentHeight` bounds content, not native detents or outer sheet height.
@@ -41,41 +41,7 @@ There are no modal style, snap-point, padding, ref, modifier or dismissal-lock p
   Expo defaults. The surface uses Host colors. Root app appearance controls the
   modal; an isolated Host override does not prove it.
 
-## Inline presentation
-
-Use `presentation="inline"` at an RN boundary inside a bounded container.
-Supply positive `height`, `collapsedHeight`, controlled `expanded`,
-`onExpandedChange`, and translated `expandAccessibilityLabel` /
-`collapseAccessibilityLabel`. Optional `bottomClearance` reserves overlapping
-content space, such as the dock's raised region; it excludes system safe areas.
-
-Optional `collapsedContent` supplies a compact peek; the expanded native
-content remains mounted with a stable scroll viewport during motion.
-`dismissOnCollapse` makes menus slide away directly instead of retaining
-a collapsed preview; Android Back then dismisses immediately.
-
-- The sheet owns its gesture root, native content Hosts and bounded
-  vertical ScrollView. Supply native, intrinsic children without another
-  vertical ScrollView or standalone Host.
-- It creates no modal, portal or backdrop. Render the navigation dock after the
-  containing screen, with its existing safe-area ownership.
-- Drag the handle area to expand or collapse, or tap the accessible handle to
-  toggle. Content scrolls independently. Caller actions control visibility.
-  Touch-down catches the current spring position before pan recognition; a
-  failed pan resumes its previous target. Pan commits selection after release
-  and restores the previous target when canceled. Peek and expanded content stay
-  mounted but are never painted over each other during a drag. The handle tap
-  waits for the pan to fail, so a drag cannot also toggle the panel.
-  Keep the presenter mounted while closed so its exit can finish; respect
-  interrupted drags and keep content until the closing spring completes.
-- Android Back collapses an expanded sheet, then dismisses a collapsed sheet.
-  Mount it only in the active/retained page's effect lifecycle so hidden pages
-  do not intercept Back. Respect appearance, RTL and reduced motion.
-- The sheet clamps the collapsed height to the available expanded height. The
-  caller supplies responsive bounds.
-
 Use [Bottom Sheet/Playground](../../../.rnstorybook/stories/components/bottom-sheet.stories.tsx)
-for modal and inline examples. Verify close/reopen, drag interruption, scrolling
-to the final action, dock edge taps, keyboard, Android Back, large text,
-appearance and RTL on both platforms.
+for the modal example. Verify close/reopen, native dismissal, scrolling to the
+final action, keyboard, Android Back, large text, appearance and RTL on both platforms.
 Static checks do not establish native behavior or animation performance.
