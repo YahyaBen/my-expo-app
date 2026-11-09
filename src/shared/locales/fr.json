@@ -293,6 +293,15 @@
       "settingsFailed": "Impossible d’ouvrir les réglages. Ouvrez-les manuellement pour gérer la localisation.",
       "disabledInApp": "La localisation est désactivée dans cette app. Activez Utiliser la localisation ci-dessus."
     },
+    "messaging": {
+      "token": "[FCM] Jeton de l’appareil",
+      "ready": "Sélectionnez le jeton pour le copier.",
+      "loading": "Chargement du jeton…",
+      "permissionRequired": "Activez Notifications ci-dessus pour enregistrer cet appareil.",
+      "unavailable": "Firebase Messaging n’est pas configuré pour cette version.",
+      "failed": "Impossible de charger le jeton. Vérifiez votre connexion et réessayez.",
+      "refresh": "Actualiser le jeton FCM"
+    },
     "permissions": {
       "title": "Autorisations",
       "notifications": "Notifications",
@@ -537,6 +546,10 @@
     "info": "Informations",
     "glass": "Verre",
     "buttonGallery": {
+      "google": "Compte Google",
+      "googleHint": "Ces boutons de démonstration incrémentent le compteur sans connexion ni création de compte.",
+      "googleLogin": "Se connecter avec Google",
+      "googleRegister": "S’inscrire avec Google",
       "interaction": "Essayez les boutons",
       "interactionHint": "Les boutons actifs incrémentent le compteur. Les boutons désactivés sont sans effet. La démonstration d’attente redevient disponible après une courte requête simulée.",
       "lastAction": "Dernière action : {{label}}",

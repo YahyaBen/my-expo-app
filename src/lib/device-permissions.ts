@@ -77,7 +77,7 @@ export async function requestDeviceAccess(kind: Exclude<SystemPermission, 'notif
   return permission.granted && isDeviceFeatureEnabled(kind);
 }
 
-async function ensureNotificationChannel() {
+export async function ensureNotificationChannel() {
   if (Platform.OS === 'android') {
     await setNotificationChannelAsync('default', {
       name: i18n.t('settings.permissions.notificationChannel'),

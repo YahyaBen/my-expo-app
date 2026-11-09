@@ -33,7 +33,16 @@ const brandSchema = z.strictObject({
     icon: asset.optional(),
     lightIconForeground: asset.optional(),
     redIconForeground: asset.optional(),
-    googleServicesFile: asset.optional(),
+    googleServicesFile: z
+      .union([
+        asset,
+        z.strictObject({
+          development: asset.optional(),
+          preview: asset.optional(),
+          production: asset.optional(),
+        }),
+      ])
+      .optional(),
     adaptiveIcon: z
       .strictObject({
         backgroundColor: color,
@@ -101,6 +110,9 @@ function resolveBrand(env = process.env) {
   brand.ios.bundleIdentifier += identitySuffix;
   brand.android.package += identitySuffix;
   brand.scheme += identitySuffix;
+  if (typeof brand.android.googleServicesFile === 'object') {
+    brand.android.googleServicesFile = brand.android.googleServicesFile[variant];
+  }
 
   requireAsset(brand.icon, 'icon');
   if (brand.lightIcon) requireAsset(brand.lightIcon, 'lightIcon');

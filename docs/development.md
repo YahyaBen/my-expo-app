@@ -62,9 +62,11 @@ For a different product, change the manifest's name, slug, scheme, native IDs an
 assets as needed. The manifest defines production identity; development and preview
 suffix native IDs and URL schemes for side-by-side installation. See
 [native identity and integrations](eas-development-builds.md#native-identity-and-integrations).
-The retained Google configuration files stay unchanged and inactive for the neutral identity; enable
-Firebase only with files matching the chosen package/bundle ID. No backend,
-auth restoration, permission prompt or store-update check blocks starter startup.
+Android Firebase messaging is configured for production. Development and preview
+need Google services files matching their suffixed packages; see the
+[Firebase setup steps](eas-development-builds.md#android-firebase-messaging).
+iOS Firebase stays inactive. No backend, auth restoration, permission prompt or
+store-update check blocks starter startup.
 
 ## App and catalog ownership
 

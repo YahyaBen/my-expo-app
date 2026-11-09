@@ -31,7 +31,13 @@ module.exports = ({ config }) => {
     extra: {
       ...config.extra,
       eas: brand.eas?.projectId ? { projectId: brand.eas.projectId } : undefined,
-      brand: { id: brand.id, name: brand.name, variant, presentation: brand.presentation },
+      brand: {
+        id: brand.id,
+        name: brand.name,
+        variant,
+        presentation: brand.presentation,
+        firebaseMessaging: Boolean(brand.android.googleServicesFile),
+      },
     },
     plugins: [
       ...(config.plugins ?? []),

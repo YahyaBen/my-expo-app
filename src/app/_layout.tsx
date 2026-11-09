@@ -81,6 +81,21 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const interactive = resourcesReady && initialLayoutReady && !showLaunchScreen;
 
   useEffect(() => {
+    if (!interactive || !active || Platform.OS !== 'android' || !brand.firebaseMessaging) return;
+    let disposed = false;
+    let stop: (() => void) | undefined;
+    void import('@/lib/firebase-messaging')
+      .then(({ startFirebaseMessaging }) => {
+        if (!disposed) stop = startFirebaseMessaging();
+      })
+      .catch(() => console.warn('[FCM] Could not start push notifications.'));
+    return () => {
+      disposed = true;
+      stop?.();
+    };
+  }, [interactive, active]);
+
+  useEffect(() => {
     if (appearanceReady)
       Appearance.setColorScheme(appearance === 'system' ? 'unspecified' : appearance);
   }, [appearance, appearanceReady]);

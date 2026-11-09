@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "123456789012",
-    "project_id": "placeholder-not-a-real-firebase-project",
-    "storage_bucket": "placeholder-not-a-real-firebase-project.appspot.com"
+    "project_number": "441653513752",
+    "project_id": "expo-template-hyrkul",
+    "storage_bucket": "expo-template-hyrkul.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:0000000000000000000000",
+        "mobilesdk_app_id": "1:441653513752:android:ed3f7749e6b8ae8f6dbd6d",
         "android_client_info": {
           "package_name": "com.hyrkul.mobiletemplate"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          "current_key": "AIzaSyChc7vWK1tq6aMHbNNG00ay59BX1mGw27Q"
         }
       ],
       "services": {

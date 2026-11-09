@@ -18,6 +18,10 @@
   },
   "android": {
     "package": "com.hyrkul.mobiletemplate",
+    "googleServicesFile": {
+      "production": "./google-services.json",
+      "development": "./google-services.development.json"
+    },
     "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-foreground-dark.png",
       "backgroundColor": "#ffffff"

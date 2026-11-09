@@ -24,6 +24,7 @@ import {
 } from '@components/ui';
 import { radii, spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
+import { GoogleButtonExamples } from '@/features/template/google-button-examples';
 import { HostedPreview } from './hosted-preview';
 
 const variants = [
@@ -174,6 +175,10 @@ export default function ButtonsScreen() {
         />
         <PendingButtonDemo onComplete={() => recordPress('showcase.buttonGallery.pendingAction')} />
       </GallerySection>
+
+      <PageSection>
+        <GoogleButtonExamples onPress={recordPress} />
+      </PageSection>
 
       <GallerySection
         title={t('showcase.buttonGallery.variants')}

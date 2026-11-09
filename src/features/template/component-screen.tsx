@@ -65,6 +65,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChipExamples } from './chip-examples';
 import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
 import { FormExamples } from './form-examples';
+import { GoogleButtonExamples } from './google-button-examples';
 import { SliderExamples } from './slider-examples';
 import { TableExamples } from './table-examples';
 import { TextInputExamples } from './text-input-examples';
@@ -645,6 +646,7 @@ function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
 
   return (
     <Column spacing={spacing.xl} modifiers={nativeFillWidth}>
+      <GoogleButtonExamples onPress={onPress} />
       <LoadingButtonExample onComplete={onPress} />
       {variants.map((variant) => {
         const variantLabel = t(`showcase.${variant}`);

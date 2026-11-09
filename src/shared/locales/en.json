@@ -290,6 +290,15 @@
       "settingsFailed": "Unable to open device settings. Open them manually to manage location access.",
       "disabledInApp": "Location is disabled in this app. Turn on Use location above to enable it."
     },
+    "messaging": {
+      "token": "[FCM] Device token",
+      "ready": "Select the token to copy it.",
+      "loading": "Loading device token…",
+      "permissionRequired": "Enable Notifications above to register this device.",
+      "unavailable": "Firebase messaging is not configured for this build.",
+      "failed": "Unable to load the token. Check your connection and try again.",
+      "refresh": "Refresh FCM token"
+    },
     "permissions": {
       "title": "Permissions",
       "notifications": "Notifications",
@@ -532,6 +541,10 @@
     "info": "Info",
     "glass": "Glass",
     "buttonGallery": {
+      "google": "Google account",
+      "googleHint": "These demo buttons update the counter without signing in or creating an account.",
+      "googleLogin": "Sign in with Google",
+      "googleRegister": "Sign up with Google",
       "interaction": "Try the buttons",
       "interactionHint": "Enabled buttons update the counter. Disabled buttons do nothing. The pending demo becomes available again after a short simulated request.",
       "lastAction": "Last action: {{label}}",
