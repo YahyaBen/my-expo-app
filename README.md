@@ -59,11 +59,12 @@ iOS device, `preview` for an internal release, and `production` for store binari
 EAS still needs account access and platform signing credentials. No cloud build is
 triggered by local setup.
 
-The existing `google-services.json`, `GoogleService-Info.plist` and `firebase.json`
-are preserved. They are not attached to the neutral template identity. A distinct
-store app needs unique native identifiers, branding and matching Firebase files
-if Firebase is enabled. Those optional identity changes live in the same brand
-manifest; changing an EAS UUID cannot change an app's native identity.
+Android push uses `expo-notifications` with variant-specific Google services files;
+see [Expo push setup](docs/eas-development-builds.md#expo-push-notifications) for
+credentials and testing. Remote iOS push setup is pending. A distinct store app
+needs unique native identifiers, branding and matching platform credentials.
+Identity changes live in the brand manifest; changing an EAS UUID cannot change
+an app's native identity.
 
 Animations, gestures, sheets, launch transitions and reduced-motion handling remain
 available through the shared UI and Storybook. **Motion → Transitions** demonstrates

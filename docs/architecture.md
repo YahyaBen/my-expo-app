@@ -62,7 +62,9 @@ Android builds with push configured set Expo's notification presentation handler
 after launch without requesting permission or fetching a token. Settings reads a
 selectable Expo push token while visible after notification permission is granted.
 The app uses `expo-notifications` and Expo Push Service; Expo manages the native
-transport and device-token mapping. No custom messaging service, receiver or
+transport and device-token mapping. Production Android installs also join the
+`all-testing` topic through Expo's topic API after OS permission is granted, on
+launch/resume and during Settings registration. No custom messaging service, receiver or
 JavaScript background task is configured. Storybook also configures notification
 presentation for local examples. Template loads Settings
 when its tab first opens, keeping device helpers out of Home module evaluation.

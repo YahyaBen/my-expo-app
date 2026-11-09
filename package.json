@@ -1,9 +1,28 @@
 {
-  "name": "hyrkul-wlui-template",
+  "name": "hyrkul-template",
+  "version": "1.0.3",
+  "private": true,
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "engines": {
+    "node": "^22.18.0 || ^24.3.0 || >=26.0.0"
+  },
+  "scripts": {
+    "start": "node scripts/start.cjs",
+    "start:app": "node scripts/start.cjs --app",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "storybook:dev": "node scripts/start.cjs",
+    "storybook:generate": "sb-rn-get-stories",
+    "typecheck": "tsc --noEmit",
+    "lint": "expo lint . --max-warnings=0",
+    "lint:staged": "lint-staged",
+    "format": "prettier --write src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
+    "format:check": "prettier --check src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
+    "check": "npm run typecheck && npm run lint && npm run format:check",
+    "prepare": "node .husky/install.mjs"
+  },
   "dependencies": {
-    "@expo/ui": "~58.0.25",
+    "@expo/ui": "~58.0.27",
     "@hookform/resolvers": "^5.9.2",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "9.2.1",
@@ -17,28 +36,28 @@
     "expo-awesome-app-icon": "2.2.1",
     "expo-blur": "~58.0.5",
     "expo-camera": "~58.0.14",
-    "expo-constants": "~58.0.13",
+    "expo-constants": "~58.0.15",
     "expo-crypto": "~58.0.7",
     "expo-device": "~58.0.5",
-    "expo-font": "~58.0.10",
+    "expo-font": "~58.0.11",
     "expo-haptics": "~58.0.7",
     "expo-image": "~58.0.18",
     "expo-image-picker": "~58.0.10",
     "expo-in-app-updates": "0.13.0",
     "expo-linear-gradient": "~58.0.3",
-    "expo-linking": "~58.0.15",
+    "expo-linking": "~58.0.16",
     "expo-location": "~58.0.20",
     "expo-network": "~58.0.4",
-    "expo-notifications": "~58.1.7",
-    "expo-observe": "~58.0.16",
-    "expo-router": "~58.0.28",
+    "expo-notifications": "~58.1.8",
+    "expo-observe": "~58.0.18",
+    "expo-router": "~58.0.30",
     "expo-secure-store": "~58.0.2",
-    "expo-sharing": "~58.0.21",
-    "expo-splash-screen": "~58.0.12",
+    "expo-sharing": "~58.0.22",
+    "expo-splash-screen": "~58.0.13",
     "expo-status-bar": "~58.0.4",
     "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.7",
-    "expo-updates": "~58.0.19",
+    "expo-updates": "~58.0.21",
     "i18next": "^26.5.11",
     "lottie-react-native": "~7.5.0",
     "react": "19.3.0",
@@ -47,7 +66,7 @@
     "react-native": "0.88.1",
     "react-native-gesture-handler": "~3.3.0",
     "react-native-reanimated": "4.7.1",
-    "react-native-safe-area-context": "~5.10.1",
+    "react-native-safe-area-context": "~5.11.1",
     "react-native-worklets": "0.13.0",
     "zod": "^4.6.7"
   },
@@ -59,8 +78,8 @@
     "eslint": "^9.39.5",
     "eslint-config-expo": "~58.0.4",
     "eslint-config-prettier": "10.1.8",
-    "expo-build-properties": "~58.0.11",
-    "expo-dev-client": "~58.0.17",
+    "expo-build-properties": "~58.0.12",
+    "expo-dev-client": "~58.0.18",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
     "prettier": "3.9.10",
@@ -83,29 +102,6 @@
     },
     "esbuild": "~0.26.0"
   },
-  "scripts": {
-    "start": "node scripts/start.cjs",
-    "start:app": "node scripts/start.cjs --app",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "storybook:dev": "node scripts/start.cjs",
-    "storybook:generate": "sb-rn-get-stories",
-    "lint": "expo lint . --max-warnings=0",
-    "lint:staged": "lint-staged",
-    "prepare": "node .husky/install.mjs",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
-    "format:check": "prettier --check src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
-    "check": "npm run typecheck && npm run lint && npm run format:check"
-  },
-  "lint-staged": {
-    "*.{js,jsx,mjs,cjs,ts,tsx}": [
-      "eslint --fix --max-warnings=0 --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{json,jsonc,md,mdx,yaml,yml,css,scss,html}": "prettier --write"
-  },
-  "private": true,
   "expo": {
     "install": {
       "exclude": [
@@ -113,7 +109,11 @@
       ]
     }
   },
-  "engines": {
-    "node": "^22.18.0 || ^24.3.0 || >=26.0.0"
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx}": [
+      "eslint --fix --max-warnings=0 --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{json,jsonc,md,mdx,yaml,yml,css,scss,html}": "prettier --write"
   }
 }

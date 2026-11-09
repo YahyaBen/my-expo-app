@@ -94,6 +94,26 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   }, [interactive]);
 
   useEffect(() => {
+    if (
+      !interactive ||
+      !active ||
+      Platform.OS !== 'android' ||
+      !brand.pushNotifications ||
+      brand.variant !== 'production'
+    )
+      return;
+    let disposed = false;
+    void import('@/lib/push-notifications')
+      .then(({ subscribeToProductionPushTopic }) => {
+        if (!disposed) return subscribeToProductionPushTopic();
+      })
+      .catch(() => console.warn('[Notifications] Could not join the all-testing topic.'));
+    return () => {
+      disposed = true;
+    };
+  }, [interactive, active]);
+
+  useEffect(() => {
     if (appearanceReady)
       Appearance.setColorScheme(appearance === 'system' ? 'unspecified' : appearance);
   }, [appearance, appearanceReady]);

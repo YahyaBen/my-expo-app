@@ -36,12 +36,19 @@ const icons = {
   photo: Icon.select({ ios: 'photo', android: 'image' }),
 };
 
+const photoSessionSeed = Math.random().toString(36).slice(2);
+
+function getHomePhotoSource(photoId: number) {
+  return `https://picsum.photos/seed/${photoSessionSeed}-${photoId}/900/650`;
+}
+
 const storyPhotos: readonly PhotoItem[] = homeStories.map((story) => ({
   id: story.id,
-  source: `https://picsum.photos/id/${story.photoId}/900/650`,
+  source: getHomePhotoSource(story.photoId),
   label: story.title,
 }));
-const latestPhotos = storyPhotos.slice(1);
+const featuredPhotos = storyPhotos.slice(0, 4);
+const latestPhotos = storyPhotos.slice(1, 5);
 const recommendationPreviewCount = 6;
 
 /** Product-style sample home, composed in the existing native page and dock. */
@@ -338,7 +345,7 @@ function FeaturedStories({
       </Row>
       <Column modifiers={nativeFillWidth} testID="template-card-placeholder">
         <StackedCarousel
-          items={storyPhotos}
+          items={featuredPhotos}
           width={width}
           accessibilityLabel={t('home.featured')}
           onIndexChange={(nextIndex) => setIndex(nextIndex)}
@@ -404,7 +411,7 @@ function HomePhoto({
   return (
     <RNHostView matchContents>
       <Image
-        source={`https://picsum.photos/id/${photoId}/900/650`}
+        source={getHomePhotoSource(photoId)}
         contentFit="cover"
         accessible={false}
         pointerEvents="none"

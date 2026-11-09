@@ -125,10 +125,26 @@ permission or registering a new Expo token. Native Expo delivery handles backgro
 alerts. Notification taps open the app without feature-specific routing; custom
 silent background work is not configured.
 
-The application has no React Native Firebase packages, automatic FCM topic
-subscription, custom Android messaging plugin or JavaScript background handler.
-To broadcast through Expo Push Service, a backend must retain the recipient Expo
-push tokens. No push-token backend contract is configured in this template.
+### Production topic through Expo
+
+Production Android installs subscribe to `all-testing` with Expo's
+`subscribeToTopicAsync()` after notification permission is granted. The app tries
+after launch, on returning to the foreground, and during Settings token
+registration. Topic work does not block launch or Expo token display; failures
+are logged and the next registration/resume can retry. Development, preview and
+iOS do not subscribe, and existing installs join when they run the updated app.
+
+This is an FCM topic managed through the Expo Android API. Send topic messages
+from the production Firebase project (`expo-template-hyrkul`) using Firebase
+Console or a trusted FCM sender. Expo Push Service and its test tool accept Expo
+token recipients rather than topic names. To broadcast through Expo Push Service
+across Android and iOS, a backend must retain the recipient Expo push tokens.
+No push-token backend contract is configured in this template.
+
+The app uses no React Native Firebase packages, custom Android messaging plugin
+or JavaScript background handler. Topic support must be present in the installed
+Expo development/release binary; rebuild if that native module is unavailable.
+See [Expo topic APIs](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/#notificationssubscribetotopicasynctopic).
 
 Remote iOS setup remains pending APNs credentials and its own device verification.
 The existing `GoogleService-Info.plist` is unreferenced. Expo Go cannot test Android
