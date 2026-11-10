@@ -49,7 +49,7 @@
       "autoIncrement": true,
       "environment": "production",
       "android": {
-        "credentialsSource": "local"
+        "credentialsSource": "remote"
       },
       "ios": {
         "image": "auto"

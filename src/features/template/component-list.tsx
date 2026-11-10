@@ -24,6 +24,7 @@ export function ComponentList({
         <ListItem
           key={id}
           leading={<Icon name={icon} />}
+          supportingText={t(`componentCatalog.descriptions.${id}`)}
           onPress={() => onSelect(id)}
           testID={`${testIDPrefix}-${id}`}
         >

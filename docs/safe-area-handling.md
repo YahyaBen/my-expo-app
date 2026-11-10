@@ -17,8 +17,10 @@ The current tab layout uses one Expo Router route with a native Expo UI dock. Se
 `screenInsets` describes inset ownership without fixed device sizes. The custom
 dock receives actual bottom/side values from the template screen and adds
 them once. Content does not add another native-tabs `SafeAreaView`.
-Home and the example pages use `PageScreen tab`; Settings uses its tab mode to
-omit bottom system padding and Back. Page frames own the custom header and its
+Home, Discover, Settings and the example pages use `PageScreen tab` to
+omit bottom system padding and Back. Settings disables the page's outer scrolling
+so its bounded native `FieldGroup` remains the only scroll owner.
+Page frames own the custom header and its
 top safe area; content receives only the insets it still needs. The root stack
 keeps Expo Router's default header hidden.
 
@@ -29,16 +31,16 @@ transparent background. The tab row and system bottom inset reserve screen
 height, while the full native frame retains the circle's touch bounds.
 Tab scroll content adds only the shared `tabBarRaisedHeight` clearance after its
 last action, rather than padding for the entire dock. `PageScreen tab` supplies
-inner scroll padding; Settings tab mode uses its last section footer. The dock
+inner scroll padding for ordinary tab pages; Settings adds that clearance inside
+its final `FieldGroup` section footer. The dock
 hides while the keyboard is visible. See the
 [navigation contract](../.agents/skills/template-skill-ui-navigation/SKILL.md) for geometry ownership.
 
 Expo Router already provides the root `SafeAreaProvider`; the app does not add
 another provider around individual pages. Hooks handle changing insets with navigation
 transitions. Backgrounds and Skia artwork may reach the edges; controls remain
-inside protected content bounds. Portrait remains the app's configured
-orientation; asymmetric side-inset cases cover possible tablet/window layouts
-and future rotation support without changing that setting.
+inside protected content bounds. The app allows portrait and landscape rotation;
+asymmetric side-inset cases cover rotation and tablet/window layouts.
 
 The page Host opts out of automatic SwiftUI safe areas because the outer frame handles them. RN keyboard padding handles overlap on iOS and Android. Tab and detail pages use the shared content header, so no native-header keyboard offset is needed. The system-inset frame wraps the keyboard frame so keyboard padding cannot replace its bottom safe area. Authentication uses the same keyboard padding around its native Host. In the installed Android Expo UI implementation, the Host's keyboard-aware viewport measurement only clamps unbounded constraints; it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom sheets keep their presentation's insets and keyboard behavior. The Host wrapper's global defaults are unchanged.
 

@@ -1,5 +1,4 @@
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
-import { useThemeColors } from '@/hooks/use-theme';
 import { showAlert } from '@/lib/alerts';
 import {
   AuthScreenFrame,
@@ -7,9 +6,7 @@ import {
   BottomSheet,
   Button,
   ButtonContent,
-  Text as ButtonText,
   Checkbox,
-  CircularCarousel,
   Collapsible,
   ColorSchemeControl,
   Column,
@@ -20,12 +17,10 @@ import {
   FormSubmit,
   FormTextInput,
   Icon,
-  IosHomeGrid,
   LaunchScreen,
   List,
   ListItem,
   LoadingContent,
-  LoadingIndicator,
   OtpBottomSheet,
   PageFrame,
   PageScreen,
@@ -40,8 +35,6 @@ import {
   SkeletonContent,
   Slider,
   Spacer,
-  StackedCarousel,
-  StoryList,
   Switch,
   TabNavigationBar,
   UniversalTextContent as Text,
@@ -50,22 +43,20 @@ import {
   VerificationCodeFace,
   nativeFillWidth,
   pageFormModifiers,
-  useHostColorScheme,
-  type ButtonVariant,
   type DateTimePickerMode,
-  type PhotoItem,
   type TabNavigationItemId,
 } from '@components/ui';
 import { router } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ButtonExamples } from './button-examples';
 import { ChipExamples } from './chip-examples';
 import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
 import { FormExamples } from './form-examples';
-import { GoogleButtonExamples } from './google-button-examples';
+import type { PhotoLayout } from './photo-examples';
 import { SliderExamples } from './slider-examples';
 import { TableExamples } from './table-examples';
 import { TextInputExamples } from './text-input-examples';
@@ -95,7 +86,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
     return (
       <AuthScreenFrame
         title={title}
-        description={t('componentCatalog.tryComponent')}
+        description={t(`componentCatalog.descriptions.${id}`)}
         testID="component-auth"
         topBar={
           <Button
@@ -115,6 +106,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
       <ListItem
         key={rowId}
         leading={<Icon name={icon} />}
+        supportingText={t(`componentCatalog.descriptions.${rowId}`)}
         onPress={() => router.push({ pathname: '/components/[id]', params: { id: rowId } })}
         testID={`component-${id}-${rowId}`}
       >
@@ -134,10 +126,20 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
           }}
         >
           {id === 'list' ? (
-            <List testID="component-list">{rows}</List>
+            <List testID="component-list">
+              <PageSection>
+                <Text>{t(`componentCatalog.descriptions.${id}`)}</Text>
+              </PageSection>
+              {rows}
+            </List>
           ) : (
             <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
-              <FieldGroup.Section title={title}>{rows}</FieldGroup.Section>
+              <FieldGroup.Section title={title}>
+                <FieldGroup.SectionHeader>
+                  <Text>{t(`componentCatalog.descriptions.${id}`)}</Text>
+                </FieldGroup.SectionHeader>
+                {rows}
+              </FieldGroup.Section>
             </FieldGroup>
           )}
         </UniversalHost>
@@ -166,23 +168,6 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
   const options = [
     { value: 'first', label: t('componentCatalog.first'), testID: 'component-option-first' },
     { value: 'second', label: t('componentCatalog.second'), testID: 'component-option-second' },
-  ];
-  const photos: readonly PhotoItem[] = [
-    {
-      id: 'first',
-      label: t('componentCatalog.first'),
-      source: require('../../../assets/AppIcon-Dark.icon/Assets/icon.png'),
-    },
-    {
-      id: 'second',
-      label: t('componentCatalog.second'),
-      source: require('../../../assets/AppIcon-Light.icon/Assets/icon.png'),
-    },
-    {
-      id: 'third',
-      label: t('componentCatalog.third'),
-      source: require('../../../assets/adaptive-foreground-dark.png'),
-    },
   ];
   const actionLabel = t('componentCatalog.tryAction');
   const result = (
@@ -351,42 +336,10 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           </>
         );
       case 'circular-carousel':
-        return (
-          <CircularCarousel
-            items={photos}
-            width={width}
-            accessibilityLabel={title}
-            onItemPress={(_, item) => showAlert({ variant: 'info', message: item.label })}
-            testID="component-circular-carousel"
-          />
-        );
       case 'stacked-carousel':
-        return (
-          <StackedCarousel
-            items={photos}
-            width={width}
-            accessibilityLabel={title}
-            testID="component-stacked-carousel"
-          />
-        );
       case 'story-list':
-        return (
-          <StoryList
-            items={photos}
-            width={width}
-            accessibilityLabel={title}
-            testID="component-story-list"
-          />
-        );
       case 'ios-home-grid':
-        return (
-          <IosHomeGrid
-            items={photos}
-            width={width}
-            closeLabel={t('common.close')}
-            testID="component-ios-home-grid"
-          />
-        );
+        return <PhotoExample key={id} layout={id} width={width} />;
       case 'floating-action':
         return (
           <>
@@ -593,11 +546,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
     <View style={{ flex: 1 }}>
       <PageScreen
         title={title}
-        description={t(
-          id === 'text-input'
-            ? 'componentCatalog.inputs.description'
-            : 'componentCatalog.tryComponent',
-        )}
+        description={t(`componentCatalog.descriptions.${id}`)}
         onRefresh={id === 'refreshable-scroll-view' ? async () => countAction() : undefined}
       >
         <PageSection testID={`component-page-${id}`}>{content()}</PageSection>
@@ -607,6 +556,14 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
       ) : null}
     </View>
   );
+}
+
+/** Evaluate the device picker only when a photo example is opened. */
+function PhotoExample({ layout, width }: Readonly<{ layout: PhotoLayout; width: number }>) {
+  const PhotoExamples: typeof import('./photo-examples').PhotoExamples =
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Keep device integration deferred and synchronously bundled for native releases.
+    require('./photo-examples').PhotoExamples;
+  return <PhotoExamples initialLayout={layout} width={width} />;
 }
 
 function IconExamples() {
@@ -624,145 +581,6 @@ function IconExamples() {
         accessibilityLabel={t('common.favoritesOnly')}
       />
     </Row>
-  );
-}
-
-function ButtonExamples({ onPress }: Readonly<{ onPress: () => void }>) {
-  const { t } = useTranslation();
-  const icon = Icon.select({ ios: 'star.fill', android: 'star' });
-  const iconOnlyLabel = t('showcase.buttonGallery.iconOnly');
-  const sizes = ['sm', 'md', 'lg'] as const;
-  const variants = [
-    'primary',
-    'secondary',
-    'tertiary',
-    'link',
-    'success',
-    'warning',
-    'info',
-    'destructive',
-    'glass',
-  ] as const satisfies readonly ButtonVariant[];
-
-  return (
-    <Column spacing={spacing.xl} modifiers={nativeFillWidth}>
-      <GoogleButtonExamples onPress={onPress} />
-      <LoadingButtonExample onComplete={onPress} />
-      {variants.map((variant) => {
-        const variantLabel = t(`showcase.${variant}`);
-        return (
-          <Column key={variant} spacing={spacing.md} modifiers={nativeFillWidth}>
-            <Text variant="subtitle">{variantLabel}</Text>
-            {sizes.map((size) => (
-              <ButtonContent
-                key={size}
-                variant={variant}
-                size={size}
-                label={t(`showcase.buttonGallery.sizes.${size}`)}
-                accessibilityLabel={`${variantLabel}: ${t(`showcase.buttonGallery.sizes.${size}`)}`}
-                fullWidth
-                onPress={onPress}
-                testID={
-                  size === 'md'
-                    ? variant === 'primary'
-                      ? 'component-button'
-                      : `component-button-${variant}`
-                    : `component-button-${variant}-${size}`
-                }
-              />
-            ))}
-            <Row spacing={spacing.md} alignment="center">
-              <ButtonContent
-                variant={variant}
-                accessibilityLabel={`${variantLabel}: ${iconOnlyLabel}`}
-                circular
-                onPress={onPress}
-                testID={`component-button-${variant}-icon-only`}
-              >
-                <Icon name={icon} size={20} />
-              </ButtonContent>
-              <Text variant="caption">{iconOnlyLabel}</Text>
-            </Row>
-            {(['leading', 'trailing'] as const).map((placement) => {
-              const label = t(`showcase.buttonGallery.${placement}Icon`);
-              return (
-                <ButtonContent
-                  key={placement}
-                  variant={variant}
-                  accessibilityLabel={`${variantLabel}: ${label}`}
-                  fullWidth
-                  onPress={onPress}
-                  testID={`component-button-${variant}-${placement}-icon`}
-                >
-                  <Row spacing={spacing.sm} alignment="center">
-                    {placement === 'leading' && <Icon name={icon} size={20} />}
-                    <ButtonText>{label}</ButtonText>
-                    {placement === 'trailing' && <Icon name={icon} size={20} />}
-                  </Row>
-                </ButtonContent>
-              );
-            })}
-          </Column>
-        );
-      })}
-    </Column>
-  );
-}
-
-function LoadingButtonExample({ onComplete }: Readonly<{ onComplete: () => void }>) {
-  const { t } = useTranslation();
-  const colors = useThemeColors(useHostColorScheme());
-  const [pending, setPending] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const label = t(pending ? 'common.wait' : 'showcase.buttonGallery.pendingAction');
-
-  useEffect(
-    () => () => {
-      if (timer.current !== null) clearTimeout(timer.current);
-    },
-    [],
-  );
-
-  return (
-    <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-      <Text variant="subtitle">{t('componentCatalog.names.loading')}</Text>
-      <Text variant="caption" tone="muted">
-        {t('showcase.buttonGallery.loadingHint')}
-      </Text>
-      <ButtonContent
-        variant="primary"
-        accessibilityLabel={label}
-        fullWidth
-        disabled={pending}
-        testID="component-button-loading"
-        onPress={() => {
-          if (timer.current !== null) return;
-          setPending(true);
-          timer.current = setTimeout(() => {
-            timer.current = null;
-            setPending(false);
-            onComplete();
-          }, 1500);
-        }}
-      >
-        <Row spacing={spacing.sm} alignment="center">
-          <Row spacing={0} alignment="center" style={{ width: 20, height: 20 }}>
-            {pending ? (
-              <LoadingIndicator
-                color={colors.onPrimary}
-                testID="component-button-loading-spinner"
-              />
-            ) : (
-              <Icon
-                name={Icon.select({ ios: 'square.and.arrow.down', android: 'save' })}
-                size={20}
-              />
-            )}
-          </Row>
-          <ButtonText>{label}</ButtonText>
-        </Row>
-      </ButtonContent>
-    </Column>
   );
 }
 

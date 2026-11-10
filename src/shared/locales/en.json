@@ -1,36 +1,32 @@
 {
   "discover": {
     "title": "Discover",
-    "eyebrow": "THE EVERYDAY EDIT",
-    "headline": "Find your next spark.",
-    "description": "Fresh perspectives and small ideas for a more thoughtful everyday.",
+    "eyebrow": "A NATIVE APP TEMPLATE",
+    "headline": "Your next app starts here.",
+    "description": "This app is a template that brings together the essential components and screens you need to build an iOS or Android app.",
     "featured": {
-      "badge": "This week’s collection",
-      "title": "Less rush.\nMore room.",
-      "description": "A quiet morning, an open window, a walk with no destination. Make a little space for the things that feel good.",
-      "caption": "A slower pace starts with one small moment."
+      "badge": "iOS + Android",
+      "title": "The essentials.\nReady to explore.",
+      "description": "Explore {{total}} components and app patterns across {{categories}} categories. Try the examples and use them as a starting point for your own app.",
+      "caption": "From your first button to a complete screen."
     },
-    "topicsTitle": "A world of inspiration",
-    "topics": {
-      "outside": { "title": "Step outside", "description": "Fresh air & new paths" },
-      "spaces": { "title": "Feel at home", "description": "Spaces with a little soul" },
-      "rituals": { "title": "Daily rituals", "description": "Small moments that matter" },
-      "creativity": { "title": "Stay curious", "description": "Room for a new idea" }
-    },
-    "ideasTitle": "Try a little something",
-    "ideasDescription": "Three simple ways to bring the inspiration into your day.",
-    "ideas": {
-      "walk": {
-        "title": "Take the scenic route",
-        "description": "Leave ten minutes early and choose a different street. Notice something you would usually walk past."
+    "componentsTitle": "Everything your app needs",
+    "componentsDescription": "Browse the full collection, grouped by what you want to build. Open a category to try its components.",
+    "exploreCategory": "Explore {{category}}",
+    "stepsTitle": "Make it your own",
+    "stepsDescription": "A starting point for your ideas, from individual components to complete app experiences.",
+    "steps": {
+      "explore": {
+        "title": "Explore the components",
+        "description": "Try buttons, forms, lists, navigation and more. Each category opens working native examples."
       },
-      "corner": {
-        "title": "Reset one small corner",
-        "description": "Clear a shelf, move a plant, or put your favorite book within reach. A small change can make a familiar space feel new."
+      "compose": {
+        "title": "Put the pieces together",
+        "description": "See the components in context on the sample Home screen, then combine them into your own screens and flows."
       },
-      "offline": {
-        "title": "Keep a moment for yourself",
-        "description": "Put your phone aside while your coffee brews. Take a breath and enjoy a few minutes without a to-do list."
+      "personalize": {
+        "title": "Find your app’s style",
+        "description": "Visit Settings to explore themes, light and dark appearance, and English, French or Arabic."
       }
     }
   },
@@ -76,12 +72,11 @@
     "restarting": "Restarting…",
     "restart": "Restart to apply",
     "download": "Download improvements",
-    "later": "Later",
     "newVersion": "A new version is available",
     "improvementsReady": "New improvements are available",
-    "storeHint": "Update through your app store to get the latest version.",
-    "downloadHint": "Download the latest improvements. You can restart when you’re ready.",
-    "restartHint": "Your improvements are ready. Restart the app to apply them.",
+    "storeHint": "Update through your app store to continue using the app.",
+    "downloadHint": "Download the latest improvements to continue using the app.",
+    "restartHint": "Your improvements are ready. Restart the app to continue.",
     "status": {
       "unchecked": "Not checked yet",
       "current": "Up to date",
@@ -812,6 +807,11 @@
     "photoLibrary": "Photo library",
     "photoHint": "Use the system picker to select one photo. Canceling keeps your current preview.",
     "choosePhoto": "Choose a photo",
+    "choosePhotos": "Choose photos",
+    "collectionHint": "Take photos or choose images, then switch layouts to browse the same collection. Photos stay in this screen’s local preview and are not uploaded.",
+    "photoLayout": "Photo layout",
+    "emptyCollection": "No photos yet. Take a photo or choose images to try this view.",
+    "photoCount": "Photos: {{count}}",
     "choosing": "Choosing photo…",
     "photoSize": "{{width}} × {{height}} pixels",
     "permissionFailed": "Unable to access the camera. Check permission in device settings and try again.",
@@ -833,8 +833,67 @@
     "noComponents": "No components found."
   },
   "componentCatalog": {
-    "browseCategories": "Choose a category to explore its components.",
+    "browseCategories": "Explore native UI components and app flows. Choose a category to learn what each component does and try its examples.",
     "categoryCount": "Components: {{count}}",
+    "categoryDescriptions": {
+      "layout": "Text, icons, shapes and page layouts provide the building blocks for clear native screens.",
+      "controls": "Buttons, selection controls and form fields let people take actions and enter information.",
+      "data": "Lists, rows, tables, disclosures and pull to refresh help people browse and organize information.",
+      "media": "Photo carousels, story cards and an expandable grid let people browse and explore images.",
+      "navigation": "Floating actions, a tab bar, popovers and sheets provide access to destinations and related content.",
+      "feedback": "Badges, alerts, progress, empty states and placeholders explain what is happening and what to do next.",
+      "flows": "Appearance controls, authentication layouts, launch screens and code verification support common app flows."
+    },
+    "descriptions": {
+      "button": "Buttons trigger actions. Compare Google account buttons, semantic colors, visual variants and sizes.",
+      "checkbox": "A checkbox selects or clears an independent choice. Toggle this example to try both states.",
+      "chip": "Chips present compact choices and actions. Try filters, single selection, removable tags and suggestions.",
+      "badge": "Badges show a short status beside content. Compare default, secondary, destructive and outline styles.",
+      "switch": "A switch turns a setting on or off immediately. Toggle this example to change its local value.",
+      "slider": "Sliders choose a value within a range. Try volume, brightness and text size with continuous or stepped changes.",
+      "picker": "A picker chooses one item from a set. Open this example and select the first or second option.",
+      "date-time-picker": "Native date and time pickers schedule an event. Switch modes, change the appointment and try the disabled state.",
+      "segmented-control": "A segmented control switches between related choices. Select either segment to change the active option.",
+      "text-input": "Text inputs collect written information. Compare field styles, feedback, passwords and native keyboards.",
+      "field-group": "Field groups organize related settings into sections. Browse these grouped navigation rows and open a component.",
+      "form": "Forms collect and validate related information. Try a profile form, review its values and compare field states.",
+      "text": "Text presents readable content with a clear hierarchy. Compare a heading, body text and a muted caption.",
+      "icon": "Icons communicate familiar ideas at a glance. This example shows native star and heart symbols.",
+      "shape": "Shapes provide simple visual building blocks. Compare a circle, rounded rectangle and capsule.",
+      "native": "Rows, columns and spacers arrange native content. Try a layout combining text, a shape and an action.",
+      "host": "A Host displays native UI inside a React Native screen. This example groups native text, layout and a button.",
+      "page": "A page gives screen content a consistent frame, header and spacing. Explore this title, text and placeholder layout.",
+      "list": "A list presents rows in a native scrolling container. Browse the sample components and tap a row to open one.",
+      "list-item": "A list item combines a title, supporting text and an icon in one tappable row. Tap it to update the counter.",
+      "table": "Tables compare structured data across rows and columns. Search, select, sort and update sample payments or open their details.",
+      "collapsible": "A disclosure reveals or hides related content. Expand this example to edit a field, then close and reopen it.",
+      "refreshable-scroll-view": "Pull to refresh lets people request fresh content. Pull down in this example to update the action count.",
+      "circular-carousel": "A circular carousel browses photos in a round frame. Swipe between images and tap a photo to show its label.",
+      "stacked-carousel": "A stacked carousel presents photos as overlapping cards. Swipe through the sample images to explore the stack.",
+      "story-list": "A story list presents a horizontal collection of photo cards. Swipe through this sample collection.",
+      "ios-home-grid": "A photo grid offers a compact overview of images. Tap a photo to expand it, then dismiss the expanded view.",
+      "floating-action": "A floating action keeps a key task easy to reach. Tap this example to update the counter.",
+      "navigation": "A tab bar switches between main destinations and keeps a central action available. Try the tabs and raised button.",
+      "popover": "A popover shows related content beside its trigger. Open this example, then close it to return to the page.",
+      "bottom-sheet": "A bottom sheet presents a focused task above the current screen. Open the sample sheet and try dismissing it.",
+      "alert": "An alert draws attention to an important message. Tap the button to display an informational alert.",
+      "loading": "Loading indicators show that work is in progress. Compare an activity indicator with progress controlled by a slider.",
+      "empty-state": "An empty state explains missing content and offers a next step. Try the sample create, import and learn more actions.",
+      "skeleton": "Skeletons reserve space while content loads. These static placeholders represent an image and two lines of text.",
+      "appearance": "Appearance controls choose light, dark or system mode. Change the selection to update the app's saved appearance.",
+      "auth": "An authentication frame organizes account screens with a title and keyboard-aware content. Try the sample name form.",
+      "launch-screen": "A launch screen introduces the app while it becomes ready. Tap to preview the branded exit animation.",
+      "otp-bottom-sheet": "A verification sheet collects a six-digit code. Open it and enter 123456 to try local verification.",
+      "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error."
+    },
+    "buttons": {
+      "semantic": "Semantic actions",
+      "semanticHint": "Success, warning, information and destructive colors communicate the action's intent.",
+      "variants": "Visual variants",
+      "variantsHint": "Compare primary, secondary, tertiary, link and glass styles to choose an action's emphasis.",
+      "sizes": "Sizes",
+      "sizesHint": "Compare small, medium and large buttons using the same primary style."
+    },
     "categories": {
       "layout": "Layout & typography",
       "controls": "Controls & forms",

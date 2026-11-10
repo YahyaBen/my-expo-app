@@ -7,14 +7,15 @@ import {
   UniversalTextContent,
   Button,
   nativeFillWidth,
+  UniversalHost,
 } from '@components/ui';
 import type { Meta, StoryObj } from '@storybook/react-native';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { action } from 'storybook/actions';
 import { NativeStoryFrame } from '../../components/native-story-frame';
 
-type DemoProps = Pick<BottomSheetProps, 'isPresented' | 'onDismiss' | 'testID'> & {
+type DemoProps = Pick<BottomSheetProps, 'isPresented' | 'onDismiss' | 'testID' | 'dismissible'> & {
   contentHeight?: number;
   colorScheme: 'light' | 'dark';
   title: string;
@@ -28,6 +29,7 @@ function BottomSheetDemo({
   content,
   colorScheme,
   contentHeight,
+  dismissible = true,
   isPresented: requestedPresentation,
   testID,
   onOpen,
@@ -53,43 +55,54 @@ function BottomSheetDemo({
         }}
       />
       <UniversalText testID={testID ? `${testID}-state` : undefined} colorScheme={colorScheme}>
-        {`State: ${isPresented ? 'Open' : 'Closed'}. Swipe down or tap Close to dismiss.`}
+        {`State: ${isPresented ? 'Open' : 'Closed'}. ${dismissible ? 'Swipe down or tap Close to dismiss.' : 'Only the Close button dismisses this sheet.'}`}
       </UniversalText>
-      <BottomSheet
-        testID={testID}
-        contentHeight={contentHeight}
-        isPresented={isPresented}
-        onDismiss={() => {
-          setIsPresented(false);
-          onDismiss();
-        }}
+      <UniversalHost
+        colorScheme={colorScheme}
+        matchContents={false}
+        style={StyleSheet.absoluteFill}
+        pointerEvents="none"
       >
-        <Column
-          testID={testID ? `${testID}-content` : undefined}
-          spacing={16}
-          modifiers={nativeFillWidth}
+        <BottomSheet
+          testID={testID}
+          contentHeight={contentHeight}
+          dismissible={dismissible}
+          isPresented={isPresented}
+          onDismiss={() => {
+            setIsPresented(false);
+            onDismiss();
+          }}
         >
-          <UniversalTextContent variant="subtitle" testID={testID ? `${testID}-title` : undefined}>
-            {title}
-          </UniversalTextContent>
-          <UniversalTextContent
-            testID={testID ? `${testID}-description` : undefined}
-            textStyle={{ fontSize: 16 }}
+          <Column
+            testID={testID ? `${testID}-content` : undefined}
+            spacing={16}
+            modifiers={nativeFillWidth}
           >
-            {content}
-          </UniversalTextContent>
-          <ButtonContent
-            variant="secondary"
-            fullWidth
-            testID={testID ? `${testID}-close` : undefined}
-            label="Close"
-            onPress={() => {
-              setIsPresented(false);
-              onClose();
-            }}
-          />
-        </Column>
-      </BottomSheet>
+            <UniversalTextContent
+              variant="subtitle"
+              testID={testID ? `${testID}-title` : undefined}
+            >
+              {title}
+            </UniversalTextContent>
+            <UniversalTextContent
+              testID={testID ? `${testID}-description` : undefined}
+              textStyle={{ fontSize: 16 }}
+            >
+              {content}
+            </UniversalTextContent>
+            <ButtonContent
+              variant="secondary"
+              fullWidth
+              testID={testID ? `${testID}-close` : undefined}
+              label="Close"
+              onPress={() => {
+                setIsPresented(false);
+                onClose();
+              }}
+            />
+          </Column>
+        </BottomSheet>
+      </UniversalHost>
     </View>
   );
 }
@@ -128,3 +141,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+export const RequiredAction: Story = {
+  args: {
+    dismissible: false,
+    title: 'A required action',
+    content: 'Swiping, tapping outside and Android Back keep this sheet open. Tap Close to finish.',
+  },
+};

@@ -39,10 +39,9 @@ Source: [page implementation](../../../../src/components/ui/page/).
 
 ## Decorative screen artwork
 
-Home's [Ramadan banner](../../../../src/features/home/ramadan-banner.tsx) is static
-screen content in its first `PageSection`, below the default header. Its decorative
-SVG is hidden from accessibility; the translated greeting uses native text. The
-banner scrolls with content and owns no header geometry, mask or animation clock.
+Home's [date/time banner](../../../../src/features/home/date-time-banner.tsx) lives
+in its first `PageSection`, below the default header. It scrolls with content
+and owns no header geometry, mask or animation clock.
 
 Keep native blur, title and Back rectangular and outside decorative artwork.
 Any future mask may affect artwork alone; decoration must not change header
@@ -51,8 +50,10 @@ before adding motion.
 
 ## Content and readiness
 
-- Settings reserves measured header height in its scrolling first-section header.
-  pageFormModifiers hides iOS Form canvas/background; retain native scrolling.
+- Home, Discover and Settings share the `PageScreen` frame, Host and keyboard
+  avoidance. Settings uses `scrollable={false}` so its native `FieldGroup` owns
+  scrolling, with the header inset in its first section header and raised-dock
+  clearance in its final section footer.
 - Overlay map content keeps the top device inset; shielded header gestures
   must not reach the map.
 - PageFrame's performance marker requires layout, focus, active app and completed

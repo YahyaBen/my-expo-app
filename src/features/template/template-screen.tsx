@@ -29,18 +29,19 @@ function DeferredSettingsScreen(props: Readonly<SettingsScreenProps>) {
   return <SettingsScreen {...props} />;
 }
 
-type ContentTabId = Exclude<TabNavigationItemId, 'more'>;
+type ContentTabId = Exclude<TabNavigationItemId, 'home' | 'more'>;
 
 /** Native template shell and its local component-navigation menu. */
 export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
   const { t } = useTranslation();
   const brand = getAppBrand();
   const insets = useSafeAreaInsets();
-  const [{ activeId, contentId, settingsOpened }, setTab] = useState<{
+  const [{ activeId, contentId, homeOpened, settingsOpened }, setTab] = useState<{
     activeId: TabNavigationItemId;
     contentId: ContentTabId;
+    homeOpened: boolean;
     settingsOpened: boolean;
-  }>({ activeId: 'home', contentId: 'home', settingsOpened: false });
+  }>({ activeId: 'search', contentId: 'search', homeOpened: false, settingsOpened: false });
   const [menuState, setMenuState] = useState<'unopened' | 'open' | 'closed'>('unopened');
   const menuOpen = menuState === 'open';
   const navigating = useRef(false);
@@ -72,7 +73,8 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     setTab((current) => ({
       activeId: id,
       // Keep the hidden page's content and native scroll tree unchanged.
-      contentId: id === 'more' ? current.contentId : id,
+      contentId: id === 'more' || id === 'home' ? current.contentId : id,
+      homeOpened: current.homeOpened || id === 'home',
       settingsOpened: current.settingsOpened || id === 'more',
     }));
   }
@@ -87,16 +89,22 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
-        <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
-          <HomeScreen
-            title={titles.home}
-            showBack={showBack}
-            onBrowseComponents={() => selectTab('recipes')}
-          />
-        </Activity>
+        {homeOpened ? (
+          <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
+            <HomeScreen
+              title={titles.home}
+              showBack={showBack}
+              onBrowseComponents={() => selectTab('recipes')}
+            />
+          </Activity>
+        ) : null}
         <Activity mode={activeId === 'more' || activeId === 'home' ? 'hidden' : 'visible'}>
           {contentId === 'search' ? (
-            <DiscoverScreen showBack={showBack} />
+            <DiscoverScreen
+              showBack={showBack}
+              onBrowseComponents={() => selectTab('recipes')}
+              onSelectCategory={navigateToCategory}
+            />
           ) : contentId === 'recipes' ? (
             <PageScreen
               tab
@@ -131,12 +139,12 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         leftInset={insets.left}
         rightInset={insets.right}
         items={[
-          { id: 'home', label: t('common.home') },
           {
             id: 'search',
             label: t('discover.title'),
             icon: Icon.select({ ios: 'safari', android: 'explore' }),
           },
+          { id: 'home', label: t('common.home') },
           {
             id: 'recipes',
             label: t('template.components'),

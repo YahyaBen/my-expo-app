@@ -1,5 +1,5 @@
 import { getBrandHeadingFont } from '@/config/brand-assets';
-import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
+import { spacing, tabBarRaisedHeight } from '@/constants/layout';
 import { useLanguage } from '@/context/language.context';
 import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useMotionSettings } from '@/context/theme.context';
@@ -7,7 +7,6 @@ import { useAppUpdates } from '@/features/updates/app-updates';
 import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
-import { screenInsets } from '@/lib/screen-insets';
 import {
   BottomSheet,
   ColorSchemeControl,
@@ -15,23 +14,22 @@ import {
   FieldGroup,
   Icon,
   ListItem,
+  nativeFillSize,
   nativeFillWidth,
   pageFormModifiers,
-  PageFrame,
+  PageScreen,
   PageSection,
   Row,
   Switch,
-  ThemeControl,
   UniversalTextContent as Text,
-  UniversalHost,
+  ThemeControl,
   usePageHeaderInset,
 } from '@components/ui';
-import { router } from 'expo-router';
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application';
-import { useState, type ReactNode } from 'react';
+import { router } from 'expo-router';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, useWindowDimensions, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform, useWindowDimensions } from 'react-native';
 import { PushTokenField } from './push-token-field';
 import { SettingsPickerRow } from './settings-picker-row';
 import { useDeviceLocation } from './use-device-location';
@@ -117,24 +115,25 @@ function SettingsPage({
       color={colors.muted}
     />
   );
+  // Native section footers keep the final row clear of the shared raised tab action.
+  const tabFooter = tab ? (
+    <FieldGroup.SectionFooter>
+      <Column style={{ height: tabBarRaisedHeight }} testID="app-settings-tab-clearance" />
+    </FieldGroup.SectionFooter>
+  ) : null;
   return (
-    <PageFrame title={t('settings.title')} onBack={onBack} headerMode="scroll">
-      <SettingsViewport tab={tab}>
-        <UniversalHost
-          // Recreate only this iOS form host when direction flips; reused native cells mirror text.
-          key={Platform.OS === 'ios' ? direction : undefined}
-          matchContents={false}
-          useViewportSizeMeasurement={Platform.OS === 'android'}
-          ignoreSafeArea="all"
-          style={{
-            flex: 1,
-            maxWidth: screenContentMaxWidth,
-            alignSelf: 'center',
-            marginBottom: tab ? tabBarRaisedHeight : 0,
-          }}
-          testID="app-settings-content"
-        >
+    <PageScreen
+      tab={tab}
+      title={t('settings.title')}
+      onBack={onBack}
+      showBack={!!onBack}
+      scrollable={false}
+    >
+      <Column spacing={0} modifiers={nativeFillSize} testID="app-settings-viewport">
+        <Column spacing={0} modifiers={nativeFillSize} testID="app-settings-content">
           <FieldGroup
+            // Recreate only the native form when direction flips; retain preference state above it.
+            key={Platform.OS === 'ios' ? direction : undefined}
             modifiers={pageFormModifiers}
             style={{ backgroundColor: 'transparent' }}
             testID="app-settings-groups"
@@ -308,6 +307,7 @@ function SettingsPage({
                   {t('settings.location.openSettings')}
                 </Text>
               </ListItem.FieldRow>
+              {!updates ? tabFooter : null}
             </FieldGroup.Section>
             {updates ? (
               <FieldGroup.Section
@@ -398,16 +398,12 @@ function SettingsPage({
                     </Text>
                   </ListItem.FieldRow>
                 ) : null}
+                {tabFooter}
               </FieldGroup.Section>
             ) : null}
           </FieldGroup>
-        </UniversalHost>
-        {/* A sheet owns a Host; isolate its presentation from the form's native hit-testing tree. */}
-        <UniversalHost
-          style={{ position: 'absolute' }}
-          pointerEvents="box-none"
-          testID="app-settings-language-presentation"
-        >
+        </Column>
+        <Column spacing={0} testID="app-settings-language-presentation">
           <BottomSheet
             isPresented={languageOpen}
             onDismiss={() => setLanguageOpen(false)}
@@ -418,46 +414,41 @@ function SettingsPage({
                 {t('common.language')}
               </Text>
               <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
-                <FieldGroup modifiers={pageFormModifiers} testID="app-settings-language-options">
-                  <FieldGroup.Section>
-                    {SUPPORTED_LANGUAGES.map((value) => (
-                      <ListItem.FieldRow
-                        key={value}
-                        testID={`app-settings-language-${value}`}
-                        onPress={
-                          changeLanguage &&
-                          (() => {
-                            changeLanguage(value);
-                            setLanguageOpen(false);
-                          })
-                        }
-                        trailing={
-                          language === value ? (
-                            <Icon
-                              name={Icon.select({
-                                ios: 'checkmark',
-                                android: 'check',
-                              })}
-                              size={20}
-                              color={colors.tint}
-                            />
-                          ) : undefined
-                        }
-                      >
-                        <Text>{languageLabel(value)}</Text>
-                      </ListItem.FieldRow>
-                    ))}
-                  </FieldGroup.Section>
-                </FieldGroup>
+                <FieldGroup.Section>
+                  {SUPPORTED_LANGUAGES.map((value) => (
+                    <ListItem.FieldRow
+                      key={value}
+                      testID={`app-settings-language-${value}`}
+                      onPress={
+                        changeLanguage &&
+                        (() => {
+                          changeLanguage(value);
+                          setLanguageOpen(false);
+                        })
+                      }
+                      trailing={
+                        language === value ? (
+                          <Icon
+                            name={Icon.select({
+                              ios: 'checkmark',
+                              android: 'check',
+                            })}
+                            size={20}
+                            color={colors.tint}
+                          />
+                        ) : undefined
+                      }
+                    >
+                      <Text>{languageLabel(value)}</Text>
+                    </ListItem.FieldRow>
+                  ))}
+                </FieldGroup.Section>
               </Column>
-              <ListItem onPress={() => setLanguageOpen(false)} testID="app-settings-language-close">
-                <Text tone="primary">{t('common.close')}</Text>
-              </ListItem>
             </PageSection>
           </BottomSheet>
-        </UniversalHost>
-      </SettingsViewport>
-    </PageFrame>
+        </Column>
+      </Column>
+    </PageScreen>
   );
 }
 
@@ -504,19 +495,5 @@ function SettingsSectionHeading({
         {label.toLocaleUpperCase(language)}
       </Text>
     </Column>
-  );
-}
-
-// FieldGroup owns scrolling; the RN boundary supplies a bounded native viewport and safe areas.
-function SettingsViewport({ children, tab }: Readonly<{ children: ReactNode; tab: boolean }>) {
-  const insets = useSafeAreaInsets();
-  return (
-    <View
-      testID="app-settings-viewport"
-      collapsable={false}
-      style={{ flex: 1, overflow: 'hidden', ...screenInsets(insets, { tabBarShown: tab }) }}
-    >
-      {children}
-    </View>
   );
 }

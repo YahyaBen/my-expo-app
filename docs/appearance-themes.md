@@ -123,8 +123,10 @@ refreshes automatically on return.
 
 Photos use the system picker without full-library access. The camera example
 captures still photos; microphone permission is available for video audio.
-Background location and exact-alarm access are unused. Notification setup creates
-the Android channel before requesting permission. Android Settings displays the
+Background location and exact-alarm access are unused. After the launch screen closes,
+the app requests notification permission if no choice has been made yet. Previous
+grants or denials do not trigger another startup prompt or open device settings.
+Notification setup creates the Android channel before requesting permission. Android Settings displays the
 Expo push token after permission is granted, with selection/copy and retry.
 Sending through Expo needs matching platform credentials in EAS; see the
 [push setup guide](eas-development-builds.md#expo-push-notifications).
@@ -170,7 +172,8 @@ native Storybook controls also operate on isolated providers.
 
 Template's Settings tab and Appearance component page use the root's saved appearance
 preference. Settings also exposes saved motion, language and device choices, with
-one native grouped scroll owner and clearance for the raised dock action. Its
+the same `PageScreen` frame as Home and Discover. Its native `FieldGroup` owns
+scrolling and keeps the final row clear of the raised dock action. Its
 permission/location modules load when the tab is first opened. Preferences in
 Storybook renders the same feature through an isolated appearance provider, so its
 theme controls do not persist app appearance. Language and device switches in

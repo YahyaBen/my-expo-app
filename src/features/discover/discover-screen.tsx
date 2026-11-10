@@ -1,5 +1,6 @@
 import {
   Badge,
+  ButtonContent,
   Column,
   Icon,
   PageScreen,
@@ -11,23 +12,27 @@ import {
   useHostColorScheme,
 } from '@components/ui';
 import { useTranslation } from 'react-i18next';
-import { useWindowDimensions } from 'react-native';
+import {
+  componentCategories,
+  componentIds,
+  type ComponentCategoryId,
+} from '@/features/template/component-catalog';
 import { useThemeColors } from '@/hooks/use-theme';
 
-const topics = [
-  { id: 'outside', icon: Icon.select({ ios: 'leaf', android: 'eco' }) },
-  { id: 'spaces', icon: Icon.select({ ios: 'house', android: 'home' }) },
-  { id: 'rituals', icon: Icon.select({ ios: 'cup.and.saucer', android: 'coffee' }) },
-  { id: 'creativity', icon: Icon.select({ ios: 'pencil.and.outline', android: 'draw' }) },
-] as const;
-const ideas = ['walk', 'corner', 'offline'] as const;
+const steps = ['explore', 'compose', 'personalize'] as const;
 
-/** An offline editorial page composed in the shell's existing native page Host. */
-export default function DiscoverScreen({ showBack }: Readonly<{ showBack: boolean }>) {
+/** Template introduction and catalog, composed in the shell's existing native page Host. */
+export default function DiscoverScreen({
+  showBack,
+  onBrowseComponents,
+  onSelectCategory,
+}: Readonly<{
+  showBack: boolean;
+  onBrowseComponents: () => void;
+  onSelectCategory: (id: ComponentCategoryId) => void;
+}>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
-  const { width, fontScale } = useWindowDimensions();
-  const columns = width < 380 || fontScale > 1.3 ? 1 : 2;
 
   return (
     <PageScreen tab title={t('discover.title')} showBack={showBack}>
@@ -52,7 +57,7 @@ export default function DiscoverScreen({ showBack }: Readonly<{ showBack: boolea
         >
           <Badge label={t('discover.featured.badge')} variant="secondary" />
           <Icon
-            name={Icon.select({ ios: 'sun.max', android: 'light_mode' })}
+            name={Icon.select({ ios: 'square.grid.2x2', android: 'widgets' })}
             size={48}
             color={colors.surface}
           />
@@ -65,63 +70,94 @@ export default function DiscoverScreen({ showBack }: Readonly<{ showBack: boolea
               {t('discover.featured.title')}
             </UniversalTextContent>
             <UniversalTextContent variant="body" textStyle={{ color: colors.surface }}>
-              {t('discover.featured.description')}
+              {t('discover.featured.description', {
+                total: componentIds.length,
+                categories: componentCategories.length,
+              })}
             </UniversalTextContent>
           </Column>
           <UniversalTextContent variant="caption" textStyle={{ color: colors.surface }}>
             {t('discover.featured.caption')}
           </UniversalTextContent>
+          <ButtonContent
+            variant="primary"
+            fullWidth
+            color={colors.surface}
+            contentColor={colors.text}
+            label={t('home.browseComponents')}
+            onPress={onBrowseComponents}
+            testID="discover-browse-components"
+          />
         </Column>
 
         <Column spacing={16} modifiers={nativeFillWidth} testID="discover-topics">
-          <UniversalTextContent variant="title">{t('discover.topicsTitle')}</UniversalTextContent>
-          {Array.from({ length: Math.ceil(topics.length / columns) }, (_, row) => (
-            <Row key={row} spacing={12} modifiers={nativeFillWidth}>
-              {topics.slice(row * columns, (row + 1) * columns).map((topic) => (
-                <Column
-                  key={topic.id}
-                  spacing={12}
-                  modifiers={nativeRowWeight}
-                  style={{ padding: 20, borderRadius: 20, backgroundColor: colors.surfaceVariant }}
-                  testID={`discover-topic-${topic.id}`}
-                >
-                  <Icon name={topic.icon} size={28} />
-                  <Column spacing={4} modifiers={nativeFillWidth}>
-                    <UniversalTextContent variant="subtitle">
-                      {t(`discover.topics.${topic.id}.title`)}
-                    </UniversalTextContent>
-                    <UniversalTextContent variant="caption" tone="muted">
-                      {t(`discover.topics.${topic.id}.description`)}
-                    </UniversalTextContent>
-                  </Column>
+          <Column spacing={8} modifiers={nativeFillWidth}>
+            <UniversalTextContent variant="title">
+              {t('discover.componentsTitle')}
+            </UniversalTextContent>
+            <UniversalTextContent variant="body" tone="muted">
+              {t('discover.componentsDescription')}
+            </UniversalTextContent>
+          </Column>
+          {componentCategories.map(({ id, icon, components }) => (
+            <Column
+              key={id}
+              spacing={16}
+              modifiers={nativeFillWidth}
+              style={{ padding: 20, borderRadius: 20, backgroundColor: colors.surfaceVariant }}
+              testID={`discover-category-${id}`}
+            >
+              <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+                <Icon name={icon} size={28} />
+                <Column spacing={4} modifiers={nativeRowWeight}>
+                  <UniversalTextContent variant="subtitle">
+                    {t(`componentCatalog.categories.${id}`)}
+                  </UniversalTextContent>
+                  <UniversalTextContent variant="caption" tone="muted">
+                    {t('componentCatalog.categoryCount', { count: components.length })}
+                  </UniversalTextContent>
                 </Column>
-              ))}
-            </Row>
+              </Row>
+              <UniversalTextContent variant="body" tone="muted">
+                {components
+                  .map((component) => t(`componentCatalog.names.${component}`))
+                  .join(' · ')}
+              </UniversalTextContent>
+              <ButtonContent
+                variant="secondary"
+                fullWidth
+                label={t('discover.exploreCategory', {
+                  category: t(`componentCatalog.categories.${id}`),
+                })}
+                onPress={() => onSelectCategory(id)}
+                testID={`discover-explore-${id}`}
+              />
+            </Column>
           ))}
         </Column>
 
         <Column spacing={8} modifiers={nativeFillWidth} testID="discover-ideas">
-          <UniversalTextContent variant="title">{t('discover.ideasTitle')}</UniversalTextContent>
+          <UniversalTextContent variant="title">{t('discover.stepsTitle')}</UniversalTextContent>
           <UniversalTextContent variant="body" tone="muted">
-            {t('discover.ideasDescription')}
+            {t('discover.stepsDescription')}
           </UniversalTextContent>
-          {ideas.map((id, index) => (
+          {steps.map((id, index) => (
             <Row
               key={id}
               spacing={16}
               modifiers={nativeFillWidth}
               style={{ paddingVertical: 16 }}
-              testID={`discover-idea-${id}`}
+              testID={`discover-step-${id}`}
             >
               <UniversalTextContent variant="title" tone="muted">
                 {String(index + 1).padStart(2, '0')}
               </UniversalTextContent>
               <Column spacing={6} modifiers={nativeRowWeight}>
                 <UniversalTextContent variant="subtitle">
-                  {t(`discover.ideas.${id}.title`)}
+                  {t(`discover.steps.${id}.title`)}
                 </UniversalTextContent>
                 <UniversalTextContent variant="body" tone="muted">
-                  {t(`discover.ideas.${id}.description`)}
+                  {t(`discover.steps.${id}.description`)}
                 </UniversalTextContent>
               </Column>
             </Row>

@@ -27,7 +27,8 @@ content; only the 56-point row plus bottom system inset reserves screen height.
 Keep the raised region transparent and all controls inside the native touch frame.
 
 Tab content adds only the raised-height trailing clearance and omits another
-bottom system inset. `PageScreen tab` and Settings' final section already do this.
+bottom system inset. `PageScreen tab` supplies it for ordinary scrolling content;
+Settings keeps its native `FieldGroup` and adds clearance in the final section footer.
 Do not add the full dock height to content padding.
 
 Keep the background full-width and flat. The controls center within the safe

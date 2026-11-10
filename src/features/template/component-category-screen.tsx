@@ -33,9 +33,12 @@ export default function ComponentCategoryScreen({ id }: Readonly<{ id?: string }
   return (
     <PageScreen
       title={t(`componentCatalog.categories.${category.id}`)}
-      description={t('componentCatalog.categoryCount', { count: category.components.length })}
+      description={t(`componentCatalog.categoryDescriptions.${category.id}`)}
     >
       <PageSection testID={`component-category-${category.id}`}>
+        <Text variant="caption" tone="muted">
+          {t('componentCatalog.categoryCount', { count: category.components.length })}
+        </Text>
         <ComponentList
           items={componentCatalog.filter((item) => item.category === category.id)}
           onSelect={navigateToComponent}

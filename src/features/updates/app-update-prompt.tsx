@@ -5,38 +5,26 @@ import {
   UniversalHost,
   UniversalTextContent as Text,
 } from '@components/ui';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { useAppUpdates } from './app-updates';
 
-/** Offer updates once each session; Settings keeps the actions available after dismissal. */
+/** Keep required updates presented through download, retry and restart. */
 export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
   const { t } = useTranslation();
   const updates = useAppUpdates();
-  const offered = useRef(false);
-  const [kind, setKind] = useState<'store' | 'ota' | null>(null);
   const [presented, setPresented] = useState(false);
   const storeAvailable = updates?.storeStatus === 'available';
   const otaAvailable = updates?.otaStatus === 'available' || updates?.otaStatus === 'ready';
   const pending = updates?.pending ?? null;
 
-  useEffect(() => {
-    // A slow store check must not hide an OTA result that has already arrived.
-    if (
-      !ready ||
-      offered.current ||
-      (pending !== null && pending !== 'check') ||
-      (!storeAvailable && !otaAvailable)
-    )
-      return;
-    offered.current = true;
-    setKind(storeAvailable ? 'store' : 'ota');
-    setPresented(true);
-  }, [ready, pending, storeAvailable, otaAvailable]);
+  // Retain presentation if downloading or opening the store backgrounds the app.
+  if (!presented && ready && (storeAvailable || otaAvailable)) setPresented(true);
 
   if (!updates) return null;
-  const isStore = kind === 'store';
+  const isStore = storeAvailable;
+  const updating = pending === 'download' || pending === 'restart' || pending === 'store';
   const downloaded = updates.otaStatus === 'ready';
   const label =
     pending === 'store'
@@ -61,8 +49,9 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
     >
       <BottomSheet
         // A release can be withdrawn between detection and download.
-        isPresented={presented && !(kind === 'ota' && updates.otaStatus === 'current' && !pending)}
-        onDismiss={() => setPresented(false)}
+        isPresented={presented && (storeAvailable || otaAvailable || updating)}
+        dismissible={false}
+        onDismiss={() => {}}
         testID="app-update-prompt"
       >
         <PageSection>
@@ -96,13 +85,6 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
                   : updates.downloadUpdate())
             }
             testID="app-update-apply"
-          />
-          <ButtonContent
-            variant="tertiary"
-            label={t('updates.later')}
-            fullWidth
-            onPress={() => setPresented(false)}
-            testID="app-update-later"
           />
         </PageSection>
       </BottomSheet>

@@ -4,6 +4,8 @@ export type BottomSheetBaseProps = {
   children?: ReactNode;
   isPresented: boolean;
   onDismiss: () => void;
+  /** Allow user dismissal. Set false inside a Host for a required action. */
+  dismissible?: boolean;
   testID?: string;
 };
 

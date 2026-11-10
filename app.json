@@ -1,8 +1,8 @@
 {
   "expo": {
-    "version": "1.0.2",
+    "version": "1.0.4",
     "platforms": ["ios", "android"],
-    "orientation": "portrait",
+    "orientation": "default",
     "userInterfaceStyle": "automatic",
     "locales": {
       "en": "./config/locales/en.json",

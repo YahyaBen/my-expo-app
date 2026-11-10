@@ -7,7 +7,7 @@ import fr from '@/shared/locales/fr.json';
 
 export const SUPPORTED_LANGUAGES = ['fr', 'en', 'ar'] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
-export const LANGUAGE_FALLBACK: Language = 'fr';
+export const LANGUAGE_FALLBACK: Language = 'en';
 
 export function normalizeLanguage(value?: string | null): Language | null {
   const language = value?.trim().toLowerCase().split(/[-_]/)[0];

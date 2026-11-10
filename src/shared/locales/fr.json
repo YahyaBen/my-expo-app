@@ -1,39 +1,32 @@
 {
   "discover": {
     "title": "Découvrir",
-    "eyebrow": "L’INSPIRATION AU QUOTIDIEN",
-    "headline": "Une nouvelle étincelle.",
-    "description": "Un regard neuf et de petites idées pour un quotidien plus attentif.",
+    "eyebrow": "UN MODÈLE D’APPLICATION NATIVE",
+    "headline": "Votre prochaine app commence ici.",
+    "description": "Cette app est un modèle qui réunit les composants et les écrans essentiels pour créer votre application iOS ou Android.",
     "featured": {
-      "badge": "La sélection de la semaine",
-      "title": "Moins de hâte.\nPlus d’espace.",
-      "description": "Un matin paisible, une fenêtre ouverte, une balade sans destination. Faites une petite place à ce qui vous fait du bien.",
-      "caption": "Ralentir commence par un petit instant."
+      "badge": "iOS + Android",
+      "title": "Les essentiels.\nÀ vous d’explorer.",
+      "description": "Découvrez {{total}} composants et exemples d’app répartis en {{categories}} catégories. Essayez-les et utilisez-les comme point de départ pour votre propre app.",
+      "caption": "Du premier bouton à un écran complet."
     },
-    "topicsTitle": "Un monde d’inspiration",
-    "topics": {
-      "outside": { "title": "Prendre l’air", "description": "Grand air et nouveaux chemins" },
-      "spaces": { "title": "Se sentir chez soi", "description": "Des espaces qui ont une âme" },
-      "rituals": {
-        "title": "Rituels du quotidien",
-        "description": "Ces petits instants qui comptent"
+    "componentsTitle": "Les essentiels de votre app",
+    "componentsDescription": "Parcourez toute la collection selon ce que vous souhaitez créer. Ouvrez une catégorie pour essayer ses composants.",
+    "exploreCategory": "Explorer : {{category}}",
+    "stepsTitle": "Créez votre propre app",
+    "stepsDescription": "Un point de départ pour vos idées, des composants individuels aux expériences complètes.",
+    "steps": {
+      "explore": {
+        "title": "Explorez les composants",
+        "description": "Essayez les boutons, formulaires, listes, éléments de navigation et bien plus. Chaque catégorie propose des exemples natifs interactifs."
       },
-      "creativity": { "title": "Rester curieux", "description": "Une place pour les idées" }
-    },
-    "ideasTitle": "Un petit pas à essayer",
-    "ideasDescription": "Trois façons simples d’inviter l’inspiration dans votre journée.",
-    "ideas": {
-      "walk": {
-        "title": "Prendre le chemin des découvertes",
-        "description": "Partez dix minutes plus tôt et empruntez une autre rue. Remarquez un détail que vous auriez ignoré d’habitude."
+      "compose": {
+        "title": "Assemblez les éléments",
+        "description": "Retrouvez les composants en contexte sur l’écran d’accueil d’exemple, puis combinez-les dans vos propres écrans et parcours."
       },
-      "corner": {
-        "title": "Réinventer un petit coin",
-        "description": "Libérez une étagère, déplacez une plante ou gardez votre livre préféré à portée de main. Un petit changement peut renouveler un lieu familier."
-      },
-      "offline": {
-        "title": "Garder un instant pour soi",
-        "description": "Posez votre téléphone pendant que le café se prépare. Respirez et profitez de quelques minutes sans liste de tâches."
+      "personalize": {
+        "title": "Trouvez le style de votre app",
+        "description": "Dans Réglages, découvrez les thèmes, l’apparence claire et sombre, ainsi que le français, l’anglais et l’arabe."
       }
     }
   },
@@ -79,12 +72,11 @@
     "restarting": "Redémarrage…",
     "restart": "Redémarrer pour appliquer",
     "download": "Télécharger les améliorations",
-    "later": "Plus tard",
     "newVersion": "Une nouvelle version est disponible",
     "improvementsReady": "De nouvelles améliorations sont disponibles",
-    "storeHint": "Mettez l’app à jour depuis votre boutique pour obtenir la dernière version.",
-    "downloadHint": "Téléchargez les dernières améliorations. Vous pourrez redémarrer quand vous le souhaitez.",
-    "restartHint": "Vos améliorations sont prêtes. Redémarrez l’app pour les appliquer.",
+    "storeHint": "Mettez l’app à jour depuis votre boutique pour continuer à l’utiliser.",
+    "downloadHint": "Téléchargez les dernières améliorations pour continuer à utiliser l’app.",
+    "restartHint": "Vos améliorations sont prêtes. Redémarrez l’app pour continuer.",
     "status": {
       "unchecked": "Pas encore vérifié",
       "current": "À jour",
@@ -817,6 +809,11 @@
     "photoLibrary": "Photothèque",
     "photoHint": "Sélectionnez une photo avec le sélecteur système. Annuler conserve votre aperçu actuel.",
     "choosePhoto": "Choisir une photo",
+    "choosePhotos": "Choisir des photos",
+    "collectionHint": "Prenez des photos ou choisissez des images, puis changez de présentation pour parcourir la même collection. Les photos restent dans l’aperçu local de cet écran et ne sont pas envoyées.",
+    "photoLayout": "Présentation des photos",
+    "emptyCollection": "Aucune photo pour le moment. Prenez une photo ou choisissez des images pour essayer cette présentation.",
+    "photoCount": "Photos : {{count}}",
     "choosing": "Sélection d’une photo…",
     "photoSize": "{{width}} × {{height}} pixels",
     "permissionFailed": "Impossible d’accéder à l’appareil photo. Vérifiez l’autorisation dans les réglages et réessayez.",
@@ -838,8 +835,67 @@
     "noComponents": "Aucun composant trouvé."
   },
   "componentCatalog": {
-    "browseCategories": "Choisissez une catégorie pour découvrir ses composants.",
+    "browseCategories": "Explorez les composants natifs et les parcours de l’app. Choisissez une catégorie pour comprendre le rôle de chaque composant et essayer ses exemples.",
     "categoryCount": "Composants : {{count}}",
+    "categoryDescriptions": {
+      "layout": "Textes, icônes, formes et mises en page constituent les éléments de base d’écrans natifs lisibles.",
+      "controls": "Boutons, contrôles de sélection et champs de formulaire permettent d’agir et de saisir des informations.",
+      "data": "Listes, lignes, tableaux, volets repliables et actualisation aident à parcourir et organiser les informations.",
+      "media": "Carrousels photo, cartes de stories et grille extensible permettent de parcourir et d’explorer des images.",
+      "navigation": "Actions flottantes, barre d’onglets, fenêtres contextuelles et feuilles donnent accès aux destinations et aux contenus associés.",
+      "feedback": "Badges, alertes, progression, états vides et espaces réservés expliquent la situation et les actions possibles.",
+      "flows": "Apparence, écrans d’authentification, lancement et vérification de code accompagnent les parcours courants d’une app."
+    },
+    "descriptions": {
+      "button": "Les boutons déclenchent des actions. Comparez les boutons Google, les couleurs sémantiques, les variantes et les tailles.",
+      "checkbox": "Une case à cocher active ou retire un choix indépendant. Cochez cet exemple pour essayer ses deux états.",
+      "chip": "Les puces proposent des choix et des actions compacts. Essayez les filtres, le choix unique, les étiquettes et les suggestions.",
+      "badge": "Les badges affichent un statut court près d’un contenu. Comparez les styles par défaut, secondaire, destructif et contour.",
+      "switch": "Un interrupteur active ou désactive immédiatement un réglage. Basculez cet exemple pour modifier sa valeur locale.",
+      "slider": "Les curseurs choisissent une valeur dans un intervalle. Essayez le volume, la luminosité et la taille du texte en continu ou par étapes.",
+      "picker": "Un sélecteur choisit un élément parmi plusieurs. Ouvrez cet exemple et sélectionnez la première ou la deuxième option.",
+      "date-time-picker": "Les sélecteurs natifs de date et d’heure planifient un événement. Changez de mode, modifiez le rendez-vous et essayez l’état désactivé.",
+      "segmented-control": "Un contrôle segmenté alterne entre des choix liés. Sélectionnez un segment pour changer l’option active.",
+      "text-input": "Les champs de texte recueillent des informations écrites. Comparez les styles, les messages, les mots de passe et les claviers natifs.",
+      "field-group": "Les groupes de champs organisent les réglages en sections. Parcourez ces lignes regroupées et ouvrez un composant.",
+      "form": "Les formulaires recueillent et valident des informations liées. Essayez un profil, consultez ses valeurs et comparez les états des champs.",
+      "text": "Le texte présente le contenu avec une hiérarchie lisible. Comparez un titre, du texte courant et une légende atténuée.",
+      "icon": "Les icônes expriment des idées familières en un regard. Cet exemple affiche les symboles natifs étoile et cœur.",
+      "shape": "Les formes sont des éléments visuels simples. Comparez un cercle, un rectangle arrondi et une capsule.",
+      "native": "Lignes, colonnes et espaces organisent le contenu natif. Essayez une mise en page réunissant texte, forme et action.",
+      "host": "Un Host affiche l’interface native dans un écran React Native. Cet exemple regroupe du texte natif, une mise en page et un bouton.",
+      "page": "Une page fournit un cadre, un en-tête et des espacements cohérents. Explorez cette composition de titre, texte et espace réservé.",
+      "list": "Une liste présente des lignes dans un conteneur à défilement natif. Parcourez les composants et touchez une ligne pour l’ouvrir.",
+      "list-item": "Une ligne de liste réunit titre, texte secondaire et icône dans une zone interactive. Touchez-la pour incrémenter le compteur.",
+      "table": "Les tableaux comparent des données en lignes et colonnes. Recherchez, sélectionnez, triez et modifiez des paiements fictifs ou ouvrez leurs détails.",
+      "collapsible": "Un volet repliable affiche ou masque du contenu associé. Dépliez cet exemple pour modifier un champ, puis refermez-le et rouvrez-le.",
+      "refreshable-scroll-view": "Le geste d’actualisation demande du contenu à jour. Tirez vers le bas dans cet exemple pour incrémenter le compteur.",
+      "circular-carousel": "Un carrousel circulaire présente des photos dans un cadre rond. Balayez les images et touchez une photo pour afficher son nom.",
+      "stacked-carousel": "Un carrousel empilé présente des photos en cartes superposées. Balayez les images pour explorer la pile.",
+      "story-list": "Une liste de stories présente des cartes photo à l’horizontale. Balayez cette collection d’exemple.",
+      "ios-home-grid": "Une grille photo offre un aperçu compact des images. Touchez une photo pour l’agrandir, puis fermez la vue agrandie.",
+      "floating-action": "Une action flottante garde une tâche essentielle à portée de main. Touchez cet exemple pour incrémenter le compteur.",
+      "navigation": "Une barre d’onglets change de destination et garde une action centrale accessible. Essayez les onglets et le bouton surélevé.",
+      "popover": "Une fenêtre contextuelle affiche du contenu près de son déclencheur. Ouvrez cet exemple, puis fermez-le pour revenir à la page.",
+      "bottom-sheet": "Une feuille présente une tâche ciblée au-dessus de l’écran actuel. Ouvrez l’exemple et essayez de le fermer.",
+      "alert": "Une alerte attire l’attention sur un message important. Touchez le bouton pour afficher une alerte d’information.",
+      "loading": "Les indicateurs de chargement signalent un travail en cours. Comparez un indicateur d’activité et une progression réglable par curseur.",
+      "empty-state": "Un état vide explique l’absence de contenu et propose une suite. Essayez les actions de création, d’import et d’information.",
+      "skeleton": "Les squelettes réservent la place du contenu en chargement. Ces espaces statiques représentent une image et deux lignes de texte.",
+      "appearance": "Les contrôles d’apparence choisissent le mode clair, sombre ou système. Modifiez la sélection pour enregistrer l’apparence de l’app.",
+      "auth": "Un cadre d’authentification organise les écrans de compte avec un titre et un contenu adapté au clavier. Essayez le formulaire de prénom.",
+      "launch-screen": "Un écran de lancement présente l’app pendant sa préparation. Touchez le bouton pour voir l’animation de sortie de la marque.",
+      "otp-bottom-sheet": "Une feuille de vérification recueille un code à six chiffres. Ouvrez-la et saisissez 123456 pour essayer la vérification locale.",
+      "verification-code-face": "La saisie du code associe six chiffres à un personnage animé. Saisissez 123456 pour réussir ou un autre code pour afficher une erreur."
+    },
+    "buttons": {
+      "semantic": "Actions sémantiques",
+      "semanticHint": "Les couleurs de succès, d’avertissement, d’information et de destruction expriment l’intention de l’action.",
+      "variants": "Variantes visuelles",
+      "variantsHint": "Comparez les styles primaire, secondaire, tertiaire, lien et verre pour choisir l’importance d’une action.",
+      "sizes": "Tailles",
+      "sizesHint": "Comparez les boutons petit, moyen et grand avec le même style primaire."
+    },
     "categories": {
       "layout": "Mise en page et typographie",
       "controls": "Contrôles et formulaires",

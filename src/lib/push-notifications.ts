@@ -4,11 +4,11 @@ import { getExpoPushTokenAsync, subscribeToTopicAsync } from 'expo-notifications
 import { Platform } from 'react-native';
 import { ensureNotificationChannel, getDevicePermission } from './device-permissions';
 
-/** Join the production Android broadcast topic after OS approval, without prompting. */
-export async function subscribeToProductionPushTopic(): Promise<void> {
+/** Join the development Android broadcast topic after OS approval, without prompting. */
+export async function subscribeToDevelopmentPushTopic(): Promise<void> {
   if (Platform.OS !== 'android') return;
   const brand = getAppBrand();
-  if (!brand.pushNotifications || brand.variant !== 'production') return;
+  if (!brand.pushNotifications || brand.variant !== 'development') return;
   if (!(await getDevicePermission('notifications')).granted) return;
   await ensureNotificationChannel();
   await subscribeToTopicAsync('all-testing-et');
@@ -24,8 +24,8 @@ export async function getExpoPushToken(): Promise<string | null> {
   }
   await ensureNotificationChannel();
   // Topic registration can wait for connectivity without delaying the Expo token field.
-  void subscribeToProductionPushTopic().catch(() => {
-    console.warn('[Notifications] Could not join the all-testing topic.');
+  void subscribeToDevelopmentPushTopic().catch(() => {
+    console.warn('[Notifications] Could not join the all-testing-et topic.');
   });
   const token = await getExpoPushTokenAsync({ projectId });
   return token.data;

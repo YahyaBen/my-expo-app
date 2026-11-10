@@ -12,8 +12,9 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
 ## Structure
 
 - `FieldGroup` owns scrolling: SwiftUI Form / Compose LazyColumn.
-  Give its Host a bounded viewport. Use `PageFrame` or
-  `AuthScreenFrame grouped`; do not nest a full form in `PageScreen` scrolling.
+  Give its Host a bounded viewport. `PageScreen scrollable={false}` shares the
+  ordinary page frame without nesting another scroll view. `PageFrame` and
+  `AuthScreenFrame grouped` also support custom form boundaries.
 - Place `FieldGroup.Section` directly in the group. Optional `title` and
   `titleUppercase` name the section; SwiftUI controls its own header casing.
 - Place `SectionHeader` / `SectionFooter` markers directly in their section.
@@ -30,12 +31,13 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
   background does not hide iOS Form's canvas.
 - Use one fill Host and the existing safe-area/keyboard owners. FieldGroup owns
   section gutters; do not repeat page padding or add a Host per row.
-- For content behind the header, use `PageFrame headerMode="scroll"` and apply
-  `usePageHeaderInset()` inside the first section header only. Keep the
-  viewport bounded/clipped so content scrolls beneath the blur.
-- Settings remounts only its iOS form Host on direction changes because native
-  cells may retain old direction. Keep controlled state above that boundary.
-  Ordinary edits and appearance changes must retain the form.
+- For content behind the header, use `PageScreen scrollable={false}` or
+  `PageFrame headerMode="scroll"` and apply `usePageHeaderInset()` inside the
+  first section header only. Keep the viewport bounded/clipped so content scrolls
+  beneath the blur. Settings puts raised-dock clearance in its final section footer.
+- Settings remounts only its iOS `FieldGroup` when direction changes because
+  native cells may retain old direction. Keep controlled state above that boundary;
+  ordinary edits and appearance changes retain the form.
 - Form state, validation and preference persistence belong to existing owners.
   Showcase controls use local values and an isolated appearance.
 

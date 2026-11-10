@@ -120,22 +120,24 @@ checking OS permission and creating the notification channel. The selected EAS
 project ID comes from Expo configuration; the application ID comes from the
 installed binary. Registration runs while Settings is visible. The field rereads
 on resume and supports manual retry; Expo manages native device-token mapping.
-Startup configures foreground presentation after launch without requesting
-permission or registering a new Expo token. Native Expo delivery handles background
+Startup requests notification permission after launch on iOS and Android if the
+user has not made a choice yet. Previous grants or denials skip the startup prompt.
+Android also configures foreground presentation; startup does not register a new
+Expo token. Native Expo delivery handles background
 alerts. Notification taps open the app without feature-specific routing; custom
 silent background work is not configured.
 
-### Production topic through Expo
+### Development topic through Expo
 
-Production Android installs subscribe to `all-testing` with Expo's
+Development Android installs subscribe to `all-testing-et` with Expo's
 `subscribeToTopicAsync()` after notification permission is granted. The app tries
-after launch, on returning to the foreground, and during Settings token
+after the startup permission request finishes, on returning to the foreground, and during Settings token
 registration. Topic work does not block launch or Expo token display; failures
-are logged and the next registration/resume can retry. Development, preview and
+are logged and the next registration/resume can retry. Production, preview and
 iOS do not subscribe, and existing installs join when they run the updated app.
 
 This is an FCM topic managed through the Expo Android API. Send topic messages
-from the production Firebase project (`expo-template-hyrkul`) using Firebase
+from the development Firebase project (`expo-template-dev-hyrkul`) using Firebase
 Console or a trusted FCM sender. Expo Push Service and its test tool accept Expo
 token recipients rather than topic names. To broadcast through Expo Push Service
 across Android and iOS, a backend must retain the recipient Expo push tokens.

@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         story:
-          'Choose UX Template or System in Appearance > Theme to change the preview immediately. Palette and light/dark choices stay inside the story. Language and device feature switches use saved preferences; permission, location and notification actions use the real device only when requested. Check switching themes with a language sheet open, RTL and large text.',
+          'Settings shares PageScreen with Home and Discover while its bounded native FieldGroup owns scrolling. Check first-section header clearance, final-row reachability and keyboard access; use the wireframe Settings tab to check the raised dock action. Choose UX Template or System in Appearance > Theme to change the preview immediately. Palette and light/dark choices stay inside the story. Language and device feature switches use saved preferences; permission, location and notification actions use the real device only when requested. Check switching themes with a language sheet open, RTL and large text.',
       },
     },
   },

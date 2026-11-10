@@ -88,12 +88,19 @@ export function AppUpdatesProvider({
             Updates.checkForUpdateAsync().then(
               (result) => {
                 if (mounted.current)
-                  setOtaStatus(
-                    result.isAvailable || result.isRollBackToEmbedded ? 'available' : 'current',
+                  setOtaStatus((status) =>
+                    status === 'ready'
+                      ? status
+                      : result.isAvailable || result.isRollBackToEmbedded
+                        ? 'available'
+                        : 'current',
                   );
               },
               () => {
-                if (mounted.current) setOtaStatus('error');
+                if (mounted.current)
+                  setOtaStatus((status) =>
+                    status === 'available' || status === 'ready' ? status : 'error',
+                  );
               },
             ),
           ]
@@ -107,7 +114,8 @@ export function AppUpdatesProvider({
                 setStoreStatus(result.available ? 'available' : 'current');
               },
               () => {
-                if (mounted.current) setStoreStatus('error');
+                if (mounted.current)
+                  setStoreStatus((status) => (status === 'available' ? status : 'error'));
               },
             ),
           ]

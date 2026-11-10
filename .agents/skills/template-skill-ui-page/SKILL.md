@@ -17,6 +17,11 @@ Source: [page/](../../../src/components/ui/page/).
   introduction. Actions accept readonly arrays of `PageScreenAction`.
   An optional `footer` string stays below the scrollable content as a centered,
   muted caption, within the page's bottom safe area. The caller owns its text.
+- Set `scrollable={false}` when bounded native content such as `FieldGroup`
+  owns scrolling. The page still owns its Host, safe areas and keyboard avoidance.
+  Put `usePageHeaderInset()` inside the native scrolling header and add the
+  shared `tabBarRaisedHeight` clearance inside its final section when `tab` is set.
+  Keep `description`, `actions` and `onRefresh` in the default page-scroll mode.
 - Use `PageFrame` for custom content boundaries; it owns header safe areas.
 - Wrap ordinary content in `PageSection`: 16-point symmetric padding and gap.
   Use `inset={false}` when full-width content owns its gutters.

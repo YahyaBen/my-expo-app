@@ -12,11 +12,11 @@ export function ComponentCategoryList({
   const { t } = useTranslation();
   return (
     <Column spacing={0} modifiers={nativeFillWidth}>
-      {componentCategories.map(({ id, icon, components }) => (
+      {componentCategories.map(({ id, icon }) => (
         <ListItem
           key={id}
           leading={<Icon name={icon} />}
-          supportingText={t('componentCatalog.categoryCount', { count: components.length })}
+          supportingText={t(`componentCatalog.categoryDescriptions.${id}`)}
           onPress={() => onSelect(id)}
           testID={`template-component-category-${id}`}
         >

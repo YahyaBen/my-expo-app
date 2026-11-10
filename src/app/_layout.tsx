@@ -94,20 +94,23 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   }, [interactive]);
 
   useEffect(() => {
-    if (
-      !interactive ||
-      !active ||
-      Platform.OS !== 'android' ||
-      !brand.pushNotifications ||
-      brand.variant !== 'production'
-    )
-      return;
+    if (!interactive || !active) return;
     let disposed = false;
-    void import('@/lib/push-notifications')
-      .then(({ subscribeToProductionPushTopic }) => {
-        if (!disposed) return subscribeToProductionPushTopic();
+    void import('@/lib/device-permissions')
+      .then(async ({ requestStartupNotificationPermission }) => {
+        if (disposed) return;
+        await requestStartupNotificationPermission();
+        if (
+          disposed ||
+          Platform.OS !== 'android' ||
+          !brand.pushNotifications ||
+          brand.variant !== 'development'
+        )
+          return;
+        const { subscribeToDevelopmentPushTopic } = await import('@/lib/push-notifications');
+        if (!disposed) return subscribeToDevelopmentPushTopic();
       })
-      .catch(() => console.warn('[Notifications] Could not join the all-testing topic.'));
+      .catch(() => console.warn('[Notifications] Could not complete notification startup setup.'));
     return () => {
       disposed = true;
     };

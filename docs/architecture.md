@@ -53,18 +53,23 @@ header and Back.
 The root restores fonts, appearance, motion preferences, language and device
 feature preferences. It waits for the initial usable page layout before completing
 the configured minimal/branded launch. `app-ready` follows resource readiness,
-layout and overlay exit. It does not restore an auth session, contact a backend,
-request permissions or check store updates. Reduced motion and activity state
+layout and overlay exit. Readiness does not wait for an auth session, backend,
+permission response or store-update check. Reduced motion and activity state
 remain shared native capabilities. Native stack transitions use the existing
 platform options.
 
-Android builds with push configured set Expo's notification presentation handler
-after launch without requesting permission or fetching a token. Settings reads a
+After launch, the root requests notification permission on iOS and Android while
+the app is active. It asks once per app session only when permission is undetermined;
+previous grants or denials do not prompt or open device settings. Android creates
+the notification channel before requesting permission.
+Android builds with push configured also set Expo's notification presentation
+handler after launch without fetching a token. Settings reads a
 selectable Expo push token while visible after notification permission is granted.
 The app uses `expo-notifications` and Expo Push Service; Expo manages the native
-transport and device-token mapping. Production Android installs also join the
-`all-testing` topic through Expo's topic API after OS permission is granted, on
-launch/resume and during Settings registration. No custom messaging service, receiver or
+transport and device-token mapping. Development Android installs also join the
+`all-testing-et` topic through Expo's topic API after OS permission is granted, on
+launch/resume and during Settings registration. The launch attempt waits for the
+permission request to finish. No custom messaging service, receiver or
 JavaScript background task is configured. Storybook also configures notification
 presentation for local examples. Template loads Settings
 when its tab first opens, keeping device helpers out of Home module evaluation.

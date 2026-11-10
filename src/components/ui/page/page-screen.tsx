@@ -26,6 +26,8 @@ type PageContentProps = {
   children?: ReactNode;
   actions?: readonly PageScreenAction[];
   tab?: boolean;
+  /** Disable the page scroll container when bounded native content owns scrolling. */
+  scrollable?: boolean;
   onRefresh?: () => Promise<void>;
   colorScheme?: 'light' | 'dark';
 };
@@ -43,6 +45,7 @@ export function PageScreen({
   actions,
   children,
   tab = false,
+  scrollable = true,
   onRefresh,
   colorScheme,
   onBack,
@@ -62,6 +65,7 @@ export function PageScreen({
         footer={footer}
         actions={actions}
         tab={tab}
+        scrollable={scrollable}
         onRefresh={onRefresh}
         colorScheme={scheme}
       >
@@ -77,6 +81,7 @@ function PageContent({
   actions = [],
   children,
   tab = false,
+  scrollable = true,
   onRefresh,
   colorScheme: scheme,
 }: Readonly<PageContentProps>) {
@@ -86,6 +91,7 @@ function PageContent({
     <View
       style={{
         flex: 1,
+        overflow: scrollable ? undefined : 'hidden',
         ...screenInsets(insets, { tabBarShown: tab }),
       }}
     >
@@ -99,40 +105,44 @@ function PageContent({
           ignoreSafeArea="all"
           style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
         >
-          <RefreshableScrollView onRefresh={onRefresh} testID="page-scroll">
-            <Column
-              spacing={0}
-              modifiers={nativeFillWidth}
-              style={{
-                padding: 0,
-                paddingTop: headerInset,
-                paddingBottom: tab ? tabBarRaisedHeight : 0,
-              }}
-            >
-              {description ? (
-                <PageSection>
-                  <UniversalTextContent>{description}</UniversalTextContent>
-                </PageSection>
-              ) : null}
-              {children}
-              {actions.length > 0 ? (
-                <PageSection>
-                  {actions.map(({ label, href, testID }) => (
-                    <ButtonContent
-                      key={testID ?? (typeof href === 'string' ? href : JSON.stringify(href))}
-                      label={label}
-                      variant="secondary"
-                      testID={
-                        testID ??
-                        `page-action-${(typeof href === 'string' ? href : href.pathname).replaceAll(/[^a-zA-Z0-9]+/g, '-').replaceAll(/^-|-$/g, '')}`
-                      }
-                      onPress={() => router.push(href)}
-                    />
-                  ))}
-                </PageSection>
-              ) : null}
-            </Column>
-          </RefreshableScrollView>
+          {scrollable ? (
+            <RefreshableScrollView onRefresh={onRefresh} testID="page-scroll">
+              <Column
+                spacing={0}
+                modifiers={nativeFillWidth}
+                style={{
+                  padding: 0,
+                  paddingTop: headerInset,
+                  paddingBottom: tab ? tabBarRaisedHeight : 0,
+                }}
+              >
+                {description ? (
+                  <PageSection>
+                    <UniversalTextContent>{description}</UniversalTextContent>
+                  </PageSection>
+                ) : null}
+                {children}
+                {actions.length > 0 ? (
+                  <PageSection>
+                    {actions.map(({ label, href, testID }) => (
+                      <ButtonContent
+                        key={testID ?? (typeof href === 'string' ? href : JSON.stringify(href))}
+                        label={label}
+                        variant="secondary"
+                        testID={
+                          testID ??
+                          `page-action-${(typeof href === 'string' ? href : href.pathname).replaceAll(/[^a-zA-Z0-9]+/g, '-').replaceAll(/^-|-$/g, '')}`
+                        }
+                        onPress={() => router.push(href)}
+                      />
+                    ))}
+                  </PageSection>
+                ) : null}
+              </Column>
+            </RefreshableScrollView>
+          ) : (
+            children
+          )}
         </UniversalHost>
         {footer ? (
           <UniversalText

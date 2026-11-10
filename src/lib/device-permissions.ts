@@ -19,6 +19,7 @@ export type DevicePermission = {
   granted: boolean;
   canAskAgain: boolean;
 };
+let startupNotificationPermission: Promise<DevicePermission> | undefined;
 
 export async function getDevicePermission(kind: SystemPermission): Promise<DevicePermission> {
   switch (kind) {
@@ -45,6 +46,27 @@ function notificationPermission(permission: NotificationPermissionsStatus) {
   };
 }
 
+async function requestNotificationPermission() {
+  return notificationPermission(
+    await requestPermissionsAsync({
+      ios: { allowAlert: true, allowBadge: true, allowSound: true },
+    }),
+  );
+}
+
+/** Ask once after launch, preserving previous choices without opening device settings. */
+export function requestStartupNotificationPermission() {
+  startupNotificationPermission ??= (async () => {
+    const current = notificationPermission(await getPermissionsAsync());
+    if (current.granted || !current.canAskAgain || current.status !== 'undetermined') {
+      return current;
+    }
+    await ensureNotificationChannel();
+    return requestNotificationPermission();
+  })();
+  return startupNotificationPermission;
+}
+
 /** Invoke only after a user action, and never request background location. */
 export async function requestDevicePermission(kind: SystemPermission): Promise<DevicePermission> {
   if (kind === 'notifications') await ensureNotificationChannel();
@@ -62,11 +84,7 @@ export async function requestDevicePermission(kind: SystemPermission): Promise<D
     case 'location':
       return Location.requestForegroundPermissionsAsync();
     case 'notifications':
-      return notificationPermission(
-        await requestPermissionsAsync({
-          ios: { allowAlert: true, allowBadge: true, allowSound: true },
-        }),
-      );
+      return requestNotificationPermission();
   }
 }
 
