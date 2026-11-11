@@ -198,7 +198,7 @@ function AppearanceReveal({
             withTiming(
               shrinking ? 0 : maxRadius,
               {
-                duration: 900,
+                duration: 1100,
                 easing: Easing.bezier(0.23, 1, 0.32, 1),
                 reduceMotion: ReduceMotion.Never,
               },
