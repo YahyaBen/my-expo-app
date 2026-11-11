@@ -1,19 +1,19 @@
 import { Column, Row, ScrollView } from '@expo/ui';
 import type { ReactNode } from 'react';
 import { radii, spacing } from '@/constants/layout';
+import { useMeasuredWidth } from '@/hooks/use-measured-width';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useHostColorScheme } from '../host/universal-host';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
-import { TableCheckbox } from './table-checkbox';
-import { TableRow, tableRowInsets } from './table-row';
+import { onTableViewportLayout, TableCheckbox, TableRow, tableRowInsets } from './table-native';
 
 export interface TableColumn<T> {
   id: string;
   header: string;
   /** Optional native header control, such as a sort button. */
   renderHeader?: () => ReactNode;
-  /** Fixed native width, including cell padding. Defaults to 144 points/dp. */
+  /** Minimum native width, including cell padding. Defaults to 144 points/dp. */
   width?: number;
   align?: 'start' | 'center' | 'end';
   /** Strings and numbers receive themed text; custom content must be native UI. */
@@ -73,10 +73,21 @@ export function Table<T>({
   testID,
 }: Readonly<TableProps<T>>) {
   const colors = useThemeColors(useHostColorScheme());
+  const [viewportWidth, setViewportWidth] = useMeasuredWidth();
   const rowInsets = onRowPress ? tableRowInsets : { start: 0, end: 0 };
-  const dataWidth = columns.reduce((total, column) => total + (column.width ?? 144), 0);
+  const reservedWidth =
+    rowInsets.start + rowInsets.end + (renderActions ? actionsWidth : 0) + (selection ? 64 : 0);
+  const minimumDataWidth = columns.reduce((total, column) => total + (column.width ?? 144), 0);
+  // The scroll axis is unbounded; resolve spare space against the viewport instead.
+  const extraColumnWidth =
+    Math.max(0, viewportWidth - minimumDataWidth - reservedWidth) / Math.max(1, columns.length);
+  const sizedColumns = columns.map((column) => ({
+    ...column,
+    width: (column.width ?? 144) + extraColumnWidth,
+  }));
+  const dataWidth = minimumDataWidth + extraColumnWidth * columns.length;
   const rowWidth = dataWidth + rowInsets.start + rowInsets.end;
-  const tableWidth = rowWidth + (renderActions ? actionsWidth : 0) + (selection ? 64 : 0);
+  const tableWidth = Math.max(viewportWidth, dataWidth + reservedWidth);
   const cellStyle = { paddingHorizontal: spacing.md, paddingVertical: spacing.sm };
   const selectionStyle = { width: 64, paddingHorizontal: spacing.xs };
   const actionStyle = { width: actionsWidth, paddingHorizontal: spacing.sm };
@@ -84,12 +95,12 @@ export function Table<T>({
     rows.length > 0 && rows.every((row) => selection?.selectedKeys.includes(keyExtractor(row)));
 
   return (
-    <Column modifiers={nativeFillWidth} spacing={spacing.md} testID={testID}>
+    <Column style={{ width: '100%' }} spacing={spacing.md} testID={testID}>
       {toolbar}
       <Column
-        modifiers={nativeFillWidth}
         spacing={0}
         style={{
+          width: '100%',
           backgroundColor: colors.tableSurface,
           borderColor: colors.tableBorder,
           borderWidth: colors.tableBorder === undefined ? undefined : 1,
@@ -98,7 +109,8 @@ export function Table<T>({
       >
         <ScrollView
           direction="horizontal"
-          modifiers={nativeFillWidth}
+          style={{ width: '100%' }}
+          modifiers={[onTableViewportLayout(({ width }) => setViewportWidth(width))]}
           testID={testID ? `${testID}-scroll` : undefined}
         >
           <Column spacing={0} style={{ width: tableWidth }}>
@@ -121,11 +133,11 @@ export function Table<T>({
                 </Column>
               )}
               {rowInsets.start > 0 && <Column style={{ width: rowInsets.start }} />}
-              {columns.map((column) => (
+              {sizedColumns.map((column) => (
                 <Column
                   key={column.id}
                   alignment={column.align}
-                  style={{ ...cellStyle, paddingVertical: spacing.xs, width: column.width ?? 144 }}
+                  style={{ ...cellStyle, paddingVertical: spacing.xs, width: column.width }}
                 >
                   {column.renderHeader ? (
                     column.renderHeader()
@@ -152,11 +164,11 @@ export function Table<T>({
             {rows.map((row) => {
               const rowKey = keyExtractor(row);
               const rowID = testID ? `${testID}-row-${rowKey}` : undefined;
-              const cells = columns.map((column) => (
+              const cells = sizedColumns.map((column) => (
                 <Column
                   key={column.id}
                   alignment={column.align}
-                  style={{ ...cellStyle, width: column.width ?? 144 }}
+                  style={{ ...cellStyle, width: column.width }}
                   testID={rowID ? `${rowID}-cell-${column.id}` : undefined}
                 >
                   {cellContent(column.renderCell(row), colors.tableText)}

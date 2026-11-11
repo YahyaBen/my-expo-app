@@ -1,6 +1,6 @@
 ---
 name: template-skill-ui-table
-description: Compose bounded native tables with fixed columns and consumer-owned row actions.
+description: Compose bounded native tables with minimum column widths and consumer-owned row actions.
 ---
 
 # Table
@@ -13,10 +13,12 @@ Both are content-only and require an existing native Host.
 
 - Supply `rows`, `columns`, stable `keyExtractor` and `emptyState`.
 - Columns have stable `id`, translated `header`, `renderCell`, optional numeric
-  `width` (144 points by default) and logical start/center/end `align`.
+  `width` (144 points minimum by default) and logical start/center/end `align`.
   Optional `renderHeader` supplies a native header control, such as sorting.
-- Width includes cell padding. Let rows grow and overflow scroll horizontally.
-  Do not combine fixed cell width with fill-width modifiers.
+- Width includes cell padding. Table fills its measured container, sharing spare
+  width equally across data columns. Selection, action and row inset widths stay
+  fixed. When minimum widths exceed the container, content scrolls horizontally.
+  Do not combine resolved cell widths with fill-width modifiers.
 - String/number cells and empty content receive themed text. Custom cells,
   empty content and `toolbar` must contain native UI.
 - Pass a bounded dataset or one page; Table renders every row.
