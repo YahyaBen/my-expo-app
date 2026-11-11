@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { themes, type ThemeId } from '@/constants/themes/index';
 import type { AppColorScheme } from '@/constants/themes/tokens';
 const REDUCED_MOTION_STORAGE_KEY = 'appReducedMotion';
+const TAB_BAR_AUTO_HIDE_STORAGE_KEY = 'appTabBarAutoHide';
 const APPEARANCE_STORAGE_KEY = 'appColorScheme';
 const THEME_STORAGE_KEY = 'appTheme';
 let preferencePersistence = Promise.resolve();
@@ -35,6 +36,8 @@ interface ThemeSettings {
   motionReady: boolean;
   reducedMotion: boolean | null;
   setReducedMotion: (reduced: boolean) => void;
+  tabBarAutoHideEnabled: boolean;
+  setTabBarAutoHideEnabled: (enabled: boolean) => void;
 }
 
 const PaletteContext = createContext<
@@ -44,7 +47,15 @@ const AppearanceContext = createContext<
   Pick<ThemeSettings, 'colorScheme' | 'setColorScheme' | 'appearanceReady'> | undefined
 >(undefined);
 const MotionContext = createContext<
-  Pick<ThemeSettings, 'reducedMotion' | 'setReducedMotion' | 'motionReady'> | undefined
+  | Pick<
+      ThemeSettings,
+      | 'reducedMotion'
+      | 'setReducedMotion'
+      | 'motionReady'
+      | 'tabBarAutoHideEnabled'
+      | 'setTabBarAutoHideEnabled'
+    >
+  | undefined
 >(undefined);
 const MotionReadyContext = createContext(true);
 
@@ -73,6 +84,7 @@ export function ThemePreferencesProvider({
   const [colorScheme, updateColorScheme] = useState(initialColorScheme);
   const [appearanceReady, setAppearanceReady] = useState(!persistAppearance);
   const [reducedMotion, updateReducedMotion] = useState(initialReducedMotion);
+  const [tabBarAutoHideEnabled, updateTabBarAutoHideEnabled] = useState(true);
   const [motionReady, setMotionReady] = useState(!persistMotion);
   const themeSelectionEnabled = allowThemeSelection && appearanceReady;
   useEffect(() => {
@@ -102,10 +114,16 @@ export function ThemePreferencesProvider({
     if (!persistMotion) return;
     let active = true;
     void preferencePersistence
-      .then(() => AsyncStorage.getItem(REDUCED_MOTION_STORAGE_KEY))
-      .then((reduced) => {
+      .then(() =>
+        AsyncStorage.multiGet([REDUCED_MOTION_STORAGE_KEY, TAB_BAR_AUTO_HIDE_STORAGE_KEY]),
+      )
+      .then(([motion, tabBar]) => {
         if (!active) return;
+        const reduced = motion?.[1];
+        const autoHide = tabBar?.[1];
         if (reduced === 'true' || reduced === 'false') updateReducedMotion(reduced === 'true');
+        if (autoHide === 'true' || autoHide === 'false')
+          updateTabBarAutoHideEnabled(autoHide === 'true');
       })
       .catch(() => {
         /* Retain the default when local storage is unavailable. */
@@ -159,6 +177,20 @@ export function ThemePreferencesProvider({
     },
     [motionReady, persistMotion],
   );
+  const setTabBarAutoHideEnabled = useCallback(
+    (enabled: boolean) => {
+      if (!motionReady) return;
+      updateTabBarAutoHideEnabled(enabled);
+      if (persistMotion) {
+        preferencePersistence = preferencePersistence
+          .then(() => AsyncStorage.setItem(TAB_BAR_AUTO_HIDE_STORAGE_KEY, String(enabled)))
+          .catch(() => {
+            /* Retain the preference for this session when storage is unavailable. */
+          });
+      }
+    },
+    [motionReady, persistMotion],
+  );
   // Each subscription changes only with the preference group it renders.
   const palette = useMemo(
     () => ({ themeId, setThemeId, themeSelectionEnabled }),
@@ -169,8 +201,14 @@ export function ThemePreferencesProvider({
     [colorScheme, setColorScheme, appearanceReady],
   );
   const motion = useMemo(
-    () => ({ reducedMotion, setReducedMotion, motionReady }),
-    [reducedMotion, setReducedMotion, motionReady],
+    () => ({
+      reducedMotion,
+      setReducedMotion,
+      motionReady,
+      tabBarAutoHideEnabled,
+      setTabBarAutoHideEnabled,
+    }),
+    [reducedMotion, setReducedMotion, motionReady, tabBarAutoHideEnabled, setTabBarAutoHideEnabled],
   );
   return (
     <PaletteContext.Provider value={palette}>

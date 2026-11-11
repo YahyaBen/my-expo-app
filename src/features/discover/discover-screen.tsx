@@ -11,6 +11,7 @@ import {
   nativeFillWidth,
   nativeRowWeight,
   useHostColorScheme,
+  type PageScreenProps,
 } from '@components/ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -26,15 +27,17 @@ const steps = ['explore', 'compose', 'personalize'] as const;
 export default function DiscoverScreen({
   onBrowseComponents,
   onSelectCategory,
+  onScrollGeometryChange,
 }: Readonly<{
   onBrowseComponents: () => void;
   onSelectCategory: (id: ComponentCategoryId) => void;
+  onScrollGeometryChange?: PageScreenProps['onScrollGeometryChange'];
 }>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
 
   return (
-    <PageScreen tab title={t('discover.title')}>
+    <PageScreen tab title={t('discover.title')} onScrollGeometryChange={onScrollGeometryChange}>
       <PageSection spacing={spacing.xl} testID="discover-screen">
         <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.5 }}>

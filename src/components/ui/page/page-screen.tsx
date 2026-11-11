@@ -8,7 +8,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonContent } from '../button/button';
 import { UniversalHost, useHostLayoutDirection } from '../host/universal-host';
 import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
-import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
+import {
+  RefreshableScrollView,
+  type RefreshableScrollViewProps,
+} from '../refreshable-scroll-view/refreshable-scroll-view';
 import { UniversalText, UniversalTextContent } from '../text/universal-text';
 import { PageFrame, usePageHeaderInset } from './page-frame';
 import { PageSection } from './page-section';
@@ -28,6 +31,7 @@ type PageContentProps = {
   /** Disable the page scroll container when bounded native content owns scrolling. */
   scrollable?: boolean;
   onRefresh?: () => Promise<void>;
+  onScrollGeometryChange?: RefreshableScrollViewProps['onScrollGeometryChange'];
   colorScheme?: 'light' | 'dark';
 };
 
@@ -46,6 +50,7 @@ export function PageScreen({
   tab = false,
   scrollable = true,
   onRefresh,
+  onScrollGeometryChange,
   colorScheme,
   onBack,
   showBack = !tab,
@@ -66,6 +71,7 @@ export function PageScreen({
         tab={tab}
         scrollable={scrollable}
         onRefresh={onRefresh}
+        onScrollGeometryChange={onScrollGeometryChange}
         colorScheme={scheme}
       >
         {children}
@@ -82,6 +88,7 @@ function PageContent({
   tab = false,
   scrollable = true,
   onRefresh,
+  onScrollGeometryChange,
   colorScheme: scheme,
 }: Readonly<PageContentProps>) {
   const insets = useSafeAreaInsets();
@@ -110,7 +117,11 @@ function PageContent({
           style={{ flex: 1, maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
         >
           {scrollable ? (
-            <RefreshableScrollView onRefresh={onRefresh} testID="page-scroll">
+            <RefreshableScrollView
+              onRefresh={onRefresh}
+              onScrollGeometryChange={onScrollGeometryChange}
+              testID="page-scroll"
+            >
               <Column
                 spacing={0}
                 modifiers={nativeFillWidth}

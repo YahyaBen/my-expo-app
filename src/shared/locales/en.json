@@ -266,6 +266,8 @@
     "about": "About",
     "appVersion": "App version",
     "reduceMotion": "Reduce motion",
+    "tabBarAutoHide": "Auto-hide tab bar",
+    "tabBarAutoHideHint": "Swipe up on a page to hide the bar; swipe down to show it. Settings and Reduce Motion keep it visible.",
     "location": {
       "title": "Location",
       "hint": "Request your location only when needed. Coordinates stay on this screen and are not uploaded.",

@@ -266,6 +266,8 @@
     "about": "À propos",
     "appVersion": "Version de l’app",
     "reduceMotion": "Réduire les animations",
+    "tabBarAutoHide": "Masquer automatiquement la barre d’onglets",
+    "tabBarAutoHideHint": "Balayez une page vers le haut pour masquer la barre, puis vers le bas pour l’afficher. Elle reste visible dans les réglages et lorsque les animations sont réduites.",
     "location": {
       "title": "Localisation",
       "hint": "Demandez votre position uniquement lorsque vous en avez besoin. Les coordonnées restent sur cet écran et ne sont pas envoyées.",

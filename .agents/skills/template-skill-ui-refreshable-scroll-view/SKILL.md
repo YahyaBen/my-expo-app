@@ -11,6 +11,10 @@ Source: [refreshable-scroll-view/](../../../src/components/ui/refreshable-scroll
 
 - iOS uses SwiftUI refreshable; Android uses Compose PullToRefreshBox.
 - Without an onRefresh callback or when disabled, retain ordinary scrolling.
+- Optional `onScrollGeometryChange` passes through to the native iOS 18+
+  observation hook, independently of refresh. Worklet callbacks run on the UI
+  thread; ordinary callbacks receive JS events. Android and earlier iOS emit no
+  geometry events. Omit the callback when no observation is needed.
 - The async callback owns work and user-visible error feedback.
 - Repeated gestures share the pending promise. Release the native indicator
   on settlement, including rejection, so a later gesture can recover.

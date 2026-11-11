@@ -65,14 +65,11 @@ export function NativeButton({
               bottom: padding,
             }
       }
-      colors={
-        color === undefined && contentColor === undefined
-          ? undefined
-          : {
-              containerColor: filled ? color : undefined,
-              contentColor: contentColor ?? (filled ? undefined : color),
-            }
-      }
+      // Keep the native record non-null when switching back to system colors.
+      colors={{
+        containerColor: filled ? color : undefined,
+        contentColor: contentColor ?? (filled ? undefined : color),
+      }}
       modifiers={[
         ...(fullWidth && !circular ? [fillMaxWidth()] : []),
         ...(minHeight === undefined

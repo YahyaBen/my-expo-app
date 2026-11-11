@@ -19,14 +19,10 @@ export function NativeFloatingActionButton({
       // The installed native ShapeRecord defaults radius to zero, clipping
       // both the icon and the pointer target to the center of the button.
       shape={Shape.Circle({ radius: 1 })}
-      colors={
-        color === undefined
-          ? undefined
-          : {
-              containerColor: color,
-              disabledContainerColor: color,
-            }
-      }
+      colors={{
+        containerColor: color,
+        disabledContainerColor: color,
+      }}
       contentPadding={{ start: 0, end: 0, top: 0, bottom: 0 }}
       modifiers={[size(76, 76), testID(id), semantics({ contentDescription: label })]}
     >

@@ -7,6 +7,7 @@ import type { RefreshableScrollViewProps } from './refreshable-scroll-view.types
 
 export function RefreshableScrollView({
   onRefresh,
+  onScrollGeometryChange: _onScrollGeometryChange,
   ...props
 }: Readonly<RefreshableScrollViewProps>) {
   const [refreshing, setRefreshing] = useState(false);

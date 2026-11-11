@@ -11,7 +11,7 @@ export function NativeAlert({
 }: Readonly<NativeAlertProps>) {
   return (
     <AlertDialog
-      colors={accentColor === undefined ? undefined : { titleContentColor: accentColor }}
+      colors={{ titleContentColor: accentColor }}
       onDismissRequest={onDismiss}
       modifiers={[testID('app-alert')]}
     >
@@ -23,7 +23,7 @@ export function NativeAlert({
       </AlertDialog.Text>
       <AlertDialog.ConfirmButton>
         <TextButton
-          colors={accentColor === undefined ? undefined : { contentColor: accentColor }}
+          colors={{ contentColor: accentColor }}
           onClick={onDismiss}
           modifiers={[testID('app-alert-dismiss')]}
         >

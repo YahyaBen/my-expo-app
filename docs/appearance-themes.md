@@ -80,6 +80,17 @@ Template's Settings tab offers system/light/dark appearance, Reduce Motion,
 language, device permissions, haptic feedback, device location and app version
 using the root's saved preferences; the app has no account screen.
 
+**Settings > Appearance > Auto-hide tab bar** enables or disables the
+[Twitter-inspired dock](https://reactiive.io/demos/twitter-tab-bar). It is on by
+default and saved for the next launch. Swipe up on tab content to hide the dock,
+then down to reveal it; the behavior follows the finger rather than scroll
+momentum on Android. iOS 18+ follows native scrolling; earlier iOS keeps the dock
+visible. Settings, Reduce Motion, screen readers, an open keyboard and the
+component menu keep navigation visible. Tab changes and returning from another
+screen also restore it. Native scrolling and horizontal carousels retain their
+existing owners. Verify gesture coexistence and hide/reveal on iOS and Android;
+static checks do not establish native touch behavior.
+
 ## Theme values
 
 Theme values are edited directly in TypeScript:
@@ -147,7 +158,7 @@ existing saved preference provider. System follows the device; explicit Light or
 Dark remains selected until the user chooses another option. Controls wait for
 appearance restoration before accepting changes.
 
-Choosing an appearance uses a circular reveal inspired by the
+Choosing an appearance or palette uses a circular reveal inspired by the
 [Telegram theme-switch demo](https://reactiive.io/demos/telegram-theme-switch).
 The existing preference provider still saves the selection. Reduce Motion and
 live device appearance changes apply directly. Android's native Compose content

@@ -2,6 +2,7 @@ import { Column, Row } from '@expo/ui';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon, type IconName } from '../icon/icon';
 import { StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
@@ -34,6 +35,8 @@ export type TabNavigationBarProps = {
   leftInset?: number;
   rightInset?: number;
   colorScheme?: 'light' | 'dark';
+  /** Caller-owned swipe progress: 0 is visible, 1 is hidden. */
+  hideProgress?: SharedValue<number>;
 };
 
 const icons = {
@@ -63,6 +66,7 @@ export function TabNavigationBar({
   leftInset = 0,
   rightInset = 0,
   colorScheme,
+  hideProgress,
 }: Readonly<TabNavigationBarProps>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
@@ -70,6 +74,14 @@ export function TabNavigationBar({
   const motionEnabled = useMotionEnabled();
   const horizontalInset = horizontalSafeAreaInset({ left: leftInset, right: rightInset });
   const defaults = navigationTheme(scheme, colors).colors;
+  const visibilityStyle = useAnimatedStyle(() => {
+    const progress = motionEnabled ? (hideProgress?.get() ?? 0) : 0;
+    return {
+      // Release only the row/system-inset reservation; retain the raised circle's full touch frame.
+      marginBottom: -(56 + bottomInset) * progress,
+      transform: [{ translateY: (84 + bottomInset) * progress }],
+    };
+  });
   const dockStyle = {
     position: 'absolute' as const,
     top: tabBarRaisedHeight,
@@ -103,17 +115,20 @@ export function TabNavigationBar({
   };
 
   return (
-    <View
+    <Animated.View
       testID="main-tab-bar"
       pointerEvents="box-none"
-      style={{
-        height: 84 + bottomInset,
-        marginTop: -tabBarRaisedHeight,
-        flexShrink: 0,
-        overflow: 'hidden',
-        direction: direction === 'rightToLeft' ? 'rtl' : 'ltr',
-        backgroundColor: 'transparent',
-      }}
+      style={[
+        {
+          height: 84 + bottomInset,
+          marginTop: -tabBarRaisedHeight,
+          flexShrink: 0,
+          overflow: 'hidden',
+          direction: direction === 'rightToLeft' ? 'rtl' : 'ltr',
+          backgroundColor: 'transparent',
+        },
+        visibilityStyle,
+      ]}
     >
       {colors.tabBarGradientStart !== undefined &&
       colors.tabBarBackground !== undefined &&
@@ -175,6 +190,6 @@ export function TabNavigationBar({
           </Row>
         </UniversalHost>
       </View>
-    </View>
+    </Animated.View>
   );
 }

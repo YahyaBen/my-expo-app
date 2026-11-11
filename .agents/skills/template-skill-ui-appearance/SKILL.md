@@ -26,8 +26,10 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   failed writes leave the current session usable.
 - `ColorSchemeControl.onValueChange` overrides the default setter for
   coordination; an override must apply the selected preference itself.
-- Root `AppearanceTransition` adds a 300 ms circular snapshot reveal to default
-  `ColorSchemeControl` selections, originating at the native picker's center.
+- Root `AppearanceTransition` adds a circular snapshot reveal to
+  `ThemeControl` and default `ColorSchemeControl` selections, originating at the
+  native picker's center. Palette selections expand outward in both Light and
+  Dark appearance and skip the selected ID.
   Preference ownership and writes stay in `ThemePreferencesProvider`.
   It skips unchanged resolved Light/Dark choices, reduced motion, inactive/startup
   content and unavailable layout/capture. Custom callbacks and nested preview
@@ -51,6 +53,11 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
 - `appReducedMotion` uses the existing serialized preference writes.
   Root `persistMotion` restores it and exposes `motionReady` for launch readiness
   and controls. Isolated previews keep motion preferences in memory.
+- `appTabBarAutoHide` defaults to enabled and restores alongside Reduce Motion
+  in the same read. Settings > Appearance exposes its native switch, disabled
+  until `motionReady`. Changes apply immediately and use the same serialized
+  writes; missing/invalid/failed reads retain the default. Reduce Motion takes
+  precedence without clearing this choice. Preview providers do not persist it.
 - Headers use the shared rectangular blur. There is no saved header style or
   Settings picker. Obsolete `appHeaderMotion` and `appHeaderBlur` values are
   ignored; do not add startup storage work to migrate them.

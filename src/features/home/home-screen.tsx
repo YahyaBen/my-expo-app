@@ -16,6 +16,7 @@ import {
   nativeRowWeight,
   useHostColorScheme,
   type PhotoItem,
+  type PageScreenProps,
 } from '@components/ui';
 import catAnimation from '@assets/animations/cat.json';
 import { Image } from 'expo-image';
@@ -56,7 +57,12 @@ const recommendationPreviewCount = 6;
 export default function HomeScreen({
   title,
   onBrowseComponents,
-}: Readonly<{ title: string; onBrowseComponents: () => void }>) {
+  onScrollGeometryChange,
+}: Readonly<{
+  title: string;
+  onBrowseComponents: () => void;
+  onScrollGeometryChange?: PageScreenProps['onScrollGeometryChange'];
+}>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   const { width, height, fontScale } = useWindowDimensions();
@@ -80,7 +86,7 @@ export default function HomeScreen({
   }
 
   return (
-    <PageScreen tab title={title}>
+    <PageScreen tab title={title} onScrollGeometryChange={onScrollGeometryChange}>
       <PageSection testID="template-wireframe" spacing={spacing.xl}>
         <DateTimeBanner />
         <TesterThanks width={contentWidth} />

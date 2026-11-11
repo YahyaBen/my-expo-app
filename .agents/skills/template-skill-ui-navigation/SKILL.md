@@ -17,7 +17,18 @@ Source: [navigation/](../../../src/components/ui/navigation/).
 - `action` supplies center-button `kind`, translated `label`, `onPress`
   and optional `disabled`/`testID`. It adds no route.
 - Optional bottom/left/right insets belong to the dock; scheme defaults to the Host.
+- Optional caller-owned `hideProgress` is a Reanimated shared number: 0 is visible,
+  1 is hidden. The dock slides out and releases its row/system-inset reservation;
+  its parent must clip offscreen content. Omitting it keeps the dock visible.
 - Route state and sheet state stay in the consumer.
+
+Template's shell follows native scroll geometry on iOS 18+ and observes vertical
+content swipes alongside Compose on Android, with direction thresholds to avoid
+jitter. Earlier iOS keeps the dock visible. Android follows finger movement,
+not momentum; horizontal gestures do not trigger hiding. The
+shell restores the dock on tab/focus/viewport changes and keeps it visible in
+Settings, with open menus/keyboards, Reduce Motion or a screen reader. Keep swipe
+coordination in the shell; do not replace native scroll owners.
 
 ## Geometry and safe areas
 
@@ -38,5 +49,6 @@ capsule using `tabBarSelectedBackground`; labels remain outside it. Preserve
 semantic active/inactive colors, native selected state and live RTL ordering.
 
 Check selection, disabled action, circle-edge taps, end-of-scroll clearance,
-keyboard and device insets using the
+swipe hide/reveal and reversals, horizontal carousels, native scrolling, keyboard,
+screen readers and device insets using the
 [native template navigation](../../../src/features/template/template-screen.tsx).

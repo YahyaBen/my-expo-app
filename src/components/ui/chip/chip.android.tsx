@@ -36,7 +36,7 @@ export function Chip({
     ? { ...surface, selectedContainerColor: colors.primary, selectedLabelColor: colors.onPrimary }
     : undefined;
   const props = {
-    colors: surface,
+    colors: surface ?? {},
     border: surface ? { width: 0, color: surface.containerColor } : undefined,
     enabled: !disabled,
     onClick: () => {
@@ -49,7 +49,7 @@ export function Chip({
   };
   if (variant === 'filter') {
     return (
-      <FilterChip {...props} colors={selection} selected={Boolean(selected)}>
+      <FilterChip {...props} colors={selection ?? {}} selected={Boolean(selected)}>
         <FilterChip.Label>
           <Text>{label}</Text>
         </FilterChip.Label>
@@ -58,7 +58,7 @@ export function Chip({
   }
   if (variant === 'input') {
     return (
-      <InputChip {...props} colors={selection} selected={selected}>
+      <InputChip {...props} colors={selection ?? {}} selected={selected}>
         <InputChip.Label>
           <Text>{label}</Text>
         </InputChip.Label>

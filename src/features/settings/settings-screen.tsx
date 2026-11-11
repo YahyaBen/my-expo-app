@@ -166,6 +166,7 @@ function SettingsPage({
                 </ListItem.FieldRow>
               ) : null}
               <ReducedMotionControl />
+              <TabBarAutoHideControl />
               <ListItem.FieldRow
                 testID="app-settings-language"
                 onPress={changeLanguage ? () => setLanguageOpen(true) : undefined}
@@ -466,6 +467,26 @@ function ReducedMotionControl() {
       modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
       testID="app-settings-reduce-motion"
     />
+  );
+}
+
+function TabBarAutoHideControl() {
+  const { t } = useTranslation();
+  const { tabBarAutoHideEnabled, setTabBarAutoHideEnabled, motionReady } = useMotionSettings();
+  return (
+    <Column spacing={spacing.xs} modifiers={nativeFillWidth}>
+      <Switch
+        label={t('settings.tabBarAutoHide')}
+        value={tabBarAutoHideEnabled}
+        onValueChange={setTabBarAutoHideEnabled}
+        disabled={!motionReady}
+        modifiers={Platform.OS === 'ios' ? nativeFillWidth : undefined}
+        testID="app-settings-tab-bar-auto-hide"
+      />
+      <Text variant="caption" tone="muted">
+        {t('settings.tabBarAutoHideHint')}
+      </Text>
+    </Column>
   );
 }
 

@@ -17,6 +17,9 @@ Source: [page/](../../../src/components/ui/page/).
   introduction. Actions accept readonly arrays of `PageScreenAction`.
   An optional `footer` string stays below the scrollable content as a centered,
   muted caption, within the page's bottom safe area. The caller owns its text.
+- Optional `onScrollGeometryChange` observes the default scroll container on
+  iOS 18+; worklet callbacks run on the UI thread. Android and earlier iOS do not
+  emit it. It does not observe caller-owned `scrollable={false}` containers.
 - Set `scrollable={false}` when bounded native content such as `FieldGroup`
   owns scrolling. The page still owns its Host, safe areas and keyboard avoidance.
   Put `usePageHeaderInset()` inside the native scrolling header and add the
