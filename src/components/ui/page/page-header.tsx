@@ -1,5 +1,5 @@
 import { Column, Row } from '@expo/ui';
-import { Platform } from 'react-native';
+import { Platform, type ViewProps } from 'react-native';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useLanguage } from '@/context/language.context';
 import { getBrandHeadingFont } from '@/config/brand-assets';
@@ -19,10 +19,12 @@ export function PageHeader({
   title,
   onBack,
   colorScheme,
+  onLayout,
 }: Readonly<{
   title?: string;
   onBack?: () => void;
   colorScheme?: 'light' | 'dark';
+  onLayout?: ViewProps['onLayout'];
 }>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
@@ -35,6 +37,7 @@ export function PageHeader({
       ignoreSafeArea="all"
       style={{ maxWidth: screenContentMaxWidth, alignSelf: 'center' }}
       testID="page-header"
+      onLayout={onLayout}
     >
       <Column
         spacing={spacing.sm}

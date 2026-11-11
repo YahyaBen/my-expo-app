@@ -63,6 +63,25 @@ Android; preview needs its own file. See the
 Remote iOS push setup is pending. No backend, auth restoration, permission prompt or
 store-update check blocks starter startup.
 
+## Google Maps example
+
+Open **Components → Media & carousels → Google Maps** to pan and zoom around a
+sample Casablanca marker, switch between standard and satellite maps, or reset
+the view. This example does not request location access.
+
+Set `GOOGLE_MAPS_ANDROID_API_KEY` and `GOOGLE_MAPS_IOS_API_KEY` in your local build
+environment (or the selected EAS environment). `app.config.js` passes them to the
+`react-native-maps` config plugin; only availability flags go into `extra.googleMaps`.
+Enable **Maps SDK for Android** and **Maps SDK for iOS** in Google Cloud. Restrict
+the Android key to the resolved package name and signing certificate SHA-1, and
+the iOS key to the resolved bundle identifier. Development and preview builds use
+the variant identifiers described above.
+
+Create and install a new EAS development build after adding this native dependency
+or changing either key. Reloading Metro or publishing an OTA update cannot add the
+SDK or change its embedded keys. A missing key or native module shows a setup state
+in the example. See the [Expo SDK 58 Google Maps setup](https://docs.expo.dev/versions/v58.0.0/sdk/map-view/#deploy-app-with-google-maps).
+
 ## App and catalog ownership
 
 `src/app/index.tsx` opens the template screen. The root owns

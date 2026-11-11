@@ -839,7 +839,7 @@
       "layout": "Text, icons, shapes and page layouts provide the building blocks for clear native screens.",
       "controls": "Buttons, selection controls and form fields let people take actions and enter information.",
       "data": "Lists, rows, tables, disclosures and pull to refresh help people browse and organize information.",
-      "media": "Photo carousels, story cards and an expandable grid let people browse and explore images.",
+      "media": "Explore photo carousels, story cards, an expandable grid and an interactive Google map.",
       "navigation": "Floating actions, a tab bar, popovers and sheets provide access to destinations and related content.",
       "feedback": "Badges, alerts, progress, empty states and placeholders explain what is happening and what to do next.",
       "flows": "Appearance controls, authentication layouts, launch screens and code verification support common app flows."
@@ -872,6 +872,7 @@
       "stacked-carousel": "A stacked carousel presents photos as overlapping cards. Swipe through the sample images to explore the stack.",
       "story-list": "A story list presents a horizontal collection of photo cards. Swipe through this sample collection.",
       "ios-home-grid": "A photo grid offers a compact overview of images. Tap a photo to expand it, then dismiss the expanded view.",
+      "google-map": "Explore a native Google map. Pan, zoom, tap the sample marker and compare standard and satellite views.",
       "floating-action": "A floating action keeps a key task easy to reach. Tap this example to update the counter.",
       "navigation": "A tab bar switches between main destinations and keeps a central action available. Try the tabs and raised button.",
       "popover": "A popover shows related content beside its trigger. Open this example, then close it to return to the page.",
@@ -885,6 +886,18 @@
       "launch-screen": "A launch screen introduces the app while it becomes ready. Tap to preview the branded exit animation.",
       "otp-bottom-sheet": "A verification sheet collects a six-digit code. Open it and enter 123456 to try local verification.",
       "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error."
+    },
+    "googleMap": {
+      "mapType": "Map type",
+      "standard": "Standard",
+      "satellite": "Satellite",
+      "place": "Casablanca",
+      "markerHint": "Sample location",
+      "accessibilityLabel": "Interactive Google map of Casablanca",
+      "hint": "Pan and pinch to explore. Tap the marker for its label. This is a sample location, not your current position.",
+      "reset": "Return to Casablanca",
+      "unavailable": "Google Maps unavailable",
+      "setupHint": "This example needs a native build with Google Maps enabled and a configured API key for your platform."
     },
     "buttons": {
       "semantic": "Semantic actions",
@@ -1126,6 +1139,7 @@
       "stacked-carousel": "Stacked carousel",
       "story-list": "Story list",
       "ios-home-grid": "Photo grid",
+      "google-map": "Google Maps",
       "floating-action": "Floating action",
       "navigation": "Navigation bar",
       "popover": "Popover",

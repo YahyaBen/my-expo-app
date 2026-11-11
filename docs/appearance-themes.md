@@ -147,6 +147,14 @@ existing saved preference provider. System follows the device; explicit Light or
 Dark remains selected until the user chooses another option. Controls wait for
 appearance restoration before accepting changes.
 
+Choosing an appearance uses a circular reveal inspired by the
+[Telegram theme-switch demo](https://reactiive.io/demos/telegram-theme-switch).
+The existing preference provider still saves the selection. Reduce Motion and
+live device appearance changes apply directly. Android's native Compose content
+is captured through `react-native-view-shot`; rebuild the development client after
+installing this native dependency. The shared Appearance component page exercises
+the same control as Settings.
+
 Settings > Appearance > Theme offers UX Template and System through the shared
 [theme control](../src/components/ui/appearance/theme-control.tsx). Selection
 applies to the whole app immediately and is saved for the next launch. The

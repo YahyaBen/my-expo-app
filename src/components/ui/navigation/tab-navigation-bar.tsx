@@ -7,6 +7,7 @@ import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { screenContentMaxWidth, tabBarRaisedHeight } from '@/constants/layout';
 import { navigationTheme } from '@/constants/navigation-theme';
 import { triggerHaptic } from '@/lib/haptics';
+import { horizontalSafeAreaInset } from '@/lib/screen-insets';
 import {
   FloatingActionButton,
   type FloatingActionButtonProps,
@@ -67,14 +68,13 @@ export function TabNavigationBar({
   const colors = useThemeColors(scheme);
   const direction = useHostLayoutDirection();
   const motionEnabled = useMotionEnabled();
-  const left = leftInset;
-  const right = rightInset;
+  const horizontalInset = horizontalSafeAreaInset({ left: leftInset, right: rightInset });
   const defaults = navigationTheme(scheme, colors).colors;
   const dockStyle = {
     position: 'absolute' as const,
     top: tabBarRaisedHeight,
-    left,
-    right,
+    left: 0,
+    right: 0,
     bottom: 0,
     backgroundColor: colors.tabBarBackground ?? defaults.card,
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -157,8 +157,7 @@ export function TabNavigationBar({
       <View
         testID="tab-dock-controls"
         style={{
-          paddingLeft: left,
-          paddingRight: right,
+          paddingHorizontal: horizontalInset,
         }}
       >
         <UniversalHost

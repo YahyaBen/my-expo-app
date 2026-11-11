@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { useRef } from 'react';
 import { useAppearanceSettings, type ColorSchemePreference } from '@/context/theme.context';
-import { Picker } from '../picker/picker';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Picker, type PickerLayout } from '../picker/picker';
+import { useAppearanceTransition } from './appearance-transition';
 
 export function ColorSchemeControl({
   testID = 'app-settings-color-scheme-picker',
@@ -13,12 +16,30 @@ export function ColorSchemeControl({
 }>) {
   const { t } = useTranslation();
   const { colorScheme, setColorScheme, appearanceReady } = useAppearanceSettings();
+  const scheme = useColorScheme();
+  const transition = useAppearanceTransition();
+  const origin = useRef<PickerLayout | null>(null);
+  const changing = !onValueChange && transition?.busy;
   return (
     <Picker<ColorSchemePreference>
       selectedValue={colorScheme}
-      onValueChange={onValueChange ?? setColorScheme}
+      onValueChange={(next) => {
+        if (!appearanceReady || disabled || changing) return;
+        if (onValueChange) {
+          onValueChange(next);
+        } else if (next === colorScheme) {
+          return;
+        } else if (transition && next !== scheme) {
+          transition.run(() => setColorScheme(next), origin.current, scheme === 'light');
+        } else {
+          setColorScheme(next);
+        }
+      }}
+      onLayoutChange={(layout) => {
+        origin.current = layout;
+      }}
       appearance="menu"
-      enabled={appearanceReady && !disabled}
+      enabled={appearanceReady && !disabled && !changing}
       testID={testID}
     >
       <Picker.Item label={t('common.systemMode')} value="system" />

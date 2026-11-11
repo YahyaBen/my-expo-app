@@ -1,13 +1,15 @@
-import {
-  Picker as UniversalPicker,
-  type PickerItemProps,
-  type PickerItemValue,
-  type PickerProps,
-} from '@expo/ui';
+import { Picker as UniversalPicker, type PickerItemProps, type PickerItemValue } from '@expo/ui';
 import { Picker as NativePicker, Text } from '@expo/ui/swift-ui';
-import { buttonStyle, disabled, pickerStyle, tag } from '@expo/ui/swift-ui/modifiers';
+import {
+  buttonStyle,
+  disabled,
+  onGeometryChange,
+  pickerStyle,
+  tag,
+} from '@expo/ui/swift-ui/modifiers';
 import { isValidElement } from 'react';
 import { flattenNativeChildren } from '../native/native-children';
+import type { PickerProps } from './picker';
 
 export function Picker<T extends PickerItemValue>({
   selectedValue,
@@ -16,6 +18,7 @@ export function Picker<T extends PickerItemValue>({
   enabled = true,
   children,
   testID,
+  onLayoutChange,
 }: Readonly<PickerProps<T>>) {
   const items = flattenNativeChildren(children).flatMap((child) =>
     isValidElement<PickerItemProps<T>>(child) && child.type === UniversalPicker.Item
@@ -33,6 +36,7 @@ export function Picker<T extends PickerItemValue>({
         pickerStyle(appearance),
         disabled(!enabled),
         ...(appearance === 'menu' ? [buttonStyle('glass')] : []),
+        ...(onLayoutChange ? [onGeometryChange(onLayoutChange)] : []),
       ]}
     >
       {items.map((item) => (

@@ -841,7 +841,7 @@
       "layout": "Textes, icônes, formes et mises en page constituent les éléments de base d’écrans natifs lisibles.",
       "controls": "Boutons, contrôles de sélection et champs de formulaire permettent d’agir et de saisir des informations.",
       "data": "Listes, lignes, tableaux, volets repliables et actualisation aident à parcourir et organiser les informations.",
-      "media": "Carrousels photo, cartes de stories et grille extensible permettent de parcourir et d’explorer des images.",
+      "media": "Explorez des carrousels photo, des stories, une grille extensible et une carte Google interactive.",
       "navigation": "Actions flottantes, barre d’onglets, fenêtres contextuelles et feuilles donnent accès aux destinations et aux contenus associés.",
       "feedback": "Badges, alertes, progression, états vides et espaces réservés expliquent la situation et les actions possibles.",
       "flows": "Apparence, écrans d’authentification, lancement et vérification de code accompagnent les parcours courants d’une app."
@@ -874,6 +874,7 @@
       "stacked-carousel": "Un carrousel empilé présente des photos en cartes superposées. Balayez les images pour explorer la pile.",
       "story-list": "Une liste de stories présente des cartes photo à l’horizontale. Balayez cette collection d’exemple.",
       "ios-home-grid": "Une grille photo offre un aperçu compact des images. Touchez une photo pour l’agrandir, puis fermez la vue agrandie.",
+      "google-map": "Explorez une carte Google native. Déplacez et zoomez la carte, touchez le repère et comparez les vues standard et satellite.",
       "floating-action": "Une action flottante garde une tâche essentielle à portée de main. Touchez cet exemple pour incrémenter le compteur.",
       "navigation": "Une barre d’onglets change de destination et garde une action centrale accessible. Essayez les onglets et le bouton surélevé.",
       "popover": "Une fenêtre contextuelle affiche du contenu près de son déclencheur. Ouvrez cet exemple, puis fermez-le pour revenir à la page.",
@@ -887,6 +888,18 @@
       "launch-screen": "Un écran de lancement présente l’app pendant sa préparation. Touchez le bouton pour voir l’animation de sortie de la marque.",
       "otp-bottom-sheet": "Une feuille de vérification recueille un code à six chiffres. Ouvrez-la et saisissez 123456 pour essayer la vérification locale.",
       "verification-code-face": "La saisie du code associe six chiffres à un personnage animé. Saisissez 123456 pour réussir ou un autre code pour afficher une erreur."
+    },
+    "googleMap": {
+      "mapType": "Type de carte",
+      "standard": "Standard",
+      "satellite": "Satellite",
+      "place": "Casablanca",
+      "markerHint": "Lieu d’exemple",
+      "accessibilityLabel": "Carte Google interactive de Casablanca",
+      "hint": "Déplacez et pincez la carte pour l’explorer. Touchez le repère pour afficher son nom. Il s’agit d’un lieu d’exemple, pas de votre position actuelle.",
+      "reset": "Revenir à Casablanca",
+      "unavailable": "Google Maps indisponible",
+      "setupHint": "Cet exemple nécessite une version native avec Google Maps activé et une clé API configurée pour votre plateforme."
     },
     "buttons": {
       "semantic": "Actions sémantiques",
@@ -1128,6 +1141,7 @@
       "stacked-carousel": "Carrousel empilé",
       "story-list": "Liste de stories",
       "ios-home-grid": "Grille de photos",
+      "google-map": "Google Maps",
       "floating-action": "Action flottante",
       "navigation": "Barre de navigation",
       "popover": "Fenêtre contextuelle",

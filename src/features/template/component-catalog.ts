@@ -32,7 +32,13 @@ export const componentCategories = [
   {
     id: 'media',
     icon: { ios: 'photo', android: 'photo' },
-    components: ['circular-carousel', 'stacked-carousel', 'story-list', 'ios-home-grid'],
+    components: [
+      'circular-carousel',
+      'stacked-carousel',
+      'story-list',
+      'ios-home-grid',
+      'google-map',
+    ],
   },
   {
     id: 'navigation',
@@ -79,6 +85,7 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   list: { ios: 'list.bullet', android: 'list' },
   table: { ios: 'tablecells', android: 'table_chart' },
   'circular-carousel': { ios: 'photo.circle', android: 'photo' },
+  'google-map': { ios: 'map', android: 'map' },
   alert: { ios: 'exclamationmark.circle', android: 'error_outline' },
   'empty-state': { ios: 'folder', android: 'folder_open' },
   appearance: { ios: 'circle.lefthalf.filled', android: 'contrast' },

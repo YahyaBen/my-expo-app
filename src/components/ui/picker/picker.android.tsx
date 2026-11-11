@@ -1,9 +1,4 @@
-import {
-  Picker as UniversalPicker,
-  type PickerProps,
-  type PickerItemProps,
-  type PickerItemValue,
-} from '@expo/ui';
+import { Picker as UniversalPicker, type PickerItemProps, type PickerItemValue } from '@expo/ui';
 import {
   DropdownMenuItem,
   ExposedDropdownMenu,
@@ -12,9 +7,14 @@ import {
   TextField,
   useNativeState,
 } from '@expo/ui/jetpack-compose';
-import { menuAnchor, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
+import {
+  menuAnchor,
+  onGloballyPositioned,
+  testID as nativeTestID,
+} from '@expo/ui/jetpack-compose/modifiers';
 import { isValidElement, useEffect, useState } from 'react';
 import { flattenNativeChildren } from '../native/native-children';
+import type { PickerProps } from './picker';
 
 export function Picker<T extends PickerItemValue>({
   selectedValue,
@@ -22,6 +22,7 @@ export function Picker<T extends PickerItemValue>({
   enabled = true,
   children,
   testID,
+  onLayoutChange,
 }: Readonly<PickerProps<T>>) {
   const items = flattenNativeChildren(children).flatMap((child) =>
     isValidElement<PickerItemProps<T>>(child) && child.type === UniversalPicker.Item
@@ -44,7 +45,11 @@ export function Picker<T extends PickerItemValue>({
         value={labelState}
         readOnly
         enabled={enabled}
-        modifiers={[menuAnchor(), ...(testID ? [nativeTestID(testID)] : [])]}
+        modifiers={[
+          menuAnchor(),
+          ...(testID ? [nativeTestID(testID)] : []),
+          ...(onLayoutChange ? [onGloballyPositioned(onLayoutChange)] : []),
+        ]}
       />
       <ExposedDropdownMenu
         expanded={enabled && expanded}

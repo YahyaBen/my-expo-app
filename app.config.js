@@ -4,6 +4,8 @@ const assets = require('./config/brand-assets.json');
 module.exports = ({ config }) => {
   const { brand, variant } = resolveBrand();
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
+  const androidGoogleMapsApiKey = process.env.GOOGLE_MAPS_ANDROID_API_KEY?.trim();
+  const iosGoogleMapsApiKey = process.env.GOOGLE_MAPS_IOS_API_KEY?.trim();
 
   return {
     ...config,
@@ -30,6 +32,10 @@ module.exports = ({ config }) => {
     },
     extra: {
       ...config.extra,
+      googleMaps: {
+        android: Boolean(androidGoogleMapsApiKey),
+        ios: Boolean(iosGoogleMapsApiKey),
+      },
       eas: brand.eas?.projectId ? { projectId: brand.eas.projectId } : undefined,
       brand: {
         id: brand.id,
@@ -41,6 +47,7 @@ module.exports = ({ config }) => {
     },
     plugins: [
       ...(config.plugins ?? []),
+      ['react-native-maps', { androidGoogleMapsApiKey, iosGoogleMapsApiKey }],
       ['expo-dev-client', { addGeneratedScheme: variant === 'development' }],
       ['expo-font', { fonts: headingFont.file ? [headingFont.file] : [] }],
       ...(brand.lightIcon || brand.redIcon

@@ -1,6 +1,7 @@
 import { usePageLayout } from '@/hooks/use-page-layout';
 import { navigationTheme } from '@/constants/navigation-theme';
 import { useThemeColors } from '@/hooks/use-theme';
+import { horizontalSafeAreaInset } from '@/lib/screen-insets';
 import { BlurTargetView } from 'expo-blur';
 import {
   createContext,
@@ -51,6 +52,7 @@ export function PageFrame({
   const backgroundColor = navigationTheme(scheme, colors).colors.background;
   const onLayout = usePageLayout();
   const insets = useSafeAreaInsets();
+  const horizontalInset = horizontalSafeAreaInset(insets);
   const [headerContentHeight, setHeaderContentHeight] = useState(PAGE_HEADER_MIN_HEIGHT);
   const headerHeight = title ? insets.top + headerContentHeight : 0;
   const mode = !title && headerMode === 'scroll' ? 'fixed' : headerMode;
@@ -58,8 +60,13 @@ export function PageFrame({
   const blurTarget = useRef<ViewInstance | null>(null);
   const contentTop = mode === 'overlay' ? insets.top : 0;
   const contentInsets = useMemo(
-    () => ({ top: contentTop, bottom: insets.bottom, left: insets.left, right: insets.right }),
-    [contentTop, insets.bottom, insets.left, insets.right],
+    () => ({
+      top: contentTop,
+      bottom: insets.bottom,
+      left: horizontalInset,
+      right: horizontalInset,
+    }),
+    [contentTop, insets.bottom, horizontalInset],
   );
   return (
     <View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
@@ -91,15 +98,6 @@ export function PageFrame({
       <View
         testID="page-header-safe-area"
         pointerEvents={onBack ? 'box-none' : 'none'}
-        onLayout={
-          title
-            ? ({ nativeEvent }) => {
-                const contentHeight = nativeEvent.layout.height - insets.top;
-                // The native Host can report before its title content has finished layout.
-                if (contentHeight >= PAGE_HEADER_MIN_HEIGHT) setHeaderContentHeight(contentHeight);
-              }
-            : undefined
-        }
         style={{
           zIndex: 2,
           position: 'absolute',
@@ -108,11 +106,21 @@ export function PageFrame({
           right: 0,
           paddingTop: insets.top,
           minHeight: title ? insets.top + PAGE_HEADER_MIN_HEIGHT : undefined,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
+          paddingHorizontal: horizontalInset,
         }}
       >
-        {title ? <PageHeader title={title} onBack={onBack} colorScheme={colorScheme} /> : null}
+        {title ? (
+          <PageHeader
+            title={title}
+            onBack={onBack}
+            colorScheme={colorScheme}
+            onLayout={({ nativeEvent }) => {
+              // Measure the title alone: inset updates and layout events can arrive separately.
+              const contentHeight = nativeEvent.layout.height;
+              if (contentHeight >= PAGE_HEADER_MIN_HEIGHT) setHeaderContentHeight(contentHeight);
+            }}
+          />
+        ) : null}
       </View>
       <PageHeaderTouchShield height={headerHeight} />
     </View>

@@ -28,6 +28,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
+import { horizontalSafeAreaInset } from '@/lib/screen-insets';
 import { homeStories, type HomeStory } from './home-stories';
 import { DateTimeBanner } from './date-time-banner';
 
@@ -62,7 +63,7 @@ export default function HomeScreen({
   const insets = useSafeAreaInsets();
   const viewportWidth = Math.max(
     1,
-    Math.min(width, screenContentMaxWidth) - insets.left - insets.right,
+    Math.min(width, screenContentMaxWidth) - horizontalSafeAreaInset(insets) * 2,
   );
   const contentWidth = Math.max(1, viewportWidth - spacing.lg * 2);
   const compact = contentWidth < 340 || fontScale > 1.3;

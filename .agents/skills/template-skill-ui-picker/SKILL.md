@@ -9,7 +9,10 @@ Import `Picker` from `@components/ui` inside an existing Host.
 Source: [picker/](../../../src/components/ui/picker/).
 
 - Props: `selectedValue`, `onValueChange`, `children`, `appearance`,
-  `enabled`, `testID`. The public declaration owns their types.
+  `enabled`, `testID`, `onLayoutChange`. The public declaration owns their types.
+- Optional `onLayoutChange` reports the native control's window-relative
+  `x`, `y`, `width` and `height` in points/dp. Use it for overlay origins;
+  it does not report an RN layout event or mirror physical coordinates in RTL.
 - The consumer owns a string/number value that exactly matches one item:
   numeric `2` and string `'2'` differ. Callbacks receive the value directly.
 - Supply unique, stable `Picker.Item` values and translate labels. Items are

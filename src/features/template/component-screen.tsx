@@ -1,5 +1,6 @@
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { showAlert } from '@/lib/alerts';
+import { horizontalSafeAreaInset } from '@/lib/screen-insets';
 import {
   AuthScreenFrame,
   Badge,
@@ -84,7 +85,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
     return (
       <AuthScreenFrame
         title={title}
-        description={t(`componentCatalog.descriptions.${id}`)}
+        description={t(`componentCatalog.descriptions.list`)}
         testID="component-auth"
         topBar={
           <Button
@@ -138,12 +139,9 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
 function CollectionDescription({ description }: Readonly<{ description: string }>) {
   const headerInset = usePageHeaderInset();
   return (
-    <Column
-      modifiers={nativeFillWidth}
-      style={{ paddingTop: headerInset, paddingBottom: spacing.lg }}
-    >
+    <PageSection style={{ paddingTop: headerInset + spacing.lg }}>
       <Text>{description}</Text>
-    </Column>
+    </PageSection>
   );
 }
 
@@ -162,8 +160,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
   const width = Math.max(
     1,
     Math.min(screenContentMaxWidth, window.width) -
-      insets.left -
-      insets.right -
+      horizontalSafeAreaInset(insets) * 2 -
       (fullWidth ? 0 : spacing.lg * 2),
   );
   const [enabled, setEnabled] = useState(false);
@@ -185,6 +182,8 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
 
   function content() {
     switch (id) {
+      case 'google-map':
+        return <GoogleMapExample width={width} />;
       case 'button':
         return (
           <>
@@ -574,6 +573,14 @@ function PhotoExample({ layout, width }: Readonly<{ layout: PhotoLayout; width: 
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- Keep device integration deferred and synchronously bundled for native releases.
     require('./photo-examples').PhotoExamples;
   return <PhotoExamples initialLayout={layout} width={width} />;
+}
+
+/** Keep map integration out of catalog startup. */
+function GoogleMapExample({ width }: Readonly<{ width: number }>) {
+  const GoogleMapExamples: typeof import('./google-map-examples').GoogleMapExamples =
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Evaluate the native integration only on this destination.
+    require('./google-map-examples').GoogleMapExamples;
+  return <GoogleMapExamples width={width} />;
 }
 
 function IconExamples() {

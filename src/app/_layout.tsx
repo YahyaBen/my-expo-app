@@ -1,10 +1,10 @@
-import { AlertHost, LaunchScreen } from '@components/ui';
+import { AlertHost, AppearanceTransition, LaunchScreen } from '@components/ui';
 import { useFonts } from 'expo-font';
 import { Stack, ThemeProvider, useRootNavigationState } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Appearance, Platform, View } from 'react-native';
+import { Appearance, Platform } from 'react-native';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
 import { navigationTheme } from '@/constants/navigation-theme';
@@ -130,7 +130,8 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
 
   return (
     <AppUpdatesProvider ready={interactive && active}>
-      <View
+      <AppearanceTransition
+        enabled={interactive}
         testID={interactive ? 'app-ready' : undefined}
         collapsable={false}
         style={{ flex: 1, backgroundColor: navigationTheme(colorScheme, colors).colors.background }}
@@ -151,7 +152,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
         ) : null}
         {!showLaunchScreen && <AlertHost />}
         <AppUpdatePrompt ready={interactive && active} />
-      </View>
+      </AppearanceTransition>
     </AppUpdatesProvider>
   );
 }

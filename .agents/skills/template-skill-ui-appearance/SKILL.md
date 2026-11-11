@@ -26,6 +26,18 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   failed writes leave the current session usable.
 - `ColorSchemeControl.onValueChange` overrides the default setter for
   coordination; an override must apply the selected preference itself.
+- Root `AppearanceTransition` adds a 300 ms circular snapshot reveal to default
+  `ColorSchemeControl` selections, originating at the native picker's center.
+  Preference ownership and writes stay in `ThemePreferencesProvider`.
+  It skips unchanged resolved Light/Dark choices, reduced motion, inactive/startup
+  content and unavailable layout/capture. Custom callbacks and nested preview
+  providers retain their own behavior. Live device/System changes are immediate.
+  The overlay mounts only during a reveal, rejects repeat selections and releases
+  its image after UI drawing stops. Resize, backgrounding and reduced motion
+  cancel the reveal while retaining the selected preference.
+- iOS captures with installed Skia 2; Android loads `react-native-view-shot` on
+  selection to include Compose hosts. Android captures use temporary PNGs that
+  are released after decoding. Adding view-shot requires a new development build.
 - System resumes live device appearance. Explicit component/Host schemes keep
   their precedence. Preview providers stay in memory and do not persist.
 - Language sheets use the existing language provider and translated autonyms.
@@ -48,4 +60,6 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   without persisting root preferences.
 
 Verify restart restoration, failed storage, live System changes,
-open language-sheet interaction and RTL on native devices.
+open language-sheet interaction and RTL on native devices. Check both reveal
+directions, rapid selections, rotation/background interruptions, Reduce Motion
+and native form/header/dock capture on iOS and Android.
