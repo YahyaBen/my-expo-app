@@ -23,6 +23,6 @@ Source: [slider.tsx](../../../src/components/ui/slider/slider.tsx).
 - There are no `label`, RN `style`, `minimumValue`, `maximumValue`,
   `onSlidingComplete`, track-color or children props.
 
-Use the [showcase](../../../.rnstorybook/components/catalog/slider-preview.tsx)
-in **Wireframes/Component Gallery**. Verify endpoints, step alignment, reset, disabled
+Use the [slider examples](../../../src/features/template/slider-examples.tsx).
+Verify endpoints, step alignment, reset, disabled
 suppression, accessibility adjustment and RTL on devices.

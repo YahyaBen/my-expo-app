@@ -38,12 +38,6 @@ const sharedImportPatterns = [
     message: 'Import feature modules instead of route files.',
   },
 ];
-const storybookImportPatterns = [
-  {
-    regex: '^(?:@storybook(?:/|$)|storybook(?:/|$))|(?:^|/)\\.rnstorybook(?:/|$)',
-    message: 'Keep Storybook imports in src/features/storybook and .rnstorybook.',
-  },
-];
 const serviceImportPatterns = [
   {
     group: [
@@ -107,16 +101,12 @@ const screenFiles = [
   'src/features/**/screens/**/*.{ts,tsx}',
 ];
 
-function restrictImports(patterns = [], { allowStorybook = false } = {}) {
+function restrictImports(patterns = []) {
   return [
     'error',
     {
       paths: nativeControlImports,
-      patterns: [
-        ...sharedImportPatterns,
-        ...(allowStorybook ? [] : storybookImportPatterns),
-        ...patterns,
-      ],
+      patterns: [...sharedImportPatterns, ...patterns],
     },
   ];
 }
@@ -132,7 +122,6 @@ module.exports = defineConfig([
       '.expo/**',
       '.scannerwork/**',
       '.sonarqube-local/**',
-      '.rnstorybook/storybook.requires.ts',
       '.husky/_/**',
     ],
   },
@@ -144,13 +133,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['src/features/storybook/**/*.{ts,tsx}'],
-    rules: { 'no-restricted-imports': restrictImports([], { allowStorybook: true }) },
-  },
-  {
     files: screenFiles,
-    // These entry points intentionally compose the developer catalog/fixtures.
-    ignores: ['src/app/storybook.tsx', 'src/features/storybook/**'],
     rules: {
       'no-restricted-imports': restrictImports([
         {
@@ -163,11 +146,6 @@ module.exports = defineConfig([
           group: ['axios', 'axios/**', 'expo-secure-store', '@react-native-async-storage/**'],
           message:
             'Screens do not own HTTP clients or persisted storage. Use the existing workflow or preference owner.',
-        },
-        {
-          group: ['@/features/storybook/**', '**/features/storybook/**'],
-          message:
-            'Keep developer examples in their catalog/Storybook entries; product screens render real data.',
         },
       ]),
     },
@@ -203,7 +181,6 @@ module.exports = defineConfig([
       'src/types/**/*.{ts,tsx}',
       'src/**/*.mapper.{ts,tsx}',
       'src/lib/api-query-keys.ts',
-      'src/config/developer-tools.ts',
     ],
     rules: {
       'no-restricted-imports': restrictImports([
@@ -297,13 +274,6 @@ module.exports = defineConfig([
             'UI implementations import siblings directly and receive workflow/data callbacks; keep feature orchestration, transport and storage outside shared UI.',
         },
       ]),
-    },
-  },
-  {
-    files: ['.rnstorybook/**/*.{ts,tsx}'],
-    rules: {
-      'no-restricted-imports': ['error', { paths: nativeControlImports }],
-      'no-restricted-syntax': ['error', expoSymbolIcons],
     },
   },
   {

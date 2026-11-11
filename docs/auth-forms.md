@@ -1,8 +1,7 @@
 # Optional authentication kit
 
 The template has no login, registration, recovery or account screens and mounts
-no auth provider. Storybook form/OTP examples validate local state without a
-backend. Shared auth presentation, schemas, session services and workflow helpers
+no auth provider. Shared auth presentation, schemas, session services and workflow helpers
 remain available for a future application.
 
 ## Add a real workflow
@@ -34,8 +33,8 @@ See [API/session ownership](api-services.md#session-model-and-logout).
 
 Compose `AuthScreenFrame`, `FormTextInput`, `FormSubmit` and the OTP components
 through `@components/ui`. Native keyboard/layout behavior belongs to those shared
-components. Local Login Form and OTP Storybook fixtures remain available, with
-pending/error/visibility examples and stable `native-form-*` selectors.
+components. The app's form and OTP component pages demonstrate local validation,
+pending, error and visibility states without a backend.
 
 Preserve component `testID` props and derived suffixes, including field errors,
 password actions and alert controls. The root still hosts `AlertHost`; native
@@ -45,8 +44,7 @@ starter's runtime UI.
 
 ## Verification
 
-Run lint, typecheck, formatting and story registration. No automated form suite
-or test runner is included. Use **Forms/Login Form**, **Forms/OTP**
-and **Wireframes/Component Gallery** for native checks. Keyboard, accessibility,
+Run lint, typecheck and formatting. No automated form suite or test runner is
+included. Use the app's form and OTP component pages for native checks. Keyboard, accessibility,
 large text, RTL, actual authentication and recovery delivery require matching
 iOS/Android builds and a real backend once those features are implemented.

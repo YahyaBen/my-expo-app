@@ -42,7 +42,19 @@ transitions. Backgrounds and Skia artwork may reach the edges; controls remain
 inside protected content bounds. The app allows portrait and landscape rotation;
 asymmetric side-inset cases cover rotation and tablet/window layouts.
 
-The page Host opts out of automatic SwiftUI safe areas because the outer frame handles them. RN keyboard padding handles overlap on iOS and Android. Tab and detail pages use the shared content header, so no native-header keyboard offset is needed. The system-inset frame wraps the keyboard frame so keyboard padding cannot replace its bottom safe area. Authentication uses the same keyboard padding around its native Host. In the installed Android Expo UI implementation, the Host's keyboard-aware viewport measurement only clamps unbounded constraints; it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom sheets keep their presentation's insets and keyboard behavior. The Host wrapper's global defaults are unchanged.
+Page Hosts opt out of automatic SwiftUI safe areas. Ordinary pages and
+authentication put device insets inside scrolling content so the viewport stays
+unpadded. Bounded native forms reserve device safe areas with outer margins and
+keep their own section gutters. Physical side insets are mapped to the native
+Host's logical direction, including asymmetric landscape insets in RTL.
+Fixed headers reserve space with a content margin inside the full-size blur target.
+
+RN keyboard padding handles overlap on iOS and Android independently of content
+insets. Tab and detail pages use the shared content header, so no native-header
+keyboard offset is needed. In the installed Android Expo UI implementation, the
+Host's keyboard-aware viewport measurement only clamps unbounded constraints;
+it does not guarantee avoidance for these flex-sized screen Hosts. Native bottom
+sheets keep their presentation's insets and keyboard behavior.
 
 ## Documentation
 
@@ -59,5 +71,5 @@ checks.
 Inspect iOS and Android with gesture and three-button navigation, a notched phone,
 tablet/window resizing, large text and the keyboard open. Check the last scroll
 item, raised action's hit area, native sheets, Back navigation, header transitions
-and keyboard dismissal. Use current native stories and app screens; JavaScript
+and keyboard dismissal. Use the app's native component pages and screens; JavaScript
 inset fixtures do not simulate operating-system geometry or prove native behavior.

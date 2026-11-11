@@ -9,7 +9,6 @@ for operator commands. Keep configuration in these existing owners:
 | `app.json`, `app.config.js`                              | Shared native settings and selected configuration assembly                   |
 | `src/config/brand.ts`                                    | Validated public native metadata from `extra.brand`                          |
 | `config/brand-assets.json`, `src/config/brand-assets.ts` | Public asset metadata and literal Metro imports                              |
-| `src/config/developer-tools.ts`                          | Build-time catalog and Storybook access gates                                |
 | `config/api.js`, `src/services/api.config.ts`            | Shared API normalization/timeout and lazy native environment access          |
 
 - `APP_BRAND` selects identity; `APP_VARIANT` selects development, preview or
@@ -34,10 +33,6 @@ for operator commands. Keep configuration in these existing owners:
 - Use literal asset imports, never a dynamic `require` from a manifest path.
   Verify native font names and scripts. Arabic and failed/unloaded optional fonts
   use native fallback; brand fonts apply to headings rather than every control.
-- Keep developer flags outside saved preferences and manifests. Storybook defaults
-  to enabled in development; exact `false` opts out. Require `__DEV__` and disable
-  Metro integration in releases. All showcase compositions live in `.rnstorybook/`;
-  inspect both release graphs to verify exclusion.
 - Keep refresh transport independent of the authenticated client. Production
   validation enforces release requirements without blocking local public previews.
 

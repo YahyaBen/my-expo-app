@@ -32,9 +32,7 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   Arabic updates live RTL without remounting ordinary forms.
 - Template's Settings tab uses the root preferences through
   [the Settings feature](../../../src/features/settings/settings-screen.tsx).
-  Its native permission/location helpers load on first opening. The Preferences
-  story renders that same feature with isolated appearance; it adds no parallel
-  preference owner.
+  Its native permission/location helpers load on first opening.
 
 ## Motion preferences
 
@@ -46,8 +44,8 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   ignored; do not add startup storage work to migrate them.
 - Reduce Motion observes the live system value until explicitly selected.
   Use `useAppReducedMotion` / `useMotionEnabled`; retain activity checks.
-- Reuse `ThemeControl` in Text previews. Storybook and Text preview providers
-  must keep palette and appearance changes in memory without persisting root preferences.
+- Isolated preview providers must keep palette and appearance changes in memory
+  without persisting root preferences.
 
 Verify restart restoration, failed storage, live System changes,
 open language-sheet interaction and RTL on native devices.

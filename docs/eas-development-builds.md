@@ -13,20 +13,20 @@ npx eas-cli@latest login
 npx eas-cli@latest build --platform android --profile development
 ```
 
-Install the resulting development client, then run `npm start`. It opens on-device
-Storybook automatically. The retained native modules require that matching binary.
+Install the resulting development client, then run `npm start` to open the app.
+The retained native modules require that matching binary.
 Use the [EAS build configuration reference](https://docs.expo.dev/eas/json/) for
 profile options and [signing setup](https://docs.expo.dev/app-signing/app-credentials/)
 for platform credentials.
 
 ## Profiles
 
-| Profile              | Result                                                | Storybook                       |
-| -------------------- | ----------------------------------------------------- | ------------------------------- |
-| `development`        | Android debug APK or iOS Simulator development client | Enabled by Metro in development |
-| `development-device` | Development client for physical iOS devices           | Enabled by Metro in development |
-| `preview`            | Internal release APK / signed iOS internal build      | Disabled; neutral wireframe     |
-| `production`         | Store binaries with remote version increment          | Disabled; neutral wireframe     |
+| Profile              | Result                                                |
+| -------------------- | ----------------------------------------------------- |
+| `development`        | Android debug APK or iOS Simulator development client |
+| `development-device` | Development client for physical iOS devices           |
+| `preview`            | Internal release APK / signed iOS internal build      |
+| `production`         | Store binaries with remote version increment          |
 
 All profiles use the brand manifest's `name` as the installed app name. The
 default brand displays `Expo Template`. Install a new native build to apply a
@@ -44,9 +44,7 @@ limits Gradle to one worker with parallel execution disabled. Preview explicitly
 an installable APK. Production creates the store Android app bundle by default.
 Build profiles share the manifest's project ID. No backend URL is required.
 
-The development client can connect to `npm run start:app` to inspect the wireframe.
-The flag is a Metro/bundle choice; changing it requires restarting Metro with a
-cleared cache. `__DEV__` always prevents Storybook in release JavaScript.
+All profiles open the template app and its component pages.
 
 ## Native identity and integrations
 
@@ -100,7 +98,7 @@ Configure sending credentials and test:
 
    ```sh
    npx eas-cli@latest build --platform android --profile development
-   npm run start:app
+   npm start
    ```
 
    Use `--profile production` for the store build. Existing binaries still contain
@@ -165,5 +163,5 @@ store submission or update publication is performed by cloning the repo.
 Resolved config, lint/typecheck, dependency checks and local native JS exports
 are static validation. A successful EAS build additionally checks native
 compilation and signing; installing it is required to verify actual UI behavior.
-Keep [Storybook release graph checks](storybook.md#release-boundary), iOS/Android
-device results and live-backend verification separate.
+Keep native release graph checks, iOS/Android device results and live-backend
+verification separate.

@@ -60,7 +60,7 @@ export default function SettingsScreen({
   );
 }
 
-/** Explicit preferences also let native stories run without changing saved app settings. */
+/** Native settings content receives language state from the existing owner. */
 function SettingsPage({
   language,
   onLanguageChange,

@@ -32,10 +32,10 @@ Settings keeps its native `FieldGroup` and adds clearance in the final section f
 Do not add the full dock height to content padding.
 
 Keep the background full-width and flat. The controls center within the safe
-viewport at `screenContentMaxWidth` (640 points). Selected icons have a 44×28
+viewport at `screenContentMaxWidth` (1024 points). Selected icons have a 44×28
 capsule using `tabBarSelectedBackground`; labels remain outside it. Preserve
 semantic active/inactive colors, native selected state and live RTL ordering.
 
 Check selection, disabled action, circle-edge taps, end-of-scroll clearance,
 keyboard and device insets using the
-[native navigation stories](../../../.rnstorybook/stories/components/navigation.stories.tsx).
+[native template navigation](../../../src/features/template/template-screen.tsx).

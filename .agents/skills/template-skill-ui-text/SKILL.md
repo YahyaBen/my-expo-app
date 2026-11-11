@@ -45,6 +45,6 @@ arrays and invented props. `numberOfLines` truncates; let essential instructions
 and errors wrap. Preserve logical alignment and large-text growth.
 
 Check wrapping, truncation, override precedence, surface contrast and spoken
-semantics using the [Text showcase](../../../.rnstorybook/components/catalog/text-preview.tsx).
+semantics using the [text example](../../../src/features/template/component-screen.tsx).
 Isolated previews must re-enter native UI with an explicit scheme after RN bridges
 and must not write saved app preferences.

@@ -90,9 +90,6 @@ function resolveBrand(env = process.env) {
     throw new Error(`APP_VARIANT must be one of: ${variants.join(', ')}.`);
   }
   const selected = env.APP_BRAND?.trim();
-  if (variant !== 'development' && env.EXPO_PUBLIC_STORYBOOK_ENABLED === 'true') {
-    throw new Error('Storybook is development-only. Disable it for preview and production.');
-  }
   const id = selected || 'template';
   if (!Object.hasOwn(brands, id)) {
     throw new Error(`Unknown APP_BRAND. Registered brands: ${Object.keys(brands).join(', ')}.`);

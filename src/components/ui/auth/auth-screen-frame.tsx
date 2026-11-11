@@ -11,13 +11,12 @@ import {
 import { FieldGroup } from '../field-group/field-group';
 import { PageFrame } from '../page/page-frame';
 import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
-import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { UniversalHost, useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
 import { UniversalTextContent as Text } from '../text/universal-text';
 import { useLanguage } from '@/context/language.context';
-import { screenContentMaxWidth, spacing } from '@/constants/layout';
+import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
 import { PageSection } from '../page/page-section';
 import { pageFormModifiers } from '../page/page-form-modifiers';
-import { screenInsets } from '@/lib/screen-insets';
 import { getAppBrand } from '@/config/brand';
 import { getBrandHeadingFont } from '@/config/brand-assets';
 
@@ -56,6 +55,7 @@ function AuthScreenContent({
   }>
 >) {
   const insets = useSafeAreaInsets();
+  const rtl = useHostLayoutDirection() === 'rightToLeft';
   const { language } = useLanguage();
   const brand = getAppBrand();
   const { colors, scheme } = useAppTheme(useHostColorScheme(colorScheme));
@@ -85,7 +85,10 @@ function AuthScreenContent({
       behavior="padding"
       style={{
         flex: 1,
-        ...screenInsets(insets, { tabBarShown: tab }),
+        marginTop: insets.top,
+        marginBottom: grouped && !tab ? insets.bottom : 0,
+        marginLeft: grouped ? insets.left : 0,
+        marginRight: grouped ? insets.right : 0,
       }}
     >
       <UniversalHost
@@ -113,7 +116,14 @@ function AuthScreenContent({
             onRefresh={onRefresh}
           >
             <Column modifiers={nativeCenteredMinHeight(viewportHeight)}>
-              <PageSection spacing={spacing.xl}>
+              <PageSection
+                spacing={spacing.xl}
+                style={{
+                  paddingBottom: spacing.lg + (tab ? tabBarRaisedHeight : insets.bottom),
+                  paddingLeft: spacing.lg + (rtl ? insets.right : insets.left),
+                  paddingRight: spacing.lg + (rtl ? insets.left : insets.right),
+                }}
+              >
                 {heading}
                 {children}
               </PageSection>

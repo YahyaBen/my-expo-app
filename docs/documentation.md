@@ -45,5 +45,5 @@ owning guide before removing a superseded document. Git retains the history.
 
 Validate skill metadata and local links after edits or moves. Format edited files
 and run lint/typecheck as required by `AGENTS.md`. Report native observations
-separately; registered stories and documentation do not prove device behavior.
+separately; static checks and documentation do not prove device behavior.
 Historical reports do not override current source or maintained guidance.

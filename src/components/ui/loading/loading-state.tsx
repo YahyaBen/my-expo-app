@@ -1,17 +1,16 @@
 import { spacing } from '@/constants/layout';
 import { navigationTheme } from '@/constants/navigation-theme';
 import { useThemeColors } from '@/hooks/use-theme';
-import { screenInsets } from '@/lib/screen-insets';
-import { Column, Row, ScrollView, Spacer } from '@expo/ui';
+import { Column, Row, Spacer } from '@expo/ui';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { ErrorBoundaryProps } from 'expo-router';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonContent } from '../button/button';
-import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { UniversalHost, useHostColorScheme, useHostLayoutDirection } from '../host/universal-host';
 import { nativeFillSize } from '../native/native-fill-width';
-import { PageFrame } from '../page/page-frame';
+import { PageScreen } from '../page/page-screen';
 import { PageSection } from '../page/page-section';
 import { UniversalTextContent as Text } from '../text/universal-text';
 import { EmptyState } from './empty-state';
@@ -44,6 +43,7 @@ export function LoadingScreen({
 }>) {
   const scheme = useHostColorScheme(colorScheme);
   const insets = useSafeAreaInsets();
+  const rtl = useHostLayoutDirection() === 'rightToLeft';
   const colors = useThemeColors(scheme);
   return (
     <UniversalHost
@@ -53,10 +53,18 @@ export function LoadingScreen({
       style={{
         flex: 1,
         backgroundColor: navigationTheme(scheme, colors).colors.background,
-        ...screenInsets(insets),
       }}
     >
-      <Column alignment="center" modifiers={nativeFillSize}>
+      <Column
+        alignment="center"
+        modifiers={nativeFillSize}
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: rtl ? insets.right : insets.left,
+          paddingRight: rtl ? insets.left : insets.right,
+        }}
+      >
         <Spacer flexible />
         <PageSection alignment="center">
           <LoadingContent label={label} />
@@ -157,31 +165,21 @@ export function QueryContent<T>({
 export function ScreenError({ error, retry }: Readonly<ErrorBoundaryProps>) {
   const { t } = useTranslation();
   const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
   return (
-    <PageFrame title={t('recovery.title')}>
-      <UniversalHost
-        testID="screen-error"
-        matchContents={false}
-        ignoreSafeArea="all"
-        style={{ flex: 1, ...screenInsets(insets, { headerShown: true }) }}
-      >
-        <ScrollView>
-          <PageSection>
-            <Text variant="title">{t('recovery.failed')}</Text>
-            <Text>{t('recovery.description')}</Text>
-            {__DEV__ ? <Text textStyle={{ color: colors.error }}>{error.message}</Text> : null}
-            <ButtonContent
-              variant="secondary"
-              label={t('common.tryAgain')}
-              testID="screen-error-retry"
-              onPress={() => {
-                void retry();
-              }}
-            />
-          </PageSection>
-        </ScrollView>
-      </UniversalHost>
-    </PageFrame>
+    <PageScreen title={t('recovery.title')} showBack={false}>
+      <PageSection testID="screen-error">
+        <Text variant="title">{t('recovery.failed')}</Text>
+        <Text>{t('recovery.description')}</Text>
+        {__DEV__ ? <Text textStyle={{ color: colors.error }}>{error.message}</Text> : null}
+        <ButtonContent
+          variant="secondary"
+          label={t('common.tryAgain')}
+          testID="screen-error-retry"
+          onPress={() => {
+            void retry();
+          }}
+        />
+      </PageSection>
+    </PageScreen>
   );
 }

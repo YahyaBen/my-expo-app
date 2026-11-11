@@ -1,13 +1,12 @@
 import { screenContentMaxWidth, spacing, tabBarRaisedHeight } from '@/constants/layout';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { screenInsets } from '@/lib/screen-insets';
 import { Column } from '@expo/ui';
 import { router, type Href } from 'expo-router';
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonContent } from '../button/button';
-import { UniversalHost } from '../host/universal-host';
+import { UniversalHost, useHostLayoutDirection } from '../host/universal-host';
 import { nativeFillWidth, nativeFillWidthCenter } from '../native/native-fill-width';
 import { RefreshableScrollView } from '../refreshable-scroll-view/refreshable-scroll-view';
 import { UniversalText, UniversalTextContent } from '../text/universal-text';
@@ -87,15 +86,20 @@ function PageContent({
 }: Readonly<PageContentProps>) {
   const insets = useSafeAreaInsets();
   const headerInset = usePageHeaderInset();
+  const rtl = useHostLayoutDirection() === 'rightToLeft';
   return (
     <View
       style={{
         flex: 1,
         overflow: scrollable ? undefined : 'hidden',
-        ...screenInsets(insets, { tabBarShown: tab }),
+        // Bounded native forms own scrolling; reserve only their device safe areas.
+        marginTop: scrollable ? 0 : insets.top,
+        marginBottom: !scrollable && !tab ? insets.bottom : 0,
+        marginLeft: scrollable ? 0 : insets.left,
+        marginRight: scrollable ? 0 : insets.right,
       }}
     >
-      {/* Keep system insets outside the keyboard padding so neither overwrites the other. */}
+      {/* Keyboard overlap is separate from the content's device/header insets. */}
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <UniversalHost
           colorScheme={scheme}
@@ -111,9 +115,12 @@ function PageContent({
                 spacing={0}
                 modifiers={nativeFillWidth}
                 style={{
-                  padding: 0,
-                  paddingTop: headerInset,
-                  paddingBottom: tab ? tabBarRaisedHeight : 0,
+                  // Insets travel with the content, leaving the viewport unpadded.
+                  paddingTop: headerInset + insets.top,
+                  paddingBottom: tab ? tabBarRaisedHeight : footer ? 0 : insets.bottom,
+                  // Expo UI maps these props to logical leading/trailing on both platforms.
+                  paddingLeft: rtl ? insets.right : insets.left,
+                  paddingRight: rtl ? insets.left : insets.right,
                 }}
               >
                 {description ? (
@@ -150,7 +157,12 @@ function PageContent({
             tone="muted"
             colorScheme={scheme}
             modifiers={nativeFillWidthCenter}
-            style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}
+            style={{
+              paddingTop: spacing.md,
+              paddingBottom: spacing.md + (scrollable && !tab ? insets.bottom : 0),
+              paddingLeft: spacing.lg + (scrollable ? (rtl ? insets.right : insets.left) : 0),
+              paddingRight: spacing.lg + (scrollable ? (rtl ? insets.left : insets.right) : 0),
+            }}
             textStyle={{ textAlign: 'center' }}
             testID="page-footer"
           >

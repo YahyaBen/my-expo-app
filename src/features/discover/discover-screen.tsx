@@ -1,3 +1,4 @@
+import { spacing } from '@/constants/layout';
 import {
   Badge,
   ButtonContent,
@@ -23,11 +24,9 @@ const steps = ['explore', 'compose', 'personalize'] as const;
 
 /** Template introduction and catalog, composed in the shell's existing native page Host. */
 export default function DiscoverScreen({
-  showBack,
   onBrowseComponents,
   onSelectCategory,
 }: Readonly<{
-  showBack: boolean;
   onBrowseComponents: () => void;
   onSelectCategory: (id: ComponentCategoryId) => void;
 }>) {
@@ -35,9 +34,9 @@ export default function DiscoverScreen({
   const colors = useThemeColors(useHostColorScheme());
 
   return (
-    <PageScreen tab title={t('discover.title')} showBack={showBack}>
-      <PageSection spacing={24} testID="discover-screen">
-        <Column spacing={8} modifiers={nativeFillWidth}>
+    <PageScreen tab title={t('discover.title')}>
+      <PageSection spacing={spacing.xl} testID="discover-screen">
+        <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.5 }}>
             {t('discover.eyebrow')}
           </UniversalTextContent>
@@ -50,9 +49,9 @@ export default function DiscoverScreen({
         </Column>
 
         <Column
-          spacing={20}
+          spacing={spacing.xl}
           modifiers={nativeFillWidth}
-          style={{ padding: 24, borderRadius: 24, backgroundColor: colors.text }}
+          style={{ padding: spacing.xl, borderRadius: 24, backgroundColor: colors.text }}
           testID="discover-featured"
         >
           <Badge label={t('discover.featured.badge')} variant="secondary" />
@@ -61,7 +60,7 @@ export default function DiscoverScreen({
             size={48}
             color={colors.surface}
           />
-          <Column spacing={12} modifiers={nativeFillWidth}>
+          <Column spacing={spacing.md} modifiers={nativeFillWidth}>
             <UniversalTextContent
               variant="heading"
               fontSize={36}
@@ -90,8 +89,8 @@ export default function DiscoverScreen({
           />
         </Column>
 
-        <Column spacing={16} modifiers={nativeFillWidth} testID="discover-topics">
-          <Column spacing={8} modifiers={nativeFillWidth}>
+        <Column spacing={spacing.lg} modifiers={nativeFillWidth} testID="discover-topics">
+          <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
             <UniversalTextContent variant="title">
               {t('discover.componentsTitle')}
             </UniversalTextContent>
@@ -102,14 +101,18 @@ export default function DiscoverScreen({
           {componentCategories.map(({ id, icon, components }) => (
             <Column
               key={id}
-              spacing={16}
+              spacing={spacing.lg}
               modifiers={nativeFillWidth}
-              style={{ padding: 20, borderRadius: 20, backgroundColor: colors.surfaceVariant }}
+              style={{
+                padding: spacing.lg,
+                borderRadius: 20,
+                backgroundColor: colors.surfaceVariant,
+              }}
               testID={`discover-category-${id}`}
             >
-              <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+              <Row spacing={spacing.md} alignment="center" modifiers={nativeFillWidth}>
                 <Icon name={icon} size={28} />
-                <Column spacing={4} modifiers={nativeRowWeight}>
+                <Column spacing={spacing.xs} modifiers={nativeRowWeight}>
                   <UniversalTextContent variant="subtitle">
                     {t(`componentCatalog.categories.${id}`)}
                   </UniversalTextContent>
@@ -136,7 +139,7 @@ export default function DiscoverScreen({
           ))}
         </Column>
 
-        <Column spacing={8} modifiers={nativeFillWidth} testID="discover-ideas">
+        <Column spacing={spacing.sm} modifiers={nativeFillWidth} testID="discover-ideas">
           <UniversalTextContent variant="title">{t('discover.stepsTitle')}</UniversalTextContent>
           <UniversalTextContent variant="body" tone="muted">
             {t('discover.stepsDescription')}
@@ -144,15 +147,15 @@ export default function DiscoverScreen({
           {steps.map((id, index) => (
             <Row
               key={id}
-              spacing={16}
+              spacing={spacing.lg}
               modifiers={nativeFillWidth}
-              style={{ paddingVertical: 16 }}
+              style={{ paddingVertical: spacing.lg }}
               testID={`discover-step-${id}`}
             >
               <UniversalTextContent variant="title" tone="muted">
                 {String(index + 1).padStart(2, '0')}
               </UniversalTextContent>
-              <Column spacing={6} modifiers={nativeRowWeight}>
+              <Column spacing={spacing.sm} modifiers={nativeRowWeight}>
                 <UniversalTextContent variant="subtitle">
                   {t(`discover.steps.${id}.title`)}
                 </UniversalTextContent>

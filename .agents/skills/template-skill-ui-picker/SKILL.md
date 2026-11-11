@@ -25,6 +25,6 @@ Source: [picker/](../../../src/components/ui/picker/).
 - Preserve Android label synchronization and `testID-option-index` selectors;
   option indexes are not domain values. Keep extraction in existing adapters.
 
-Use the [showcase](../../../.rnstorybook/components/catalog/picker-preview.tsx)
-in **Wireframes/Component Gallery**. Verify string/number values, reset, disabling an
+Use the [picker example](../../../src/features/template/component-screen.tsx).
+Verify string/number values, reset, disabling an
 open menu, translated label updates, native focus, RTL and large text.

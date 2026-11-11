@@ -21,5 +21,5 @@ Source: [list/](../../../src/components/ui/list/).
 - Inherit the Host's color scheme and tint; retain supported seed overrides.
 - Use only modifiers exposed by the installed component contract.
 
-Check scrolling, row actions and recycled content on both platforms. The [native stories](../../../.rnstorybook/stories/components/list.stories.tsx)
-provide grouped-list and interaction examples.
+Check scrolling, row actions and recycled content on both platforms using the
+[component examples](../../../src/features/template/component-screen.tsx).

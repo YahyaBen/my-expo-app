@@ -8,16 +8,13 @@
   },
   "scripts": {
     "start": "node scripts/start.cjs",
-    "start:app": "node scripts/start.cjs --app",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "storybook:dev": "node scripts/start.cjs",
-    "storybook:generate": "sb-rn-get-stories",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint . --max-warnings=0",
     "lint:staged": "lint-staged",
-    "format": "prettier --write src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
-    "format:check": "prettier --check src config docs .agents .github .husky .rnstorybook scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
+    "format": "prettier --write src config docs .agents .github .husky scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
+    "format:check": "prettier --check src config docs .agents .github .husky scripts \"*.{js,cjs,mjs,json,md,yaml,yml}\"",
     "check": "npm run typecheck && npm run lint && npm run format:check",
     "prepare": "node .husky/install.mjs"
   },
@@ -71,9 +68,6 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@storybook/addon-ondevice-actions": "10.7.0",
-    "@storybook/addon-ondevice-controls": "10.7.0",
-    "@storybook/react-native": "10.7.0",
     "@types/react": "~19.3.0",
     "eslint": "^9.39.5",
     "eslint-config-expo": "~58.0.4",
@@ -83,24 +77,14 @@
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
     "prettier": "3.9.10",
-    "storybook": "10.6.5",
     "typescript": "~6.0.3"
   },
   "overrides": {
     "@expo/ui": "$@expo/ui",
     "react-native-safe-area-context": "$react-native-safe-area-context",
-    "@storybook/react": "10.6.5",
-    "@storybook/react-native-ui": "10.7.0",
-    "@storybook/react-native-ui-common": "10.7.0",
-    "@storybook/react-native-theming": "10.7.0",
-    "@storybook/react-dom-shim": "10.6.5",
-    "@storybook/mcp": {
-      "valibot": "^1.5.0"
-    },
     "xcode": {
       "uuid": "^11.1.1"
-    },
-    "esbuild": "~0.26.0"
+    }
   },
   "expo": {
     "install": {

@@ -61,6 +61,8 @@ LTR islands and independently themed previews isolated from surrounding content.
 Viewport height takes priority over inline when selecting `matchContents`.
 Consumer `style` follows derived sizing and can override it. Fill sizing needs
 a bounded parent; it cannot infer screen height from intrinsic scroll content.
+Hosts add no content padding. Put gutters and gaps in native content groups;
+keep scroll viewport bounds separate from their inner content insets.
 The public `ref` addresses the RN `ViewInstance`. iOS Host content top-aligns;
 request centering in native layout.
 
@@ -77,13 +79,12 @@ request centering in native layout.
 - Pass direction through the Host prop. Leave safe-area ownership to the page.
 
 Check intrinsic/bounded sizes, retained state, touch bounds and RTL using the
-[Host showcase](../../../.rnstorybook/components/catalog/host-preview.tsx).
+[Host example](../../../src/features/template/component-screen.tsx).
 
 ## Verification and performance claims
 
-Run lint, typecheck and formatting checks; regenerate registration after story
-changes. In the Host showcase, enter a draft and press its action, then change
-appearance/direction without losing either value. Check changed controls on iOS
+Run lint, typecheck and formatting checks. Check retained drafts and action state
+when appearance/direction changes. Check changed controls on iOS
 and Android with large text, keyboard, screen readers and edge taps.
 
 Report structural changes separately from measured results. Host count does not

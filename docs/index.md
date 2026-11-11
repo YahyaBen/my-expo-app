@@ -12,7 +12,6 @@ Maintained guides are listed below. Component contracts belong to independent sk
 - [Documentation ownership](documentation.md)
 - [Task and component skills](skills.md)
 - [Shared native UI](ui.md)
-- [Storybook](storybook.md)
 - [Bundled assets](assets.md)
 
 ## Implementation and appearance

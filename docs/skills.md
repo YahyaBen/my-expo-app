@@ -12,7 +12,7 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 | [expo-mobile-ui-only](../.agents/skills/expo-mobile-ui-only/SKILL.md)                           | Mobile platform and UI technology constraints            |
 | [template-skill-implementation](../.agents/skills/template-skill-implementation/SKILL.md)       | Feature architecture and workflow boundaries             |
 | [expo-api-services](../.agents/skills/expo-api-services/SKILL.md)                               | Validated transport, session-safe remote state and cache |
-| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Shared library structure, theme tokens and stories       |
+| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Shared library structure, theme tokens and examples      |
 | [template-skill-performance](../.agents/skills/template-skill-performance/SKILL.md)             | Measured native performance investigations               |
 
 ## Layout and primitives

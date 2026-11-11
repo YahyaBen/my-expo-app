@@ -10,8 +10,7 @@
       "environment": "development",
       "env": {
         "APP_BRAND": "template",
-        "APP_VARIANT": "development",
-        "EXPO_PUBLIC_STORYBOOK_ENABLED": "true"
+        "APP_VARIANT": "development"
       },
       "android": {
         "gradleCommand": ":app:assembleDebug --max-workers=1 --no-parallel"
@@ -37,8 +36,7 @@
       },
       "env": {
         "APP_BRAND": "template",
-        "APP_VARIANT": "preview",
-        "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
+        "APP_VARIANT": "preview"
       },
       "android": {
         "buildType": "apk"
@@ -56,8 +54,7 @@
       },
       "env": {
         "APP_BRAND": "template",
-        "APP_VARIANT": "production",
-        "EXPO_PUBLIC_STORYBOOK_ENABLED": "false"
+        "APP_VARIANT": "production"
       },
       "channel": "production"
     }

@@ -26,5 +26,4 @@ jobs:
           node-version: '22.18.0'
           cache: npm
       - run: npm ci
-      - run: npm run storybook:generate
       - run: npm run check

@@ -38,12 +38,12 @@ impact and notification feedback from [Expo Haptics](https://docs.expo.dev/versi
 Selection uses the broadly supported Android clock tick. Outcome constants require
 API 30; older Android versions use context-click and long-press fallbacks. Check
 constant API levels against the installed native implementation before changing effects.
-The `Components/Haptics` Storybook preview compares the effects on physical devices.
+Compare haptic effects on physical devices through the app's Haptics component page.
 
 ## Previews and SDK upgrades
 
-Stories and all native demonstration compositions live in `.rnstorybook/`. Shared UI imports neither. The explicit development
-entry owns Storybook imports; see [preview access and bundle boundaries](storybook.md).
+Native demonstration compositions live in `src/features/template/`. Shared UI
+receives data and callbacks without importing feature examples.
 
 For an SDK or Expo UI upgrade:
 
@@ -55,8 +55,8 @@ For an SDK or Expo UI upgrade:
    current version aligned with the installed SDK and verify using new binaries.
 3. Use matching native builds and exercise affected iOS/Android interactions,
    light/dark, live RTL, large text, selectors, retained state and touch bounds.
-4. Run lint and typecheck; regenerate registration after story changes. Inspect
-   both release graphs after entry/Metro changes. Development guards control access; inspect emitted bundles to confirm tooling exclusion.
+4. Run lint and typecheck. Inspect both release graphs after entry/Metro changes
+   to confirm developer tooling is excluded.
 
 Use [the SDK baseline](development.md#sdk-and-native-verification-baseline) for
 current package/build requirements. Report static checks separately from native

@@ -66,10 +66,7 @@ export function PageFrame({
       <SafeAreaInsetsContext.Provider value={contentInsets}>
         <PageHeaderInsetContext.Provider value={mode === 'scroll' ? headerHeight : 0}>
           {/* Keep the same capture target even when blur, title or layout mode changes. */}
-          <BlurTargetView
-            ref={blurTarget}
-            style={{ flex: 1, paddingTop: mode === 'fixed' ? reservedTop : 0 }}
-          >
+          <BlurTargetView ref={blurTarget} style={{ flex: 1 }}>
             {/* Android captures target children, including the background of empty regions. */}
             <View
               testID="page-blur-scene-background"
@@ -77,7 +74,9 @@ export function PageFrame({
               accessible={false}
               style={[StyleSheet.absoluteFill, { backgroundColor }]}
             />
-            {children}
+            <View style={{ flex: 1, marginTop: mode === 'fixed' ? reservedTop : 0 }}>
+              {children}
+            </View>
           </BlurTargetView>
         </PageHeaderInsetContext.Provider>
       </SafeAreaInsetsContext.Provider>

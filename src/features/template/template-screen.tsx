@@ -32,7 +32,7 @@ function DeferredSettingsScreen(props: Readonly<SettingsScreenProps>) {
 type ContentTabId = Exclude<TabNavigationItemId, 'home' | 'more'>;
 
 /** Native template shell and its local component-navigation menu. */
-export default function TemplateScreen({ showBack = false }: Readonly<{ showBack?: boolean }>) {
+export default function TemplateScreen() {
   const { t } = useTranslation();
   const brand = getAppBrand();
   const insets = useSafeAreaInsets();
@@ -91,17 +91,12 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         {/* Activity retains native views/state and cleans up hidden-page effects. */}
         {homeOpened ? (
           <Activity mode={activeId === 'home' ? 'visible' : 'hidden'}>
-            <HomeScreen
-              title={titles.home}
-              showBack={showBack}
-              onBrowseComponents={() => selectTab('recipes')}
-            />
+            <HomeScreen title={titles.home} onBrowseComponents={() => selectTab('recipes')} />
           </Activity>
         ) : null}
         <Activity mode={activeId === 'more' || activeId === 'home' ? 'hidden' : 'visible'}>
           {contentId === 'search' ? (
             <DiscoverScreen
-              showBack={showBack}
               onBrowseComponents={() => selectTab('recipes')}
               onSelectCategory={navigateToCategory}
             />
@@ -110,7 +105,6 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
               tab
               title={titles[contentId]}
               description={t('componentCatalog.browseCategories')}
-              showBack={showBack}
             >
               <PageSection>
                 <ComponentCategoryList onSelect={navigateToCategory} />
@@ -121,11 +115,7 @@ export default function TemplateScreen({ showBack = false }: Readonly<{ showBack
         {/* Do not render hidden Settings at startup: Activity also prerenders hidden children. */}
         {settingsOpened ? (
           <Activity mode={activeId === 'more' ? 'visible' : 'hidden'}>
-            <DeferredSettingsScreen
-              allowAppIconChange
-              tab
-              onBack={showBack ? () => router.back() : undefined}
-            />
+            <DeferredSettingsScreen allowAppIconChange tab />
           </Activity>
         ) : null}
       </View>

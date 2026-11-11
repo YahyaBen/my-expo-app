@@ -64,7 +64,7 @@ The wrapper owns a native observable but accepts a plain string `value`.
   readable words. Allow wrapping. Check
   duplicate label stops, secure reveal, native focus and RTL on devices.
 
-Use the [showcase](../../../.rnstorybook/components/catalog/input-preview.tsx)
-in **Wireframes/Component Gallery** for reset/ref, feedback, password, read-only and
+Use the [text-input examples](../../../src/features/template/text-input-examples.tsx)
+for reset/ref, feedback, password, read-only and
 multiline examples. Verify keyboard reachability and native cursor behavior
 separately from lint/typecheck.

@@ -19,6 +19,6 @@ existing Host. Source: [badge/](../../../src/components/ui/badge/).
   for essential status text. iOS uses a capsule background/stroke; Android uses a
   nonclickable Material Surface with a pill shape.
 
-Use [Badge/Playground](../../../.rnstorybook/stories/components/badge.stories.tsx)
+Use the [badge example](../../../src/features/template/component-screen.tsx)
 to inspect all variants, label changes, light/dark, RTL and translated text.
 Verify large text, contrast and VoiceOver/TalkBack reading on both platforms.

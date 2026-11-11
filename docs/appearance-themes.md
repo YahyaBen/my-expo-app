@@ -58,12 +58,8 @@ Full `useThemePreferences` / `useThemeSettings` snapshots are reserved for seedi
 isolated previews. Controls use their matching palette, appearance or
 motion settings hook.
 
-In **Components/Theme Tokens/Playground**, choose `example: subscriptions` to
-inspect independent preference updates. After startup settles, the development
-console logs `[theme-subscription]` commits for each probe. Motion changes commit
-motion and motion-gate; appearance changes commit appearance and colors. The fixed palette probe stays
-unchanged. Probe logs count their component commits, not descendant native style
-updates, and do not establish device frame-rate improvements.
+Inspect preference subscriptions with a development profiler when investigating
+updates. Component commits do not establish native frame-rate improvements.
 
 Titled page frames use one rectangular native blur backdrop. The title
 and Back remain sharp above it. Headers have no decorative variants or saved
@@ -76,18 +72,13 @@ factor. iOS ultra-thin system materials retain their native color treatment. See
 shared blur policy and capture-background requirements.
 Page titles and Home branding use the configured font and theme foreground.
 
-The **Components/Theme Tokens** story displays the active palette, text hierarchy,
-type ramp with line heights, surface layers, shapes, shared spacing, working
-button states and an editable field. Toggle the local field/submit error example
-to inspect icon-and-text feedback and paired error-container foregrounds.
-Choose `ux` or `system` and light/dark in the story's Controls. These previews do not
-send backend requests. Native font scaling, RTL, rendered contrast and keyboard
-behavior still require verification on matching iOS and Android builds.
+Use the app's component pages to inspect text, surfaces, spacing, buttons and field
+feedback. Native font scaling, RTL, rendered contrast and keyboard behavior require
+verification on matching iOS and Android builds.
 
-The **Wireframes/Preferences** story offers system/light/dark appearance,
-Reduce Motion, language, device permissions, haptic feedback, device location and
-app version. Template's Settings tab exposes that
-same page using the root's saved preferences; the app has no account screen.
+Template's Settings tab offers system/light/dark appearance, Reduce Motion,
+language, device permissions, haptic feedback, device location and app version
+using the root's saved preferences; the app has no account screen.
 
 ## Theme values
 
@@ -162,22 +153,15 @@ applies to the whole app immediately and is saved for the next launch. The
 System palette uses native colors; the separate System appearance option follows
 the device's light/dark setting.
 
-The Text showcase in **Wireframes/Component Gallery** has
-an isolated theme control and
-appearance control; these changes stay in memory and leave saved app preferences
-untouched. Leaving and reopening that page starts from the app's current choices.
-The color-sample area has its own explicit-scheme Host after the RN bridge;
-page chrome and the other text examples keep the app appearance. The retained
-native Storybook controls also operate on isolated providers.
+The Text component page follows the app appearance. Isolated theme compositions
+must use their own provider and pass an explicit scheme when re-entering native
+UI after an RN bridge.
 
 Template's Settings tab and Appearance component page use the root's saved appearance
 preference. Settings also exposes saved motion, language and device choices, with
 the same `PageScreen` frame as Home and Discover. Its native `FieldGroup` owns
 scrolling and keeps the final row clear of the raised dock action. Its
-permission/location modules load when the tab is first opened. Preferences in
-Storybook renders the same feature through an isolated appearance provider, so its
-theme controls do not persist app appearance. Language and device switches in
-that story use their real saved settings.
+permission/location modules load when the tab is first opened.
 
 ## Saved appearance
 

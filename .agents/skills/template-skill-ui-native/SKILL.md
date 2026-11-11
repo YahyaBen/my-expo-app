@@ -17,6 +17,8 @@ installed types in `node_modules/@expo/ui/src/universal/` before adding props.
 - Bound ScrollView's viewport, avoid nested scrolling on the same axis and keep
   refresh work in the feature. Use `RefreshableScrollView` for pull-to-refresh and
   a virtualized list for large datasets.
+- Keep viewport/Host padding at zero. Put scroll gutters on an inner Row/Column;
+  keep horizontal rails outside padded ancestors and inset nearby content separately.
 - RNHostView bridges RN artwork into native content. Supply a width constraint;
   percentage widths can collapse under intrinsic measurement. A native group
   inside that RN subtree needs one Host or an existing standalone hosted control.
@@ -46,4 +48,4 @@ Source: [native-fill-width declarations and adapters](../../../src/components/ui
   Set raw HStack/VStack spacing explicitly when zero is intended.
 
 Check direct-child weight, constrained fills, center/end alignment, RTL and large
-text with the [Native layout showcase](../../../.rnstorybook/components/catalog/native-preview.tsx).
+text with the [native layout example](../../../src/features/template/component-screen.tsx).

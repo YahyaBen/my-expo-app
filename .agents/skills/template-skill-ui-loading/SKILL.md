@@ -14,6 +14,8 @@ Source: [loading/](../../../src/components/ui/loading/).
 
 - Use `LoadingContent` inside an existing Host and `LoadingScreen` at a
   route/Suspense boundary. `ScreenError` presents route-error recovery.
+- Keep Hosts unpadded. Loading puts device insets in its native content group;
+  recovery reuses the shared page's scrolling and inset ownership.
 - Keep queries, prerequisites and retry work in the feature.
 - A disabled query waits for prerequisites; a paused query waits for connectivity.
   Neither is active loading.
@@ -40,8 +42,8 @@ Source: [loading/](../../../src/components/ui/loading/).
 - Root `testID` defaults to `empty-state`; descendants append `-title`,
   `-description`, `-primary`, `-secondary` and `-footer`. Use `titleTestID` and
   action `testID` overrides to preserve existing selectors during adoption.
-- The native Empty State stories cover paired actions, no actions, search results
-  and dark appearance. Verify RTL, large text, touch bounds and disabled actions
+- Check paired actions, no actions, search results and dark appearance.
+  Verify RTL, large text, touch bounds and disabled actions
   on matching iOS and Android builds.
 
 ## Native indicators
@@ -61,8 +63,7 @@ Import `LoadingIndicator`, `LoadingIndicatorProps`, `ProgressIndicator` and
 - Native animation needs no JS timer. Mount indicators only while work is active.
   Do not invent elapsed-time completion percentages.
 
-Use [Loading Indicator/Playground](../../../.rnstorybook/stories/components/loading-indicator.stories.tsx)
-and [Progress Indicator/Playground](../../../.rnstorybook/stories/components/progress-indicator.stories.tsx)
+Use the [loading examples](../../../src/features/template/component-screen.tsx)
 for native styles, progress updates, completion and explicit tint. Check actual
 rendering and accessibility separately on iOS and Android.
 
@@ -75,4 +76,4 @@ Without a prefix, preserve `query-error`, `query-retry`, `query-offline`,
 
 Check initial error, cached error, offline/disabled states, pending retry
 suppression and independent activation using the
-[Loading showcase](../../../.rnstorybook/components/catalog/loading-preview.tsx).
+[loading examples](../../../src/features/template/component-screen.tsx).

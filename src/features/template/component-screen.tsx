@@ -22,7 +22,6 @@ import {
   ListItem,
   LoadingContent,
   OtpBottomSheet,
-  PageFrame,
   PageScreen,
   PageSection,
   Picker,
@@ -39,10 +38,10 @@ import {
   TabNavigationBar,
   UniversalTextContent as Text,
   TextInput,
-  UniversalHost,
   VerificationCodeFace,
   nativeFillWidth,
   pageFormModifiers,
+  usePageHeaderInset,
   type DateTimePickerMode,
   type TabNavigationItemId,
 } from '@components/ui';
@@ -79,7 +78,6 @@ export default function ComponentScreen({ id }: Readonly<{ id?: string }>) {
 
 function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
   const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
   const title = t(`componentCatalog.names.${id}`);
 
   if (id === 'auth') {
@@ -114,39 +112,39 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
       </ListItem>
     ));
     return (
-      <PageFrame title={title} onBack={goBack}>
-        <UniversalHost
-          matchContents={false}
-          ignoreSafeArea="all"
-          style={{
-            flex: 1,
-            paddingBottom: insets.bottom,
-            paddingLeft: insets.left,
-            paddingRight: insets.right,
-          }}
-        >
-          {id === 'list' ? (
-            <List testID="component-list">
-              <PageSection>
-                <Text>{t(`componentCatalog.descriptions.${id}`)}</Text>
-              </PageSection>
+      <PageScreen title={title} onBack={goBack} scrollable={false}>
+        {id === 'list' ? (
+          <List testID="component-list">
+            <CollectionDescription description={t(`componentCatalog.descriptions.${id}`)} />
+            {rows}
+          </List>
+        ) : (
+          <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
+            <FieldGroup.Section title={title}>
+              <FieldGroup.SectionHeader>
+                <CollectionDescription description={t(`componentCatalog.descriptions.${id}`)} />
+              </FieldGroup.SectionHeader>
               {rows}
-            </List>
-          ) : (
-            <FieldGroup modifiers={pageFormModifiers} testID="component-field-group">
-              <FieldGroup.Section title={title}>
-                <FieldGroup.SectionHeader>
-                  <Text>{t(`componentCatalog.descriptions.${id}`)}</Text>
-                </FieldGroup.SectionHeader>
-                {rows}
-              </FieldGroup.Section>
-            </FieldGroup>
-          )}
-        </UniversalHost>
-      </PageFrame>
+            </FieldGroup.Section>
+          </FieldGroup>
+        )}
+      </PageScreen>
     );
   }
   return <ComponentExample id={id} title={title} />;
+}
+
+/** Header clearance belongs to the native list/form's scrolling content. */
+function CollectionDescription({ description }: Readonly<{ description: string }>) {
+  const headerInset = usePageHeaderInset();
+  return (
+    <Column
+      modifiers={nativeFillWidth}
+      style={{ paddingTop: headerInset, paddingBottom: spacing.lg }}
+    >
+      <Text>{description}</Text>
+    </Column>
+  );
 }
 
 /** A small, local native example; only the current destination is mounted. */
@@ -154,9 +152,19 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const window = useWindowDimensions();
+  const fullWidth =
+    id === 'chip' ||
+    id === 'table' ||
+    id === 'circular-carousel' ||
+    id === 'stacked-carousel' ||
+    id === 'story-list' ||
+    id === 'ios-home-grid';
   const width = Math.max(
     1,
-    Math.min(screenContentMaxWidth, window.width - insets.left - insets.right) - spacing.lg * 2,
+    Math.min(screenContentMaxWidth, window.width) -
+      insets.left -
+      insets.right -
+      (fullWidth ? 0 : spacing.lg * 2),
   );
   const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -226,7 +234,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
       case 'chip':
         return (
           <>
-            {result}
+            <PageSection style={{ paddingVertical: 0 }}>{result}</PageSection>
             <ChipExamples onAction={countAction} />
           </>
         );
@@ -549,7 +557,9 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
         description={t(`componentCatalog.descriptions.${id}`)}
         onRefresh={id === 'refreshable-scroll-view' ? async () => countAction() : undefined}
       >
-        <PageSection testID={`component-page-${id}`}>{content()}</PageSection>
+        <PageSection inset={!fullWidth} testID={`component-page-${id}`}>
+          {content()}
+        </PageSection>
       </PageScreen>
       {id === 'launch-screen' && open ? (
         <LaunchScreen mode="branded" exiting onExitComplete={() => setOpen(false)} />

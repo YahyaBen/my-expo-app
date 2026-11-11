@@ -36,7 +36,7 @@ start remote verification.
 - `faceSize` scales the 96-unit Skia drawing and its surrounding rotation space.
   Keep artwork helpers in this family; child selectors derive from `testID`.
 
-Use [native stories](../../../.rnstorybook/stories/components/verification-code-face.stories.tsx)
+Use the [verification-code example](../../../src/features/template/component-screen.tsx)
 to verify the controlled six-digit fixtures, supplied error/disabled states,
 completion counts, supported digit scripts, Reset, keyboard behavior, reduced
 motion, RTL and both appearances. The sample success code exists only in the

@@ -10,7 +10,7 @@ const HostColorSchemeContext = createContext<'light' | 'dark' | undefined>(undef
 type HostLayoutDirection = NonNullable<ComponentProps<typeof Host>['layoutDirection']>;
 const HostLayoutDirectionContext = createContext<HostLayoutDirection | undefined>(undefined);
 
-/** Nested native and RN boundaries retain explicit Storybook direction overrides. */
+/** Nested native and RN boundaries retain explicit direction overrides. */
 export function useHostLayoutDirection(preferredDirection?: HostLayoutDirection) {
   const inheritedDirection = useContext(HostLayoutDirectionContext);
   const appDirection = useLayoutDirection();
@@ -21,7 +21,7 @@ export function useHostLayoutDirection(preferredDirection?: HostLayoutDirection)
   );
 }
 
-/** Project content follows its owning Host, including deterministic story themes. */
+/** Project content follows its owning Host's color scheme. */
 export function useHostColorScheme(preferredScheme?: ColorSchemeName) {
   const inheritedScheme = useContext(HostColorSchemeContext);
   return useColorScheme(preferredScheme ?? inheritedScheme);

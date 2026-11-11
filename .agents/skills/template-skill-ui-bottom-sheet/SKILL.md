@@ -47,7 +47,7 @@ There are no modal style, snap-point, padding, ref or modifier props.
   Expo defaults unless dismissal is locked. The surface uses Host colors. Root app appearance controls the
   modal; an isolated Host override does not prove it.
 
-Use [Bottom Sheet/Playground](../../../.rnstorybook/stories/components/bottom-sheet.stories.tsx)
+Use the [bottom-sheet example](../../../src/features/template/component-screen.tsx)
 for the modal example. Verify close/reopen, native dismissal, scrolling to the
 final action, keyboard, Android Back, large text, appearance and RTL on both platforms.
 Static checks do not establish native behavior or animation performance.

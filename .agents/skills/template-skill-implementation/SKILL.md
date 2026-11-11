@@ -34,10 +34,10 @@ needed for the requested behavior; reuse the existing feature's structure.
 - Reuse existing providers and adapters. Avoid parallel theme/session/HTTP systems,
   generic repositories or dependency-injection layers for ordinary feature work.
 - Extend ESLint scopes through `restrictImports`; flat-config replacement must
-  preserve shared native-control, route and Storybook restrictions. See the
+  preserve shared native-control and route restrictions. See the
   [enforced boundaries](../../../docs/architecture.md#enforced-import-boundaries).
 
 Run lint, typecheck and formatting checks for edited files. Update native examples
-when reusable behavior changes; regenerate registration after story edits. There
+when reusable behavior changes. There
 is no automated service or UI test runner in this checkout. Report native-device
 and live-backend verification separately from static checks.

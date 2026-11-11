@@ -23,9 +23,16 @@ Source: [page/](../../../src/components/ui/page/).
   shared `tabBarRaisedHeight` clearance inside its final section when `tab` is set.
   Keep `description`, `actions` and `onRefresh` in the default page-scroll mode.
 - Use `PageFrame` for custom content boundaries; it owns header safe areas.
+- Keep `PageFrame`, page viewports and content Hosts free of content padding.
+  Header clearance and device insets belong inside ordinary scroll content;
+  bounded native forms reserve device safe areas with outer margins. Fixed
+  headers reserve space with an inner content margin while the blur target
+  and its background stay full-size.
 - Wrap ordinary content in `PageSection`: 16-point symmetric padding and gap.
   Use `inset={false}` when full-width content owns its gutters.
-- Native content Hosts cap at `screenContentMaxWidth` (640 points), centered on
+- Keep horizontal rails outside inset sections. Pad their inner content, and
+  inset adjacent labels/actions separately, so scrolling reaches the edges.
+- Native content Hosts cap at `screenContentMaxWidth` (1024 points), centered on
   wide displays. Keep frame backgrounds and header blur edge-to-edge.
 - Bounded Android page/form Hosts use `useViewportSizeMeasurement` to supply a
   nonzero initial Compose proposal before Yoga settles their viewport. Keep
@@ -34,7 +41,8 @@ Source: [page/](../../../src/components/ui/page/).
   28-point raised-button trailing clearance; the dock owns its row/system inset.
   Tab pages hide Back by default; explicit `showBack` can retain a pushed
   Template preview's Back action while keeping dock spacing.
-- Keep system insets outside keyboard padding and avoid nested scroll containers.
+- Keep keyboard overlap separate from device/header insets and avoid nested
+  scroll containers.
 
 ## Header
 
@@ -63,5 +71,5 @@ for controls such as maps. Untitled `scroll` frames reserve only the top safe ar
 Read [header rendering](references/page-guide.md) when changing blur or
 retained-screen behavior. Check actual native Back round trips,
 safe-area changes, RTL, large text and shield hit testing using
-[page-header stories](../../../.rnstorybook/stories/components/page-header.stories.tsx).
+[app component pages](../../../src/features/template/component-screen.tsx).
 Static checks do not establish native blur or gesture behavior.

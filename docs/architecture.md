@@ -1,10 +1,8 @@
 # Application architecture
 
 The template has a native dock, a modal component menu, app-facing
-component pages and a development-only Storybook entry.
-`/` redirects to `/storybook` in development unless explicitly disabled.
-`/?preview=true` lets transition stories push the real wireframe and return using
-native Back. Preview/production start at the Template page. Its center action opens
+component pages. All build variants start at the Template page through `/`.
+Its center action opens
 the shared native modal sheet with a translated empty state and Close action.
 The menu presenter stays mounted after its first open so native dismissal can finish.
 Component IDs/icons belong to `src/features/template/component-catalog.ts`;
@@ -37,8 +35,6 @@ header and Back.
 | Routes and native stack                 | `src/app/`                                                                      |
 | Template shell and component pages      | `src/features/template/`                                                        |
 | App settings and native device controls | `src/features/settings/`                                                        |
-| Development entry and flag              | `src/features/storybook/`, `src/config/developer-tools.ts`                      |
-| Stories and demonstration compositions  | `.rnstorybook/`                                                                 |
 | Shared native presentation              | `src/components/ui/`                                                            |
 | Preferences, language and direction     | Existing contexts, hooks and storage owners                                     |
 | Optional auth/form workflow kit         | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
@@ -70,15 +66,13 @@ transport and device-token mapping. Development Android installs also join the
 `all-testing-et` topic through Expo's topic API after OS permission is granted, on
 launch/resume and during Settings registration. The launch attempt waits for the
 permission request to finish. No custom messaging service, receiver or
-JavaScript background task is configured. Storybook also configures notification
-presentation for local examples. Template loads Settings
+JavaScript background task is configured. Template loads Settings
 when its tab first opens, keeping device helpers out of Home module evaluation.
 Discover shows offline editorial content. Component search lives in the
 Components tab. The center component menu uses the shared native modal sheet.
 Retained tab activities keep drafts and selection while cleaning
 up hidden effects. Settings reads permission state while visible, and requests
-OS access or a one-shot location only after the matching action. The same feature
-serves the Preferences story under its isolated appearance provider.
+OS access or a one-shot location only after the matching action.
 
 Optional auth/query/service helpers are retained for future features and are not
 mounted by the starter. A consuming auth flow supplies its own verification
@@ -101,24 +95,19 @@ rule replacement must preserve the shared restrictions.
   secure storage or query transport configuration.
 - Services do not depend on feature presentation, UI components or UI contexts.
 - Entity repositories do not own React rendering, navigation, cache policy or native storage.
-- Schemas, DTOs, mappers, query keys and preview flags remain pure.
+- Schemas, DTOs, mappers and query keys remain pure.
 - UI implementations import concrete siblings, avoiding their own public barrel.
 - Auth refresh keeps its raw transport independent of authenticated interceptors and the auth repository.
-- Storybook imports stay in `.rnstorybook/` and its narrow feature entry. Native
-  control restrictions cover both stories and supporting preview compositions.
 
-Storybook compositions and fixtures remain behind the development boundary.
-App-facing component pages use public UI directly, without importing Storybook.
-The runtime guard, Metro integration and conditional registration import keep
-developer tooling out of releases. Verify both native graphs after entry/Metro changes; see
-[the catalog boundary](storybook.md#release-boundary).
+App-facing component pages use public UI directly. Verify both native graphs
+after entry/Metro changes to keep developer tooling out of releases.
 
 ## Brand and services
 
 The Node brand resolver validates assets and native references; app modules read
 only its public projection. Static asset registries keep Metro imports literal.
 The root palette comes from the manifest; preview theme providers are isolated.
-Language/device switches in the Preferences story can persist actual settings.
+Language/device switches in Settings persist actual settings.
 
 API helpers retain validated contracts, request cancellation, secure session
 storage, generation guards, token rotation and cache maintenance. Backend URLs

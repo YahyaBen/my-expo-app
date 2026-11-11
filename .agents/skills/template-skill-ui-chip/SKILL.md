@@ -23,6 +23,6 @@ Source: [chip/](../../../src/components/ui/chip/).
 - Preserve native sizing, large text and Host appearance. These adapters provide
   equivalent interactions; native shape, padding and colors differ.
 
-Use [Chip/Playground](../../../.rnstorybook/stories/components/chip.stories.tsx)
+Use the [chip examples](../../../src/features/template/chip-examples.tsx)
 for selection, removal, disabled guards, translated labels and live RTL. Verify
 VoiceOver/TalkBack selection announcements and actual touch bounds on devices.

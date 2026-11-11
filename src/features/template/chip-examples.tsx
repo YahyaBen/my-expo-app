@@ -2,6 +2,7 @@ import {
   ButtonContent,
   Chip,
   Column,
+  PageSection,
   Row,
   ScrollView,
   Switch,
@@ -37,16 +38,18 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
   return (
     <Column spacing={spacing.xxl} modifiers={nativeFillWidth}>
       <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-        <Text variant="subtitle">{t('componentCatalog.chips.multiple')}</Text>
-        <Text variant="caption" tone="muted">
-          {t('componentCatalog.chips.multipleHint')}
-        </Text>
-        <Switch
-          label={t('componentCatalog.chips.disableSelection')}
-          value={disabled}
-          onValueChange={setDisabled}
-          testID="component-chip-disable-selection"
-        />
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          <Text variant="subtitle">{t('componentCatalog.chips.multiple')}</Text>
+          <Text variant="caption" tone="muted">
+            {t('componentCatalog.chips.multipleHint')}
+          </Text>
+          <Switch
+            label={t('componentCatalog.chips.disableSelection')}
+            value={disabled}
+            onValueChange={setDisabled}
+            testID="component-chip-disable-selection"
+          />
+        </PageSection>
         <ChipRail testID="component-chip-filters">
           {topics.map((topic) => (
             <Chip
@@ -68,48 +71,52 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
             />
           ))}
         </ChipRail>
-        <Text testID="component-chip-selection-count">
-          {t('componentCatalog.chips.selectionCount', {
-            selected: selectedTopics.length,
-            total: topics.length,
-          })}
-        </Text>
-        <Text variant="caption" testID="component-chip-selection-state">
-          {t(`componentCatalog.chips.selectionStates.${selectionState}`)}
-        </Text>
-        <Text variant="caption" tone="muted" testID="component-chip-selected-values">
-          {t('componentCatalog.chips.selectedValues', {
-            labels: selectedTopics.length
-              ? selectedTopics.map(topicLabel).join(' · ')
-              : t('common.none'),
-          })}
-        </Text>
-        <Row spacing={spacing.md} modifiers={nativeFillWidth}>
-          <Column modifiers={nativeRowWeight}>
-            <ButtonContent
-              variant="secondary"
-              label={t('componentCatalog.chips.selectAll')}
-              disabled={disabled || selectionState === 'all'}
-              fullWidth
-              onPress={() => replaceSelection(topics)}
-              testID="component-chip-select-all"
-            />
-          </Column>
-          <Column modifiers={nativeRowWeight}>
-            <ButtonContent
-              variant="secondary"
-              label={t('componentCatalog.chips.clearAll')}
-              disabled={disabled || selectionState === 'none'}
-              fullWidth
-              onPress={() => replaceSelection([])}
-              testID="component-chip-clear-all"
-            />
-          </Column>
-        </Row>
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          <Text testID="component-chip-selection-count">
+            {t('componentCatalog.chips.selectionCount', {
+              selected: selectedTopics.length,
+              total: topics.length,
+            })}
+          </Text>
+          <Text variant="caption" testID="component-chip-selection-state">
+            {t(`componentCatalog.chips.selectionStates.${selectionState}`)}
+          </Text>
+          <Text variant="caption" tone="muted" testID="component-chip-selected-values">
+            {t('componentCatalog.chips.selectedValues', {
+              labels: selectedTopics.length
+                ? selectedTopics.map(topicLabel).join(' · ')
+                : t('common.none'),
+            })}
+          </Text>
+          <Row spacing={spacing.md} modifiers={nativeFillWidth}>
+            <Column modifiers={nativeRowWeight}>
+              <ButtonContent
+                variant="secondary"
+                label={t('componentCatalog.chips.selectAll')}
+                disabled={disabled || selectionState === 'all'}
+                fullWidth
+                onPress={() => replaceSelection(topics)}
+                testID="component-chip-select-all"
+              />
+            </Column>
+            <Column modifiers={nativeRowWeight}>
+              <ButtonContent
+                variant="secondary"
+                label={t('componentCatalog.chips.clearAll')}
+                disabled={disabled || selectionState === 'none'}
+                fullWidth
+                onPress={() => replaceSelection([])}
+                testID="component-chip-clear-all"
+              />
+            </Column>
+          </Row>
+        </PageSection>
       </Column>
 
       <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-        <Text variant="subtitle">{t('componentCatalog.chips.single')}</Text>
+        <PageSection style={{ paddingVertical: 0 }}>
+          <Text variant="subtitle">{t('componentCatalog.chips.single')}</Text>
+        </PageSection>
         <ChipRail testID="component-chip-single-options">
           {topics.map((topic) => (
             <Chip
@@ -125,16 +132,20 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
             />
           ))}
         </ChipRail>
-        <Text variant="caption" testID="component-chip-single-value">
-          {t('componentCatalog.chips.selectedValues', { labels: topicLabel(single) })}
-        </Text>
+        <PageSection style={{ paddingVertical: 0 }}>
+          <Text variant="caption" testID="component-chip-single-value">
+            {t('componentCatalog.chips.selectedValues', { labels: topicLabel(single) })}
+          </Text>
+        </PageSection>
       </Column>
 
       <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-        <Text variant="subtitle">{t('componentCatalog.chips.input')}</Text>
-        <Text variant="caption" tone="muted">
-          {t('componentCatalog.chips.inputHint')}
-        </Text>
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          <Text variant="subtitle">{t('componentCatalog.chips.input')}</Text>
+          <Text variant="caption" tone="muted">
+            {t('componentCatalog.chips.inputHint')}
+          </Text>
+        </PageSection>
         {tokens.length ? (
           <ChipRail testID="component-chip-inputs">
             {topics
@@ -157,26 +168,30 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
               ))}
           </ChipRail>
         ) : (
-          <Text testID="component-chip-input-empty">{t('componentCatalog.chips.empty')}</Text>
+          <PageSection style={{ paddingVertical: 0 }}>
+            <Text testID="component-chip-input-empty">{t('componentCatalog.chips.empty')}</Text>
+          </PageSection>
         )}
-        <Text variant="caption" testID="component-chip-input-count">
-          {t('componentCatalog.chips.tokenCount', { count: tokens.length })}
-        </Text>
-        <ButtonContent
-          variant="secondary"
-          label={t('componentCatalog.chips.restoreAll')}
-          disabled={tokens.length === topics.length}
-          fullWidth
-          onPress={() => {
-            setTokens(topics);
-            onAction();
-          }}
-          testID="component-chip-restore-all"
-        />
-        <Text variant="label">{t('componentCatalog.chips.suggestion')}</Text>
-        <Text variant="caption" tone="muted">
-          {t('componentCatalog.chips.suggestionHint')}
-        </Text>
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          <Text variant="caption" testID="component-chip-input-count">
+            {t('componentCatalog.chips.tokenCount', { count: tokens.length })}
+          </Text>
+          <ButtonContent
+            variant="secondary"
+            label={t('componentCatalog.chips.restoreAll')}
+            disabled={tokens.length === topics.length}
+            fullWidth
+            onPress={() => {
+              setTokens(topics);
+              onAction();
+            }}
+            testID="component-chip-restore-all"
+          />
+          <Text variant="label">{t('componentCatalog.chips.suggestion')}</Text>
+          <Text variant="caption" tone="muted">
+            {t('componentCatalog.chips.suggestionHint')}
+          </Text>
+        </PageSection>
         <ChipRail testID="component-chip-suggestions">
           {topics.map((topic) => (
             <Chip
@@ -197,7 +212,7 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
         </ChipRail>
       </Column>
 
-      <Column spacing={spacing.md} modifiers={nativeFillWidth}>
+      <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
         <Text variant="subtitle">{t('componentCatalog.chips.assist')}</Text>
         <Text variant="caption" tone="muted">
           {t('componentCatalog.chips.assistHint')}
@@ -208,16 +223,20 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
           onPress={onAction}
           testID="component-chip-assist"
         />
-      </Column>
+      </PageSection>
 
       <Column spacing={spacing.md} modifiers={nativeFillWidth}>
-        <Text variant="subtitle">{t('componentCatalog.chips.disabled')}</Text>
-        <Text variant="caption" tone="muted">
-          {t('componentCatalog.chips.disabledHint')}
-        </Text>
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          <Text variant="subtitle">{t('componentCatalog.chips.disabled')}</Text>
+          <Text variant="caption" tone="muted">
+            {t('componentCatalog.chips.disabledHint')}
+          </Text>
+        </PageSection>
         {(['filter', 'input'] as const).map((variant) => (
           <Column key={variant} spacing={spacing.sm} modifiers={nativeFillWidth}>
-            <Text variant="label">{t(`componentCatalog.chips.variants.${variant}`)}</Text>
+            <PageSection style={{ paddingVertical: 0 }}>
+              <Text variant="label">{t(`componentCatalog.chips.variants.${variant}`)}</Text>
+            </PageSection>
             <ChipRail testID={`component-chip-disabled-${variant}`}>
               {[false, true].map((selected) => (
                 <Chip
@@ -233,16 +252,18 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
             </ChipRail>
           </Column>
         ))}
-        {(['assist', 'suggestion'] as const).map((variant) => (
-          <Chip
-            key={variant}
-            variant={variant}
-            label={t(`componentCatalog.chips.variants.${variant}`)}
-            disabled
-            onPress={onAction}
-            testID={`component-chip-disabled-${variant}`}
-          />
-        ))}
+        <PageSection spacing={spacing.md} style={{ paddingVertical: 0 }}>
+          {(['assist', 'suggestion'] as const).map((variant) => (
+            <Chip
+              key={variant}
+              variant={variant}
+              label={t(`componentCatalog.chips.variants.${variant}`)}
+              disabled
+              onPress={onAction}
+              testID={`component-chip-disabled-${variant}`}
+            />
+          ))}
+        </PageSection>
       </Column>
     </Column>
   );
@@ -251,7 +272,7 @@ export function ChipExamples({ onAction }: Readonly<{ onAction: () => void }>) {
 function ChipRail({ children, testID }: Readonly<{ children: ReactNode; testID: string }>) {
   return (
     <ScrollView direction="horizontal" modifiers={nativeFillWidth} testID={testID}>
-      <Row spacing={spacing.sm} alignment="center">
+      <Row spacing={spacing.sm} alignment="center" style={{ paddingHorizontal: spacing.lg }}>
         {children}
       </Row>
     </ScrollView>

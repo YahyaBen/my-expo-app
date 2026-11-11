@@ -1,8 +1,7 @@
 # Live LTR / RTL
 
-Arabic selected in **Wireframes/Preferences** applies RTL; French and English
-apply LTR. Language changes preserve mounted drafts and navigation. Explicit
-direction controls in native Storybook provide session-only layout previews.
+Arabic selected in Settings applies RTL; French and English apply LTR.
+Language changes preserve mounted drafts and navigation.
 
 `LayoutDirectionProvider` updates Expo Router's public `LocaleProvider` and the
 root React Native view's `direction`. Every `UniversalHost` receives an explicit
@@ -10,9 +9,8 @@ root React Native view's `direction`. Every `UniversalHost` receives an explicit
 reload APIs: global direction changes require a subsequent app launch.
 
 `PageFrame` retains a title/back header and consumes the top safe area once;
-content owns the remaining edges. Isolated stories and sheets use distinct
-direction-control selectors. Native sheets cover the page while presented; the direction
-composition story includes an in-sheet switch for that scenario.
+content owns the remaining edges. Native sheets cover the page while presented;
+check direction changes while a sheet is open.
 
 Compose content in the shared Expo UI Row / Column controls. Use logical start /
 end offsets for React Native alignment. Keep physical safe-area insets and map
@@ -26,9 +24,7 @@ Use the shared `BottomSheet` export from `@components/ui`. Expo's universal shee
 creates its own native Host; the shared wrapper bridges content back through a
 `UniversalHost` so open sheets follow theme and direction changes.
 
-Current native fixtures include [page RTL](../.rnstorybook/stories/components/page-screen.stories.tsx),
-[tab direction](../.rnstorybook/stories/components/navigation.stories.tsx) and
-[live button direction](../.rnstorybook/stories/components/button.stories.tsx).
+Use the app's component pages and tab navigation for direction checks.
 Check draft preservation, open-sheet updates, native appearance, text cursor/focus
 and back gestures manually on iOS and Android. Preserve the existing selectors;
 this template has no automated test suite.

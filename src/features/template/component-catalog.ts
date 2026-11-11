@@ -1,6 +1,6 @@
 import type { IconName } from '@components/ui';
 
-/** App destinations and categories, independent of Storybook and translated names. */
+/** App destinations and categories, independent of translated names. */
 export const componentCategories = [
   {
     id: 'layout',

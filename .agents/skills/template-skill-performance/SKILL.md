@@ -31,8 +31,8 @@ Make the smallest supported change. Preserve native behavior, RTL, accessibility
 drafts and selectors. Repeat the interaction; retain raw samples, sample counts,
 median/p90 and boundaries, then derive budgets from the baseline.
 
-Run lint, typecheck and formatting checks. Regenerate registration after fixture
-edits; inspect both release graphs after entry/tooling changes. Keep developer
+Run lint, typecheck and formatting checks. Inspect both release graphs after
+entry/tooling changes. Keep developer
 probes out of releases and this template free of automated test suites.
 
 Report static/export, native-device and live-backend verification separately.

@@ -4,6 +4,7 @@ import {
   Column,
   EmptyState,
   Icon,
+  PageSection,
   Popover,
   Row,
   Table,
@@ -140,29 +141,31 @@ export function TableExamples({
 
   return (
     <Column spacing={spacing.lg} modifiers={nativeFillWidth}>
-      <Text variant="heading">{t('componentCatalog.tables.title')}</Text>
-      <Text variant="caption" tone="muted">
-        {t('componentCatalog.tables.hint')}
-      </Text>
-      <TextInput
-        value={search}
-        onChangeText={(next) => {
-          setSearch(next);
-          setPopoverId(null);
-        }}
-        label={t('componentCatalog.tables.search')}
-        placeholder={t('componentCatalog.tables.searchPlaceholder')}
-        autoCapitalize="none"
-        autoCorrect={false}
-        returnKeyType="search"
-        testID="component-table-search"
-      />
-      <Text variant="caption" testID="component-table-result-count">
-        {t('componentCatalog.tables.resultCount', {
-          visible: visiblePayments.length,
-          total: payments.length,
-        })}
-      </Text>
+      <PageSection style={{ paddingVertical: 0 }}>
+        <Text variant="heading">{t('componentCatalog.tables.title')}</Text>
+        <Text variant="caption" tone="muted">
+          {t('componentCatalog.tables.hint')}
+        </Text>
+        <TextInput
+          value={search}
+          onChangeText={(next) => {
+            setSearch(next);
+            setPopoverId(null);
+          }}
+          label={t('componentCatalog.tables.search')}
+          placeholder={t('componentCatalog.tables.searchPlaceholder')}
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyType="search"
+          testID="component-table-search"
+        />
+        <Text variant="caption" testID="component-table-result-count">
+          {t('componentCatalog.tables.resultCount', {
+            visible: visiblePayments.length,
+            total: payments.length,
+          })}
+        </Text>
+      </PageSection>
       <Table
         rows={visiblePayments}
         columns={columns}
@@ -270,45 +273,47 @@ export function TableExamples({
           </Popover>
         )}
       />
-      <Text variant="caption" tone="muted" testID="component-table-selection-count">
-        {t('componentCatalog.tables.selectionCount', {
-          selected: visibleSelectedCount,
-          total: visiblePayments.length,
-        })}
-      </Text>
-      <ButtonContent
-        variant="tertiary"
-        label={t('componentCatalog.tables.clearSelection')}
-        disabled={readOnly || selectedKeys.length === 0}
-        onPress={() => setSelectedKeys([])}
-        testID="component-table-clear-selection"
-      />
-      <Text variant="caption" tone="muted">
-        {t('showcase.tableGallery.scrollHint')}
-      </Text>
-      {feedback && (
-        <Text testID="component-table-feedback">
-          {t('componentCatalog.tables.statusUpdated', {
-            email: feedback.email,
-            status: t('componentCatalog.tables.statuses.' + feedback.status),
+      <PageSection style={{ paddingVertical: 0 }}>
+        <Text variant="caption" tone="muted" testID="component-table-selection-count">
+          {t('componentCatalog.tables.selectionCount', {
+            selected: visibleSelectedCount,
+            total: visiblePayments.length,
           })}
         </Text>
-      )}
-      <ButtonContent
-        variant="secondary"
-        label={t('componentCatalog.tables.reset')}
-        fullWidth
-        disabled={readOnly}
-        onPress={() => {
-          setPayments(initialPayments);
-          setSearch('');
-          setSelectedKeys([]);
-          setSortDirection(null);
-          setPopoverId(null);
-          setFeedback(null);
-        }}
-        testID="component-table-reset"
-      />
+        <ButtonContent
+          variant="tertiary"
+          label={t('componentCatalog.tables.clearSelection')}
+          disabled={readOnly || selectedKeys.length === 0}
+          onPress={() => setSelectedKeys([])}
+          testID="component-table-clear-selection"
+        />
+        <Text variant="caption" tone="muted">
+          {t('showcase.tableGallery.scrollHint')}
+        </Text>
+        {feedback && (
+          <Text testID="component-table-feedback">
+            {t('componentCatalog.tables.statusUpdated', {
+              email: feedback.email,
+              status: t('componentCatalog.tables.statuses.' + feedback.status),
+            })}
+          </Text>
+        )}
+        <ButtonContent
+          variant="secondary"
+          label={t('componentCatalog.tables.reset')}
+          fullWidth
+          disabled={readOnly}
+          onPress={() => {
+            setPayments(initialPayments);
+            setSearch('');
+            setSelectedKeys([]);
+            setSortDirection(null);
+            setPopoverId(null);
+            setFeedback(null);
+          }}
+          testID="component-table-reset"
+        />
+      </PageSection>
     </Column>
   );
 }

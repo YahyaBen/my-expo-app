@@ -61,11 +61,11 @@ before adding motion.
   may still be pending. Measurement failures cannot block the frame.
 - Keep scene backgrounds opaque and use theme background to prevent outgoing text
   appearing through incoming navigation scenes.
-- Use `native-back-return` with its multiline title, a scrolled page and a draft.
-  Push the shorter wireframe header, then return repeatedly using both Back
+- Check a multiline title, a scrolled page and a draft.
+  Push a shorter page header, then return repeatedly using both Back
   controls. Check the transition's final frame, retained title height and blur,
   then repeat with Reduce Motion, RTL and large text.
 - Check Back round trips, retained drafts/scroll, live blur restoration, Reduce
   Transparency, layout changes and covered/uncovered taps on both platforms.
-- Use the `change-header-style` story to toggle title presence, blur and header
+- Toggle title presence, blur and header
   mode without resetting its native content, draft, counters or scroll state.

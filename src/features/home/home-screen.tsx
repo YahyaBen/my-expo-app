@@ -25,7 +25,7 @@ import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { screenContentMaxWidth } from '@/constants/layout';
+import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useThemeColors } from '@/hooks/use-theme';
 import { homeStories, type HomeStory } from './home-stories';
@@ -54,17 +54,17 @@ const recommendationPreviewCount = 6;
 /** Product-style sample home, composed in the existing native page and dock. */
 export default function HomeScreen({
   title,
-  showBack,
   onBrowseComponents,
-}: Readonly<{ title: string; showBack: boolean; onBrowseComponents: () => void }>) {
+}: Readonly<{ title: string; onBrowseComponents: () => void }>) {
   const { t } = useTranslation();
   const colors = useThemeColors(useHostColorScheme());
   const { width, height, fontScale } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const contentWidth = Math.max(
+  const viewportWidth = Math.max(
     1,
-    Math.min(width - insets.left - insets.right, screenContentMaxWidth) - 32,
+    Math.min(width, screenContentMaxWidth) - insets.left - insets.right,
   );
+  const contentWidth = Math.max(1, viewportWidth - spacing.lg * 2);
   const compact = contentWidth < 340 || fontScale > 1.3;
   const [selectedStory, setSelectedStory] = useState<HomeStory>(homeStories[0]);
   const [storyOpen, setStoryOpen] = useState(false);
@@ -79,11 +79,11 @@ export default function HomeScreen({
   }
 
   return (
-    <PageScreen tab title={title} showBack={showBack}>
-      <PageSection testID="template-wireframe" spacing={24}>
+    <PageScreen tab title={title}>
+      <PageSection testID="template-wireframe" spacing={spacing.xl}>
         <DateTimeBanner />
         <TesterThanks width={contentWidth} />
-        <Column spacing={8} modifiers={nativeFillWidth}>
+        <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
           <UniversalTextContent variant="caption" tone="muted" textStyle={{ letterSpacing: 1.8 }}>
             {t('home.eyebrow')}
           </UniversalTextContent>
@@ -99,17 +99,19 @@ export default function HomeScreen({
             {'Consectetur adipiscing elit. Ut enim ad minim veniam.'}
           </UniversalTextContent>
         </Column>
+      </PageSection>
 
-        <FeaturedStories width={contentWidth} onOpen={openStory} />
+      <PageSection inset={false}>
+        <FeaturedStories width={viewportWidth} onOpen={openStory} />
       </PageSection>
 
       <PageSection
-        spacing={20}
-        style={{ backgroundColor: colors.surfaceVariant, paddingVertical: 24 }}
+        spacing={spacing.xl}
+        style={{ backgroundColor: colors.surfaceVariant, paddingVertical: spacing.xl }}
         testID="home-recommendations"
       >
-        <Row alignment="center" spacing={8} modifiers={nativeFillWidth}>
-          <Column spacing={4} modifiers={nativeRowWeight}>
+        <Row alignment="center" spacing={spacing.sm} modifiers={nativeFillWidth}>
+          <Column spacing={spacing.xs} modifiers={nativeRowWeight}>
             <UniversalTextContent variant="title">{t('home.forYou')}</UniversalTextContent>
             <UniversalTextContent variant="caption" tone="muted">
               {t('home.collectionCount', { count: homeStories.length })}
@@ -134,8 +136,17 @@ export default function HomeScreen({
         />
       </PageSection>
 
-      <PageSection spacing={20} style={{ paddingVertical: 24 }} testID="home-latest">
-        <Column spacing={4} modifiers={nativeFillWidth}>
+      <PageSection
+        inset={false}
+        spacing={spacing.xl}
+        style={{ paddingVertical: spacing.xl }}
+        testID="home-latest"
+      >
+        <Column
+          spacing={spacing.xs}
+          modifiers={nativeFillWidth}
+          style={{ paddingHorizontal: spacing.lg }}
+        >
           <UniversalTextContent variant="title">{t('home.latest')}</UniversalTextContent>
           <UniversalTextContent variant="body" tone="muted">
             {'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
@@ -143,12 +154,12 @@ export default function HomeScreen({
         </Column>
         <StoryList
           items={latestPhotos}
-          width={contentWidth}
+          width={viewportWidth}
           accessibilityLabel={t('home.latest')}
           onIndexChange={(index) => setLatestIndex(index)}
           testID="home-story-list"
         />
-        <Column spacing={8} modifiers={nativeFillWidth}>
+        <PageSection spacing={spacing.sm} style={{ paddingVertical: 0 }}>
           <UniversalTextContent variant="subtitle">{latest.title}</UniversalTextContent>
           <UniversalTextContent variant="body" tone="muted">
             {latest.description}
@@ -159,26 +170,32 @@ export default function HomeScreen({
             onPress={() => openStory(latest)}
             testID={`home-latest-${latest.id}`}
           />
-        </Column>
-        <Column
-          spacing={12}
-          modifiers={nativeFillWidth}
-          style={{ padding: 20, borderRadius: 20, backgroundColor: colors.surfaceVariant }}
-          testID="home-discover-more"
-        >
-          <Icon name={icons.components} size={28} />
-          <UniversalTextContent variant="subtitle">{t('home.discoverMore')}</UniversalTextContent>
-          <UniversalTextContent variant="body" tone="muted">
-            {'Lorem ipsum dolor sit amet. Duis aute irure dolor in reprehenderit.'}
-          </UniversalTextContent>
-          <ButtonContent
-            variant="secondary"
-            fullWidth
-            label={t('home.browseComponents')}
-            onPress={onBrowseComponents}
-            testID="home-browse-components"
-          />
-        </Column>
+        </PageSection>
+        <PageSection style={{ paddingVertical: 0 }}>
+          <Column
+            spacing={spacing.md}
+            modifiers={nativeFillWidth}
+            style={{
+              padding: spacing.lg,
+              borderRadius: 20,
+              backgroundColor: colors.surfaceVariant,
+            }}
+            testID="home-discover-more"
+          >
+            <Icon name={icons.components} size={28} />
+            <UniversalTextContent variant="subtitle">{t('home.discoverMore')}</UniversalTextContent>
+            <UniversalTextContent variant="body" tone="muted">
+              {'Lorem ipsum dolor sit amet. Duis aute irure dolor in reprehenderit.'}
+            </UniversalTextContent>
+            <ButtonContent
+              variant="secondary"
+              fullWidth
+              label={t('home.browseComponents')}
+              onPress={onBrowseComponents}
+              testID="home-browse-components"
+            />
+          </Column>
+        </PageSection>
       </PageSection>
 
       <BottomSheet
@@ -188,8 +205,8 @@ export default function HomeScreen({
         testID="home-story-sheet"
       >
         <ScrollView style={{ height: Math.max(1, Math.min(height * 0.72, 680)) }}>
-          <Column spacing={16} modifiers={nativeFillWidth} style={{ paddingBottom: 24 }}>
-            <Row alignment="center" spacing={12} modifiers={nativeFillWidth}>
+          <PageSection style={{ paddingBottom: spacing.xl }}>
+            <Row alignment="center" spacing={spacing.md} modifiers={nativeFillWidth}>
               <Column modifiers={nativeRowWeight}>
                 <Badge label={t(`home.categories.${selectedStory.category}`)} variant="secondary" />
               </Column>
@@ -217,7 +234,7 @@ export default function HomeScreen({
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.'
               }
             </UniversalTextContent>
-          </Column>
+          </PageSection>
         </ScrollView>
       </BottomSheet>
     </PageScreen>
@@ -229,7 +246,7 @@ function TesterThanks({ width }: Readonly<{ width: number }>) {
   const colors = useThemeColors(useHostColorScheme());
   const animate = useMotionEnabled();
   const animation = useRef<LottieView>(null);
-  const artworkSize = Math.max(1, Math.min(180, width - 40));
+  const artworkSize = Math.max(1, Math.min(180, width - spacing.lg * 2));
 
   useFocusEffect(
     useCallback(() => {
@@ -243,9 +260,9 @@ function TesterThanks({ width }: Readonly<{ width: number }>) {
   return (
     <Column
       alignment="center"
-      spacing={12}
+      spacing={spacing.md}
       modifiers={nativeFillWidth}
-      style={{ padding: 20, borderRadius: 24, backgroundColor: colors.surfaceVariant }}
+      style={{ padding: spacing.lg, borderRadius: 24, backgroundColor: colors.surfaceVariant }}
       testID="home-tester-thanks"
     >
       <RNHostView matchContents>
@@ -290,14 +307,14 @@ function StoryGrid({
 }>) {
   const { t } = useTranslation();
   const columns = compact ? 1 : 2;
-  const tileWidth = compact ? width : (width - 16) / 2;
+  const tileWidth = compact ? width : (width - spacing.lg) / 2;
 
   return (
-    <Column spacing={24} modifiers={nativeFillWidth}>
+    <Column spacing={spacing.xl} modifiers={nativeFillWidth}>
       {Array.from({ length: Math.ceil(stories.length / columns) }, (_, row) => (
-        <Row key={row} spacing={16} modifiers={nativeFillWidth}>
+        <Row key={row} spacing={spacing.lg} modifiers={nativeFillWidth}>
           {stories.slice(row * columns, (row + 1) * columns).map((story) => (
-            <Column key={story.id} spacing={10} style={{ width: tileWidth }}>
+            <Column key={story.id} spacing={spacing.md} style={{ width: tileWidth }}>
               <HomePhoto
                 photoId={story.photoId}
                 width={tileWidth}
@@ -336,8 +353,13 @@ function FeaturedStories({
   const story = homeStories[index];
 
   return (
-    <Column spacing={16} modifiers={nativeFillWidth} testID="home-featured">
-      <Row spacing={12} alignment="center" modifiers={nativeFillWidth}>
+    <Column spacing={spacing.lg} modifiers={nativeFillWidth} testID="home-featured">
+      <Row
+        spacing={spacing.md}
+        alignment="center"
+        modifiers={nativeFillWidth}
+        style={{ paddingHorizontal: spacing.lg }}
+      >
         <Column modifiers={nativeRowWeight}>
           <UniversalTextContent variant="subtitle">{t('home.featured')}</UniversalTextContent>
         </Column>
@@ -347,12 +369,17 @@ function FeaturedStories({
         <StackedCarousel
           items={featuredPhotos}
           width={width}
+          itemWidth={Math.min(width - spacing.lg * 2, 480)}
           accessibilityLabel={t('home.featured')}
           onIndexChange={(nextIndex) => setIndex(nextIndex)}
           testID="home-stacked-carousel"
         />
       </Column>
-      <Column spacing={8} modifiers={nativeFillWidth}>
+      <Column
+        spacing={spacing.sm}
+        modifiers={nativeFillWidth}
+        style={{ paddingHorizontal: spacing.lg }}
+      >
         <UniversalTextContent variant="caption" tone="muted">
           {`${t(`home.categories.${story.category}`)} · ${t('home.readTime', { count: story.minutes })}`}
         </UniversalTextContent>
@@ -361,13 +388,15 @@ function FeaturedStories({
           {story.description}
         </UniversalTextContent>
       </Column>
-      <ButtonContent
-        variant="primary"
-        fullWidth
-        label={t('home.readStory')}
-        onPress={() => onOpen(story)}
-        testID="home-featured-open"
-      />
+      <Column modifiers={nativeFillWidth} style={{ paddingHorizontal: spacing.lg }}>
+        <ButtonContent
+          variant="primary"
+          fullWidth
+          label={t('home.readStory')}
+          onPress={() => onOpen(story)}
+          testID="home-featured-open"
+        />
+      </Column>
     </Column>
   );
 }
@@ -385,11 +414,11 @@ function HomePhoto({
     return (
       <Column
         alignment="center"
-        spacing={8}
+        spacing={spacing.sm}
         style={{
           width,
           height,
-          paddingVertical: 16,
+          paddingVertical: spacing.lg,
           backgroundColor: colors.surfaceVariant,
           borderRadius: 16,
         }}

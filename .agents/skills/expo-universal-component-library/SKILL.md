@@ -1,6 +1,6 @@
 ---
 name: expo-universal-component-library
-description: Maintain shared native component architecture, theme tokens and Storybook coverage.
+description: Maintain shared native component architecture, theme tokens and component examples.
 ---
 
 # Shared component library
@@ -20,16 +20,13 @@ contracts; this skill does not prescribe their props or feature workflows.
 - Use semantic tokens from `src/constants/themes/`. Read
   [theme ownership](references/theme.md) when changing token resolution, a palette
   or inherited native appearance.
-- Add or update a deterministic native story for changed reusable behavior. Use
-  production components, explicit preview state and stable selectors on actual
-  controls. Compound slots can use a focused composition story.
-- Keep Storybook imports in `.rnstorybook/` and `src/features/storybook/`.
-  The development entry, runtime guard and Metro integration exclude fixtures from releases. Follow
-  the existing [preview workflow](../../../docs/storybook.md).
+- Add or update the app's native component examples for changed reusable behavior.
+  Use production components, explicit local state and stable selectors on actual
+  controls. Keep example compositions in `src/features/template/`.
 - On SDK/UI upgrades, inspect installed types and both platform adapters. Remove
   a workaround only after reproducing its original case on matching native builds.
 
-Run lint and typecheck; regenerate registration after story edits. Check affected
+Run lint and typecheck. Check affected
 native behavior on both platforms, including light/dark, live RTL, large text,
 disabled states and touch bounds. Inspect both release graphs after entry/Metro
-changes. Registration, screenshots and JS mocks do not establish native behavior.
+changes. Static checks, screenshots and JS mocks do not establish native behavior.

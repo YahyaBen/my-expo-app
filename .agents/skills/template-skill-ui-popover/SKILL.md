@@ -21,6 +21,6 @@ Source: [popover/](../../../src/components/ui/popover/).
 - testID addresses the anchor wrapper; presented content appends -content.
   Give trigger and content actions their own stable selectors.
 
-Use [Popover/Playground](../../../.rnstorybook/stories/components/popover.stories.tsx)
+Use the [popover example](../../../src/features/template/component-screen.tsx)
 for open/close, repeated actions, retained caller state and RTL. Verify outside
 and Back dismissal, focus, large text, edge positioning and theme on both devices.

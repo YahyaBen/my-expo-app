@@ -11,7 +11,7 @@ export function ComponentCategoryList({
 }: Readonly<{ onSelect: (id: ComponentCategoryId) => void }>) {
   const { t } = useTranslation();
   return (
-    <Column spacing={0} modifiers={nativeFillWidth}>
+    <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
       {componentCategories.map(({ id, icon }) => (
         <ListItem
           key={id}

@@ -4,8 +4,7 @@
 
 The Expo SDK 58 release renders the
 [template screen](../src/features/template/template-screen.tsx), component pages
-and an on-demand Settings feature. Storybook's isolated previews and stress
-fixtures stay development-only. Settings native permission/location integrations
+and an on-demand Settings feature. Settings native permission/location integrations
 are evaluated when that tab is opened. Optional
 auth/query providers are not mounted by the release root.
 
@@ -44,21 +43,21 @@ measurements remain pending.
    first-open cost when deferring work. Twenty launches per startup condition are
    a useful initial sample.
 
-## Native fixtures and regression checks
+## Native regression checks
 
-Use the [Storybook workflow](storybook.md). Fixture registration establishes
-availability; it does not establish device results.
+Use app screens and component pages for manual checks. Add representative datasets
+to a local development harness when measurements need larger workloads.
 
-| Fixture                                                      | Check                                                                                                                                                                                                                                                                        |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Performance/Native Lists/Playground                          | Compare eager native scrolling, FlashList and native ListForEach with 24/200/1,000 mixed-height multilingual rows. Inspect mounted rows, native Host cost, fast-fling gaps and settled memory.                                                                               |
-| Components/Theme Tokens/Playground, `example: subscriptions` | After startup settles, change one preference and inspect the matching `[theme-subscription]` committed-update logs.                                                                                                                                                          |
-| Native input and OTP examples                                | Type, reject, reset, paste/autofill and dismiss while pending. Preserve focus, drafts, callbacks, countdown lifetime and duplicate-request guards. Local simulations do not verify a backend.                                                                                |
-| Wireframes/Preferences                                       | Reopen, return from system Settings and toggle location. Check permission refresh, retryable writes, request cleanup and language-sheet dismissal.                                                                                                                           |
-| Wireframes/Template                                          | Repeat Components/Settings switches after the first visit. Check retained scroll/drafts, header blur restoration, absence of narrow initial text and hidden permission/motion work. Capture menu closed, opening, settled open and closed again separately on the same page. |
-| Motion/Transitions/NativeStack and PausedContent             | Repeat push/Back and background/resume. Restore blur, touch shielding, drafts and scroll position; pause decorative work while hidden.                                                                                                                                       |
-| Components/Launch Screen/Playground                          | Let the visible hold elapse before clearing waiting. Check that preparation overlaps the hold without restarting it.                                                                                                                                                         |
-| Home photo stories                                           | Use carousel datasets `large-200`/`large-1000` and grid counts 200/1,000. Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return.                        |
+| Scenario                      | Check                                                                                                                                                                                                                                        |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Native lists                  | Compare eager scrolling, FlashList and native ListForEach with representative mixed-height multilingual data. Inspect mounted rows, native Host cost, fast-fling gaps and settled memory.                                                    |
+| Theme preferences             | After startup settles, change one preference and inspect committed updates.                                                                                                                                                                  |
+| Native input and OTP examples | Type, reject, reset, paste/autofill and dismiss while pending. Preserve focus, drafts, callbacks, countdown lifetime and duplicate-request guards. Local simulations do not verify a backend.                                                |
+| Settings                      | Reopen, return from system Settings and toggle location. Check permission refresh, retryable writes, request cleanup and language-sheet dismissal.                                                                                           |
+| Template tabs and menu        | Repeat Components/Settings switches after the first visit. Check retained scroll/drafts, header blur restoration and hidden permission/motion work. Capture menu closed, opening, settled open and closed again separately on the same page. |
+| Navigation and activity       | Repeat push/Back and background/resume. Restore blur, touch shielding, drafts and scroll position; pause decorative work while hidden.                                                                                                       |
+| Launch screen                 | Check that preparation overlaps the visible hold without restarting it.                                                                                                                                                                      |
+| Photo components              | Check forward/reverse swipes, snaps, overlapping-card order, resize alignment and source replacement. Exercise later-row expansion, drag/cancel/close and thumbnail return with representative large datasets.                               |
 
 Repeat affected paths in Arabic/RTL, large text, both appearances and Reduce Motion.
 Check keyboard and safe areas after layout changes. Headers use one rectangular
@@ -67,14 +66,14 @@ when React Activity hides and reveals retained screens.
 
 The [photo viewport](../src/components/ui/photo/photo-scroll-view.tsx) owns the carousel
 window and geometry alignment. Measure its initial and retained windows rather
-than treating the current settings as a device budget. The large-grid fixture uses
-a bounded viewport with one vertical scroll owner; small inline grids stay eager.
+than treating the current settings as a device budget. Large grids need a bounded
+viewport with one vertical scroll owner; small inline grids stay eager.
 Preserve the grid's native image-display handoff and selection cleanup when cells
 unmount. Component contracts live in the matching entries in the
 [skill index](skills.md).
 
-Photo fixtures repeat twelve offline payloads. They exercise view lifetime, not
-unique-media decoding or network cost. Windowing does not evict native image caches
+Offline photo examples do not establish unique-media decoding or network cost.
+Windowing does not evict native image caches
 or bound caller data; measure cache/decoder memory separately from mounted views.
 
 ## Startup boundaries
@@ -111,10 +110,9 @@ per screen instance; an initial React commit may still render null for fonts.
 ## Verification and results
 
 - **Static:** run `npm run lint`, `npm run typecheck` and formatting checks; validate
-  local documentation links. Regenerate registration after fixture edits. Keep
+  local documentation links. Keep
   this template free of automated test suites.
-- **Export:** inspect both native release graphs after entry/tooling changes using
-  the [release boundary workflow](storybook.md#release-boundary). Developer probes
+- **Export:** inspect both native release graphs after entry/tooling changes. Developer probes
   must be absent. `--no-bytecode` can inspect the graph when Hermes is unavailable;
   it does not validate bytecode or replace a native build.
 - **Native device:** repeat the affected interactions and before/after measurements.

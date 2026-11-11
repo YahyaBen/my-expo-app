@@ -41,6 +41,6 @@ Sources: [field-group/](../../../src/components/ui/field-group/) and
 - Form state, validation and preference persistence belong to existing owners.
   Showcase controls use local values and an isolated appearance.
 
-Use the [showcase](../../../.rnstorybook/components/catalog/field-group-preview.tsx)
-in **Wireframes/Component Gallery**. Verify final-row reachability, header scrolling,
+Use the [component examples](../../../src/features/template/component-screen.tsx).
+Verify final-row reachability, header scrolling,
 keyboard access, grouping, control names and live RTL on both platforms.

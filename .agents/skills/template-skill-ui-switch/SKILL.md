@@ -24,6 +24,6 @@ Source: [switch.tsx](../../../src/components/ui/switch/switch.tsx).
 - There are no `checked`, `onChange`, `style`, `color`, `loading` or
   children props.
 
-Use the [showcase](../../../.rnstorybook/components/catalog/switch-preview.tsx)
-in **Wireframes/Component Gallery**. Verify label activation, disabled on/off states,
+Use the [switch example](../../../src/features/template/component-screen.tsx).
+Verify label activation, disabled on/off states,
 native spoken state, RTL and large-text wrapping.

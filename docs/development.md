@@ -16,19 +16,15 @@ configure native behavior through app configuration and plugins.
 
 ## Commands
 
-| Command                           | Purpose                                       |
-| --------------------------------- | --------------------------------------------- |
-| `npm start`                       | Open Storybook in a native development client |
-| `npm run storybook:dev`           | Same development catalog                      |
-| `npm run start:app`               | Open the neutral wireframe instead            |
-| `npm run android` / `npm run ios` | Local native run with installed toolchains    |
-| `npm run storybook:generate`      | Refresh story registration                    |
-| `npm run check`                   | Typecheck, lint and formatting                |
-| `npx expo-doctor`                 | Check Expo configuration/dependency health    |
+| Command                           | Purpose                                     |
+| --------------------------------- | ------------------------------------------- |
+| `npm start`                       | Open the app in a native development client |
+| `npm run android` / `npm run ios` | Local native run with installed toolchains  |
+| `npm run check`                   | Typecheck, lint and formatting              |
+| `npx expo-doctor`                 | Check Expo configuration/dependency health  |
 
 No automated tests or test scripts are included. Preserve `testID` props and
-explicit selectors in stories for later device inspection. See
-[Storybook](storybook.md) for the catalog and release bundle checks.
+explicit selectors in native examples for later device inspection.
 
 Edit app-owned theme values directly in the existing TypeScript theme/layout
 files, then run `npm run check`. See
@@ -46,17 +42,15 @@ For a cloned starter's EAS build, set the manifest's `eas.owner` and
 works for local development. Production requires a project ID. See
 [build profiles](eas-development-builds.md) for account access and signing.
 
-| Variable                        | Meaning                                                                             |
-| ------------------------------- | ----------------------------------------------------------------------------------- |
-| `APP_BRAND`                     | Registered manifest; defaults to `template`                                         |
-| `APP_VARIANT`                   | `development` (default), `preview` or `production`                                  |
-| `EXPO_PUBLIC_STORYBOOK_ENABLED` | Development defaults to enabled; exact `false` disables it; release always disabled |
-| `EXPO_PUBLIC_API_URL`           | Optional backend for retained API helpers; production requires HTTPS when set       |
+| Variable              | Meaning                                                                       |
+| --------------------- | ----------------------------------------------------------------------------- |
+| `APP_BRAND`           | Registered manifest; defaults to `template`                                   |
+| `APP_VARIANT`         | `development` (default), `preview` or `production`                            |
+| `EXPO_PUBLIC_API_URL` | Optional backend for retained API helpers; production requires HTTPS when set |
 
-No `.env.local` is required. The launch scripts override only their own child
-process's preview flags and development variant. EAS profiles select their own
-variant/flag. Public variables are bundled and must not contain secrets.
-`EXPO_PUBLIC_ENABLE_DEV_SCREENS` is obsolete and unused.
+No `.env.local` is required. The launch script selects the development variant
+for its child process. EAS profiles select their own variant. Public variables
+are bundled and must not contain secrets.
 
 For a different product, change the manifest's name, slug, scheme, native IDs and
 assets as needed. The manifest defines production identity; development and preview
@@ -71,24 +65,24 @@ store-update check blocks starter startup.
 
 ## App and catalog ownership
 
-`src/app/index.tsx` selects the wireframe or redirects to Storybook. The root owns
+`src/app/index.tsx` opens the template screen. The root owns
 fonts, preference/language hydration, launch readiness, native navigation motion
 and feedback hosting. It mounts no authentication or query provider. Helpers for
 HTTP, auth, forms and session-safe queries remain available for future features,
 with no live backend configured by default.
 
-Reusable native UI lives in `src/components/ui/`. All example compositions,
-including Home sections and device preferences, live in `.rnstorybook/components/`.
-Use native stories to browse and interact. Components receive data and callbacks;
+Reusable native UI lives in `src/components/ui/`. App examples live in
+`src/features/template/`; Home and Settings own their feature compositions.
+Use the Components tab to browse and interact. Components receive data and callbacks;
 future routes/screens stay in `src/app/` and `src/features/` respectively.
 
 ## Verification
 
-Run lint, typecheck, formatting and story generation for edits. Check both native
+Run lint, typecheck and formatting for edits. Check both native
 release graphs after tooling-entry changes. Keep static results separate from
 device results and live-backend results. Manual device checks include cold start,
 safe areas, dark mode, RTL, large text, keyboard, native Back, gestures, reduced
-motion and background/resume. Builds/registration do not prove those behaviors.
+motion and background/resume. Static checks and builds do not prove those behaviors.
 
 ## Dependency audit follow-up
 

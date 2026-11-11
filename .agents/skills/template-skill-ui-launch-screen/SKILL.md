@@ -40,5 +40,5 @@ Startup state belongs to the root; this component owns presentation.
   and minimal `app-launch-minimal` selectors.
 
 Verify the configured brand, cold start, font fallback, background
-resume and reduced motion on native devices. Story registration does not verify
+resume and reduced motion on native devices. Static checks do not verify
 startup timing or rendering.

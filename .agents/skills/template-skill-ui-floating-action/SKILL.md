@@ -24,6 +24,6 @@ Source: [floating-action/](../../../src/components/ui/floating-action/).
 - Consumers own placement, navigation and async guards. Preserve shared
   props/theme resolution plus existing iOS/Android adapters and declaration.
 
-Use [native stories](../../../.rnstorybook/stories/components/floating-action.stories.tsx)
+Use the [floating-action example](../../../src/features/template/component-screen.tsx)
 to verify edge taps, single activation, disabled suppression, repeated actions,
 named focus and keyboard visibility on iOS/Android.

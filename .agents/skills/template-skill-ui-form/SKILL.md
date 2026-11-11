@@ -39,6 +39,6 @@ existing Host. Source: [form/](../../../src/components/ui/form/).
 - Connect the feature's validated submit handler. Schemas, requests, pending
   ownership and duplicate-submission guards stay in the feature.
 
-Use [auth stories](../../../.rnstorybook/stories/forms/auth-screen.stories.tsx)
+Use the [form examples](../../../src/features/template/form-examples.tsx)
 to verify resets, error focus, password visibility, optional-ID omission and
 pending recovery.

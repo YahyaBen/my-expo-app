@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, Platform, View } from 'react-native';
 import { getAppBrand } from '@/config/brand';
 import { getBrandFonts } from '@/config/brand-assets';
-import { storybookEnabled } from '@/config/developer-tools';
 import { navigationTheme } from '@/constants/navigation-theme';
 import { stackMotionOptions, stackRouteDepth } from '@/constants/navigation-motion';
 import { LanguageProvider, useLanguage } from '@/context/language.context';
@@ -197,9 +196,6 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
         <Stack.Screen name="components/category/[id]" />
         <Stack.Screen name="settings/app-icon" />
         <Stack.Screen name="table/[id]" />
-        <Stack.Protected guard={storybookEnabled}>
-          <Stack.Screen name="storybook" />
-        </Stack.Protected>
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
