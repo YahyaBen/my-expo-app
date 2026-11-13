@@ -12,4 +12,6 @@ export type BottomSheetBaseProps = {
 export type BottomSheetProps = BottomSheetBaseProps & {
   presentation?: 'modal';
   contentHeight?: number;
+  /** Present at a single fraction of the available height, greater than 0 and at most 1. */
+  heightFraction?: number;
 };

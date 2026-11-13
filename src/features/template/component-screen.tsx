@@ -2,6 +2,7 @@ import { screenContentMaxWidth, spacing } from '@/constants/layout';
 import { showAlert } from '@/lib/alerts';
 import { horizontalSafeAreaInset } from '@/lib/screen-insets';
 import {
+  AppearanceTransitionControl,
   AuthScreenFrame,
   Badge,
   BottomSheet,
@@ -80,6 +81,8 @@ export default function ComponentScreen({ id }: Readonly<{ id?: string }>) {
 function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
   const { t } = useTranslation();
   const title = t(`componentCatalog.names.${id}`);
+
+  if (id === 'google-map') return <GoogleMapExample title={title} />;
 
   if (id === 'auth') {
     return (
@@ -182,8 +185,6 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
 
   function content() {
     switch (id) {
-      case 'google-map':
-        return <GoogleMapExample width={width} />;
       case 'button':
         return (
           <>
@@ -425,6 +426,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
               isPresented={open}
               onDismiss={() => setOpen(false)}
               testID="component-bottom-sheet"
+              heightFraction={0.65}
             >
               <Column spacing={spacing.lg} style={{ padding: spacing.xl, width }}>
                 <Text variant="title">{title}</Text>
@@ -496,7 +498,14 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           </>
         );
       case 'appearance':
-        return <ColorSchemeControl testID="component-appearance" />;
+        return (
+          <>
+            <Text>{t('settings.themeTransition')}</Text>
+            <AppearanceTransitionControl testID="component-appearance-transition" />
+            <Text>{t('common.colorScheme')}</Text>
+            <ColorSchemeControl testID="component-appearance" />
+          </>
+        );
       case 'launch-screen':
         return (
           <ButtonContent
@@ -544,6 +553,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
       // These destinations have their own native scroll/frame above.
       case 'auth':
       case 'field-group':
+      case 'google-map':
       case 'list':
         return null;
     }
@@ -576,11 +586,11 @@ function PhotoExample({ layout, width }: Readonly<{ layout: PhotoLayout; width: 
 }
 
 /** Keep map integration out of catalog startup. */
-function GoogleMapExample({ width }: Readonly<{ width: number }>) {
+function GoogleMapExample({ title }: Readonly<{ title: string }>) {
   const GoogleMapExamples: typeof import('./google-map-examples').GoogleMapExamples =
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- Evaluate the native integration only on this destination.
     require('./google-map-examples').GoogleMapExamples;
-  return <GoogleMapExamples width={width} />;
+  return <GoogleMapExamples title={title} onBack={goBack} />;
 }
 
 function IconExamples() {

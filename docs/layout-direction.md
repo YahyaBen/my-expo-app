@@ -1,6 +1,6 @@
 # Live LTR / RTL
 
-Arabic selected in Settings applies RTL; French and English apply LTR.
+Arabic selected in Settings applies RTL; all other supported languages apply LTR.
 Language changes preserve mounted drafts and navigation.
 
 `LayoutDirectionProvider` updates Expo Router's public `LocaleProvider` and the

@@ -12,8 +12,14 @@ export {
 } from '@expo/ui';
 
 export * from './alert/alert';
-export { AppearanceTransition } from './appearance/appearance-transition';
+export {
+  AppearanceTransition,
+  SnapshotReveal,
+  useAppearanceTransitionOrigin,
+  type SnapshotRevealFrame,
+} from './appearance/appearance-transition';
 export * from './appearance/color-scheme-control';
+export * from './appearance/appearance-transition-control';
 export * from './appearance/theme-control';
 export * from './auth/auth-screen-frame';
 export * from './badge/badge';

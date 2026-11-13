@@ -9,12 +9,21 @@ export type { BottomSheetProps } from './bottom-sheet.types';
 
 export function BottomSheet(props: Readonly<BottomSheetProps>) {
   const colors = useThemeColors(useHostColorScheme());
-  const { children, isPresented, onDismiss, testID, contentHeight, dismissible = true } = props;
+  const {
+    children,
+    isPresented,
+    onDismiss,
+    testID,
+    contentHeight,
+    heightFraction,
+    dismissible = true,
+  } = props;
   return (
     <NativeBottomSheet
       isPresented={isPresented}
       onDismiss={onDismiss}
       dismissible={dismissible}
+      heightFraction={heightFraction}
       testID={testID}
       containerColor={colors.surface}
       contentColor={colors.text}

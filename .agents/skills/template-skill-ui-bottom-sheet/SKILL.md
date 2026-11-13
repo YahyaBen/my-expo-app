@@ -33,7 +33,13 @@ button inside the content.
 
 Omit `presentation` or use `presentation="modal"`. Optional finite positive
 `contentHeight` bounds content, not native detents or outer sheet height.
-There are no modal style, snap-point, padding, ref or modifier props.
+Optional `heightFraction` (greater than 0 and at most 1) presents the sheet at one
+fraction of the available native height. Use a bounded fill-size content root;
+iOS uses a single detent and Android sizes the content while skipping its partially
+expanded state. Keep Android's outer modal unconstrained so its anchors use the full
+window. Fractional Android sheets require an existing UniversalHost. Omit
+`contentHeight` when content should fill that presentation.
+There are no modal style, snap-point array, padding, ref or modifier props.
 
 - Expo owns modal presentation and supplies a Host at an RN boundary. Use a
   single native layout root such as a Column for content with multiple children.
@@ -43,7 +49,7 @@ There are no modal style, snap-point, padding, ref or modifier props.
   do not force intrinsic content with flex: 1.
 - For long content, give contentHeight and the native ScrollView viewport the
   same responsive height before presenting. Keep inner content intrinsic.
-- Native safe areas, corners, padding, drag indicator and expanded states use
+- Native safe areas, corners, padding, drag indicator and default expanded states use
   Expo defaults unless dismissal is locked. The surface uses Host colors. Root app appearance controls the
   modal; an isolated Host override does not prove it.
 

@@ -1,7 +1,8 @@
 import { Column, Row } from '@expo/ui';
 import { LinearGradient } from 'expo-linear-gradient';
+import type { Ref } from 'react';
 import { Icon, type IconName } from '../icon/icon';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type ViewInstance } from 'react-native';
 import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { useThemeColors } from '@/hooks/use-theme';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
@@ -37,6 +38,8 @@ export type TabNavigationBarProps = {
   colorScheme?: 'light' | 'dark';
   /** Caller-owned swipe progress: 0 is visible, 1 is hidden. */
   hideProgress?: SharedValue<number>;
+  /** Native control frame centered on the floating action, for the app's theme reveal. */
+  appearanceOriginRef?: Ref<ViewInstance>;
 };
 
 const icons = {
@@ -67,6 +70,7 @@ export function TabNavigationBar({
   rightInset = 0,
   colorScheme,
   hideProgress,
+  appearanceOriginRef,
 }: Readonly<TabNavigationBarProps>) {
   const scheme = useHostColorScheme(colorScheme);
   const colors = useThemeColors(scheme);
@@ -170,6 +174,8 @@ export function TabNavigationBar({
         <View testID="tab-dock-surface" pointerEvents="none" style={dockStyle} />
       )}
       <View
+        ref={appearanceOriginRef}
+        collapsable={false}
         testID="tab-dock-controls"
         style={{
           paddingHorizontal: horizontalInset,

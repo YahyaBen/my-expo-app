@@ -35,7 +35,7 @@ export function LanguageProvider({ children }: Readonly<PropsWithChildren>) {
     function applyLanguage() {
       const language = getCurrentLanguage();
       setDirection(language === 'ar' ? 'rtl' : 'ltr');
-      z.config(z.locales[language]());
+      z.config(z.locales[language === 'zh' ? 'zhCN' : language]());
     }
     i18n.on('languageChanged', applyLanguage);
     // A remounted root must restore the latest queued selection, just like appearance.

@@ -26,7 +26,7 @@
       },
       "personalize": {
         "title": "Trouvez le style de votre app",
-        "description": "Dans Réglages, découvrez les thèmes, l’apparence claire et sombre, ainsi que le français, l’anglais et l’arabe."
+        "description": "Dans Réglages, découvrez les thèmes, l’apparence claire et sombre, ainsi que les langues disponibles."
       }
     }
   },
@@ -55,6 +55,7 @@
     }
   },
   "updates": {
+    "description": "Gardez {{appName}} à jour. Suivez les étapes ci-dessous pour installer la mise à jour disponible et continuer à utiliser l’app.",
     "title": "Mises à jour",
     "installed": "Version installée",
     "installedVersion": "Version {{version}} (build {{build}})",
@@ -100,6 +101,12 @@
     "english": "Anglais",
     "french": "Français",
     "arabic": "Arabe",
+    "chinese": "Chinois simplifié",
+    "spanish": "Espagnol",
+    "turkish": "Turc",
+    "korean": "Coréen",
+    "japanese": "Japonais",
+    "hindi": "Hindi",
     "lightMode": "Mode clair",
     "darkMode": "Mode sombre",
     "manageAccount": "Gérer le compte",
@@ -250,6 +257,13 @@
     "tab": "Réglages",
     "title": "Paramètres de l’application",
     "appearance": "Apparence",
+    "themeTransition": "Transition du thème",
+    "transitions": {
+      "circular": "Circulaire",
+      "kurohitsugi": "Kurohitsugi",
+      "yhwach": "Yhwach",
+      "dangai": "Ichigo Dangai"
+    },
     "appIcon": "Icône de l’application",
     "appIconRed": "Rouge",
     "appIconHint": "Balayez pour choisir une icône, puis touchez Appliquer.",

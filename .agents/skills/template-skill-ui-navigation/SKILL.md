@@ -20,12 +20,18 @@ Source: [navigation/](../../../src/components/ui/navigation/).
 - Optional caller-owned `hideProgress` is a Reanimated shared number: 0 is visible,
   1 is hidden. The dock slides out and releases its row/system-inset reservation;
   its parent must clip offscreen content. Omitting it keeps the dock visible.
+- Optional `appearanceOriginRef` exposes the native controls frame, whose center
+  matches the raised floating action. The template shell uses it as the theme
+  reveal's origin; component previews omit it. Attach it to the existing
+  non-collapsible React Native controls `View`, whose ref supports
+  `measureInWindow`, rather than the Expo `Host` wrapper.
 - Route state and sheet state stay in the consumer.
 
 Template's shell follows native scroll geometry on iOS 18+ and observes vertical
 content swipes alongside Compose on Android, with direction thresholds to avoid
 jitter. Earlier iOS keeps the dock visible. Android follows finger movement,
-not momentum; horizontal gestures do not trigger hiding. The
+not momentum; horizontal gestures do not trigger hiding. Hide/reveal transitions
+take 520 ms in either direction. The
 shell restores the dock on tab/focus/viewport changes and keeps it visible in
 Settings, with open menus/keyboards, Reduce Motion or a screen reader. Keep swipe
 coordination in the shell; do not replace native scroll owners.

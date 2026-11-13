@@ -8,6 +8,7 @@ import { useAppReducedMotion } from '@/hooks/use-motion-enabled';
 import { useAppTheme } from '@/hooks/use-theme';
 import i18n, { SUPPORTED_LANGUAGES, type Language } from '@/lib/i18n';
 import {
+  AppearanceTransitionControl,
   BottomSheet,
   ColorSchemeControl,
   Column,
@@ -20,6 +21,7 @@ import {
   PageScreen,
   PageSection,
   Row,
+  ScrollView,
   Switch,
   UniversalTextContent as Text,
   ThemeControl,
@@ -39,6 +41,12 @@ const languageKeys: Record<Language, string> = {
   fr: 'common.french',
   en: 'common.english',
   ar: 'common.arabic',
+  zh: 'common.chinese',
+  es: 'common.spanish',
+  tr: 'common.turkish',
+  ko: 'common.korean',
+  ja: 'common.japanese',
+  hi: 'common.hindi',
 };
 const languageLabel = (language: Language) => i18n.getFixedT(language)(languageKeys[language]);
 
@@ -79,9 +87,8 @@ function SettingsPage({
   const { t } = useTranslation();
   const direction = useLayoutDirection();
   const { colors } = useAppTheme();
-  const { width, height: windowHeight, fontScale } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
   const stackPickers = Platform.OS === 'android' && (width < 360 || fontScale > 1.2);
-  const languageListHeight = Math.min(320, windowHeight * 0.45);
   const changeLanguage = languageReady ? onLanguageChange : undefined;
   const [languageOpen, setLanguageOpen] = useState(false);
   const device = useDevicePermissions();
@@ -155,6 +162,9 @@ function SettingsPage({
               </SettingsPickerRow>
               <SettingsPickerRow label={t('common.colorScheme')} stacked={stackPickers}>
                 <ColorSchemeControl testID="app-settings-color-scheme-picker" />
+              </SettingsPickerRow>
+              <SettingsPickerRow label={t('settings.themeTransition')} stacked={stackPickers}>
+                <AppearanceTransitionControl />
               </SettingsPickerRow>
               {allowAppIconChange ? (
                 <ListItem.FieldRow
@@ -408,13 +418,14 @@ function SettingsPage({
           <BottomSheet
             isPresented={languageOpen}
             onDismiss={() => setLanguageOpen(false)}
+            heightFraction={0.9}
             testID="app-settings-language-sheet"
           >
-            <PageSection>
-              <Text variant="title" testID="app-settings-language-title">
-                {t('common.language')}
-              </Text>
-              <Column modifiers={nativeFillWidth} style={{ height: languageListHeight }}>
+            <ScrollView modifiers={nativeFillSize} testID="app-settings-language-scroll">
+              <PageSection>
+                <Text variant="title" testID="app-settings-language-title">
+                  {t('common.language')}
+                </Text>
                 <FieldGroup.Section>
                   {SUPPORTED_LANGUAGES.map((value) => (
                     <ListItem.FieldRow
@@ -444,8 +455,8 @@ function SettingsPage({
                     </ListItem.FieldRow>
                   ))}
                 </FieldGroup.Section>
-              </Column>
-            </PageSection>
+              </PageSection>
+            </ScrollView>
           </BottomSheet>
         </Column>
       </Column>

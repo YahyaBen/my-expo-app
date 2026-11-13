@@ -80,7 +80,7 @@ export function useTabBarAutoHide(activeId: TabNavigationItemId, menuOpen: boole
     const nextHidden = distance < 0;
     if (hidden.get() === nextHidden) return;
     hidden.set(nextHidden);
-    progress.set(withTiming(nextHidden ? 1 : 0, { duration: 220 }));
+    progress.set(withTiming(nextHidden ? 1 : 0, { duration: 520 }));
   };
 
   const onScrollGeometryChange: NonNullable<PageScreenProps['onScrollGeometryChange']> = (
@@ -107,7 +107,7 @@ export function useTabBarAutoHide(activeId: TabNavigationItemId, menuOpen: boole
     previousY.set(offset);
     if (offset <= 0 && hidden.get()) {
       hidden.set(false);
-      progress.set(withTiming(0, { duration: 220 }));
+      progress.set(withTiming(0, { duration: 520 }));
       travel.set(0);
     } else {
       updateVisibility(delta);

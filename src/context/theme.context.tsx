@@ -14,9 +14,17 @@ const REDUCED_MOTION_STORAGE_KEY = 'appReducedMotion';
 const TAB_BAR_AUTO_HIDE_STORAGE_KEY = 'appTabBarAutoHide';
 const APPEARANCE_STORAGE_KEY = 'appColorScheme';
 const THEME_STORAGE_KEY = 'appTheme';
+const TRANSITION_STORAGE_KEY = 'appAppearanceTransition';
 let preferencePersistence = Promise.resolve();
 
 export type ColorSchemePreference = AppColorScheme | 'system';
+export type AppearanceTransitionStyle = 'circular' | 'kurohitsugi' | 'yhwach' | 'dangai';
+
+function isAppearanceTransitionStyle(value: unknown): value is AppearanceTransitionStyle {
+  return (
+    value === 'circular' || value === 'kurohitsugi' || value === 'yhwach' || value === 'dangai'
+  );
+}
 
 function isColorSchemePreference(value: unknown): value is ColorSchemePreference {
   return value === 'system' || value === 'light' || value === 'dark';
@@ -33,6 +41,8 @@ interface ThemeSettings {
   setThemeId: (theme: ThemeId) => void;
   setColorScheme: (scheme: ColorSchemePreference) => void;
   appearanceReady: boolean;
+  transitionStyle: AppearanceTransitionStyle;
+  setTransitionStyle: (style: AppearanceTransitionStyle) => void;
   motionReady: boolean;
   reducedMotion: boolean | null;
   setReducedMotion: (reduced: boolean) => void;
@@ -44,7 +54,15 @@ const PaletteContext = createContext<
   Pick<ThemeSettings, 'themeId' | 'setThemeId' | 'themeSelectionEnabled'> | undefined
 >(undefined);
 const AppearanceContext = createContext<
-  Pick<ThemeSettings, 'colorScheme' | 'setColorScheme' | 'appearanceReady'> | undefined
+  | Pick<
+      ThemeSettings,
+      | 'colorScheme'
+      | 'setColorScheme'
+      | 'appearanceReady'
+      | 'transitionStyle'
+      | 'setTransitionStyle'
+    >
+  | undefined
 >(undefined);
 const MotionContext = createContext<
   | Pick<
@@ -82,6 +100,7 @@ export function ThemePreferencesProvider({
 >) {
   const [themeId, updateThemeId] = useState(initialTheme);
   const [colorScheme, updateColorScheme] = useState(initialColorScheme);
+  const [transitionStyle, updateTransitionStyle] = useState<AppearanceTransitionStyle>('circular');
   const [appearanceReady, setAppearanceReady] = useState(!persistAppearance);
   const [reducedMotion, updateReducedMotion] = useState(initialReducedMotion);
   const [tabBarAutoHideEnabled, updateTabBarAutoHideEnabled] = useState(true);
@@ -92,13 +111,17 @@ export function ThemePreferencesProvider({
     let active = true;
     // A remounted root must read after any previous selection has finished saving.
     void preferencePersistence
-      .then(() => AsyncStorage.multiGet([APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY]))
-      .then(([appearance, palette]) => {
+      .then(() =>
+        AsyncStorage.multiGet([APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY, TRANSITION_STORAGE_KEY]),
+      )
+      .then(([appearance, palette, transition]) => {
         if (!active) return;
         const storedScheme = appearance?.[1];
         const storedTheme = palette?.[1];
         if (isColorSchemePreference(storedScheme)) updateColorScheme(storedScheme);
         if (allowThemeSelection && isThemeId(storedTheme)) updateThemeId(storedTheme);
+        const storedTransition = transition?.[1];
+        if (isAppearanceTransitionStyle(storedTransition)) updateTransitionStyle(storedTransition);
       })
       .catch(() => {
         /* Retain the initial appearance when local storage is unavailable. */
@@ -163,6 +186,20 @@ export function ThemePreferencesProvider({
     },
     [appearanceReady, persistAppearance],
   );
+  const setTransitionStyle = useCallback(
+    (style: AppearanceTransitionStyle) => {
+      if (!appearanceReady || !isAppearanceTransitionStyle(style)) return;
+      updateTransitionStyle(style);
+      if (persistAppearance) {
+        preferencePersistence = preferencePersistence
+          .then(() => AsyncStorage.setItem(TRANSITION_STORAGE_KEY, style))
+          .catch(() => {
+            /* Retain the selected transition for this session when storage is unavailable. */
+          });
+      }
+    },
+    [appearanceReady, persistAppearance],
+  );
   const setReducedMotion = useCallback(
     (reduced: boolean) => {
       if (!motionReady) return;
@@ -197,8 +234,8 @@ export function ThemePreferencesProvider({
     [themeId, setThemeId, themeSelectionEnabled],
   );
   const appearance = useMemo(
-    () => ({ colorScheme, setColorScheme, appearanceReady }),
-    [colorScheme, setColorScheme, appearanceReady],
+    () => ({ colorScheme, setColorScheme, appearanceReady, transitionStyle, setTransitionStyle }),
+    [colorScheme, setColorScheme, appearanceReady, transitionStyle, setTransitionStyle],
   );
   const motion = useMemo(
     () => ({

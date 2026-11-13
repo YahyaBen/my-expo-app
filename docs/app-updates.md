@@ -8,6 +8,8 @@ and waits while another update operation is running. No background task or
 persisted update state is added.
 
 A native sheet requires an available update before the app can be used again.
+The prompt occupies 65% of the available height, with scrollable instructions
+above the update action and a footer showing the app name and installed version.
 It has no Later or Cancel action, drag handle, swipe dismissal, backdrop dismissal
 or Android Back dismissal. It stays open during download, after download until
 restart, and after an action fails so the user can retry. Settings keeps a manual

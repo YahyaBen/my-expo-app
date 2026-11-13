@@ -3,6 +3,7 @@ import {
   PageScreen,
   PageSection,
   TabNavigationBar,
+  useAppearanceTransitionOrigin,
   type TabNavigationItemId,
 } from '@components/ui';
 import { router, useFocusEffect } from 'expo-router';
@@ -38,6 +39,7 @@ export default function TemplateScreen() {
   const { t } = useTranslation();
   const brand = getAppBrand();
   const insets = useSafeAreaInsets();
+  const appearanceOrigin = useAppearanceTransitionOrigin();
   const [{ activeId, contentId, homeOpened, settingsOpened }, setTab] = useState<{
     activeId: TabNavigationItemId;
     contentId: ContentTabId;
@@ -140,6 +142,7 @@ export default function TemplateScreen() {
         <ComponentMenu isPresented={menuOpen} onClose={closeMenu} />
       ) : null}
       <TabNavigationBar
+        appearanceOriginRef={appearanceOrigin}
         hideProgress={tabBar.hideProgress}
         activeId={activeId}
         onSelect={selectTab}

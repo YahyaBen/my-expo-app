@@ -158,8 +158,29 @@ existing saved preference provider. System follows the device; explicit Light or
 Dark remains selected until the user chooses another option. Controls wait for
 appearance restoration before accepting changes.
 
-Choosing an appearance or palette uses a circular reveal inspired by the
-[Telegram theme-switch demo](https://reactiive.io/demos/telegram-theme-switch).
+Settings > Appearance > Theme transition offers the existing circular reveal,
+inspired by the [Telegram theme-switch demo](https://reactiive.io/demos/telegram-theme-switch),
+and Kurohitsugi, inspired by the wall fragments assembling in the
+[reference clip from 0:16](https://www.youtube.com/watch?v=llRkXBHe0p0&t=16s).
+Seven individually drawn tower-shaped openings follow the background silhouette
+in the image reference. Their chipped crowns, dry-ink grain, long brush tears,
+fine bristles and scattered debris reveal fragments of the next theme through
+the previous one. Thin cuts retain the previous theme within each tower during
+the rise, then clear fully at completion.
+A brief windup releases into a fast ascent from the lower center, followed by a
+short settle, revealing the next theme in place like the circular reveal. Only the actual
+old and new app appearances are shown. The motion stays flat and vertical.
+Yhwach adds a separate many-eyed reveal: sharp, uneven eye frames open in staggered
+groups, with outlined sclera, layered oval irises and small oval pupils aligned along
+each eye. Its smooth iris contours follow the supplied reference. Shadow tendrils grow
+upward before a final sweep completes the change. Its eye pattern uses only the
+two app themes, with a 1500 ms duration.
+Dangai Ichigo adds a 1400 ms aura reveal with flowing ribbons, fine tears,
+drifting fragments and rising pressure-wave arcs. A final curved surge completes
+the switch. All four options share capture, motion preferences and cancellation
+behavior and use only the actual old/new app appearances.
+Circular remains the default; the selected effect is
+saved for the next launch and applies to palette and color-mode switches.
 The existing preference provider still saves the selection. Reduce Motion and
 live device appearance changes apply directly. Android's native Compose content
 is captured through `react-native-view-shot`; rebuild the development client after

@@ -26,7 +26,7 @@
       },
       "personalize": {
         "title": "Find your app’s style",
-        "description": "Visit Settings to explore themes, light and dark appearance, and English, French or Arabic."
+        "description": "Visit Settings to explore themes, light and dark appearance, and available languages."
       }
     }
   },
@@ -55,6 +55,7 @@
     }
   },
   "updates": {
+    "description": "Keep {{appName}} up to date. Follow the steps below to install the available update and continue using the app.",
     "title": "App updates",
     "installed": "Installed version",
     "installedVersion": "Version {{version}} (build {{build}})",
@@ -100,6 +101,12 @@
     "english": "English",
     "french": "French",
     "arabic": "Arabic",
+    "chinese": "Chinese (Simplified)",
+    "spanish": "Spanish",
+    "turkish": "Turkish",
+    "korean": "Korean",
+    "japanese": "Japanese",
+    "hindi": "Hindi",
     "lightMode": "Light Mode",
     "darkMode": "Dark Mode",
     "manageAccount": "Manage Account",
@@ -250,6 +257,13 @@
     "tab": "Settings",
     "title": "App Settings",
     "appearance": "Appearance",
+    "themeTransition": "Theme transition",
+    "transitions": {
+      "circular": "Circular",
+      "kurohitsugi": "Kurohitsugi",
+      "yhwach": "Yhwach",
+      "dangai": "Dangai Ichigo"
+    },
     "appIcon": "App icon",
     "appIconRed": "Red",
     "appIconHint": "Swipe to choose an icon, then tap Apply.",

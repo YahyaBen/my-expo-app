@@ -1,4 +1,4 @@
-import { useAppearanceSettings } from '@/context/theme.context';
+import { useAppearanceSettings, type AppearanceTransitionStyle } from '@/context/theme.context';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { Canvas, Group, Image, Skia, type SkImage } from '@shopify/react-native-skia';
 import {
@@ -9,6 +9,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type RefObject,
 } from 'react';
 import { StyleSheet, View, type ViewInstance, type ViewProps } from 'react-native';
 import {
@@ -23,10 +24,18 @@ import {
 import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 import type { PickerLayout } from '../picker/picker';
 import { captureAppearance } from './capture-appearance';
+import { PatternSnapshotReveal } from './pattern-snapshot-reveal';
 
-type Reveal = { x: number; y: number; width: number; height: number; shrinking: boolean };
+export type SnapshotRevealFrame = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  shrinking: boolean;
+};
 type Transition = {
   owner: ReturnType<typeof useAppearanceSettings>['setColorScheme'];
+  origin: RefObject<ViewInstance | null>;
   busy: boolean;
   run: (apply: () => void, origin: PickerLayout | null, shrinking: boolean) => void;
 };
@@ -38,9 +47,10 @@ export function AppearanceTransition({
   children,
   ...props
 }: Readonly<ViewProps & { enabled: boolean }>) {
-  const { setColorScheme } = useAppearanceSettings();
+  const { setColorScheme, transitionStyle } = useAppearanceSettings();
   const animate = useMotionEnabled(enabled);
   const capture = useRef<ViewInstance>(null);
+  const navigationOrigin = useRef<ViewInstance>(null);
   const frame = useRef<PickerLayout | null>(null);
   const mounted = useRef(false);
   const operation = useRef(0);
@@ -48,7 +58,9 @@ export function AppearanceTransition({
   const snapshot = useRef<SkImage | null>(null);
   const image = useSharedValue<SkImage | null>(null);
   const [busy, setBusy] = useState(false);
-  const [reveal, setReveal] = useState<Reveal | null>(null);
+  const [reveal, setReveal] = useState<
+    (SnapshotRevealFrame & { style: AppearanceTransitionStyle }) | null
+  >(null);
 
   const applyPending = useCallback(() => {
     const apply = pending.current;
@@ -93,7 +105,14 @@ export function AppearanceTransition({
     (apply, origin, shrinking) => {
       if (pending.current || snapshot.current) return;
       const bounds = frame.current;
-      if (!animate || !origin || !bounds || bounds.width <= 0 || bounds.height <= 0) {
+      const circular = transitionStyle === 'circular';
+      if (
+        !animate ||
+        (circular && !origin && !navigationOrigin.current) ||
+        !bounds ||
+        bounds.width <= 0 ||
+        bounds.height <= 0
+      ) {
         apply();
         return;
       }
@@ -104,6 +123,14 @@ export function AppearanceTransition({
       requestAnimationFrame(async () => {
         if (id !== operation.current || !mounted.current) return;
         try {
+          const target = circular
+            ? ((await measureAppearanceOrigin(navigationOrigin.current)) ?? origin)
+            : null;
+          if (id !== operation.current || !mounted.current) return;
+          if (circular && !target) {
+            finish();
+            return;
+          }
           const captured = await captureAppearance(capture);
           if (id !== operation.current || !mounted.current) {
             captured?.dispose();
@@ -116,22 +143,30 @@ export function AppearanceTransition({
           snapshot.current = captured;
           image.set(captured);
           setReveal({
-            x: Math.max(0, Math.min(bounds.width, origin.x + origin.width / 2 - bounds.x)),
-            y: Math.max(0, Math.min(bounds.height, origin.y + origin.height / 2 - bounds.y)),
+            x: target
+              ? Math.max(0, Math.min(bounds.width, target.x + target.width / 2 - bounds.x))
+              : bounds.width / 2,
+            y: target
+              ? Math.max(0, Math.min(bounds.height, target.y + target.height / 2 - bounds.y))
+              : bounds.height,
             width: bounds.width,
             height: bounds.height,
             shrinking,
+            style: transitionStyle,
           });
-        } catch {
+        } catch (error) {
           // A failed snapshot must never prevent changing or saving appearance.
-          if (id === operation.current) finish();
+          if (id === operation.current) {
+            if (__DEV__) console.warn('[AppearanceTransition] Theme reveal failed.', error);
+            finish();
+          }
         }
       });
     },
-    [animate, finish, image],
+    [animate, finish, image, transitionStyle],
   );
   const transition = useMemo(
-    () => ({ owner: setColorScheme, busy, run }),
+    () => ({ owner: setColorScheme, origin: navigationOrigin, busy, run }),
     [setColorScheme, busy, run],
   );
 
@@ -154,12 +189,23 @@ export function AppearanceTransition({
           {children}
         </View>
         {reveal ? (
-          <AppearanceReveal
-            reveal={reveal}
-            image={image}
-            onCovered={applyPending}
-            onComplete={finish}
-          />
+          reveal.style !== 'circular' ? (
+            <PatternSnapshotReveal
+              variant={reveal.style}
+              width={reveal.width}
+              height={reveal.height}
+              image={image}
+              onCovered={applyPending}
+              onComplete={finish}
+            />
+          ) : (
+            <SnapshotReveal
+              reveal={reveal}
+              image={image}
+              onCovered={applyPending}
+              onComplete={finish}
+            />
+          )
         ) : null}
       </View>
     </TransitionContext.Provider>
@@ -173,23 +219,48 @@ export function useAppearanceTransition() {
   return transition?.owner === setColorScheme ? transition : null;
 }
 
-function AppearanceReveal({
+/** The app shell supplies the native frame centered on its floating navigation action. */
+export function useAppearanceTransitionOrigin() {
+  return useAppearanceTransition()?.origin;
+}
+
+function measureAppearanceOrigin(view: ViewInstance | null): Promise<PickerLayout | null> {
+  if (!view) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    // A detached native view may not call back; retain the picker's origin in that case.
+    const timeout = setTimeout(() => resolve(null), 100);
+    try {
+      view.measureInWindow((x, y, width, height) => {
+        clearTimeout(timeout);
+        resolve(width > 0 && height > 0 ? { x, y, width, height } : null);
+      });
+    } catch {
+      clearTimeout(timeout);
+      resolve(null);
+    }
+  });
+}
+
+/** Shared circular reveal; callers own snapshot capture, changes and image disposal. */
+export function SnapshotReveal({
   reveal: { x, y, width, height, shrinking },
   image,
   onCovered,
   onComplete,
+  testID = 'app-appearance-reveal',
 }: Readonly<{
-  reveal: Reveal;
+  reveal: SnapshotRevealFrame;
   image: SharedValue<SkImage | null>;
   onCovered: () => void;
   onComplete: () => void;
+  testID?: string;
 }>) {
   const maxRadius = Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + 1;
   const radius = useSharedValue(shrinking ? maxRadius : 0);
   const clip = useDerivedValue(() => Skia.PathBuilder.Make().addCircle(x, y, radius.get()).build());
 
   useEffect(() => {
-    // Cover the old screen before applying native colors, then give the new theme a commit.
+    // Cover the old content before applying the change, then give native content a commit.
     let frameId = requestAnimationFrame(() => {
       onCovered();
       frameId = requestAnimationFrame(() => {
@@ -198,8 +269,8 @@ function AppearanceReveal({
             withTiming(
               shrinking ? 0 : maxRadius,
               {
-                duration: 1100,
-                easing: Easing.bezier(0.23, 1, 0.32, 1),
+                duration: 1200,
+                easing: Easing.bezier(0.215, 0.61, 0.355, 1),
                 reduceMotion: ReduceMotion.Never,
               },
               (finished) => {
@@ -223,7 +294,7 @@ function AppearanceReveal({
       accessible={false}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      testID="app-appearance-reveal"
+      testID={testID}
     >
       <Canvas style={styles.fill} pointerEvents="none">
         <Group clip={clip} invertClip={!shrinking}>
