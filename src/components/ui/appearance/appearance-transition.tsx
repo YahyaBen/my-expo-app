@@ -1,5 +1,6 @@
 import { useAppearanceSettings, type AppearanceTransitionStyle } from '@/context/theme.context';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Canvas, Group, Image, Skia, type SkImage } from '@shopify/react-native-skia';
 import {
   createContext,
@@ -48,6 +49,7 @@ export function AppearanceTransition({
   ...props
 }: Readonly<ViewProps & { enabled: boolean }>) {
   const { setColorScheme, transitionStyle } = useAppearanceSettings();
+  const sourceScheme = useColorScheme();
   const animate = useMotionEnabled(enabled);
   const capture = useRef<ViewInstance>(null);
   const navigationOrigin = useRef<ViewInstance>(null);
@@ -59,7 +61,8 @@ export function AppearanceTransition({
   const image = useSharedValue<SkImage | null>(null);
   const [busy, setBusy] = useState(false);
   const [reveal, setReveal] = useState<
-    (SnapshotRevealFrame & { style: AppearanceTransitionStyle }) | null
+    | (SnapshotRevealFrame & { style: AppearanceTransitionStyle; sourceScheme: 'light' | 'dark' })
+    | null
   >(null);
 
   const applyPending = useCallback(() => {
@@ -153,6 +156,7 @@ export function AppearanceTransition({
             height: bounds.height,
             shrinking,
             style: transitionStyle,
+            sourceScheme,
           });
         } catch (error) {
           // A failed snapshot must never prevent changing or saving appearance.
@@ -163,7 +167,7 @@ export function AppearanceTransition({
         }
       });
     },
-    [animate, finish, image, transitionStyle],
+    [animate, finish, image, sourceScheme, transitionStyle],
   );
   const transition = useMemo(
     () => ({ owner: setColorScheme, origin: navigationOrigin, busy, run }),
@@ -194,6 +198,7 @@ export function AppearanceTransition({
               variant={reveal.style}
               width={reveal.width}
               height={reveal.height}
+              sourceScheme={reveal.sourceScheme}
               image={image}
               onCovered={applyPending}
               onComplete={finish}
@@ -201,6 +206,7 @@ export function AppearanceTransition({
           ) : (
             <SnapshotReveal
               reveal={reveal}
+              duration={20_000}
               image={image}
               onCovered={applyPending}
               onComplete={finish}
@@ -244,12 +250,14 @@ function measureAppearanceOrigin(view: ViewInstance | null): Promise<PickerLayou
 /** Shared circular reveal; callers own snapshot capture, changes and image disposal. */
 export function SnapshotReveal({
   reveal: { x, y, width, height, shrinking },
+  duration = 1200,
   image,
   onCovered,
   onComplete,
   testID = 'app-appearance-reveal',
 }: Readonly<{
   reveal: SnapshotRevealFrame;
+  duration?: number;
   image: SharedValue<SkImage | null>;
   onCovered: () => void;
   onComplete: () => void;
@@ -269,7 +277,7 @@ export function SnapshotReveal({
             withTiming(
               shrinking ? 0 : maxRadius,
               {
-                duration: 1200,
+                duration,
                 easing: Easing.bezier(0.215, 0.61, 0.355, 1),
                 reduceMotion: ReduceMotion.Never,
               },
@@ -285,7 +293,7 @@ export function SnapshotReveal({
       cancelAnimationFrame(frameId);
       cancelAnimation(radius);
     };
-  }, [maxRadius, onComplete, onCovered, radius, shrinking]);
+  }, [duration, maxRadius, onComplete, onCovered, radius, shrinking]);
 
   return (
     <View

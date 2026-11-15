@@ -177,8 +177,25 @@ upward before a final sweep completes the change. Its eye pattern uses only the
 two app themes, with a 1500 ms duration.
 Dangai Ichigo adds a 1400 ms aura reveal with flowing ribbons, fine tears,
 drifting fragments and rising pressure-wave arcs. A final curved surge completes
-the switch. All four options share capture, motion preferences and cancellation
-behavior and use only the actual old/new app appearances.
+the switch.
+Garganta first covers the departing theme with a monochrome surface, then opens
+a contrasting manga-ink rift from the middle. Its uneven rectangular breaks retain frayed
+shoulders, tangled fine threads, long vertical scratches and dry-ink grain.
+The actual next screen becomes visible through the entire rift as its jaws part,
+surrounded by a narrow ink rim and the monochrome exterior. After a brief hold,
+a 2D push enters that live opening. The entrance covers every corner before cleanup; the next theme
+stays at its resting layout. This white/black interlude lasts 2000 ms.
+Xbox intro uses the supplied filled SVG over 2400 ms. Its flat logo fade and hold
+follow the [2020 Series X startup reference](https://news.xbox.com/en-us/2020/05/07/xbox-20-20-inside-xbox-recap/),
+then the logo itself becomes the expanding mask revealing the live next theme.
+The artwork uses solid black or white.
+Both effects use white behind a black mask when departing Light, and black behind
+a white mask when departing Dark. The root captures the resolved appearance at
+selection, so applying the destination theme keeps the interlude colors stable.
+Palette switches use that same source appearance; Circular and the other effects
+keep their existing behavior.
+All six options share capture, motion preferences and cancellation behavior.
+Circular, Kurohitsugi, Yhwach and Dangai use only the actual old/new app appearances.
 Circular remains the default; the selected effect is
 saved for the next launch and applies to palette and color-mode switches.
 The existing preference provider still saves the selection. Reduce Motion and
@@ -186,6 +203,13 @@ live device appearance changes apply directly. Android's native Compose content
 is captured through `react-native-view-shot`; rebuild the development client after
 installing this native dependency. The shared Appearance component page exercises
 the same control as Settings.
+
+Discover keeps circular masks floating upward over the live page. They invert
+the colors beneath them while scrolling and buttons remain interactive. Each
+bubble recycles outside the viewport, and its period fits the shared motion
+clock's wrap so the field has no visible reset. Motion pauses while the page is
+hidden or unfocused, in the background, and with Reduce Motion enabled. Android
+versions below 10 use a faint tint because native view blending is unavailable.
 
 Settings > Appearance > Theme offers UX Template and System through the shared
 [theme control](../src/components/ui/appearance/theme-control.tsx). Selection

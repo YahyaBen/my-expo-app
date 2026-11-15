@@ -43,7 +43,7 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   its image after UI drawing stops. Resize, backgrounding and reduced motion
   cancel the reveal while retaining the selected preference.
   Snapshot failures warn only in development and still apply/save the choice.
-- `AppearanceTransitionControl` selects `circular` (default), `kurohitsugi`, `yhwach` or `dangai` in
+- `AppearanceTransitionControl` selects `circular` (default), `kurohitsugi`, `yhwach`, `dangai`, `garganta` or `xbox` in
   Settings and the Appearance example. It accepts an optional `testID`, waits for
   `appearanceReady` and disables during capture/reveal. The existing provider
   validates and saves `appAppearanceTransition` through the preference queue;
@@ -87,6 +87,39 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
   existing root capture, motion, cancellation and image-disposal owners. Only
   actual old/new themes are shown. Persist the stable `dangai` identifier through
   `appAppearanceTransition`; keep all existing effects and Circular's default.
+- Garganta and Xbox use direction-aware monochrome interludes. Capture the
+  resolved `sourceScheme` in the root's active reveal when selection begins,
+  before applying the destination. A Light source uses pure white behind a
+  pure-black mask; a Dark source uses pure black behind a pure-white mask. Pass
+  the captured scheme to `PatternSnapshotReveal`; applying the next appearance
+  must not flip colors during the interlude. Palette selections and System mode
+  use the same resolved source. Keep this transient; add no preference or storage.
+- Garganta adds a 2000 ms manga interlude. Fade the captured old theme to the
+  monochrome exterior during the first 12%, then spread the center seam sideways.
+  As the jaws part from 28%, reveal the actual live destination screen through
+  the entire opening. Keep only a narrow ink rim plus the exterior's rectangular
+  breaks, frayed shoulders, tangled threads, vertical filaments and grain.
+  Build the entrance once by subtracting a thin stroke from the solid silhouette;
+  if path operations fail, use the original silhouette as a rimless fallback.
+  Opening artwork and entrance share the same transform, including the hold and
+  flat 2D push during the final 28%; do not hold a solid-color interior until zoom.
+  Compute final zoom from the entrance's clear core to cover every viewport corner.
+  Keep captured old content and the incoming native theme at rest. Construct
+  selected static paths on demand and preserve shared capture, cancellation,
+  Reduce Motion, image disposal and preference ownership. The stable `garganta`
+  identifier uses the existing preference; keep Circular and the other effects.
+- Xbox intro adds a 2400 ms flat Series X-style fade and hold with the supplied
+  filled 24-unit SVG. Render a solid white/black mark: no aura, gradients, blur,
+  outline stage, light trails or wordmark. Parse each original SVG path separately
+  so relative moves retain their origin; build static geometry only when selected.
+  Progress drives opacity and a flat zoom through the logo's broad lower lobe.
+  The actual SVG becomes the destination-theme opening during the final push;
+  derive completion scale from its clear core so every viewport corner is revealed.
+  Preserve shared capture/commit, motion, cancellation, repeat-selection and
+  image-disposal owners in `PatternSnapshotReveal` and the root. `XboxIntro` owns
+  canvas content only; add no startup work, audio, dependencies or persistence owner.
+  Save `xbox` through `appAppearanceTransition`; retain prior options, picker indexes
+  and Circular as default.
 - iOS captures with installed Skia 2; Android loads `react-native-view-shot` on
   selection to include Compose hosts. Android captures use temporary PNGs that
   are released after decoding. Adding view-shot requires a new development build.
@@ -125,5 +158,5 @@ Sources: [appearance controls](../../../src/components/ui/appearance/) and
 
 Verify restart restoration, failed storage, live System changes,
 open language-sheet interaction and RTL on native devices. Check both reveal
-directions, Kurohitsugi, Yhwach and Dangai old/new theme visibility in Light and Dark, transition restoration, rapid selections, rotation/background interruptions, Reduce Motion
+directions, Kurohitsugi, Yhwach, Dangai, Garganta and Xbox old/new theme visibility in Light and Dark, transition restoration, rapid selections, rotation/background interruptions, Reduce Motion
 and native form/header/dock capture on iOS and Android.

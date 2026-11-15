@@ -25,6 +25,8 @@ export function AppearanceTransitionControl({
       <Picker.Item label={t('settings.transitions.kurohitsugi')} value="kurohitsugi" />
       <Picker.Item label={t('settings.transitions.yhwach')} value="yhwach" />
       <Picker.Item label={t('settings.transitions.dangai')} value="dangai" />
+      <Picker.Item label={t('settings.transitions.garganta')} value="garganta" />
+      <Picker.Item label={t('settings.transitions.xbox')} value="xbox" />
     </Picker>
   );
 }
