@@ -44,7 +44,51 @@ limits Gradle to one worker with parallel execution disabled. Preview explicitly
 an installable APK. Production creates the store Android app bundle by default.
 Build profiles share the manifest's project ID. No backend URL is required.
 
-All profiles open the template app and its component pages.
+The app opens the public Discover shell. Login and Register are listed under
+Components → App flows; they do not gate the catalog or Home tab.
+
+## Local Android release
+
+On Windows, use the installed Android SDK/JDK and Expo prebuild with Gradle to
+produce a signed AAB locally. The helper uses the production brand identity and
+the exact `expo.version` and `expo.android.versionCode` in `app.json`; it does not
+increment EAS's remote version counter. `JAVA_HOME` and `ANDROID_HOME` must point
+to the installed toolchains.
+
+```powershell
+node scripts/build-android-local.cjs --credentials "C:\private\keystore-credentials.md" --keystore "C:\private\upload.jks" --output "dist\app-release.aab"
+```
+
+The credentials Markdown must provide these three data fields:
+
+```text
+- Android upload keystore password: <password>
+- Android key alias: <alias>
+- Android key password: <password>
+```
+
+Keep that file and the keystore outside source control. The helper reads only
+those fields, verifies the keystore, and passes signing values through the local
+build process environment. The config plugin configures generated Gradle signing
+without embedding credentials in source; generated Android files remain ignored.
+The helper sets the production update channel, disables developer screens,
+generates Android with Expo, regenerates the JavaScript bundle so current public
+environment values are embedded, runs `bundleRelease`, verifies the archive signature,
+and copies the AAB to the requested output. Sanitized logs are kept in
+`.expo/local-release/build.log`. An existing output file is never overwritten.
+
+On Windows the helper temporarily maps an unused drive letter to this workspace
+and places the app's C++ staging files under that short path. This avoids Ninja's
+260-character filename limit while keeping generated files in `.expo/`. It removes
+its own drive mapping when finished. Gradle runs without a persistent daemon.
+
+After a failed build, `--reuse-native` reapplies only the local release config
+plugin before retrying Gradle, retaining compiled outputs. Use it only when app
+identity, version, dependencies and other native configuration have not changed
+since prebuild. Otherwise run the normal command to regenerate Android first.
+
+Configure API and Google OAuth values for the intended release before relying on
+authentication; a successful native build does not verify live sign-in.
 
 ## Native identity and integrations
 

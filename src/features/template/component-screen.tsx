@@ -47,7 +47,7 @@ import {
   type DateTimePickerMode,
   type TabNavigationItemId,
 } from '@components/ui';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -55,7 +55,12 @@ import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonExamples } from './button-examples';
 import { ChipExamples } from './chip-examples';
-import { componentCatalog, isComponentId, type ComponentId } from './component-catalog';
+import {
+  componentCatalog,
+  componentHref,
+  isComponentId,
+  type ComponentId,
+} from './component-catalog';
 import { FormExamples } from './form-examples';
 import type { PhotoLayout } from './photo-examples';
 import { SliderExamples } from './slider-examples';
@@ -66,6 +71,7 @@ const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
 export default function ComponentScreen({ id }: Readonly<{ id?: string }>) {
   const { t } = useTranslation();
+  if (id === 'login' || id === 'register') return <Redirect href={componentHref(id)} />;
   if (!isComponentId(id)) {
     return (
       <PageScreen title={t('template.components')}>
@@ -109,7 +115,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
         key={rowId}
         leading={<Icon name={icon} />}
         supportingText={t(`componentCatalog.descriptions.${rowId}`)}
-        onPress={() => router.push({ pathname: '/components/[id]', params: { id: rowId } })}
+        onPress={() => router.push(componentHref(rowId))}
         testID={`component-${id}-${rowId}`}
       >
         {t(`componentCatalog.names.${rowId}`)}

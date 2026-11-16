@@ -33,5 +33,7 @@ export function useAuthForm<T extends FieldValues>(
     form,
     submit,
     pending: form.formState.isSubmitting || mutation.isPending,
+    error: mutation.error,
+    clearError: mutation.reset,
   };
 }

@@ -251,7 +251,16 @@
     "confirmRequired": "パスワードを確認してください。",
     "passwordMismatch": "パスワードが一致しません。",
     "recoveryCodeInvalid": "6桁の再設定コードを入力してください。",
-    "emailPlaceholder": "you@example.com"
+    "emailPlaceholder": "you@example.com",
+    "signInUnavailable": "現在、このログイン方法は利用できません。しばらくしてからもう一度お試しください。",
+    "exploreComponents": "コンポーネントを見る",
+    "resendAvailableAt": "{{time}}に新しいコードをリクエストできます。",
+    "restoringSession": "アカウントを準備しています。",
+    "demoHomeTitle": "ホーム",
+    "greeting": "こんにちは、{{name}}さん。",
+    "demoCardTitle": "自分だけのスペースに",
+    "demoDescription": "これはサンプルのホームページです。今後、ダッシュボードやアカウント機能がここに表示されます。",
+    "signOut": "ログアウト"
   },
   "settings": {
     "themeTransition": "テーマ切り替えアニメーション",
@@ -908,6 +917,8 @@
       "skeleton": "スケルトンは読込中の場所を確保します。静止した仮表示で画像と2行の文字を示します。",
       "appearance": "外観ではライト、ダーク、システムを選べます。保存する外観を変更できます。",
       "auth": "認証フレームは見出しとキーボード対応の内容で画面を構成します。名前のフォームを試せます。",
+      "login": "Google またはメールアドレスとパスワードでログインするページです。",
+      "register": "Google またはメールアドレスとパスワードのフォームで登録するページです。",
       "launch-screen": "起動画面は準備中にアプリを紹介します。タップしてブランドの退出アニメーションを見られます。",
       "otp-bottom-sheet": "確認シートは6桁を受け付けます。開いて123456を入力するとローカルで試せます。",
       "verification-code-face": "6桁の入力とキャラクターが連動します。123456で成功、他のコードでエラーになります。"
@@ -1179,6 +1190,8 @@
       "skeleton": "スケルトン",
       "appearance": "外観",
       "auth": "認証フレーム",
+      "login": "ログイン",
+      "register": "新規登録",
       "launch-screen": "起動画面",
       "otp-bottom-sheet": "確認シート",
       "verification-code-face": "確認コードのキャラクター"

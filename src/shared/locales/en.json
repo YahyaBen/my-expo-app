@@ -251,7 +251,16 @@
     "confirmRequired": "Confirm your password.",
     "passwordMismatch": "Passwords do not match.",
     "recoveryCodeInvalid": "Enter the 6-digit recovery code.",
-    "emailPlaceholder": "you@example.com"
+    "emailPlaceholder": "you@example.com",
+    "signInUnavailable": "This sign-in option is currently unavailable. Please try again later.",
+    "exploreComponents": "Explore components",
+    "resendAvailableAt": "You can request another code at {{time}}.",
+    "restoringSession": "Getting your account ready.",
+    "demoHomeTitle": "Home",
+    "greeting": "Hello, {{name}}.",
+    "demoCardTitle": "Make this space yours",
+    "demoDescription": "This is a sample home page. Your future dashboard and account features will appear here.",
+    "signOut": "Sign out"
   },
   "settings": {
     "tab": "Settings",
@@ -901,6 +910,8 @@
       "skeleton": "Skeletons reserve space while content loads. These static placeholders represent an image and two lines of text.",
       "appearance": "Appearance controls choose light, dark or system mode. Change the selection to update the app's saved appearance.",
       "auth": "An authentication frame organizes account screens with a title and keyboard-aware content. Try the sample name form.",
+      "login": "A login page with Google and email/password sign-in.",
+      "register": "A registration page with Google and an email/password form.",
       "launch-screen": "A launch screen introduces the app while it becomes ready. Tap to preview the branded exit animation.",
       "otp-bottom-sheet": "A verification sheet collects a six-digit code. Open it and enter 123456 to try local verification.",
       "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error."
@@ -1168,6 +1179,8 @@
       "skeleton": "Skeleton",
       "appearance": "Appearance",
       "auth": "Authentication frame",
+      "login": "Login",
+      "register": "Register",
       "launch-screen": "Launch screen",
       "otp-bottom-sheet": "Verification sheet",
       "verification-code-face": "Verification code face"

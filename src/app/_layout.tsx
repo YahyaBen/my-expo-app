@@ -193,6 +193,8 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="template" />
         <Stack.Screen name="components/[id]" />
         <Stack.Screen name="components/category/[id]" />
         <Stack.Screen name="settings/app-icon" />

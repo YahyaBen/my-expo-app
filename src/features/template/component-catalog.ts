@@ -1,4 +1,5 @@
 import type { IconName } from '@components/ui';
+import type { Href } from 'expo-router';
 
 /** App destinations and categories, independent of translated names. */
 export const componentCategories = [
@@ -56,6 +57,8 @@ export const componentCategories = [
     components: [
       'appearance',
       'auth',
+      'login',
+      'register',
       'launch-screen',
       'otp-bottom-sheet',
       'verification-code-face',
@@ -90,6 +93,8 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   'empty-state': { ios: 'folder', android: 'folder_open' },
   appearance: { ios: 'circle.lefthalf.filled', android: 'contrast' },
   auth: { ios: 'lock', android: 'lock' },
+  login: { ios: 'person.crop.circle', android: 'login' },
+  register: { ios: 'person.badge.plus', android: 'person_add' },
 };
 
 export const componentCatalog = componentCategories.flatMap(({ id: category, components }) =>
@@ -98,4 +103,11 @@ export const componentCatalog = componentCategories.flatMap(({ id: category, com
 
 export function isComponentId(value: string | undefined): value is ComponentId {
   return componentIds.some((id) => id === value);
+}
+
+/** Authentication pages share a scoped layout; ordinary examples use the dynamic route. */
+export function componentHref(id: ComponentId): Href {
+  if (id === 'login') return '/components/login';
+  if (id === 'register') return '/components/register';
+  return { pathname: '/components/[id]', params: { id } };
 }

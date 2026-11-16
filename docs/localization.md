@@ -12,8 +12,8 @@ product screens are not part of the template dictionary.
 English is the default. Settings and the shared auth language control use
 the existing language provider and appLanguage storage key. Startup waits for
 restoration; failed reads use English and failed writes leave the current selection
-usable for the session. Template's Settings tab exposes the saved language choice;
-there is no login route.
+usable for the session. The public Settings tab exposes the saved language choice.
+Login and Register names/descriptions are translated in the component catalog.
 
 Arabic selects RTL through the existing direction provider; all other supported
 languages select LTR. Language changes preserve mounted drafts and navigation.

@@ -6,7 +6,7 @@ export const passwordResetSchema = z
       .string()
       .trim()
       .regex(/^\d{6}$/, 'auth.recoveryCodeInvalid'),
-    newPassword: z.string().min(8, 'auth.passwordMinLength').max(128),
+    newPassword: z.string().min(8, 'auth.passwordMinLength').max(128, 'auth.passwordMaxLength'),
     confirmPassword: z.string(),
   })
   .refine((v) => v.newPassword === v.confirmPassword, {

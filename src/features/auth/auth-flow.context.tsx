@@ -3,6 +3,7 @@ import { authRepository } from '@/services/auth/auth.repository';
 import { getSessionVersion, subscribeAuthSession } from '@/services/auth/auth.session';
 import { SessionChangedError } from '@/services/auth/auth.errors';
 import { getDeviceMetadata } from '@/services/auth/device-installation';
+import { getGoogleIdToken } from '@/services/auth/google-sign-in';
 import type {
   AuthFlowResponse,
   LoginRequest,
@@ -24,6 +25,7 @@ import {
 interface AuthFlowContextValue {
   registrationChallenge: AuthFlowResponse | null;
   signIn: (request: Pick<LoginRequest, 'login' | 'password'>) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   register: (request: RegisterRequest) => Promise<void>;
   confirmRegistration: (code: string) => Promise<void>;
   canResendRegistration: boolean;
@@ -39,19 +41,24 @@ interface RegistrationChallengeState {
 
 const AuthFlowContext = createContext<AuthFlowContextValue | undefined>(undefined);
 
-/** Optional workflow kit. The consuming app owns its verification route. */
+/** Coordinate auth results; the route owner supplies completion navigation. */
 export function AuthFlowProvider({
   children,
   onVerificationRequired,
-}: Readonly<PropsWithChildren<{ onVerificationRequired: () => void }>>) {
+  onAuthenticated,
+}: Readonly<
+  PropsWithChildren<{ onVerificationRequired: () => void; onAuthenticated: () => void }>
+>) {
   const pathname = usePathname();
 
   const [challengeState, setChallengeState] = useState<RegistrationChallengeState | null>(null);
   const mounted = useRef(true);
   const sequence = useRef(0);
+  const pendingRequest = useRef<number | null>(null);
   const committingSession = useRef(false);
   const invalidatePending = useCallback(() => {
     sequence.current += 1;
+    pendingRequest.current = null;
   }, []);
 
   // Leaving a form invalidates its pending response, including Android back gestures.
@@ -83,50 +90,60 @@ export function AuthFlowProvider({
 
   const run = useCallback(
     async (
-      request: () => Promise<AuthFlowResponse | TokenResponse>,
+      request: (assertCurrent: () => void) => Promise<AuthFlowResponse | TokenResponse | null>,
       challengeEmail: string | null = null,
     ) => {
-      if (!mounted.current || committingSession.current) return;
+      if (!mounted.current || committingSession.current || pendingRequest.current !== null) return;
       const id = ++sequence.current;
-      const version = getSessionVersion();
-      const isCurrent = () => mounted.current && sequence.current === id;
-      let response: AuthFlowResponse | TokenResponse;
+      pendingRequest.current = id;
       try {
-        response = await request();
-      } catch (error) {
-        if (!isCurrent() || version !== getSessionVersion()) throw new SessionChangedError();
-        throw error;
-      }
-      if (!isCurrent() || version !== getSessionVersion()) throw new SessionChangedError();
-
-      let token: TokenResponse;
-      if ('isOtpValidated' in response) {
-        if (!response.isOtpValidated && response.challengeId) {
-          setChallengeState({ response, email: challengeEmail });
-          onVerificationRequired();
-          return;
+        const version = getSessionVersion();
+        const isCurrent = () => mounted.current && sequence.current === id;
+        const assertCurrent = () => {
+          if (!isCurrent() || version !== getSessionVersion()) throw new SessionChangedError();
+        };
+        let response: AuthFlowResponse | TokenResponse | null;
+        try {
+          response = await request(assertCurrent);
+        } catch (error) {
+          assertCurrent();
+          throw error;
         }
-        if (!response.isOtpValidated || !response.loginResponse) {
-          throw new Error('Invalid authentication flow response.');
-        }
-        token = response.loginResponse;
-      } else {
-        token = response;
-      }
+        assertCurrent();
+        if (response === null) return;
 
-      committingSession.current = true;
-      try {
-        await establishSession(token, version);
-        if (isCurrent()) {
-          setChallengeState(null);
+        let token: TokenResponse;
+        if ('isOtpValidated' in response) {
+          if (!response.isOtpValidated && response.challengeId) {
+            setChallengeState({ response, email: challengeEmail });
+            onVerificationRequired();
+            return;
+          }
+          if (!response.isOtpValidated || !response.loginResponse) {
+            throw new Error('Invalid authentication flow response.');
+          }
+          token = response.loginResponse;
+        } else {
+          token = response;
+        }
+
+        committingSession.current = true;
+        try {
+          await establishSession(token, version);
+          if (isCurrent()) {
+            setChallengeState(null);
+            onAuthenticated();
+          }
+        } finally {
+          // No other commit can start while this flag is set. Always release it,
+          // even if navigation invalidated the response while storage was pending.
+          committingSession.current = false;
         }
       } finally {
-        // No other commit can start while this flag is set. Always release it,
-        // even if navigation invalidated the response while storage was pending.
-        committingSession.current = false;
+        if (pendingRequest.current === id) pendingRequest.current = null;
       }
     },
-    [onVerificationRequired],
+    [onAuthenticated, onVerificationRequired],
   );
 
   const registrationChallenge = challengeState?.response ?? null;
@@ -138,12 +155,15 @@ export function AuthFlowProvider({
     async (request: Pick<LoginRequest, 'login' | 'password'>) => {
       const login = request.login.trim();
       await run(
-        async () =>
-          authRepository.login({
+        async (assertCurrent) => {
+          const metadata = await getDeviceMetadata();
+          assertCurrent();
+          return authRepository.login({
             ...request,
             login,
-            ...(await getDeviceMetadata()),
-          }),
+            ...metadata,
+          });
+        },
         login.includes('@') ? login : null,
       );
     },
@@ -155,16 +175,31 @@ export function AuthFlowProvider({
     [run],
   );
 
+  const signInWithGoogle = useCallback(
+    () =>
+      run(async (assertCurrent) => {
+        const idToken = await getGoogleIdToken();
+        if (!idToken) return null;
+        assertCurrent();
+        const metadata = await getDeviceMetadata();
+        assertCurrent();
+        return authRepository.googleSignIn({ idToken, ...metadata });
+      }),
+    [run],
+  );
+
   const confirmRegistration = useCallback(
     (code: string) =>
-      run(async () => {
+      run(async (assertCurrent) => {
         if (!challengeId) {
           throw new Error('Missing verification challenge.');
         }
+        const metadata = await getDeviceMetadata();
+        assertCurrent();
         return authRepository.confirmRegistration({
           challengeId,
           code: code.trim(),
-          ...(await getDeviceMetadata()),
+          ...metadata,
         });
       }, challengeEmail),
     [challengeId, challengeEmail, run],
@@ -179,6 +214,7 @@ export function AuthFlowProvider({
     () => ({
       registrationChallenge,
       signIn,
+      signInWithGoogle,
       register,
       confirmRegistration,
       canResendRegistration,
@@ -194,6 +230,7 @@ export function AuthFlowProvider({
       registrationChallenge,
       resendRegistration,
       signIn,
+      signInWithGoogle,
     ],
   );
 

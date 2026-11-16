@@ -5,8 +5,10 @@
 The Expo SDK 58 release renders the
 [template screen](../src/features/template/template-screen.tsx), component pages
 and an on-demand Settings feature. Settings native permission/location integrations
-are evaluated when that tab is opened. Optional
-auth/query providers are not mounted by the release root.
+are evaluated when that tab is opened. Auth/query providers mount inside the
+authentication example route group, rather than the public Discover shell.
+Google native code is evaluated on its explicit sign-in action. Measure startup
+and route transitions on devices before making performance claims.
 
 Template retains its ordinary page and Settings in separate React Activities
 after the first Settings visit. Hidden Activities retain state/native views and

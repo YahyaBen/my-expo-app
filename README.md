@@ -1,10 +1,10 @@
 # Expo white-label template
 
 iOS and Android starter using Expo SDK 58, Expo Router and native Expo UI.
-All builds open the Template page with a native dock and circular component menu. Tap its
-center action to browse components: swiping shows the page name and tapping an
-icon pushes its native example. Shared components and optional service/workflow
-helpers remain available for future features.
+The app opens Discover with its native Home, Components and Settings tabs.
+Components → App flows lists Login and Register as optional full-screen examples
+with email/password and Google options. Browsing the template requires no account.
+See [authentication setup](docs/auth-forms.md) for the API contract and Google credentials.
 
 Keep it simple. Native performance is a primary requirement: load only what the
 active feature needs, preserve idle/motion guards and measure before optimizing.
@@ -20,7 +20,8 @@ npm start
 
 Install a matching development build first; Expo Go does not contain all the native
 modules. Browse examples through the Components tab and Home tab.
-Demo artwork works offline. No backend or `.env.local` is needed.
+Component examples and demo artwork work offline. Authentication requires a reachable
+API; Google also requires OAuth credentials and a matching native build.
 
 ```sh
 npm run check              # Typecheck, lint and formatting

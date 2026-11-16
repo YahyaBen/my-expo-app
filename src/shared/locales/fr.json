@@ -251,7 +251,16 @@
     "confirmRequired": "Confirmez votre mot de passe.",
     "passwordMismatch": "Les mots de passe ne correspondent pas.",
     "recoveryCodeInvalid": "Saisissez le code de récupération à 6 chiffres.",
-    "emailPlaceholder": "you@example.com"
+    "emailPlaceholder": "you@example.com",
+    "signInUnavailable": "Cette option de connexion est indisponible pour le moment. Veuillez réessayer plus tard.",
+    "exploreComponents": "Explorer les composants",
+    "resendAvailableAt": "Vous pourrez demander un nouveau code à {{time}}.",
+    "restoringSession": "Préparation de votre compte.",
+    "demoHomeTitle": "Accueil",
+    "greeting": "Bonjour, {{name}}.",
+    "demoCardTitle": "Un espace à votre image",
+    "demoDescription": "Voici un exemple de page d’accueil. Votre futur tableau de bord et les fonctionnalités de votre compte apparaîtront ici.",
+    "signOut": "Se déconnecter"
   },
   "settings": {
     "tab": "Réglages",
@@ -903,6 +912,8 @@
       "skeleton": "Les squelettes réservent la place du contenu en chargement. Ces espaces statiques représentent une image et deux lignes de texte.",
       "appearance": "Les contrôles d’apparence choisissent le mode clair, sombre ou système. Modifiez la sélection pour enregistrer l’apparence de l’app.",
       "auth": "Un cadre d’authentification organise les écrans de compte avec un titre et un contenu adapté au clavier. Essayez le formulaire de prénom.",
+      "login": "Une page de connexion avec Google ou email et mot de passe.",
+      "register": "Une page d’inscription avec Google ou un formulaire email et mot de passe.",
       "launch-screen": "Un écran de lancement présente l’app pendant sa préparation. Touchez le bouton pour voir l’animation de sortie de la marque.",
       "otp-bottom-sheet": "Une feuille de vérification recueille un code à six chiffres. Ouvrez-la et saisissez 123456 pour essayer la vérification locale.",
       "verification-code-face": "La saisie du code associe six chiffres à un personnage animé. Saisissez 123456 pour réussir ou un autre code pour afficher une erreur."
@@ -1170,6 +1181,8 @@
       "skeleton": "Squelette",
       "appearance": "Apparence",
       "auth": "Cadre d’authentification",
+      "login": "Connexion",
+      "register": "Inscription",
       "launch-screen": "Écran de lancement",
       "otp-bottom-sheet": "Panneau de vérification",
       "verification-code-face": "Visage de vérification"

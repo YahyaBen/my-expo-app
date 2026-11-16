@@ -251,7 +251,16 @@
     "confirmRequired": "请确认密码。",
     "passwordMismatch": "两次输入的密码不一致。",
     "recoveryCodeInvalid": "请输入六位重置码。",
-    "emailPlaceholder": "you@example.com"
+    "emailPlaceholder": "you@example.com",
+    "signInUnavailable": "此登录方式暂不可用，请稍后重试。",
+    "exploreComponents": "浏览组件",
+    "resendAvailableAt": "你可以在 {{time}} 请求新的验证码。",
+    "restoringSession": "正在准备你的账户。",
+    "demoHomeTitle": "首页",
+    "greeting": "你好，{{name}}。",
+    "demoCardTitle": "打造你的专属空间",
+    "demoDescription": "这是一个示例首页。未来的控制面板和账户功能将在这里显示。",
+    "signOut": "退出登录"
   },
   "settings": {
     "themeTransition": "主题切换动画",
@@ -899,6 +908,8 @@
       "skeleton": "骨架屏在加载内容时预留空间。这些静态占位元素代表一张图片和两行文本。",
       "appearance": "外观控件用于选择浅色、深色或跟随系统。更改选项可更新应用保存的外观。",
       "auth": "身份验证框架通过标题和适应键盘的内容组织账户页面。试用示例姓名表单。",
+      "login": "使用 Google 或电子邮箱和密码登录的页面。",
+      "register": "使用 Google 或电子邮箱和密码表单注册的页面。",
       "launch-screen": "启动屏在应用准备就绪前展示品牌。点按以预览品牌退出动画。",
       "otp-bottom-sheet": "验证面板用于输入六位验证码。打开后输入 123456 以试用本地验证。",
       "verification-code-face": "验证码输入搭配动画角色。输入 123456 显示成功，输入其他验证码显示错误。"
@@ -1166,6 +1177,8 @@
       "skeleton": "骨架屏",
       "appearance": "外观",
       "auth": "身份验证框架",
+      "login": "登录",
+      "register": "注册",
       "launch-screen": "启动屏",
       "otp-bottom-sheet": "验证面板",
       "verification-code-face": "验证码表情"

@@ -6,6 +6,16 @@ module.exports = ({ config }) => {
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
   const androidGoogleMapsApiKey = process.env.GOOGLE_MAPS_ANDROID_API_KEY?.trim();
   const iosGoogleMapsApiKey = process.env.GOOGLE_MAPS_IOS_API_KEY?.trim();
+  const googleIosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim();
+  const googleWebClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim();
+  for (const [name, value] of [
+    ['EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID', googleIosClientId],
+    ['EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID', googleWebClientId],
+  ]) {
+    if (value && !/^\d+-[\w-]+\.apps\.googleusercontent\.com$/.test(value)) {
+      throw new Error(`${name} must be a Google OAuth client ID.`);
+    }
+  }
 
   return {
     ...config,
@@ -17,6 +27,14 @@ module.exports = ({ config }) => {
     updates: {
       ...config.updates,
       url: brand.eas?.projectId ? `https://u.expo.dev/${brand.eas.projectId}` : undefined,
+      ...(process.env.LOCAL_ANDROID_RELEASE === '1'
+        ? {
+            requestHeaders: {
+              ...config.updates?.requestHeaders,
+              'expo-channel-name': 'production',
+            },
+          }
+        : {}),
     },
     ios: {
       ...config.ios,
@@ -47,6 +65,19 @@ module.exports = ({ config }) => {
     },
     plugins: [
       ...(config.plugins ?? []),
+      ...(process.env.LOCAL_ANDROID_RELEASE === '1' ? ['./config/with-local-android-release'] : []),
+      ...(googleIosClientId
+        ? [
+            [
+              'react-native-nitro-google-signin',
+              {
+                iosUrlScheme: googleIosClientId.split('.').reverse().join('.'),
+              },
+            ],
+          ]
+        : brand.android.googleServicesFile
+          ? ['react-native-nitro-google-signin']
+          : []),
       ['react-native-maps', { androidGoogleMapsApiKey, iosGoogleMapsApiKey }],
       ['expo-dev-client', { addGeneratedScheme: variant === 'development' }],
       ['expo-font', { fonts: headingFont.file ? [headingFont.file] : [] }],

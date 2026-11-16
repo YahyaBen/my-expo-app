@@ -251,7 +251,16 @@
     "confirmRequired": "Şifrenizi onaylayın.",
     "passwordMismatch": "Şifreler eşleşmiyor.",
     "recoveryCodeInvalid": "6 haneli kurtarma kodunu girin.",
-    "emailPlaceholder": "siz@ornek.com"
+    "emailPlaceholder": "siz@ornek.com",
+    "signInUnavailable": "Bu giriş seçeneği şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+    "exploreComponents": "Bileşenleri keşfet",
+    "resendAvailableAt": "Saat {{time}} itibarıyla yeni bir kod isteyebilirsiniz.",
+    "restoringSession": "Hesabınız hazırlanıyor.",
+    "demoHomeTitle": "Ana sayfa",
+    "greeting": "Merhaba, {{name}}.",
+    "demoCardTitle": "Bu alanı kendinize göre düzenleyin",
+    "demoDescription": "Bu örnek bir ana sayfadır. Gelecekteki kontrol paneliniz ve hesap özellikleriniz burada görünecektir.",
+    "signOut": "Çıkış yap"
   },
   "settings": {
     "themeTransition": "Tema geçişi",
@@ -908,6 +917,8 @@
       "skeleton": "İskeletler içerik yüklenirken yer ayırır. Bu sabit yer tutucular bir görseli ve iki satırı temsil eder.",
       "appearance": "Görünüm kontrolleri açık, koyu veya sistem modunu seçer. Kayıtlı görünümü değiştirmek için seçim yapın.",
       "auth": "Kimlik doğrulama çerçevesi hesap ekranlarını başlık ve klavyeye uyumlu içerikle düzenler. Örnek ad formunu deneyin.",
+      "login": "Google veya e-posta ve şifre ile giriş yapma sayfası.",
+      "register": "Google veya e-posta ve şifre formuyla kayıt olma sayfası.",
       "launch-screen": "Açılış ekranı uygulama hazırlanırken markayı tanıtır. Çıkış animasyonunu önizlemek için dokunun.",
       "otp-bottom-sheet": "Doğrulama paneli altı haneli kod toplar. Yerel deneme için açıp 123456 girin.",
       "verification-code-face": "Kod girişi altı haneyi hareketli karakterle birleştirir. Başarı için 123456, hata için başka kod girin."
@@ -1179,6 +1190,8 @@
       "skeleton": "İskelet",
       "appearance": "Görünüm",
       "auth": "Kimlik doğrulama çerçevesi",
+      "login": "Giriş yap",
+      "register": "Kayıt ol",
       "launch-screen": "Açılış ekranı",
       "otp-bottom-sheet": "Doğrulama paneli",
       "verification-code-face": "Doğrulama kodu yüzü"

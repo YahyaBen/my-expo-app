@@ -42,15 +42,19 @@ For a cloned starter's EAS build, set the manifest's `eas.owner` and
 works for local development. Production requires a project ID. See
 [build profiles](eas-development-builds.md) for account access and signing.
 
-| Variable              | Meaning                                                                       |
-| --------------------- | ----------------------------------------------------------------------------- |
-| `APP_BRAND`           | Registered manifest; defaults to `template`                                   |
-| `APP_VARIANT`         | `development` (default), `preview` or `production`                            |
-| `EXPO_PUBLIC_API_URL` | Optional backend for retained API helpers; production requires HTTPS when set |
+| Variable              | Meaning                                                                 |
+| --------------------- | ----------------------------------------------------------------------- |
+| `APP_BRAND`           | Registered manifest; defaults to `template`                             |
+| `APP_VARIANT`         | `development` (default), `preview` or `production`                      |
+| `EXPO_PUBLIC_API_URL` | Backend required for authentication; production requires HTTPS when set |
 
 No `.env.local` is required. The launch script selects the development variant
 for its child process. EAS profiles select their own variant. Public variables
 are bundled and must not contain secrets.
+
+Authentication needs a reachable API. Google additionally needs Web/iOS OAuth
+client IDs and registered Android signing certificates; see
+[authentication setup](auth-forms.md) for environment values and native builds.
 
 For a different product, change the manifest's name, slug, scheme, native IDs and
 assets as needed. The manifest defines production identity; development and preview
@@ -84,11 +88,14 @@ in the example. See the [Expo SDK 58 Google Maps setup](https://docs.expo.dev/ve
 
 ## App and catalog ownership
 
-`src/app/index.tsx` opens the template screen. The root owns
-fonts, preference/language hydration, launch readiness, native navigation motion
-and feedback hosting. It mounts no authentication or query provider. Helpers for
-HTTP, auth, forms and session-safe queries remain available for future features,
-with no live backend configured by default.
+`src/app/index.tsx` opens the public Discover/Home/Components/Settings shell.
+Components → App flows lists Login and Register at `/components/login` and
+`/components/register`; `/template` is an alias for `/`. The root owns fonts,
+preference/language hydration, launch readiness, native navigation motion and
+feedback hosting. The `(auth)` route group owns authentication/query providers
+and session restoration for those examples. Its loading/retry view preserves
+incoming auth links while storage is read. Confirm API contracts and configure
+credentials before live use.
 
 Reusable native UI lives in `src/components/ui/`. App examples live in
 `src/features/template/`; Home and Settings own their feature compositions.

@@ -251,7 +251,16 @@
     "confirmRequired": "Confirma tu contraseña.",
     "passwordMismatch": "Las contraseñas no coinciden.",
     "recoveryCodeInvalid": "Introduce el código de recuperación de 6 dígitos.",
-    "emailPlaceholder": "tu@ejemplo.com"
+    "emailPlaceholder": "tu@ejemplo.com",
+    "signInUnavailable": "Esta opción de inicio de sesión no está disponible en este momento. Inténtalo más tarde.",
+    "exploreComponents": "Explorar componentes",
+    "resendAvailableAt": "Puedes solicitar otro código a las {{time}}.",
+    "restoringSession": "Preparando tu cuenta.",
+    "demoHomeTitle": "Inicio",
+    "greeting": "Hola, {{name}}.",
+    "demoCardTitle": "Haz tuyo este espacio",
+    "demoDescription": "Esta es una página de inicio de ejemplo. Aquí aparecerán tu futuro panel y las funciones de tu cuenta.",
+    "signOut": "Cerrar sesión"
   },
   "settings": {
     "themeTransition": "Transición del tema",
@@ -899,6 +908,8 @@
       "skeleton": "Los esqueletos reservan espacio mientras carga el contenido. Estos marcadores estáticos representan una imagen y dos líneas de texto.",
       "appearance": "Los controles de apariencia eligen el modo claro, oscuro o del sistema. Cambia la selección para actualizar la apariencia guardada de la app.",
       "auth": "Un marco de autenticación organiza pantallas de cuenta con un título y contenido que se adapta al teclado. Prueba el formulario de nombre.",
+      "login": "Una página para iniciar sesión con Google o correo electrónico y contraseña.",
+      "register": "Una página de registro con Google o un formulario de correo electrónico y contraseña.",
       "launch-screen": "Una pantalla de inicio presenta la app mientras se prepara. Toca para ver la animación de salida de la marca.",
       "otp-bottom-sheet": "Un panel de verificación recoge un código de seis dígitos. Ábrelo e introduce 123456 para probar la verificación local.",
       "verification-code-face": "La entrada de código combina seis dígitos con un personaje animado. Introduce 123456 para el éxito u otro código para un error."
@@ -1166,6 +1177,8 @@
       "skeleton": "Esqueleto",
       "appearance": "Apariencia",
       "auth": "Marco de autenticación",
+      "login": "Iniciar sesión",
+      "register": "Registrarse",
       "launch-screen": "Pantalla de inicio",
       "otp-bottom-sheet": "Panel de verificación",
       "verification-code-face": "Personaje del código de verificación"

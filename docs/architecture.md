@@ -1,7 +1,8 @@
 # Application architecture
 
-The template has a native dock, a modal component menu, app-facing
-component pages. All build variants start at the Template page through `/`.
+The template opens Discover at `/` with its native Home, Components and Settings
+tabs. Components → App flows includes public Login and Register examples at
+`/components/login` and `/components/register`. `/template` redirects to `/`.
 Its center action opens
 the shared native modal sheet with a translated empty state and Close action.
 The menu presenter stays mounted after its first open so native dismissal can finish.
@@ -37,7 +38,7 @@ header and Back.
 | App settings and native device controls | `src/features/settings/`                                                        |
 | Shared native presentation              | `src/components/ui/`                                                            |
 | Preferences, language and direction     | Existing contexts, hooks and storage owners                                     |
-| Optional auth/form workflow kit         | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
+| Authentication screens and workflow     | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
 | Entity data access                      | `src/services/<entity>/<entity>.repository.ts`                                  |
 | HTTP, queries and session lifecycle     | `src/services/`, `src/lib/api-query-keys.ts`                                    |
 | Validation and DTOs                     | `src/validation/`, `src/types/`                                                 |
@@ -74,9 +75,17 @@ Retained tab activities keep drafts and selection while cleaning
 up hidden effects. Settings reads permission state while visible, and requests
 OS access or a one-shot location only after the matching action.
 
-Optional auth/query/service helpers are retained for future features and are not
-mounted by the starter. A consuming auth flow supplies its own verification
-navigation callback. Add providers only when building an actual backend feature.
+The `(auth)` route group mounts the existing query, session and auth-flow
+providers when an authentication example is opened. Discover, Home and the
+ordinary catalog do not wait for session restoration. The auth group's native
+loading/retry view preserves its incoming destination and parameters until auth
+is known, including after storage-error retries.
+Google native code loads after its explicit button action. The auth flow
+uses the existing backend contract and routes email challenges to `/verify-email`.
+Login and Register remain public examples even with a saved session. Successful
+authentication opens the separate `/account` placeholder; only that destination
+requires a valid backend session.
+See [authentication setup](auth-forms.md).
 Shared UI receives data and callbacks, and never imports services or fixtures.
 
 Feature workflows and query options call a feature-specific repository. The
@@ -112,5 +121,5 @@ Language/device switches in Settings persist actual settings.
 API helpers retain validated contracts, request cancellation, secure session
 storage, generation guards, token rotation and cache maintenance. Backend URLs
 are optional for the starter. Do not bypass those owners when adding real features.
-See [API services](api-services.md), [auth kit](auth-forms.md),
+See [API services](api-services.md), [authentication setup](auth-forms.md),
 [appearance](appearance-themes.md) and [brand setup](development.md#brand-and-environment-configuration).

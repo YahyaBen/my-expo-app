@@ -2,7 +2,7 @@
 
 The starter retains the existing Axios client, response validation, auth lifecycle,
 secure session storage and TanStack Query integration. Set `EXPO_PUBLIC_API_URL`
-for the real server before consuming the optional auth kit's endpoints.
+for the real server and confirm the retained contract before live authentication.
 No guest credentials or mocked production API responses are supplied.
 
 [`auth.repository.ts`](../src/services/auth/auth.repository.ts) exports the

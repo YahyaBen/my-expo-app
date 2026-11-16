@@ -17,7 +17,7 @@ Maintained guides are listed below. Component contracts belong to independent sk
 ## Implementation and appearance
 
 - [API services](api-services.md)
-- [Optional authentication kit](auth-forms.md)
+- [Authentication setup](auth-forms.md)
 - [Localization](localization.md)
 - [Live LTR / RTL](layout-direction.md)
 - [Safe-area handling](safe-area-handling.md)
