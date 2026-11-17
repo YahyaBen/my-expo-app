@@ -269,10 +269,6 @@
     "themeTransition": "Theme transition",
     "transitions": {
       "circular": "Circular",
-      "kurohitsugi": "Kurohitsugi",
-      "yhwach": "Yhwach",
-      "dangai": "Dangai Ichigo",
-      "garganta": "Garganta",
       "xbox": "Xbox intro"
     },
     "appIcon": "App icon",

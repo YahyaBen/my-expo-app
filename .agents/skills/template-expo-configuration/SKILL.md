@@ -1,6 +1,6 @@
 ---
-name: expo-overview
-description: Configure this project's Expo SDK, native dependencies, brands and build environments.
+name: template-expo-configuration
+description: Configure this template's Expo SDK, native dependencies, app brands and EAS build environments.
 license: MIT
 ---
 

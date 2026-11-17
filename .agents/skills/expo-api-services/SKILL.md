@@ -22,7 +22,6 @@ and the current auth lifecycle rather than creating a second transport.
 | ---------------------------------------- | -------------------------------------------------------------------- |
 | `src/validation/schemas/api/<entity>.ts` | Runtime response schema; infer response DTOs from it                 |
 | `src/types/<entity>.types.ts`            | Query, result and supported write types                              |
-| `src/lib/api-query-keys.ts`              | Pure normalized key factories                                        |
 | Entity `.repository.ts`                  | Typed data access through `apiClient`; no React, UI or cache effects |
 | Entity `.queries.ts` / `.mutations.ts`   | Read options and supported writes with cache maintenance             |
 | Entity `.hooks.ts`                       | React consumption, callback composition and invalidation             |
@@ -31,8 +30,8 @@ and the current auth lifecycle rather than creating a second transport.
 
 - Attach a Zod `responseSchema` to each consumed JSON response. Validate once in
   `apiClient`; do not cast responses or parse again in screens. Preserve required,
-  optional and nullable fields; use `z.looseObject` for additive fields and the
-  existing pagination schema for page metadata.
+  optional and nullable fields; use `z.looseObject` for additive fields. Add
+  pagination schemas only for a consumed endpoint with a confirmed contract.
 - Malformed success responses become safe `ApiResponseValidationError`s without
   payloads, credentials or Zod input. Do not retry them, seed caches or invalidate
   from malformed writes.
@@ -51,16 +50,16 @@ and the current auth lifecycle rather than creating a second transport.
 
 ## Queries and writes
 
-- Normalize parameters once for requests and keys with `request-utils.ts`;
-  preserve explicit `false` and encode identifier segments.
-- Reuse `query-utils.ts`, forward `AbortSignal` on every read and use `skipToken`
+- Normalize parameters once for requests and keys; preserve explicit `false`
+  and encode identifier segments. Add shared helpers only when callers need them.
+- Keep query options with their consuming feature, forward `AbortSignal` on every read and use `skipToken`
   until all detail identifiers exist. Separate finite/infinite keys; stop pagination
   on the final, empty or repeated page.
 - Match service/query defaults. Use `useQueryClient()` in hooks and explicit
-  clients in imperative factories. Reuse entity invalidators with complete
-  identifier tuples. Pull-to-refresh targets exact displayed query keys through
-  `useScreenRefresh`, preserving filters, drafts and completion/error handling.
-- Use `sessionMutationOptions` for authenticated writes: retain generation guards,
+  clients in imperative factories. Invalidate complete identifier tuples.
+  Pull-to-refresh targets exact displayed query keys, preserving filters,
+  drafts and completion/error handling.
+- For authenticated writes, retain generation guards,
   no automatic retry and no deferred offline replay. Add optimistic behavior only
   for an explicit workflow with cancellation, rollback and account ownership.
 - Cancel detail reads before replacing/removing entries. After each awaited
@@ -68,7 +67,7 @@ and the current auth lifecycle rather than creating a second transport.
   returned details and invalidate affected finite/infinite lists and related data.
   Await required maintenance before completion or success navigation; failed writes
   keep existing freshness.
-- Compose callbacks through `withMutationCallbacks`; replacing `onSuccess` must
+- Compose consumer callbacks after mandatory cache work; replacing `onSuccess` must
   not discard maintenance. Keep navigation in consumers. Distinguish server-write
   failures from callback/refetch failures before offering a repeated POST.
 

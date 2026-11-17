@@ -46,10 +46,8 @@ async function main() {
   const env = {
     ...localEnv,
     ...process.env,
-    APP_BRAND: 'template',
     APP_VARIANT: 'production',
     NODE_ENV: 'production',
-    EXPO_PUBLIC_ENABLE_DEV_SCREENS: 'false',
     LOCAL_ANDROID_RELEASE: '1',
     LOCAL_ANDROID_KEYSTORE_PATH: keystore,
     LOCAL_ANDROID_KEYSTORE_PASSWORD: field('Android upload keystore password'),

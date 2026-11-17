@@ -1,8 +1,5 @@
 {
   "expo": {
-    "name": "Expo Template",
-    "slug": "expo-mobile-template",
-    "version": "1.0.8",
     "platforms": ["ios", "android"],
     "orientation": "default",
     "userInterfaceStyle": "automatic",
@@ -19,7 +16,6 @@
       }
     },
     "android": {
-      "versionCode": 16,
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.CAMERA",

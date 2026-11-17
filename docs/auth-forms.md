@@ -37,8 +37,9 @@ keys, signing keys and passwords do not belong in the app or this chat.
 ## Google Cloud setup
 
 The checked-in Android files name `expo-template-dev-hyrkul` (development) and
-`expo-template-hyrkul` (production), but contain no OAuth clients. The checked-in
-iOS plist is a placeholder and is not used for Google sign-in.
+`expo-template-hyrkul` (production), but contain no OAuth clients. On iOS,
+sign-in uses the configured OAuth client ID and reversed URL scheme; this
+flow does not require a Firebase plist.
 
 1. Open the intended project in [Google Cloud Console](https://console.cloud.google.com/).
    Configure Google Auth Platform branding, audience and contact information.
@@ -48,7 +49,8 @@ iOS plist is a placeholder and is not used for Google sign-in.
    is in Testing, add the accounts used for testing. See
    [Google's audience rules](https://support.google.com/cloud/answer/15549945?hl=en).
 2. Under Google Auth Platform → Clients, create a **Web application** client.
-   Give its ID to the API developer and set `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+   Give its ID to the API developer and set
+   `variants.<variant>.googleAuth.webClientId` in `config/app.js`.
    This flow sends an ID token to your API; no web redirect URI or client secret
    is needed in the mobile application.
 3. Create **Android** clients using the package and actual signing SHA-1 for every
@@ -56,13 +58,15 @@ iOS plist is a placeholder and is not used for Google sign-in.
    different certificates. Register the installed app's certificate, not just
    the upload key.
 4. Create an **iOS** client with the matching bundle identifier. Set
-   `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID` before building iOS. `app.config.js` registers
+   `variants.<variant>.googleAuth.iosClientId` in `config/app.js` before building iOS.
+   `app.config.js` registers
    its reversed client ID URL scheme through the library's config plugin.
-5. Put the public IDs in `.env.local` for local development and the matching EAS
-   environment for cloud builds. Keep Web/iOS/Android clients in the intended
+5. Put the public IDs in the appropriate variant in `config/app.js` for local
+   and EAS builds. Optional environment overrides remain available in `.env.example`.
+   Keep Web/iOS/Android clients in the intended
    Google project. The API must accept that environment's Web client ID.
 
-Current native identities, resolved from the brand manifest:
+Current native identities, resolved from `config/app.js`:
 
 | Variant     | Android package / iOS bundle identifier |
 | ----------- | --------------------------------------- |
@@ -73,10 +77,13 @@ Current native identities, resolved from the brand manifest:
 The development and development-device EAS profiles share the development identity.
 Keep the production identifiers when configuring this existing application.
 
-```dotenv
-EXPO_PUBLIC_API_URL=https://your-api.example.com
-EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=your-web-client-id.apps.googleusercontent.com
-EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=your-ios-client-id.apps.googleusercontent.com
+```js
+// Inside variants.development (or preview / production) in config/app.js:
+apiUrl: 'https://your-api.example.com',
+googleAuth: {
+  webClientId: '123456789-your-web-client.apps.googleusercontent.com',
+  iosClientId: '123456789-your-ios-client.apps.googleusercontent.com',
+},
 ```
 
 Replace the examples with actual Google-issued IDs. Do not append `/api` to the

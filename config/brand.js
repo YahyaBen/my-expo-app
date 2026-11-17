@@ -3,16 +3,16 @@ const path = require('node:path');
 const { z } = require('zod');
 const { resolveApiBaseUrl } = require('./api');
 const assets = require('./brand-assets.json');
+const settings = require('./app');
 
-const brands = {
-  template: require('./brands/template.json'),
-};
 const variants = ['development', 'preview', 'production'];
 const color = z.string().regex(/^#[0-9a-fA-F]{6}$/);
 const asset = z.string().startsWith('./').min(3);
 const brandSchema = z.strictObject({
   id: z.string().regex(/^[a-z][a-z0-9-]*$/),
   name: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/),
   slug: z.string().regex(/^[a-z0-9][a-z0-9-]*$/),
   scheme: z.string().regex(/^[a-z][a-z0-9+.-]*$/),
   icon: asset,
@@ -27,22 +27,14 @@ const brandSchema = z.strictObject({
   ios: z.strictObject({
     icon: asset.optional(),
     bundleIdentifier: z.string().regex(/^[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/),
+    buildNumber: z.string().regex(/^\d+(?:\.\d+){0,2}$/),
   }),
   android: z.strictObject({
     package: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+$/),
+    versionCode: z.number().int().min(1).max(2_100_000_000),
     icon: asset.optional(),
     lightIconForeground: asset.optional(),
     redIconForeground: asset.optional(),
-    googleServicesFile: z
-      .union([
-        asset,
-        z.strictObject({
-          development: asset.optional(),
-          preview: asset.optional(),
-          production: asset.optional(),
-        }),
-      ])
-      .optional(),
     adaptiveIcon: z
       .strictObject({
         backgroundColor: color,
@@ -67,6 +59,29 @@ const brandSchema = z.strictObject({
     })
     .optional(),
 });
+const oauthClientId = z
+  .string()
+  .trim()
+  .regex(/^(?:\d+-[\w-]+\.apps\.googleusercontent\.com)?$/);
+const variantSchema = z.strictObject({
+  description: z.string().trim().min(1),
+  nameSuffix: z.string(),
+  identitySuffix: z.enum(['', '.dev', '.preview']),
+  apiUrl: z.string().trim(),
+  googleServicesFile: asset.or(z.literal('')),
+  developmentPushTopic: z.string().regex(/^[a-zA-Z0-9-_.~%]*$/),
+  googleMaps: z.strictObject({ androidApiKey: z.string().trim(), iosApiKey: z.string().trim() }),
+  googleAuth: z.strictObject({ webClientId: oauthClientId, iosClientId: oauthClientId }),
+});
+const settingsSchema = z.strictObject({
+  variant: z.enum(variants),
+  app: brandSchema,
+  variants: z.strictObject({
+    development: variantSchema,
+    preview: variantSchema,
+    production: variantSchema,
+  }),
+});
 const projectRoot = path.resolve(__dirname, '..');
 
 function requireAsset(file, field) {
@@ -85,31 +100,42 @@ function requireAsset(file, field) {
 
 /** Resolve a build-time brand without mutating manifests or environment variables. */
 function resolveBrand(env = process.env) {
-  const variant = env.APP_VARIANT?.trim() || 'development';
+  const parsed = settingsSchema.safeParse(settings);
+  if (!parsed.success) {
+    const fields = parsed.error.issues.map((issue) => issue.path.join('.')).join(', ');
+    throw new Error(`Invalid config/app.js; check fields: ${fields}.`);
+  }
+  const variant = env.APP_VARIANT?.trim() || parsed.data.variant;
   if (!variants.includes(variant)) {
     throw new Error(`APP_VARIANT must be one of: ${variants.join(', ')}.`);
   }
-  const selected = env.APP_BRAND?.trim();
-  const id = selected || 'template';
-  if (!Object.hasOwn(brands, id)) {
-    throw new Error(`Unknown APP_BRAND. Registered brands: ${Object.keys(brands).join(', ')}.`);
+  const brand = parsed.data.app;
+  if (env.APP_BRAND?.trim() && env.APP_BRAND.trim() !== brand.id) {
+    throw new Error('APP_BRAND must match app.id in config/app.js, or be unset.');
   }
-  const parsed = brandSchema.safeParse(brands[id]);
-  if (!parsed.success) {
-    const fields = parsed.error.issues.map((issue) => issue.path.join('.')).join(', ');
-    throw new Error(`Invalid brand manifest ${id}; check fields: ${fields}.`);
+  const integration = parsed.data.variants[variant];
+  const apiUrl = env.EXPO_PUBLIC_API_URL?.trim() || integration.apiUrl;
+  const googleMaps = {
+    androidApiKey: env.GOOGLE_MAPS_ANDROID_API_KEY?.trim() || integration.googleMaps.androidApiKey,
+    iosApiKey: env.GOOGLE_MAPS_IOS_API_KEY?.trim() || integration.googleMaps.iosApiKey,
+  };
+  const googleAuth = {
+    webClientId: env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim() || integration.googleAuth.webClientId,
+    iosClientId: env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim() || integration.googleAuth.iosClientId,
+  };
+  for (const [field, value] of Object.entries(googleAuth)) {
+    if (!oauthClientId.safeParse(value).success) {
+      throw new Error(`googleAuth.${field} must be a Google OAuth client ID.`);
+    }
   }
-  const brand = parsed.data;
-  if (brand.id !== id) throw new Error(`Brand manifest ID must match its registry key: ${id}.`);
 
   // Apply variant IDs before validating package-specific integrations.
-  const identitySuffix = { development: '.dev', preview: '.preview', production: '' }[variant];
+  const identitySuffix = integration.identitySuffix;
+  brand.name += integration.nameSuffix;
   brand.ios.bundleIdentifier += identitySuffix;
   brand.android.package += identitySuffix;
   brand.scheme += identitySuffix;
-  if (typeof brand.android.googleServicesFile === 'object') {
-    brand.android.googleServicesFile = brand.android.googleServicesFile[variant];
-  }
+  brand.android.googleServicesFile = integration.googleServicesFile || undefined;
 
   requireAsset(brand.icon, 'icon');
   if (brand.lightIcon) requireAsset(brand.lightIcon, 'lightIcon');
@@ -158,15 +184,37 @@ function resolveBrand(env = process.env) {
     }
   }
   if (variant === 'production' && !brand.eas?.projectId) {
-    throw new Error(`Set eas.projectId in config/brands/${id}.json before building production.`);
+    throw new Error('Set app.eas.projectId in config/app.js before building production.');
   }
-  if (env.EXPO_PUBLIC_API_URL?.trim()) {
-    const apiBaseUrl = resolveApiBaseUrl(env.EXPO_PUBLIC_API_URL);
-    if (variant === 'production' && new URL(apiBaseUrl).protocol !== 'https:') {
-      throw new Error('Production requires an HTTPS EXPO_PUBLIC_API_URL.');
+  const apiBaseUrl = apiUrl ? resolveApiBaseUrl(apiUrl) : '';
+  if (variant === 'production' && apiBaseUrl && new URL(apiBaseUrl).protocol !== 'https:') {
+    throw new Error(
+      'Production requires an HTTPS API URL in config/app.js or EXPO_PUBLIC_API_URL.',
+    );
+  }
+  // Distinct identities are required for side-by-side installs and Firebase routing.
+  const suffixes = variants.map((name) => parsed.data.variants[name].identitySuffix);
+  if (
+    new Set(suffixes).size !== variants.length ||
+    parsed.data.variants.production.identitySuffix
+  ) {
+    throw new Error(
+      'Variant identity suffixes must be unique and production must use the base ID.',
+    );
+  }
+  for (const name of ['preview', 'production']) {
+    if (parsed.data.variants[name].developmentPushTopic) {
+      throw new Error('Only the development variant may configure developmentPushTopic.');
     }
   }
-  return { brand, variant };
+  return {
+    brand,
+    variant,
+    apiUrl: apiBaseUrl,
+    googleMaps,
+    googleAuth,
+    developmentPushTopic: integration.developmentPushTopic,
+  };
 }
 
 module.exports = { resolveBrand };

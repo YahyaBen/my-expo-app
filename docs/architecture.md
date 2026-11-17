@@ -40,9 +40,9 @@ header and Back.
 | Preferences, language and direction     | Existing contexts, hooks and storage owners                                     |
 | Authentication screens and workflow     | `src/features/auth/`, `src/context/auth.context.tsx`, `src/guards/`             |
 | Entity data access                      | `src/services/<entity>/<entity>.repository.ts`                                  |
-| HTTP, queries and session lifecycle     | `src/services/`, `src/lib/api-query-keys.ts`                                    |
+| HTTP and session lifecycle              | `src/services/`, `src/lib/react-query.ts`                                       |
 | Validation and DTOs                     | `src/validation/`, `src/types/`                                                 |
-| Build-time identity                     | `config/brand.js`, `config/brands/`, `app.config.js`                            |
+| Build-time identity                     | `config/app.js`, `config/brand.js`, `app.config.js`                             |
 | Public brand/asset metadata             | `src/config/brand.ts`, `src/config/brand-assets.ts`, `config/brand-assets.json` |
 
 ## Startup

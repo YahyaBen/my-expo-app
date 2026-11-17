@@ -32,32 +32,53 @@ files, then run `npm run check`. See
 
 ## Brand and environment configuration
 
-The default brand is `template`. Its name, native identity, assets, EAS project ID
-and initial presentation live in `config/brands/template.json`. `config/brand.js`
-validates that manifest and `app.config.js` projects it into Expo configuration.
-The app reads only public metadata through `src/config/brand.ts`.
+Edit **`config/app.js`** when cloning the template. It contains commented setup
+values and a description for each variant. `config/brand.js` validates the file;
+`app.config.js` assembles Expo configuration. `app.json` retains shared native
+behavior and plugins; `eas.json` retains reusable build profiles. The app reads
+only selected public metadata through `src/config/brand.ts`, never the setup file.
 
-For a cloned starter's EAS build, set the manifest's `eas.owner` and
-`eas.projectId` for a project with the slug `expo-mobile-template`. An empty ID
-works for local development. Production requires a project ID. See
-[build profiles](eas-development-builds.md) for account access and signing.
+| Setting in `config/app.js`                              | Purpose                                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `variant`                                               | Local default: `development`, `preview` or `production`                  |
+| `app.id`, `app.name`, `app.description`                 | Internal brand ID, app name and product description                      |
+| `app.slug`, `app.scheme`                                | EAS project slug and base deep-link scheme                               |
+| `app.version`                                           | Store-visible version and app-version OTA runtime                        |
+| `app.android.package`, `app.ios.bundleIdentifier`       | Base production native identities                                        |
+| `app.android.versionCode`, `app.ios.buildNumber`        | Locally managed build numbers; increase before store uploads             |
+| `app.icon`, `app.ios.icon`, `app.android`, `app.splash` | Home-screen icons and splash assets/colors                               |
+| `app.presentation`                                      | Default palette, launch mode, registered heading font and launch artwork |
+| `app.eas.owner`, `app.eas.projectId`                    | Your EAS account and project UUID; slug must match that project          |
+| `variants.<variant>.description`                        | Explains who the variant is for and which services it uses               |
+| `variants.<variant>.nameSuffix`, `identitySuffix`       | Home-screen label suffix and native ID / deep-link suffix                |
+| `variants.<variant>.apiUrl`                             | Optional backend origin; production requires HTTPS when set              |
+| `variants.<variant>.googleServicesFile`                 | Firebase Android client JSON path; `''` disables Android push            |
+| `variants.development.developmentPushTopic`             | Android development broadcast topic; `''` disables subscription          |
+| `variants.<variant>.googleMaps`                         | Android/iOS Maps SDK API keys                                            |
+| `variants.<variant>.googleAuth`                         | Google OAuth Web and iOS client IDs                                      |
 
-| Variable              | Meaning                                                                 |
-| --------------------- | ----------------------------------------------------------------------- |
-| `APP_BRAND`           | Registered manifest; defaults to `template`                             |
-| `APP_VARIANT`         | `development` (default), `preview` or `production`                      |
-| `EXPO_PUBLIC_API_URL` | Backend required for authentication; production requires HTTPS when set |
+No `.env.local` is required. `npm start` respects the file's default variant;
+EAS build profiles select their own `APP_VARIANT`. For an OTA update, explicitly
+select the variant with `APP_VARIANT` or the file's `variant` value; a channel name
+does not select app configuration. Existing nonempty API/Google environment values
+still override the selected variant for local or CI/EAS use; `.env.example` lists
+them. Remove stale overrides when switching projects. An optional legacy
+`APP_BRAND` must match `app.id`; new clones do not need it.
 
-No `.env.local` is required. The launch script selects the development variant
-for its child process. EAS profiles select their own variant. Public variables
-are bundled and must not contain secrets.
+Public Google client IDs and restricted native Maps keys may be configured here.
+Keep OAuth client secrets, FCM service-account private keys and signing passwords
+outside app configuration. Authentication needs a reachable API and matching
+Google Cloud registrations; see [authentication setup](auth-forms.md).
 
-Authentication needs a reachable API. Google additionally needs Web/iOS OAuth
-client IDs and registered Android signing certificates; see
-[authentication setup](auth-forms.md) for environment values and native builds.
+For a cloned starter's EAS build, fill `app.eas` with your project details.
+An empty project ID works locally; production requires an ID. EAS uses local
+version numbers and does not increment them. For an existing app, choose build
+numbers above the latest uploaded Android/iOS builds, including previous EAS
+remote counters. `package.json` version is npm metadata and does not control
+native app versions. See [build profiles](eas-development-builds.md).
 
-For a different product, change the manifest's name, slug, scheme, native IDs and
-assets as needed. The manifest defines production identity; development and preview
+For a different product, change the file's name, slug, scheme, native IDs and
+assets. The app section defines production identity; development and preview
 suffix native IDs and URL schemes for side-by-side installation. See
 [native identity and integrations](eas-development-builds.md#native-identity-and-integrations).
 Expo push notifications are configured for Android development and production.
@@ -73,8 +94,8 @@ Open **Components → Media & carousels → Google Maps** to pan and zoom around
 sample Casablanca marker, switch between standard and satellite maps, or reset
 the view. This example does not request location access.
 
-Set `GOOGLE_MAPS_ANDROID_API_KEY` and `GOOGLE_MAPS_IOS_API_KEY` in your local build
-environment (or the selected EAS environment). `app.config.js` passes them to the
+Set `variants.<variant>.googleMaps.androidApiKey` and `iosApiKey` in `config/app.js`.
+`app.config.js` passes them to the
 `react-native-maps` config plugin; only availability flags go into `extra.googleMaps`.
 Enable **Maps SDK for Android** and **Maps SDK for iOS** in Google Cloud. Restrict
 the Android key to the resolved package name and signing certificate SHA-1, and

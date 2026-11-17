@@ -1,11 +1,10 @@
-import { apiClient, createApiClient } from '@/services/api';
+import { apiClient, createApiClient, type ApiRequestOptions } from '@/services/api';
 import {
   authFlowResponseSchema,
   tokenResponseSchema,
   currentIdentityResponseSchema,
   messageResponseSchema,
 } from '@/validation/schemas/api/auth';
-import type { ApiReadOptions } from '../request-utils';
 import { DEFAULT_API_TIMEOUT_MS } from '../api.config';
 import type {
   AuthFlowResponse,
@@ -22,6 +21,8 @@ const authClient = createApiClient({
   includeAuth: false,
   skipInterceptor: true,
 });
+
+type ApiReadOptions = Pick<ApiRequestOptions, 'signal' | 'timeoutMs'>;
 
 /** Remote operations only; queries and session lifecycle remain with their owners. */
 export interface AuthRepository {

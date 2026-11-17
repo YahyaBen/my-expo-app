@@ -11,6 +11,11 @@ const publicBrandSchema = z.object({
   name: z.string().min(1),
   variant: z.enum(['development', 'preview', 'production']),
   pushNotifications: z.boolean().default(false),
+  developmentPushTopic: z.string().default(''),
+  apiUrl: z.string().default(''),
+  googleAuth: z
+    .object({ webClientId: z.string(), iosClientId: z.string() })
+    .default({ webClientId: '', iosClientId: '' }),
   presentation: z.object({
     launch: z.enum(['minimal', 'branded']),
     palette: z.custom<ThemeId>(
@@ -31,7 +36,7 @@ export type AppBrand = z.infer<typeof publicBrandSchema>;
 export function getAppBrand() {
   const result = publicBrandSchema.safeParse(Constants.expoConfig?.extra?.brand);
   if (!result.success) {
-    throw new Error('Missing or invalid brand metadata. Restart Expo with the intended APP_BRAND.');
+    throw new Error('Missing or invalid app metadata. Check config/app.js and restart Expo.');
   }
   return result.data;
 }

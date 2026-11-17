@@ -1,6 +1,6 @@
 ---
 name: template-skill-ui-host
-description: Compose native groups with shared Host ownership; audit redundant boundaries while preserving sizing, appearance and live layout direction.
+description: Fix native Host boundaries, sizing, inherited scheme/tint and live layout direction; consolidate redundant Hosts.
 ---
 
 # UniversalHost

@@ -13,7 +13,7 @@ System/Light/Dark appearance preference.
 Palette colors and semantic tokens
 stay in `src/constants/themes/`. Register new
 palettes in that registry and the config resolver's supported palette IDs, then
-select the ID in the brand manifest. See [brand setup](development.md#brand-and-environment-configuration).
+select the ID in `app.presentation` in `config/app.js`. See [brand setup](development.md#brand-and-environment-configuration).
 
 UX uses the [official shadcn/ui default Neutral theme](https://ui.shadcn.com/docs/theming#default-theme-css)
 in both appearances. The upstream OKLCH colors are converted to sRGB hex and
@@ -160,44 +160,18 @@ appearance restoration before accepting changes.
 
 Settings > Appearance > Theme transition offers the existing circular reveal,
 inspired by the [Telegram theme-switch demo](https://reactiive.io/demos/telegram-theme-switch),
-and Kurohitsugi, inspired by the wall fragments assembling in the
-[reference clip from 0:16](https://www.youtube.com/watch?v=llRkXBHe0p0&t=16s).
-Seven individually drawn tower-shaped openings follow the background silhouette
-in the image reference. Their chipped crowns, dry-ink grain, long brush tears,
-fine bristles and scattered debris reveal fragments of the next theme through
-the previous one. Thin cuts retain the previous theme within each tower during
-the rise, then clear fully at completion.
-A brief windup releases into a fast ascent from the lower center, followed by a
-short settle, revealing the next theme in place like the circular reveal. Only the actual
-old and new app appearances are shown. The motion stays flat and vertical.
-Yhwach adds a separate many-eyed reveal: sharp, uneven eye frames open in staggered
-groups, with outlined sclera, layered oval irises and small oval pupils aligned along
-each eye. Its smooth iris contours follow the supplied reference. Shadow tendrils grow
-upward before a final sweep completes the change. Its eye pattern uses only the
-two app themes, with a 1500 ms duration.
-Dangai Ichigo adds a 1400 ms aura reveal with flowing ribbons, fine tears,
-drifting fragments and rising pressure-wave arcs. A final curved surge completes
-the switch.
-Garganta first covers the departing theme with a monochrome surface, then opens
-a contrasting manga-ink rift from the middle. Its uneven rectangular breaks retain frayed
-shoulders, tangled fine threads, long vertical scratches and dry-ink grain.
-The actual next screen becomes visible through the entire rift as its jaws part,
-surrounded by a narrow ink rim and the monochrome exterior. After a brief hold,
-a 2D push enters that live opening. The entrance covers every corner before cleanup; the next theme
-stays at its resting layout. This white/black interlude lasts 2000 ms.
-Xbox intro uses the supplied filled SVG over 2400 ms. Its flat logo fade and hold
+and Xbox intro. Xbox uses the supplied filled SVG over 2000 ms. Its flat logo fade and hold
 follow the [2020 Series X startup reference](https://news.xbox.com/en-us/2020/05/07/xbox-20-20-inside-xbox-recap/),
 then the logo itself becomes the expanding mask revealing the live next theme.
 The artwork uses solid black or white.
-Both effects use white behind a black mask when departing Light, and black behind
+Xbox uses white behind a black mask when departing Light, and black behind
 a white mask when departing Dark. The root captures the resolved appearance at
 selection, so applying the destination theme keeps the interlude colors stable.
-Palette switches use that same source appearance; Circular and the other effects
-keep their existing behavior.
-All six options share capture, motion preferences and cancellation behavior.
-Circular, Kurohitsugi, Yhwach and Dangai use only the actual old/new app appearances.
-Circular remains the default; the selected effect is
+Palette switches use that same source appearance. Both options share capture,
+motion preferences and cancellation behavior. Circular uses only the actual
+old/new app appearances and remains the default; the selected effect is
 saved for the next launch and applies to palette and color-mode switches.
+Unsupported saved transition values fall back to Circular.
 The existing preference provider still saves the selection. Reduce Motion and
 live device appearance changes apply directly. Android's native Compose content
 is captured through `react-native-view-shot`; rebuild the development client after

@@ -1,7 +1,8 @@
 # Backend repositories
 
 The starter retains the existing Axios client, response validation, auth lifecycle,
-secure session storage and TanStack Query integration. Set `EXPO_PUBLIC_API_URL`
+secure session storage and TanStack Query integration. Set the selected variant's
+`apiUrl` in `config/app.js`
 for the real server and confirm the retained contract before live authentication.
 No guest credentials or mocked production API responses are supplied.
 
@@ -9,7 +10,6 @@ No guest credentials or mocked production API responses are supplied.
 `AuthRepository` contract and its `authRepository` implementation. Its operations
 cover login, registration, registration confirmation/resend, Google sign-in,
 password recovery/reset, current identity and remote logout.
-`auth.queries.ts` calls `authRepository.getCurrentIdentity` for the identity query.
 Consumed responses are validated by `src/validation/schemas/api/auth.ts` through
 the existing HTTP client; request/form schemas retain their contracts.
 
@@ -40,21 +40,16 @@ revocation. Its repository never establishes or clears a local session. The raw
 refresh transport remains independent of the repository to avoid interceptor
 cycles. Localized error presentation lives in `auth.error-message.ts`.
 
-Recipe-specific entity services, feature adapters, DTOs and schemas are removed.
-Generic request normalization, pagination schemas, query factories, mutation
-callbacks, invalidation helpers and `createEntityKeys` remain for new backend
-features. Create only the layers required by an actual endpoint. Preserve abort
-signals, account ownership, session-generation checks and mandatory cache work
-when composing success navigation.
+Add query options, cache keys, pagination schemas and mutation helpers when a
+feature consumes them. The starter keeps its active transport and session owners
+without unused entity scaffolding. Repository read options select `signal` and
+`timeoutMs` from the existing transport type. Preserve abort signals, account
+ownership, session-generation checks and mandatory cache work when composing
+success navigation.
 
-Current-identity and entity-detail queries use `skipToken` until their required
-identifiers exist. Empty/whitespace identifiers and an empty detail identifier
-tuple cannot start a request through manual refetch. Normalize identifiers once
-for both the query key and the readiness check.
-
-`request-utils.ts` owns primitive parameter normalization and identifier paths.
-Its API types are imported as types only, so using these helpers does not load
-the HTTP client, secure session storage or initialized query cache.
+For future queries, normalize identifiers once for both the key and readiness
+check. Use `skipToken` until required identifiers exist, keep finite/infinite
+keys separate and validate pagination against the actual backend response.
 
 Repository modules have an enforced transport import boundary. Keep
 React/navigation and cache effects in consumers or query/mutation modules, and
@@ -71,7 +66,7 @@ static checks.
 
 `config/api.js` owns URL validation/normalization and the default ten-second
 timeout. `src/services/api.config.ts` is the native transport entry point: it
-reads the statically referenced `process.env.EXPO_PUBLIC_API_URL` lazily and maps
+reads the selected public `apiUrl` from `extra.brand` lazily and maps
 configuration failures to `ApiConfigurationError` with safe user feedback.
 
 Ordinary requests, explicit base URL overrides and raw token refresh use this

@@ -1,7 +1,7 @@
 # Bundled assets
 
-Each brand manifest selects `presentation.headingFont` and
-`presentation.launchArtwork`. The public metadata in
+`app.presentation` in `config/app.js` selects `headingFont` and
+`launchArtwork`. The public metadata in
 [`config/brand-assets.json`](../config/brand-assets.json) describes registered
 files, platform font names and supported languages. Config resolution validates
 the selected IDs and files. [`src/config/brand-assets.ts`](../src/config/brand-assets.ts)
@@ -28,7 +28,7 @@ The template image is an existing Expo placeholder. Replace it with client artwo
 before distribution. Native app/adaptive icons and the native splash are separate
 manifest fields; changing in-app artwork does not update those assets.
 
-The App Icon picker offers Dark, Light and Red. The brand manifest registers
+The App Icon picker offers Dark, Light and Red. `app` in `config/app.js` registers
 alternate artwork and padded Android foregrounds; `app.config.js` declares the
 Light and Red native resources through `expo-awesome-app-icon`. Red uses the same
 metallic design with a ruby/crimson palette in `assets/AppIcon-Red.icon/`.
@@ -81,13 +81,13 @@ language requires a font with appropriate glyphs and native readability checks.
 
 ## Change or add artwork and fonts
 
-1. Select an existing asset ID in the brand manifest when possible. A new brand
+1. Select an existing asset ID in `config/app.js` when possible. A new brand
    using registered assets needs no screen edits.
 2. For a new asset, add its bundled file and metadata, then add a literal import
    or `require` to the native registry. Its typed keys must match the metadata.
    Never construct `require(manifestPath)` dynamically. The current launch
    renderer supports Lottie and image assets.
-3. Restart Metro with the intended `APP_BRAND`/`APP_VARIANT`; selection is fixed
+3. Restart Metro with the intended `APP_VARIANT` (or the default in `config/app.js`); selection is fixed
    for that app run. Changes to embedded fonts, font plugin configuration, native
    identity, icons or native splash require a matching native build. An OTA
    update cannot replace those native settings.

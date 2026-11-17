@@ -11,6 +11,10 @@ behavior, performance and compatibility across both platforms.
   template free of automated test suites; use static checks and native verification.
 - Measure before optimizing. Do not add speculative memoization or caching, or
   claim device performance gains from source inspection or bundle size alone.
+- Apply [Ponytail](https://github.com/DietrichGebert/ponytail) within this project's
+  native UI, architecture and measured-performance constraints. Its verification
+  guidance uses this project's static checks and manual native verification;
+  do not add automated test suites.
 
 ## Skills and documentation
 
@@ -22,6 +26,18 @@ behavior, performance and compatibility across both platforms.
   Do not add per-component READMEs or chain skills through links to other skills.
 - Use [the documentation index](docs/index.md) for project guides and follow
   [documentation ownership](docs/documentation.md) when editing guidance.
+
+## Multi-agent work
+
+- For tasks with independent parts, delegate bounded work in parallel to the
+  project agents in `.codex/agents/`. Keep small or tightly coupled tasks with
+  the main agent. See [agent setup](docs/codex-agents.md) for roles and usage.
+- Give each agent a concrete outcome and explicit file ownership before edits.
+  Do not assign overlapping writes; coordinate shared contracts and files through
+  the main agent. Preserve existing uncommitted work.
+- Each agent follows these rules and selects relevant skills from `docs/skills.md`.
+  The main agent integrates results, reviews the combined diff and runs final
+  verification. Agent definitions do not start background work on their own.
 
 ## Expo APIs
 

@@ -8,10 +8,11 @@ import { ensureNotificationChannel, getDevicePermission } from './device-permiss
 export async function subscribeToDevelopmentPushTopic(): Promise<void> {
   if (Platform.OS !== 'android') return;
   const brand = getAppBrand();
-  if (!brand.pushNotifications || brand.variant !== 'development') return;
+  if (!brand.pushNotifications || brand.variant !== 'development' || !brand.developmentPushTopic)
+    return;
   if (!(await getDevicePermission('notifications')).granted) return;
   await ensureNotificationChannel();
-  await subscribeToTopicAsync('all-testing-et');
+  await subscribeToTopicAsync(brand.developmentPushTopic);
 }
 
 /** Register with Expo Push Service after OS permission, without showing a permission prompt. */
@@ -25,7 +26,7 @@ export async function getExpoPushToken(): Promise<string | null> {
   await ensureNotificationChannel();
   // Topic registration can wait for connectivity without delaying the Expo token field.
   void subscribeToDevelopmentPushTopic().catch(() => {
-    console.warn('[Notifications] Could not join the all-testing-et topic.');
+    console.warn('[Notifications] Could not join the development push topic.');
   });
   const token = await getExpoPushTokenAsync({ projectId });
   return token.data;

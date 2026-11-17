@@ -39,7 +39,7 @@ prompt and Settings; standalone component previews do not start update work.
 
 The EAS CLI configured the `appVersion` runtime policy and build-profile channels
 in `app.json` / `eas.json`. `app.config.js` derives the update URL from the selected
-brand's existing `eas.projectId`. **Increase `expo.version` before making a build
+app's `app.eas.projectId` in `config/app.js`. **Increase `app.version` in that file before making a build
 with different native code or native configuration.** Builds sharing an app version
 must have compatible native code. An OTA update cannot add native modules.
 
@@ -53,7 +53,8 @@ Publish through EAS after building and installing a matching release binary:
 npx eas-cli@latest update --channel preview --environment preview --message "Describe the change"
 ```
 
-Use the matching `APP_BRAND` / `APP_VARIANT` when publishing; preview builds use
+Use the matching `APP_VARIANT` when publishing (or set `variant` in `config/app.js`);
+an update channel does not select the app variant. Preview builds use
 `preview`, production builds use `production`. Keep runtime version, environment,
 project and channel aligned. Publishing affects installed apps; verify a preview
 before choosing a production publication.

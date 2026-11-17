@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Template Expo Configuration'
+  short_description: 'Configure SDK compatibility and native build settings'
+  default_prompt: "Use $template-expo-configuration to update this template's Expo dependencies or brand/build configuration."

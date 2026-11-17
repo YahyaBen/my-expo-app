@@ -1,4 +1,0 @@
-interface:
-  display_name: 'Expo Project Setup'
-  short_description: 'Configure SDK compatibility and native build settings'
-  default_prompt: "Use $expo-overview to update this project's Expo dependencies or brand/build configuration."

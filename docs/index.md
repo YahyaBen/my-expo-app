@@ -8,6 +8,7 @@ Maintained guides are listed below. Component contracts belong to independent sk
 ## Development and architecture
 
 - [Development](development.md)
+- [Project agents](codex-agents.md)
 - [Application architecture](architecture.md)
 - [Documentation ownership](documentation.md)
 - [Task and component skills](skills.md)

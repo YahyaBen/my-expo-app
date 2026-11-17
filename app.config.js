@@ -2,24 +2,17 @@ const { resolveBrand } = require('./config/brand');
 const assets = require('./config/brand-assets.json');
 
 module.exports = ({ config }) => {
-  const { brand, variant } = resolveBrand();
+  const { brand, variant, apiUrl, googleMaps, googleAuth, developmentPushTopic } = resolveBrand();
   const headingFont = assets.headingFonts[brand.presentation.headingFont];
-  const androidGoogleMapsApiKey = process.env.GOOGLE_MAPS_ANDROID_API_KEY?.trim();
-  const iosGoogleMapsApiKey = process.env.GOOGLE_MAPS_IOS_API_KEY?.trim();
-  const googleIosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim();
-  const googleWebClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim();
-  for (const [name, value] of [
-    ['EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID', googleIosClientId],
-    ['EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID', googleWebClientId],
-  ]) {
-    if (value && !/^\d+-[\w-]+\.apps\.googleusercontent\.com$/.test(value)) {
-      throw new Error(`${name} must be a Google OAuth client ID.`);
-    }
-  }
+  const androidGoogleMapsApiKey = googleMaps.androidApiKey || undefined;
+  const iosGoogleMapsApiKey = googleMaps.iosApiKey || undefined;
+  const googleIosClientId = googleAuth.iosClientId;
 
   return {
     ...config,
     name: brand.name,
+    description: brand.description,
+    version: brand.version,
     slug: brand.slug,
     scheme: brand.scheme,
     icon: brand.icon,
@@ -40,11 +33,13 @@ module.exports = ({ config }) => {
       ...config.ios,
       icon: brand.ios.icon ?? brand.icon,
       bundleIdentifier: brand.ios.bundleIdentifier,
+      buildNumber: brand.ios.buildNumber,
     },
     android: {
       ...config.android,
       icon: brand.android.icon ?? brand.icon,
       package: brand.android.package,
+      versionCode: brand.android.versionCode,
       adaptiveIcon: brand.android.adaptiveIcon,
       googleServicesFile: brand.android.googleServicesFile,
     },
@@ -61,6 +56,9 @@ module.exports = ({ config }) => {
         variant,
         presentation: brand.presentation,
         pushNotifications: Boolean(brand.android.googleServicesFile),
+        developmentPushTopic,
+        apiUrl,
+        googleAuth,
       },
     },
     plugins: [

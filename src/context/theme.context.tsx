@@ -18,18 +18,10 @@ const TRANSITION_STORAGE_KEY = 'appAppearanceTransition';
 let preferencePersistence = Promise.resolve();
 
 export type ColorSchemePreference = AppColorScheme | 'system';
-export type AppearanceTransitionStyle =
-  'circular' | 'kurohitsugi' | 'yhwach' | 'dangai' | 'garganta' | 'xbox';
+export type AppearanceTransitionStyle = 'circular' | 'xbox';
 
 function isAppearanceTransitionStyle(value: unknown): value is AppearanceTransitionStyle {
-  return (
-    value === 'circular' ||
-    value === 'kurohitsugi' ||
-    value === 'yhwach' ||
-    value === 'dangai' ||
-    value === 'garganta' ||
-    value === 'xbox'
-  );
+  return value === 'circular' || value === 'xbox';
 }
 
 function isColorSchemePreference(value: unknown): value is ColorSchemePreference {

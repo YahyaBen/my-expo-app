@@ -25,7 +25,7 @@ import {
 import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 import type { PickerLayout } from '../picker/picker';
 import { captureAppearance } from './capture-appearance';
-import { PatternSnapshotReveal } from './pattern-snapshot-reveal';
+import { XboxSnapshotReveal } from './xbox-snapshot-reveal';
 
 export type SnapshotRevealFrame = {
   x: number;
@@ -193,9 +193,8 @@ export function AppearanceTransition({
           {children}
         </View>
         {reveal ? (
-          reveal.style !== 'circular' ? (
-            <PatternSnapshotReveal
-              variant={reveal.style}
+          reveal.style === 'xbox' ? (
+            <XboxSnapshotReveal
               width={reveal.width}
               height={reveal.height}
               sourceScheme={reveal.sourceScheme}
@@ -206,7 +205,7 @@ export function AppearanceTransition({
           ) : (
             <SnapshotReveal
               reveal={reveal}
-              duration={20_000}
+              duration={2_000}
               image={image}
               onCovered={applyPending}
               onComplete={finish}

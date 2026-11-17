@@ -266,10 +266,6 @@
     "themeTransition": "テーマ切り替えアニメーション",
     "transitions": {
       "circular": "円形",
-      "kurohitsugi": "黒棺",
-      "yhwach": "ユーハバッハ",
-      "dangai": "断界一護",
-      "garganta": "黒腔（ガルガンタ）",
       "xbox": "Xbox イントロ"
     },
     "tab": "設定",

@@ -1,9 +1,9 @@
 import { Platform } from 'react-native';
+import { getAppBrand } from '@/config/brand';
 
 /** Load native Google code only after an explicit sign-in action. */
 export async function getGoogleIdToken(): Promise<string | null> {
-  const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim();
-  const iosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim();
+  const { webClientId, iosClientId } = getAppBrand().googleAuth;
   if (!webClientId || (Platform.OS === 'ios' && !iosClientId)) {
     throw new Error('auth.signInUnavailable');
   }

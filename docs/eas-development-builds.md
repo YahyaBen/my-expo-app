@@ -2,9 +2,9 @@
 
 ## Link a clone
 
-Set `eas.owner` and `eas.projectId` in `config/brands/template.json` to the
-account and UUID of your EAS project. Use the slug `hyrkul-wlui-template` to
-match the starter. Production requires a project ID. Local development accepts
+Set `app.eas.owner` and `app.eas.projectId` in `config/app.js` to the
+account and UUID of your EAS project. Set `app.slug` to match that project.
+Production requires a project ID. Local development accepts
 an empty ID.
 
 ```sh
@@ -21,16 +21,19 @@ for platform credentials.
 
 ## Profiles
 
-| Profile              | Result                                                |
-| -------------------- | ----------------------------------------------------- |
-| `development`        | Android debug APK or iOS Simulator development client |
-| `development-device` | Development client for physical iOS devices           |
-| `preview`            | Internal release APK / signed iOS internal build      |
-| `production`         | Store binaries with remote version increment          |
+| Profile              | Result                                                 |
+| -------------------- | ------------------------------------------------------ |
+| `development`        | Android debug APK or iOS Simulator development client  |
+| `development-device` | Development client for physical iOS devices            |
+| `preview`            | Internal release APK / signed iOS internal build       |
+| `production`         | Store binaries with locally configured version numbers |
 
-All profiles use the brand manifest's `name` as the installed app name. The
-default brand displays `Expo Template`. Install a new native build to apply a
-name change.
+Installed names combine `app.name` and the selected variant's `nameSuffix` in
+`config/app.js`: `Expo Template Dev`, `Expo Template Preview`, or `Expo Template`.
+Install a new native build to apply a name change. EAS uses the local version
+source without auto-increment: increase `app.android.versionCode` and
+`app.ios.buildNumber` yourself before a new store upload. For an existing app,
+use numbers above the latest uploaded builds, including previous remote EAS versions.
 
 ```sh
 npx eas-cli@latest build --platform ios --profile development
@@ -42,7 +45,7 @@ npx eas-cli@latest build --platform all --profile production
 EAS chooses the SDK-compatible iOS image through `image: auto`. Development Android
 limits Gradle to one worker with parallel execution disabled. Preview explicitly creates
 an installable APK. Production creates the store Android app bundle by default.
-Build profiles share the manifest's project ID. No backend URL is required.
+Build profiles share `app.eas.projectId`. No backend URL is required.
 
 The app opens the public Discover shell. Login and Register are listed under
 Components → App flows; they do not gate the catalog or Home tab.
@@ -51,8 +54,8 @@ Components → App flows; they do not gate the catalog or Home tab.
 
 On Windows, use the installed Android SDK/JDK and Expo prebuild with Gradle to
 produce a signed AAB locally. The helper uses the production brand identity and
-the exact `expo.version` and `expo.android.versionCode` in `app.json`; it does not
-increment EAS's remote version counter. `JAVA_HOME` and `ANDROID_HOME` must point
+the exact `app.version` and `app.android.versionCode` in `config/app.js`.
+It does not increment build numbers. `JAVA_HOME` and `ANDROID_HOME` must point
 to the installed toolchains.
 
 ```powershell
@@ -71,9 +74,9 @@ Keep that file and the keystore outside source control. The helper reads only
 those fields, verifies the keystore, and passes signing values through the local
 build process environment. The config plugin configures generated Gradle signing
 without embedding credentials in source; generated Android files remain ignored.
-The helper sets the production update channel, disables developer screens,
+The helper selects the production variant and update channel,
 generates Android with Expo, regenerates the JavaScript bundle so current public
-environment values are embedded, runs `bundleRelease`, verifies the archive signature,
+configuration values are embedded, runs `bundleRelease`, verifies the archive signature,
 and copies the AAB to the requested output. Sanitized logs are kept in
 `.expo/local-release/build.log`. An existing output file is never overwritten.
 
@@ -95,14 +98,14 @@ authentication; a successful native build does not verify live sign-in.
 EAS project UUIDs identify Expo projects, not store apps. Account access, Android
 signing, Apple credentials and device provisioning are still required where
 applicable. Separate products need unique app IDs, display names and assets in the
-brand manifest. Keeping an existing package ID updates/replaces that installed app.
+`config/app.js`. Keeping an existing package ID updates/replaces that installed app.
 
-`config/brand.js` derives each variant's identity from the manifest so development,
+`config/brand.js` derives each variant's identity from `config/app.js` so development,
 preview and production can be installed together:
 
 | Variant       | Android package / iOS bundle ID | URL scheme suffix |
 | ------------- | ------------------------------- | ----------------- |
-| `production`  | Manifest's base ID              | None              |
+| `production`  | App's base ID                   | None              |
 | `preview`     | Base ID + `.preview`            | `.preview`        |
 | `development` | Base ID + `.dev`                | `.dev`            |
 
@@ -124,10 +127,12 @@ Expo, so the Google services files and FCM v1 sending credentials remain require
 | Development | `com.hyrkul.mobiletemplate.dev` | `google-services.development.json` | `expo-template-dev-hyrkul` |
 | Production  | `com.hyrkul.mobiletemplate`     | `google-services.json`             | `expo-template-hyrkul`     |
 
-In `config/brands/template.json`, `android.googleServicesFile` accepts one file
-path or a map by variant. Each file must contain a client matching the resolved
-Android package. Preview has no file configured; register its `.preview` package
-and add its Google services file before enabling remote push for that variant.
+In `config/app.js`, set `variants.development.googleServicesFile` and
+`variants.production.googleServicesFile` to the separate downloaded Firebase
+Android app JSON files. Each file must contain a client matching the resolved
+Android package. The resolver rejects missing files, malformed JSON and mismatched
+package names before building. Preview has an empty path; register its `.preview`
+package and fill `variants.preview.googleServicesFile` before enabling Android push.
 Expo copies the selected file and configures Google services during prebuild.
 
 Configure sending credentials and test:
@@ -171,12 +176,14 @@ silent background work is not configured.
 
 ### Development topic through Expo
 
-Development Android installs subscribe to `all-testing-et` with Expo's
+Development Android installs subscribe to `variants.development.developmentPushTopic`
+in `config/app.js` (currently `all-testing-et`) with Expo's
 `subscribeToTopicAsync()` after notification permission is granted. The app tries
 after the startup permission request finishes, on returning to the foreground, and during Settings token
 registration. Topic work does not block launch or Expo token display; failures
 are logged and the next registration/resume can retry. Production, preview and
 iOS do not subscribe, and existing installs join when they run the updated app.
+Set the topic to `''` to disable subscription for a clone.
 
 This is an FCM topic managed through the Expo Android API. Send topic messages
 from the development Firebase project (`expo-template-dev-hyrkul`) using Firebase
@@ -191,7 +198,7 @@ Expo development/release binary; rebuild if that native module is unavailable.
 See [Expo topic APIs](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/#notificationssubscribetotopicasynctopic).
 
 Remote iOS setup remains pending APNs credentials and its own device verification.
-The existing `GoogleService-Info.plist` is unreferenced. Expo Go cannot test Android
+Expo Go cannot test Android
 remote push notifications; use a development build. An Expo token alone does not
 prove EAS sending credentials are configured. See
 [Expo notification APIs](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/)

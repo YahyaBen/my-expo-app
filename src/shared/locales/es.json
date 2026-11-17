@@ -266,10 +266,6 @@
     "themeTransition": "Transición del tema",
     "transitions": {
       "circular": "Circular",
-      "kurohitsugi": "Kurohitsugi",
-      "yhwach": "Yhwach",
-      "dangai": "Ichigo Dangai",
-      "garganta": "Garganta",
       "xbox": "Intro de Xbox"
     },
     "tab": "Ajustes",

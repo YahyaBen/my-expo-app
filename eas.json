@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 24.4.1",
-    "appVersionSource": "remote"
+    "appVersionSource": "local"
   },
   "build": {
     "development": {
@@ -9,7 +9,6 @@
       "distribution": "internal",
       "environment": "development",
       "env": {
-        "APP_BRAND": "template",
         "APP_VARIANT": "development"
       },
       "android": {
@@ -35,7 +34,6 @@
         "image": "auto"
       },
       "env": {
-        "APP_BRAND": "template",
         "APP_VARIANT": "preview"
       },
       "android": {
@@ -44,7 +42,6 @@
       "channel": "preview"
     },
     "production": {
-      "autoIncrement": true,
       "environment": "production",
       "android": {
         "credentialsSource": "remote"
@@ -53,7 +50,6 @@
         "image": "auto"
       },
       "env": {
-        "APP_BRAND": "template",
         "APP_VARIANT": "production"
       },
       "channel": "production"

@@ -10,7 +10,6 @@ const result = spawnSync(
     env: {
       ...process.env,
       NODE_ENV: 'development',
-      APP_VARIANT: 'development',
     },
   },
 );

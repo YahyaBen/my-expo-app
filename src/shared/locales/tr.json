@@ -266,10 +266,6 @@
     "themeTransition": "Tema geçişi",
     "transitions": {
       "circular": "Dairesel",
-      "kurohitsugi": "Kurohitsugi",
-      "yhwach": "Yhwach",
-      "dangai": "Dangai Ichigo",
-      "garganta": "Garganta",
       "xbox": "Xbox açılışı"
     },
     "tab": "Ayarlar",

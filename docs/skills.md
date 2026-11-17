@@ -4,15 +4,21 @@ Select skills by the responsibility being changed. Each skill is independent;
 there is no required router or sequence. Source and installed types define the
 available APIs. Keep skill-to-skill navigation in this index, outside skill bodies.
 
+## Agent communication
+
+| Skill                                         | Responsibility                                  |
+| --------------------------------------------- | ----------------------------------------------- |
+| [caveman](../.agents/skills/caveman/SKILL.md) | Concise replies that preserve technical details |
+
 ## Project workflows
 
 | Skill                                                                                           | Responsibility                                           |
 | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| [expo-overview](../.agents/skills/expo-overview/SKILL.md)                                       | SDK, dependencies, brands and build environments         |
+| [template-expo-configuration](../.agents/skills/template-expo-configuration/SKILL.md)           | SDK, dependencies, brands and build environments         |
 | [expo-mobile-ui-only](../.agents/skills/expo-mobile-ui-only/SKILL.md)                           | Mobile platform and UI technology constraints            |
 | [template-skill-implementation](../.agents/skills/template-skill-implementation/SKILL.md)       | Feature architecture and workflow boundaries             |
 | [expo-api-services](../.agents/skills/expo-api-services/SKILL.md)                               | Validated transport, session-safe remote state and cache |
-| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Shared library structure, theme tokens and examples      |
+| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Theme tokens, shared UI exports, adapters and examples   |
 | [template-skill-performance](../.agents/skills/template-skill-performance/SKILL.md)             | Measured native performance investigations               |
 
 ## Layout and primitives
@@ -65,16 +71,16 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 
 ## Feedback and app compositions
 
-| Skill                                                                                               | Responsibility                                |
-| --------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| [template-skill-ui-bottom-sheet](../.agents/skills/template-skill-ui-bottom-sheet/SKILL.md)         | Native sheet presentation and dismissal       |
-| [template-skill-ui-popover](../.agents/skills/template-skill-ui-popover/SKILL.md)                   | Anchored native popup content and dismissal   |
-| [template-skill-ui-loading](../.agents/skills/template-skill-ui-loading/SKILL.md)                   | Progress, query content, errors and retry     |
-| [template-skill-ui-skeleton](../.agents/skills/template-skill-ui-skeleton/SKILL.md)                 | Static placeholders and hosted pulse          |
-| [template-skill-ui-alert](../.agents/skills/template-skill-ui-alert/SKILL.md)                       | Queued native feedback and acknowledgment     |
-| [template-skill-ui-appearance](../.agents/skills/template-skill-ui-appearance/SKILL.md)             | Saved appearance and isolated previews        |
-| [template-skill-ui-auth](../.agents/skills/template-skill-ui-auth/SKILL.md)                         | Authentication frame and preference controls  |
-| [template-skill-ui-floating-action](../.agents/skills/template-skill-ui-floating-action/SKILL.md)   | Named floating icon actions                   |
-| [template-skill-ui-navigation](../.agents/skills/template-skill-ui-navigation/SKILL.md)             | Five-slot native tab dock                     |
-| [template-skill-ui-launch-screen](../.agents/skills/template-skill-ui-launch-screen/SKILL.md)       | Readiness and configured startup presentation |
-| [template-skill-ui-otp-bottom-sheet](../.agents/skills/template-skill-ui-otp-bottom-sheet/SKILL.md) | Verification, resend and OTP lifecycle        |
+| Skill                                                                                               | Responsibility                                    |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [template-skill-ui-bottom-sheet](../.agents/skills/template-skill-ui-bottom-sheet/SKILL.md)         | Native sheet presentation and dismissal           |
+| [template-skill-ui-popover](../.agents/skills/template-skill-ui-popover/SKILL.md)                   | Anchored native popup content and dismissal       |
+| [template-skill-ui-loading](../.agents/skills/template-skill-ui-loading/SKILL.md)                   | Progress, query content, errors and retry         |
+| [template-skill-ui-skeleton](../.agents/skills/template-skill-ui-skeleton/SKILL.md)                 | Static placeholders and hosted pulse              |
+| [template-skill-ui-alert](../.agents/skills/template-skill-ui-alert/SKILL.md)                       | Queued native feedback and acknowledgment         |
+| [template-skill-ui-appearance](../.agents/skills/template-skill-ui-appearance/SKILL.md)             | Saved appearance/motion, previews and transitions |
+| [template-skill-ui-auth](../.agents/skills/template-skill-ui-auth/SKILL.md)                         | Authentication frame and preference controls      |
+| [template-skill-ui-floating-action](../.agents/skills/template-skill-ui-floating-action/SKILL.md)   | Named floating icon actions                       |
+| [template-skill-ui-navigation](../.agents/skills/template-skill-ui-navigation/SKILL.md)             | Five-slot native tab dock                         |
+| [template-skill-ui-launch-screen](../.agents/skills/template-skill-ui-launch-screen/SKILL.md)       | Readiness and configured startup presentation     |
+| [template-skill-ui-otp-bottom-sheet](../.agents/skills/template-skill-ui-otp-bottom-sheet/SKILL.md) | Verification, resend and OTP lifecycle            |

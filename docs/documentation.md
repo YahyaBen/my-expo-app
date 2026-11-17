@@ -43,6 +43,12 @@ owning guide before removing a superseded document. Git retains the history.
 
 ## Verification
 
+For new or substantially revised skills, try realistic requests in a fresh chat,
+including a nearby request outside the skill's responsibility. Check selection
+from metadata before reading the body, then verify the resulting work. Use real
+outcomes to make narrow corrections; valid metadata alone does not prove useful
+behavior. Keep these checks manual rather than adding an automated test suite.
+
 Validate skill metadata and local links after edits or moves. Format edited files
 and run lint/typecheck as required by `AGENTS.md`. Report native observations
 separately; static checks and documentation do not prove device behavior.

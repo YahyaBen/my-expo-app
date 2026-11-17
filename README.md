@@ -36,11 +36,31 @@ roles in [tokens.ts](src/constants/themes/tokens.ts), spacing/radii in
 [design.ts](src/constants/themes/design.ts). See
 [theme values](docs/appearance-themes.md#theme-values) for ownership and previewing.
 
+## Configure your new app
+
+Edit [config/app.js](config/app.js). This is the single setup file for the app's
+name, description, slug, deep-link scheme, Android/iOS identifiers, version,
+Android version code, iOS build number, icons, splash, presentation and EAS project.
+It also describes development, preview and production and gives each variant its
+own API URL, Firebase JSON path, Google Maps keys and Google sign-in client IDs.
+
+Replace `google-services.development.json` and `google-services.json` with the
+Android app files downloaded from your development and production Firebase projects.
+Their package names must match the resolved IDs in `config/app.js`. Preview can
+use its own file; leaving its path empty disables Android push for preview.
+Keep FCM service-account private keys in EAS credentials, outside app configuration.
+
+EAS reads version numbers from this file. Increase `app.android.versionCode` and
+`app.ios.buildNumber` before another store upload; set them above previously
+uploaded builds, including any versions formerly managed remotely by EAS.
+The npm package version in `package.json` is package metadata, not the app version.
+See [configuration details](docs/development.md#brand-and-environment-configuration).
+
 ## Build your clone with EAS
 
-Set `eas.owner` and `eas.projectId` in
-[config/brands/template.json](config/brands/template.json) to your EAS account
-and project UUID. Use the slug `hyrkul-wlui-template` to match this starter.
+Set `app.eas.owner` and `app.eas.projectId` in
+[config/app.js](config/app.js) to your EAS account and project UUID.
+Set `app.slug` to match that EAS project.
 You can clear the ID for local development without linking an EAS project.
 
 ```sh
@@ -59,7 +79,7 @@ Android push uses `expo-notifications` with variant-specific Google services fil
 see [Expo push setup](docs/eas-development-builds.md#expo-push-notifications) for
 credentials and testing. Remote iOS push setup is pending. A distinct store app
 needs unique native identifiers, branding and matching platform credentials.
-Identity changes live in the brand manifest; changing an EAS UUID cannot change
+Identity changes live in `config/app.js`; changing an EAS UUID cannot change
 an app's native identity.
 
 Animations, gestures, sheets, launch transitions and reduced-motion handling remain

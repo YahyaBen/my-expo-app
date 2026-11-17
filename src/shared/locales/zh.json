@@ -266,10 +266,6 @@
     "themeTransition": "主题切换动画",
     "transitions": {
       "circular": "圆形扩散",
-      "kurohitsugi": "黑棺",
-      "yhwach": "友哈巴赫",
-      "dangai": "断界一护",
-      "garganta": "黑腔",
       "xbox": "Xbox 开场"
     },
     "tab": "设置",

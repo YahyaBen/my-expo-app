@@ -1,6 +1,6 @@
 ---
 name: expo-universal-component-library
-description: Maintain shared native component architecture, theme tokens and component examples.
+description: Change shared theme tokens, native UI exports, platform adapters and component examples.
 ---
 
 # Shared component library
