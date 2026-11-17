@@ -23,15 +23,19 @@ and the current auth lifecycle rather than creating a second transport.
 | `src/validation/schemas/api/<entity>.ts` | Runtime response schema; infer response DTOs from it                 |
 | `src/types/<entity>.types.ts`            | Query, result and supported write types                              |
 | Entity `.repository.ts`                  | Typed data access through `apiClient`; no React, UI or cache effects |
-| Entity `.queries.ts` / `.mutations.ts`   | Read options and supported writes with cache maintenance             |
-| Entity `.hooks.ts`                       | React consumption, callback composition and invalidation             |
+| Consuming feature's query/mutation files | Read options and supported writes with cache maintenance             |
+| Consuming feature's hooks                | React consumption, callback composition and invalidation             |
+
+Add query/mutation files only when a feature needs that responsibility. A small
+imperative workflow can call its repository directly without forwarding hooks.
 
 ## Response and session boundaries
 
 - Attach a Zod `responseSchema` to each consumed JSON response. Validate once in
   `apiClient`; do not cast responses or parse again in screens. Preserve required,
-  optional and nullable fields; use `z.looseObject` for additive fields. Add
-  pagination schemas only for a consumed endpoint with a confirmed contract.
+  optional and nullable fields. `z.object` accepts and strips additive fields;
+  use `z.looseObject` only when the consumer must retain them. Add pagination
+  schemas only for a consumed endpoint with a confirmed contract.
 - Malformed success responses become safe `ApiResponseValidationError`s without
   payloads, credentials or Zod input. Do not retry them, seed caches or invalidate
   from malformed writes.

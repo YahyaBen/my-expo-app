@@ -1,6 +1,8 @@
 import {
   ButtonContent,
   Column,
+  Icon,
+  Row,
   UniversalTextContent as Text,
   nativeFillWidth,
   type ButtonVariant,
@@ -24,6 +26,32 @@ export function ButtonExamples({
   return (
     <Column spacing={spacing.xl} modifiers={nativeFillWidth}>
       <GoogleButtonExamples onPress={onPress} />
+      <Column spacing={spacing.md} modifiers={nativeFillWidth}>
+        <Text variant="subtitle">{t('componentCatalog.names.icon')}</Text>
+        <Row spacing={spacing.lg}>
+          {(['close', 'more', 'disabled'] as const).map((action) => (
+            <ButtonContent
+              key={action}
+              variant="secondary"
+              circular
+              size="lg"
+              disabled={action === 'disabled'}
+              accessibilityLabel={
+                action === 'more' ? t('componentCatalog.sheets.more') : t('common.close')
+              }
+              onPress={onPress}
+              testID={`${testIDPrefix}-icon-${action}`}
+            >
+              <Icon
+                name={{
+                  ios: action === 'more' ? 'ellipsis' : 'xmark',
+                  android: action === 'more' ? 'more_horiz' : 'close',
+                }}
+              />
+            </ButtonContent>
+          ))}
+        </Row>
+      </Column>
       {groups.map(({ id, variants }) => (
         <Column key={id} spacing={spacing.md} modifiers={nativeFillWidth}>
           <Text variant="subtitle">{t(`componentCatalog.buttons.${id}`)}</Text>

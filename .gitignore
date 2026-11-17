@@ -41,6 +41,9 @@ yarn-error.*
 .scannerwork/
 .sonarqube-local/
 
+# Graphify generated graphs and caches
+/graphify-out/
+
 # generated native folders
 /ios
 /android

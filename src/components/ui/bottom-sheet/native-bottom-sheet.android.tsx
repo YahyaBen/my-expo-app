@@ -8,11 +8,18 @@ import type { NativeBottomSheetProps } from './native-bottom-sheet';
 export function NativeBottomSheet({
   dismissible,
   heightFraction,
+  edgeToEdge,
   ...props
 }: Readonly<NativeBottomSheetProps>) {
-  if (dismissible && heightFraction === undefined) return <BottomSheet {...props} />;
+  if (dismissible && heightFraction === undefined)
+    return <BottomSheet {...props} contentPadding={edgeToEdge ? 0 : undefined} />;
   return (
-    <ControlledBottomSheet {...props} dismissible={dismissible} heightFraction={heightFraction} />
+    <ControlledBottomSheet
+      {...props}
+      dismissible={dismissible}
+      heightFraction={heightFraction}
+      edgeToEdge={edgeToEdge}
+    />
   );
 }
 
@@ -25,6 +32,7 @@ function ControlledBottomSheet({
   contentColor,
   dismissible,
   heightFraction,
+  edgeToEdge,
 }: Readonly<NativeBottomSheetProps>) {
   const sheetRef = useRef<ModalBottomSheetRef>(null);
   const [mounted, setMounted] = useState(isPresented);
@@ -51,7 +59,7 @@ function ControlledBottomSheet({
       contentColor={contentColor}
       sheetGesturesEnabled={dismissible}
       showDragHandle={dismissible}
-      skipPartiallyExpanded={heightFraction !== undefined}
+      skipPartiallyExpanded={!dismissible || heightFraction !== undefined}
       properties={{
         shouldDismissOnBackPress: dismissible,
         shouldDismissOnClickOutside: dismissible,
@@ -62,7 +70,7 @@ function ControlledBottomSheet({
           ...nativeFillWidth,
           // Size content, not the modal: its anchors need the full window height.
           ...(heightFraction === undefined ? [] : [fillMaxHeight(heightFraction)]),
-          padding(16, dismissible ? 0 : 16, 16, 0),
+          ...(edgeToEdge ? [] : [padding(16, dismissible ? 0 : 16, 16, 0)]),
           ...(testID ? [nativeTestID(testID)] : []),
         ]}
       >

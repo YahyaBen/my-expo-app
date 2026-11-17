@@ -5,7 +5,6 @@ import {
   AppearanceTransitionControl,
   AuthScreenFrame,
   Badge,
-  BottomSheet,
   Button,
   ButtonContent,
   Checkbox,
@@ -54,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import { View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ButtonExamples } from './button-examples';
+import { BottomSheetExamples } from './bottom-sheet-examples';
 import { ChipExamples } from './chip-examples';
 import {
   componentCatalog,
@@ -94,7 +94,7 @@ function ComponentPage({ id }: Readonly<{ id: ComponentId }>) {
     return (
       <AuthScreenFrame
         title={title}
-        description={t(`componentCatalog.descriptions.list`)}
+        description={t('componentCatalog.descriptions.auth')}
         testID="component-auth"
         topBar={
           <Button
@@ -420,32 +420,7 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
           </Popover>
         );
       case 'bottom-sheet':
-        return (
-          <>
-            <ButtonContent
-              variant="primary"
-              label={actionLabel}
-              onPress={() => setOpen(true)}
-              testID="component-bottom-sheet-trigger"
-            />
-            <BottomSheet
-              isPresented={open}
-              onDismiss={() => setOpen(false)}
-              testID="component-bottom-sheet"
-              heightFraction={0.65}
-            >
-              <Column spacing={spacing.lg} style={{ padding: spacing.xl, width }}>
-                <Text variant="title">{title}</Text>
-                <IconExamples />
-                <ButtonContent
-                  variant="secondary"
-                  label={t('common.close')}
-                  onPress={() => setOpen(false)}
-                />
-              </Column>
-            </BottomSheet>
-          </>
-        );
+        return <BottomSheetExamples />;
       case 'alert':
         return (
           <ButtonContent

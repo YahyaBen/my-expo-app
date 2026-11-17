@@ -21,7 +21,6 @@ import {
 } from '@/features/template/component-catalog';
 import { useThemeColors } from '@/hooks/use-theme';
 import { StyleSheet, View } from 'react-native';
-import { DiscoverBubbles } from './discover-bubbles';
 
 const steps = ['explore', 'compose', 'personalize'] as const;
 
@@ -174,11 +173,10 @@ export default function DiscoverScreen({
           </Column>
         </PageSection>
       </PageScreen>
-      <DiscoverBubbles />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scene: { flex: 1, overflow: 'hidden', isolation: 'isolate' },
+  scene: { flex: 1 },
 });

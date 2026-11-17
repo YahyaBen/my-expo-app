@@ -8,17 +8,19 @@ description: Implement feature workflows while preserving the project's architec
 Inspect the affected route, screen, workflow and callers. Change only the layers
 needed for the requested behavior; reuse the existing feature's structure.
 
-| Responsibility                                   | Owner                                       |
-| ------------------------------------------------ | ------------------------------------------- |
-| Routes, navigators and access                    | `src/app/`, `src/guards/`                   |
-| Screens, local drafts and workflow coordination  | `src/features/<feature>/`                   |
-| Pure validation and domain rules                 | Feature domain files, `src/validation/`     |
-| Repositories, remote state and session lifecycle | `src/services/`, `src/lib/react-query.ts`   |
-| Shared native presentation                       | `src/components/ui/<family>/`               |
-| Persisted preferences                            | Existing contexts, hooks and storage owners |
+| Responsibility                                  | Owner                                       |
+| ----------------------------------------------- | ------------------------------------------- |
+| Routes, navigators and access                   | `src/app/`, `src/guards/`                   |
+| Screens, local drafts and workflow coordination | `src/features/<feature>/`                   |
+| Pure validation and domain rules                | Feature domain files, `src/validation/`     |
+| Remote operations and session lifecycle         | `src/services/`                             |
+| Consumed query options and cache coordination   | Feature files, `src/lib/react-query.ts`     |
+| Shared native presentation                      | `src/components/ui/<family>/`               |
+| Persisted preferences                           | Existing contexts, hooks and storage owners |
 
-- Keep dependencies flowing from routes to features to query hooks/options,
-  feature-specific repositories and the shared transport. Pure rules have no rendering or I/O. Shared UI receives data and
+- Keep dependencies flowing from routes to features, feature-specific repositories
+  and the shared transport. Add query hooks/options only when consumed. Pure rules
+  have no rendering or I/O. Shared UI receives data and
   callbacks; it does not own feature navigation or entity writes.
 - Import shared UI from `@components/ui` in features. Inside that library, import
   concrete implementation files to avoid public-barrel cycles.
@@ -28,8 +30,8 @@ needed for the requested behavior; reuse the existing feature's structure.
 - Update a changed contract and its consumers together. Preserve cancellation,
   session ownership, required mutation callbacks and duplicate-submit guards.
   Navigate after required cache maintenance completes; retain drafts on failure.
-- Translate app-owned labels and accessibility text in `fr.json`, `en.json` and
-  `ar.json` together. Keep IDs, route names and selectors independent of language;
+- Translate app-owned labels and accessibility text in every locale registered
+  in `src/lib/i18n.ts`. Keep IDs, route names and selectors independent of language;
   use logical start/end placement without mirroring physical coordinates/insets.
 - Reuse existing providers and adapters. Avoid parallel theme/session/HTTP systems,
   generic repositories or dependency-injection layers for ordinary feature work.

@@ -47,11 +47,14 @@ and live-backend checks separately as required by `AGENTS.md`.
 
 ## Reply style
 
-The project includes the [Caveman skill](https://github.com/JuliusBrussee/caveman)
-for concise replies that preserve code, commands and technical details. Invoke
-`$caveman` in Codex to use it for the chat. Say `stop caveman` or `normal mode`
-to return to normal replies. After installation, the skill will be available on
-the next turn.
+The [Caveman skill](https://github.com/JuliusBrussee/caveman) is enabled by default
+through this project's `AGENTS.md`. It keeps replies concise while preserving code,
+commands and technical details. Say `stop caveman` or `normal mode` to use normal
+replies for the rest of the chat. Invoke `$caveman` to re-enable it.
+
+Codex loads global defaults from `~/.codex/AGENTS.md`; add the same default-skill
+instruction there to apply Caveman across projects. Start a new chat to load
+changes to these instruction files.
 
 ## Ponytail
 
@@ -79,3 +82,50 @@ measurement and static/manual verification.
 
 See [Ponytail's Codex installation guide](https://github.com/DietrichGebert/ponytail/blob/main/INSTALL.md#codex)
 for upstream setup details.
+
+## Graphify
+
+[Graphify](https://github.com/Graphify-Labs/graphify) indexes code into a local
+knowledge graph. The official Python package is `graphifyy` (double `y`); its CLI
+is `graphify`. Keep it in an isolated developer environment, outside the app's
+JavaScript dependencies. The current setup uses Graphify 0.9.111 and Python 3.12.
+
+Install once per machine with [uv](https://docs.astral.sh/uv/getting-started/installation/):
+
+```sh
+uv tool install --python 3.12 graphifyy==0.9.111
+graphify install --platform codex
+```
+
+On Windows, `winget install astral-sh.uv` installs uv. Restart Codex after changing
+your user `PATH`. If an already-running terminal cannot find Graphify, invoke
+`& "$env:USERPROFILE/.local/bin/graphify.exe"` in PowerShell.
+
+The second command installs Graphify's official skill in
+`~/.codex/skills/graphify/`. This repository maintains a compact project workflow
+in `.agents/skills/graphify/SKILL.md`, discoverable through the skill index.
+Codex user preferences in `~/.codex/AGENTS.md` and this project's `AGENTS.md`
+enable Graphify automatically for codebase work in every chat. Query the graph
+before source searches, building or refreshing it with local code-only extraction
+when needed. No explicit invocation is required. You can also invoke `$graphify .`
+to build the graph or `$graphify query "<question>"` to inspect it.
+
+For a local code-only build and query from the repository root:
+
+```sh
+graphify extract . --code-only --max-workers 2
+graphify query "How does session restoration reach the API client?" --budget 1500
+```
+
+This uses local code parsers without model calls. Re-run extraction after source
+changes. `.graphifyignore` excludes agent instructions and bundled media;
+Graphify also respects `.gitignore`. Generated graphs, reports and caches stay
+in the ignored `graphify-out/` directory. Verify graph results against current
+source before relying on them.
+
+The project workflow applies automatically during codebase work and refreshes
+after code edits. Full semantic extraction of documents and media uses a
+configured model backend; watchers, commit hooks, MCP and cloud
+services are optional. The upstream Codex project installer also writes broad
+agent instructions and a hook file, so use the maintained project skill here
+instead of rerunning `graphify install --project --platform codex`.

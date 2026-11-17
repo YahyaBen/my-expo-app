@@ -26,8 +26,8 @@ Source: [otp-bottom-sheet/](../../../src/components/ui/otp-bottom-sheet/).
 
 - Reuse `otp-input.tsx` for the same six-digit entry as `VerificationCodeFace`.
   One transparent native field overlays six decorative slots, preserving
-  paste/autofill/selection/backspace. Normalize Western, Arabic, Persian and
-  full-width digits; strip pasted separators.
+  paste/autofill/selection/backspace. Normalize Western, Arabic, Persian,
+  Devanagari (Hindi) and full-width digits; strip pasted separators.
 - Keep the measured numeric row in an explicit-width LTR Host while surrounding
   copy follows RTL. Mount input after its native section is measured; retain
   values on resize and grow height for font scaling.

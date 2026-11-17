@@ -20,9 +20,9 @@ Source: [refreshable-scroll-view/](../../../src/components/ui/refreshable-scroll
   on settlement, including rejection, so a later gesture can recover.
 - `usePullToRefresh` in `src/hooks/` coalesces pending work. Android supplies
   the spinner state callback. iOS awaits the shared promise.
-- For TanStack Query data, call `useScreenRefresh([queryKey])` in the screen and
-  pass its result to `PageScreen` or `RefreshableScrollView` as `onRefresh`.
-  Use the exact keys for the displayed queries.
+- For TanStack Query data, pass a caller-owned async callback that awaits the
+  displayed queries' refetches or exact-key invalidations. Keep filters and error
+  feedback with the consuming feature; do not add a separate refresh abstraction.
 - Preserve native indicator colors and disabled/hidden interaction guards.
 - Check callback changes during pending work, duplicate gestures, rejection,
   recovery and retained content.

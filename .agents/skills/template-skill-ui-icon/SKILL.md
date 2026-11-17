@@ -18,11 +18,12 @@ const starIcon = Icon.select({
 ```
 
 - `Icon.select` keeps both platform names. A plain `{ ios, android }`
-  object is also supported. Do not use XML assets or `@expo/ui`'s `Icon`.
+  object is also supported. Consumers do not use XML assets or `@expo/ui`'s `Icon`.
+  The shared Android artwork adapter alone uses the native Compose renderer.
 - `size` defaults to 24 and gives the native row a bounded viewport for the
   symbol. `color` overrides the native button foreground, then
   the owning Host's themed text color. System leaves SwiftUI foregrounds native;
-  Android's RN symbol artwork reads the Host's Material foreground across the bridge.
+  Android artwork reads the Host's Material foreground for native image tinting.
   Native `style`, `modifiers`, disabled state and test selectors stay on the
   native wrapper.
 - iOS renders system symbols with SwiftUI `Image`. An explicit `type` uses
@@ -33,11 +34,19 @@ const starIcon = Icon.select({
 - Keep hosted `expo-symbols` artwork inside a non-collapsible `View` with
   `pointerEvents="none"`, so tapping artwork belongs to the native parent action.
   Do not add a separate icon press handler.
-- Android uses the bundled regular Material Symbols font loaded by `SymbolView`.
-  Verify first-render artwork and dynamic names on matching native builds.
-- Android parent-button taps require the `RNHostView` native fix in `@expo/ui`
-  58.0.24 or later. Rebuild the development client after updating that dependency;
-  Metro reloads cannot apply the native touch fix.
+- Android renders the bundled regular Material Symbols through
+  `unstable_getMaterialSymbolSourceAsync`, then draws the source in a native
+  Compose Icon without an RNHostView. White glyph sources are shared by name and
+  size; native tint follows theme changes without regenerating PNGs. Failed
+  sources are removed so a later mount can retry. Preserve stale-result guards
+  when a name or size changes during rendering.
+- Do not bridge Android icon artwork back through RNHostView: in modal windows
+  the bridge owns JS touches and can consume the center of a native parent button,
+  even when its RN children use pointerEvents="none". Increasing the button size
+  does not repair that dead zone.
+- Verify the exact icon center, its surrounding padding, disabled actions, dynamic
+  names, first-render artwork and theme tint on matching native builds. The button
+  and sheet examples supply local actions and stable selectors for these checks.
 
 Source: [public export](../../../src/components/ui/index.ts),
 [implementation](../../../src/components/ui/icon/icon.tsx) and installed

@@ -1,6 +1,12 @@
 This is an Expo/React Native application for iOS and Android. Prioritize native
 behavior, performance and compatibility across both platforms.
 
+## Reply style
+
+- Read and apply [Caveman](.agents/skills/caveman/SKILL.md) by default in every chat.
+- Honor `stop caveman` or `normal mode` for the rest of that chat unless the user
+  re-enables Caveman.
+
 ## Simplicity and performance
 
 - Keep it simple: use the smallest clear implementation and reuse existing owners.
@@ -15,6 +21,13 @@ behavior, performance and compatibility across both platforms.
   native UI, architecture and measured-performance constraints. Its verification
   guidance uses this project's static checks and manual native verification;
   do not add automated test suites.
+
+## Codebase navigation
+
+- Read and apply [Graphify](.agents/skills/graphify/SKILL.md) by default for
+  codebase work in every chat; no explicit `$graphify` invocation is needed.
+- Query the graph before source searches. Follow the skill's local code-only
+  build and refresh workflow, then verify relevant findings against current source.
 
 ## Skills and documentation
 

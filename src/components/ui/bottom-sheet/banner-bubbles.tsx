@@ -1,9 +1,9 @@
 import { useActiveMotionTime } from '@/hooks/use-active-motion-time';
 import { useThemeColors } from '@/hooks/use-theme';
 import { Canvas, Path, usePathValue } from '@shopify/react-native-skia';
-import { useIsFocused } from 'expo-router';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
+import { useHostColorScheme } from '../host/universal-host';
 
 const supportsBlending = Platform.OS !== 'android' || Number(Platform.Version) >= 29;
 
@@ -19,11 +19,10 @@ const bubbles = [
   { x: 0.06, radius: 0.06, phase: 0.47, period: 20 },
 ] as const;
 
-/** Circular masks invert the live page beneath them without capturing its content. */
-export function DiscoverBubbles() {
-  const focused = useIsFocused();
-  const colors = useThemeColors();
-  const time = useActiveMotionTime(focused);
+/** Circular masks invert the live banner beneath them without capturing its content. */
+export function BannerBubbles({ animate, testID }: Readonly<{ animate: boolean; testID: string }>) {
+  const colors = useThemeColors(useHostColorScheme());
+  const time = useActiveMotionTime(animate);
   const size = useSharedValue({ width: 0, height: 0 });
   const mask = usePathValue((builder) => {
     'worklet';
@@ -44,7 +43,7 @@ export function DiscoverBubbles() {
 
   return (
     <View
-      testID="discover-bubbles"
+      testID={testID}
       pointerEvents="none"
       accessible={false}
       accessibilityElementsHidden

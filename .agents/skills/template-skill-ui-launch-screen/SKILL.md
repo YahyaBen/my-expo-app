@@ -29,8 +29,9 @@ Source: [launch-screen/](../../../src/components/ui/launch-screen/).
 
 Startup state belongs to the root; this component owns presentation.
 
-- Restore preferences/language/header concurrently with fonts. The template root
-  has no auth restoration; session/recovery readiness belongs to a future auth flow.
+- Restore appearance, language, motion and device preferences concurrently with
+  fonts. The template root has no auth restoration; the existing `(auth)` route
+  group owns session restoration and recovery readiness.
   Mount the overlay after appearance and font readiness/fallback.
 - `onReady` follows overlay native layout so the root can hide the native splash.
   Set `exiting` only after a usable page or recovery frame lays out underneath.

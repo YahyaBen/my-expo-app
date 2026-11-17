@@ -108,23 +108,6 @@ export async function establishAuthSession(token: TokenResponse, expectedVersion
   return { session, version };
 }
 
-/** Merge display metadata without overwriting a token pair rotated by another request. */
-export function updateAuthUser(updates: Partial<AuthUser>, expectedVersion = sessionVersion) {
-  return queueStorage(async () => {
-    assertSessionVersion(expectedVersion);
-    if (!currentSession) throw new Error('account.loginUpdate');
-    const session = normalizeAuthSession({
-      ...currentSession,
-      user: { ...currentSession.user, ...updates },
-    });
-    await SecureStore.setItemAsync(STORAGE_KEY, JSON.stringify(session));
-    assertSessionVersion(expectedVersion);
-    currentSession = session;
-    publish('updated');
-    return session;
-  });
-}
-
 /** Publish sign-out only after the stored credentials are durably removed. */
 export function clearAuthSession(expectedVersion = sessionVersion): Promise<void> {
   if (

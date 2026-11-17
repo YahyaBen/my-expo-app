@@ -4,6 +4,6 @@ import type { ReactNode } from 'react';
 export type NativeBottomSheetProps = Pick<
   BottomSheetProps,
   'children' | 'isPresented' | 'onDismiss' | 'testID' | 'containerColor' | 'contentColor'
-> & { dismissible: boolean; heightFraction?: number };
+> & { dismissible: boolean; heightFraction?: number; edgeToEdge?: boolean };
 
 export declare function NativeBottomSheet(props: Readonly<NativeBottomSheetProps>): ReactNode;

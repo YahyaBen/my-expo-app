@@ -24,6 +24,7 @@ export * from './appearance/theme-control';
 export * from './auth/auth-screen-frame';
 export * from './badge/badge';
 export * from './bottom-sheet/bottom-sheet';
+export * from './bottom-sheet/bottom-sheet-banner';
 export * from './button/button';
 export * from './checkbox/checkbox';
 export * from './chip/chip';

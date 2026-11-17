@@ -1,7 +1,8 @@
+import { spacing } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
-import { Column } from '@expo/ui';
+import { Column, ScrollView } from '@expo/ui';
 import { useHostColorScheme } from '../host/universal-host';
-import { nativeFillWidth } from '../native/native-fill-width';
+import { nativeFillSize, nativeFillWidth } from '../native/native-fill-width';
 import type { BottomSheetProps } from './bottom-sheet.types';
 import { NativeBottomSheet } from './native-bottom-sheet';
 
@@ -17,22 +18,68 @@ export function BottomSheet(props: Readonly<BottomSheetProps>) {
     contentHeight,
     heightFraction,
     dismissible = true,
+    banner,
+    header,
+    actions,
+    footer,
+    scrollable = false,
   } = props;
+  const hasBanner = banner != null && banner !== false;
+  const bannerLayout =
+    hasBanner && heightFraction !== undefined && contentHeight === undefined && !scrollable
+      ? nativeFillSize
+      : nativeFillWidth;
+  const body =
+    banner !== undefined ||
+    header !== undefined ||
+    actions !== undefined ||
+    footer !== undefined ? (
+      <Column
+        spacing={spacing.lg}
+        modifiers={bannerLayout}
+        style={hasBanner ? { padding: spacing.lg } : undefined}
+      >
+        {header}
+        {actions}
+        {children}
+        {footer}
+      </Column>
+    ) : (
+      children
+    );
+  const content = hasBanner ? (
+    <Column spacing={0} modifiers={bannerLayout}>
+      {banner}
+      {body}
+    </Column>
+  ) : (
+    body
+  );
+
   return (
     <NativeBottomSheet
       isPresented={isPresented}
       onDismiss={onDismiss}
       dismissible={dismissible}
       heightFraction={heightFraction}
+      edgeToEdge={hasBanner}
       testID={testID}
       containerColor={colors.surface}
       contentColor={colors.text}
     >
-      {contentHeight === undefined ? (
-        children
+      {scrollable ? (
+        <ScrollView
+          modifiers={nativeFillWidth}
+          style={contentHeight === undefined ? undefined : { height: contentHeight }}
+          testID={testID ? `${testID}-scroll` : undefined}
+        >
+          {content}
+        </ScrollView>
+      ) : contentHeight === undefined ? (
+        content
       ) : (
         <Column modifiers={nativeFillWidth} style={{ height: contentHeight }}>
-          {children}
+          {content}
         </Column>
       )}
     </NativeBottomSheet>

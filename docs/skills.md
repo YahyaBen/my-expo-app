@@ -12,14 +12,15 @@ available APIs. Keep skill-to-skill navigation in this index, outside skill bodi
 
 ## Project workflows
 
-| Skill                                                                                           | Responsibility                                           |
-| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| [template-expo-configuration](../.agents/skills/template-expo-configuration/SKILL.md)           | SDK, dependencies, brands and build environments         |
-| [expo-mobile-ui-only](../.agents/skills/expo-mobile-ui-only/SKILL.md)                           | Mobile platform and UI technology constraints            |
-| [template-skill-implementation](../.agents/skills/template-skill-implementation/SKILL.md)       | Feature architecture and workflow boundaries             |
-| [expo-api-services](../.agents/skills/expo-api-services/SKILL.md)                               | Validated transport, session-safe remote state and cache |
-| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Theme tokens, shared UI exports, adapters and examples   |
-| [template-skill-performance](../.agents/skills/template-skill-performance/SKILL.md)             | Measured native performance investigations               |
+| Skill                                                                                           | Responsibility                                              |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [graphify](../.agents/skills/graphify/SKILL.md)                                                 | Local code graphs, architecture queries and impact analysis |
+| [template-expo-configuration](../.agents/skills/template-expo-configuration/SKILL.md)           | SDK, dependencies, brands and build environments            |
+| [expo-mobile-ui-only](../.agents/skills/expo-mobile-ui-only/SKILL.md)                           | Mobile platform and UI technology constraints               |
+| [template-skill-implementation](../.agents/skills/template-skill-implementation/SKILL.md)       | Feature architecture and workflow boundaries                |
+| [expo-api-services](../.agents/skills/expo-api-services/SKILL.md)                               | Validated transport, session-safe remote state and cache    |
+| [expo-universal-component-library](../.agents/skills/expo-universal-component-library/SKILL.md) | Theme tokens, shared UI exports, adapters and examples      |
+| [template-skill-performance](../.agents/skills/template-skill-performance/SKILL.md)             | Measured native performance investigations                  |
 
 ## Layout and primitives
 

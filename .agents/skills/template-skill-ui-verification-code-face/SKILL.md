@@ -23,8 +23,9 @@ start remote verification.
 
 - Reuse `otp-bottom-sheet/otp-input.tsx` for entry and `verification-face.tsx`
   for artwork. The sheet composes these same helpers without a second input.
-- Normalize Arabic, Persian and full-width digits to ASCII, strip pasted
-  separators and cap entry at six digits. `onChangeText` receives that code.
+- Normalize Arabic, Persian, Devanagari (Hindi) and full-width digits to ASCII,
+  strip pasted separators and cap entry at six digits. `onChangeText` receives
+  that code.
 - `onComplete` receives ASCII digits after a new complete six-digit change
   event. It never fires from render, effects or externally supplied values.
 - Use one numeric field without mount autofocus. Blur on a complete numeric

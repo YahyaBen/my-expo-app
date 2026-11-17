@@ -11,7 +11,18 @@ export type BottomSheetBaseProps = {
 
 export type BottomSheetProps = BottomSheetBaseProps & {
   presentation?: 'modal';
+  /** Bound the content, or the viewport when scrollable is true. */
   contentHeight?: number;
   /** Present at a single fraction of the available height, greater than 0 and at most 1. */
   heightFraction?: number;
+  /** Native banner rendered edge-to-edge above the padded content. */
+  banner?: ReactNode;
+  /** Caller-owned title and controls, including close or overflow actions. */
+  header?: ReactNode;
+  /** Caller-owned actions, such as a horizontal chip rail. */
+  actions?: ReactNode;
+  /** Rendered after the body; scrolls with the other content. */
+  footer?: ReactNode;
+  /** Scroll the whole composition. Supply a bounded contentHeight viewport. */
+  scrollable?: boolean;
 };

@@ -98,7 +98,7 @@ The `auth.session` storage key and legacy wire-token restoration remain supporte
 Old product-only user fields are stripped during normalization and disappear from
 disk on the next valid write. A missing/invalid user makes a stored record corrupt;
 it is removed before authentication. Failed deletion remains a recovery error.
-Invalid new sessions/profile updates are rejected before changing durable state;
+Invalid new sessions and token updates are rejected before changing durable state;
 session establishment validates before reserving a new generation. It queues the
 credential write before clearing caches. All session reads await the existing
 storage queue and recheck their generation before returning even an in-memory

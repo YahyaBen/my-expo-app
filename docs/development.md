@@ -133,11 +133,10 @@ motion and background/resume. Static checks and builds do not prove those behavi
 
 ## Dependency audit follow-up
 
-The SDK-aligned dependency graph passes Expo Doctor. `npm audit` still reports
-three high-severity entries through Expo CLI's Zod 3 dependency, plus seven low
-entries. The app's direct Zod dependency is patched at 4.6.7. The collection
-validation issue is tracked in
+Run Expo Doctor and `npm audit` against the current lockfile when reviewing
+dependencies; advisory counts and compatibility results are not permanent
+architecture guarantees. The Expo CLI's Zod 3 collection-validation issue is tracked in
 [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
-The current CLI requires Zod 3; replacing it with Zod 4 needs an upstream
-compatibility change. npm's proposed force fix downgrades Expo to SDK 51, so it
-has not been applied. Review this tooling dependency when Expo ships a fix.
+Review its installed dependency path and upstream fix before changing overrides.
+Keep dependency fixes compatible with the selected Expo SDK; do not apply
+`npm audit fix --force` as routine maintenance because it can replace SDK versions.

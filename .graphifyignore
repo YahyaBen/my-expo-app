@@ -1,0 +1,4 @@
+# Keep developer instructions and bundled media out of the application graph.
+.agents/
+.codex/
+assets/

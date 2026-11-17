@@ -120,9 +120,10 @@ per screen instance; an initial React commit may still render null for fonts.
 - **Native device:** repeat the affected interactions and before/after measurements.
   Source inspection, static checks and exports do not prove faster startup,
   smoother frames or lower native memory. Mark unavailable measurements pending.
-- **Live backend:** the release wireframe has no backend workflow. When a feature
-  uses the optional kit, verify cancellation, session ownership, refresh keys,
-  pagination and duplicate submissions against its real backend separately.
+- **Live backend:** browsing the template works offline; authentication examples
+  use the retained backend contract when configured. Verify cancellation, session
+  ownership, token rotation and duplicate submissions against that real server.
+  Check query keys and pagination separately when a consuming feature adds them.
 
 Record results with raw samples or traces:
 
