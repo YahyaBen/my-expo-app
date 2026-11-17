@@ -61,7 +61,9 @@ export function BottomSheetExamples() {
   function closeButton(sheet: Sheet) {
     return (
       <ButtonContent
-        variant="secondary"
+        variant="tertiary"
+        circular
+        size="sm"
         accessibilityLabel={t('common.close')}
         onPress={() => close(sheet)}
         testID={`component-bottom-sheet-${sheet}-close`}
@@ -134,7 +136,7 @@ export function BottomSheetExamples() {
           >
             <Icon
               name={{ ios: 'sparkles', android: 'auto_awesome' }}
-              size={88}
+              size={160}
               color={colors.tint}
             />
           </BottomSheetBanner>
@@ -296,7 +298,7 @@ export function BottomSheetExamples() {
           >
             <Icon
               name={{ ios: 'sparkles', android: 'auto_awesome' }}
-              size={88}
+              size={160}
               color={colors.tint}
             />
           </BottomSheetBanner>
