@@ -26,6 +26,10 @@ owns presentation on iOS and Android; callers own photo data and translated text
   once when the X, Android Back, downward drag or accessibility dismissal is accepted.
   These are action callbacks, never render/effect notifications.
 
+- Optional `showLabels` defaults to `true`. Set it to `false` for photo-only
+  thumbnails; native tile buttons retain `item.label` as their accessible name.
+  Changing it resets measured selection because the tile height changes.
+
 - Optional `viewportHeight` must be positive and finite. It bounds and virtualizes
   rows for a larger dataset; the grid owns vertical scrolling in this mode. Put
   it outside another vertical scroll container. Omit it for a small eager inline

@@ -10,8 +10,8 @@ import {
   nativeFillWidth,
   PageSection,
   ScrollView,
-  UniversalHost,
   UniversalTextContent as Text,
+  UniversalHost,
 } from '@components/ui';
 import { applicationName, nativeApplicationVersion } from 'expo-application';
 import { useState } from 'react';
@@ -67,7 +67,7 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
         testID="app-update-prompt"
         banner={
           <BottomSheetBanner animate={visible} testID="app-update-banner">
-            <Icon name={{ ios: 'sparkles', android: 'auto_awesome' }} size={80} />
+            <Icon name={{ ios: 'sparkles', android: 'auto_awesome' }} size={180} />
           </BottomSheetBanner>
         }
       >

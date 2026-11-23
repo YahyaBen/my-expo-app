@@ -124,7 +124,13 @@ function SliderExample({
       <Row spacing={spacing.md} alignment="center" modifiers={nativeFillWidth}>
         {startIcon && <Icon name={startIcon} color={iconColor} testID={`${testID}-start-icon`} />}
         <Column modifiers={nativeRowWeight}>
-          <Slider {...props} modifiers={nativeFillWidth} testID={testID} />
+          <Slider
+            {...props}
+            accessibilityLabel={title}
+            accessibilityValue={valueLabel}
+            modifiers={nativeFillWidth}
+            testID={testID}
+          />
         </Column>
         {endIcon && <Icon name={endIcon} color={iconColor} testID={`${testID}-end-icon`} />}
       </Row>

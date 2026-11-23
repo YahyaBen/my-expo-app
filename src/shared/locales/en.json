@@ -868,6 +868,7 @@
       "flows": "Appearance controls, authentication layouts, launch screens and code verification support common app flows."
     },
     "descriptions": {
+      "charts": "Explore chart types with live data and styling controls.",
       "button": "Buttons trigger actions. Compare Google account buttons, semantic colors, visual variants and sizes.",
       "checkbox": "A checkbox selects or clears an independent choice. Toggle this example to try both states.",
       "chip": "Chips present compact choices and actions. Try filters, single selection, removable tags and suggestions.",
@@ -910,7 +911,8 @@
       "register": "A registration page with Google and an email/password form.",
       "launch-screen": "A launch screen introduces the app while it becomes ready. Tap to preview the branded exit animation.",
       "otp-bottom-sheet": "A verification sheet collects a six-digit code. Open it and enter 123456 to try local verification.",
-      "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error."
+      "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error.",
+      "explore": "Search and filter stories, open image detail sheets and explore an expanding photo strip."
     },
     "sheets": {
       "basic": "Basic sheet",
@@ -1165,6 +1167,7 @@
     "pullToRefresh": "Pull down to refresh the action count.",
     "notFound": "This component could not be found.",
     "names": {
+      "charts": "Charts",
       "button": "Button",
       "checkbox": "Checkbox",
       "chip": "Chip",
@@ -1207,7 +1210,150 @@
       "register": "Register",
       "launch-screen": "Launch screen",
       "otp-bottom-sheet": "Verification sheet",
-      "verification-code-face": "Verification code face"
+      "verification-code-face": "Verification code face",
+      "explore": "Explore stories"
+    }
+  },
+  "explore": {
+    "title": "Explore",
+    "eyebrow": "A MOMENT OF DISCOVERY",
+    "headline": "Find your next quiet escape.",
+    "description": "Six short stories about nature, waterside places and thoughtful spaces.",
+    "search": "Search stories",
+    "account": "Open your account",
+    "all": "All",
+    "results_one": "{{count}} story",
+    "results_other": "{{count}} stories",
+    "emptyTitle": "No stories found",
+    "emptyDescription": "Try another search or choose a different category.",
+    "reset": "Reset search and filters",
+    "gallery": "Photo journal",
+    "galleryHint": "Tap a photo to expand it. The strip advances automatically when motion is enabled.",
+    "photoLoading": "Loading photo",
+    "photoUnavailable": "Photo unavailable",
+    "retryPhoto": "Retry photo",
+    "open": "Explore stories",
+    "refreshError": "Photos could not be refreshed. Pull down to try again.",
+    "pauseGallery": "Pause photo strip",
+    "stories": {
+      "forest": {
+        "title": "Forest walks",
+        "description": "Follow the shade beneath the trees. Notice the soft light, listen to the leaves and leave room for a slower pace."
+      },
+      "coast": {
+        "title": "By the sea",
+        "description": "An open horizon and a little sea air can change the shape of a day. Take the coastal path and watch the water settle."
+      },
+      "space": {
+        "title": "Quiet interiors",
+        "description": "Natural light, a clear corner and a comfortable seat. A thoughtful space gives everyday moments a little more ease."
+      },
+      "mountain": {
+        "title": "Mountain trails",
+        "description": "The path climbs, the view opens and the noise fades. Find a gentle trail and enjoy the mountain one step at a time."
+      },
+      "lake": {
+        "title": "Lakeside mornings",
+        "description": "Pause beside the lake and follow the reflections. A quiet stretch of water offers a simple place to reset."
+      },
+      "studio": {
+        "title": "Working spaces",
+        "description": "A well-loved desk and a few useful objects can make space for something new. Explore a studio built around simple daily rituals."
+      }
+    }
+  },
+  "charts": {
+    "showValues": "Show values inside charts",
+    "open": "Open",
+    "close": "Close",
+    "low": "Low",
+    "high": "High",
+    "positive": "Rising",
+    "negative": "Falling",
+    "neutral": "Unchanged",
+    "title": "Chart gallery",
+    "intro": "Explore 15 chart variations. Change the sample data and styling to compare the results.",
+    "sampleData": "Sample data",
+    "customize": "Customize charts",
+    "dataControls": "Data variables",
+    "styleControls": "Appearance",
+    "seriesControls": "Series and layout",
+    "pointCount": "Samples",
+    "baseline": "Baseline",
+    "variation": "Variation",
+    "regenerate": "Generate new data",
+    "reset": "Reset all",
+    "palette": "Color palette",
+    "palettes": {
+      "theme": "Theme",
+      "ocean": "Ocean",
+      "sunset": "Sunset"
+    },
+    "curve": "Line curve",
+    "curves": {
+      "linear": "Straight",
+      "natural": "Smooth",
+      "stepAfter": "Stepped"
+    },
+    "strokeWidth": "Stroke width",
+    "opacity": "Fill opacity",
+    "barWidth": "Bar width",
+    "rounded": "Rounded bars",
+    "innerRadius": "Donut hole",
+    "showGrid": "Show grid",
+    "showAxes": "Show axes",
+    "showPoints": "Show points",
+    "animated": "Animate changes",
+    "animationsHint": "Animations follow your motion preference and pause when this screen is inactive.",
+    "pointCountValue": "{{count}} samples",
+    "percent": "{{value}}%",
+    "points": "{{value}} pt",
+    "series": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "tertiary": "Tertiary"
+    },
+    "summary": "Latest {{latest}} · Low {{min}} · High {{max}}",
+    "accessibility": "{{chart}}. {{count}} samples. Latest {{latest}}. Minimum {{min}}. Maximum {{max}}.",
+    "dataPreview": "View sample values",
+    "sample": "Sample",
+    "value": "Value",
+    "secondaryValue": "Secondary",
+    "tertiaryValue": "Tertiary",
+    "empty": "No chart samples",
+    "kinds": {
+      "line": "Line",
+      "multi-line": "Multiple lines",
+      "area": "Area",
+      "stacked-area": "Stacked area",
+      "range-area": "Range area",
+      "bar": "Bar",
+      "grouped-bar": "Grouped bars",
+      "stacked-bar": "Stacked bars",
+      "horizontal-bar": "Horizontal bars",
+      "horizontal-grouped-bar": "Horizontal grouped bars",
+      "horizontal-stacked-bar": "Horizontal stacked bars",
+      "scatter": "Scatter",
+      "candlestick": "Candlestick",
+      "pie": "Pie",
+      "donut": "Donut"
+    },
+    "descriptions": {
+      "line": "Follow changes across samples.",
+      "multi-line": "Compare three series on the same scale.",
+      "area": "Fill the space beneath a series.",
+      "stacked-area": "See how three series contribute to a total.",
+      "range-area": "Show the low-to-high band around each sample.",
+      "bar": "Compare individual sample values.",
+      "grouped-bar": "Compare series side by side.",
+      "stacked-bar": "Compare totals and their composition.",
+      "horizontal-bar": "Read sample values along a horizontal scale.",
+      "horizontal-grouped-bar": "Compare three series in horizontal groups.",
+      "horizontal-stacked-bar": "Show horizontal totals split into series.",
+      "scatter": "Compare individual observations.",
+      "candlestick": "Inspect open, high, low and close values.",
+      "pie": "Compare each sample as part of the whole.",
+      "donut": "Compare shares with a configurable center."
     }
   }
 }

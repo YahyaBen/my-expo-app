@@ -866,6 +866,7 @@
       "flows": "Los controles de apariencia, los diseños de autenticación, las pantallas de inicio y la verificación de códigos cubren flujos habituales."
     },
     "descriptions": {
+      "charts": "Explora tipos de gráficos con datos y controles de estilo interactivos.",
       "button": "Los botones activan acciones. Compara botones de cuenta de Google, colores semánticos, variantes visuales y tamaños.",
       "checkbox": "Una casilla marca o desmarca una opción independiente. Alterna este ejemplo para probar ambos estados.",
       "chip": "Las etiquetas ofrecen opciones y acciones compactas. Prueba filtros, selección única, etiquetas que se pueden eliminar y sugerencias.",
@@ -908,7 +909,8 @@
       "register": "Una página de registro con Google o un formulario de correo electrónico y contraseña.",
       "launch-screen": "Una pantalla de inicio presenta la app mientras se prepara. Toca para ver la animación de salida de la marca.",
       "otp-bottom-sheet": "Un panel de verificación recoge un código de seis dígitos. Ábrelo e introduce 123456 para probar la verificación local.",
-      "verification-code-face": "La entrada de código combina seis dígitos con un personaje animado. Introduce 123456 para el éxito u otro código para un error."
+      "verification-code-face": "La entrada de código combina seis dígitos con un personaje animado. Introduce 123456 para el éxito u otro código para un error.",
+      "explore": "Busca y filtra relatos, abre sus detalles ilustrados y amplía las fotos de la tira."
     },
     "sheets": {
       "basic": "Panel básico",
@@ -1163,6 +1165,7 @@
     "pullToRefresh": "Desliza hacia abajo para actualizar el contador de acciones.",
     "notFound": "No se encontró este componente.",
     "names": {
+      "charts": "Gráficos",
       "button": "Botón",
       "checkbox": "Casilla de verificación",
       "chip": "Etiqueta",
@@ -1205,7 +1208,150 @@
       "register": "Registrarse",
       "launch-screen": "Pantalla de inicio",
       "otp-bottom-sheet": "Panel de verificación",
-      "verification-code-face": "Personaje del código de verificación"
+      "verification-code-face": "Personaje del código de verificación",
+      "explore": "Explorar relatos"
+    }
+  },
+  "explore": {
+    "title": "Explorar",
+    "eyebrow": "UN MOMENTO PARA DESCUBRIR",
+    "headline": "Encuentra tu próxima escapada tranquila.",
+    "description": "Seis relatos breves sobre naturaleza, lugares junto al agua y espacios con encanto.",
+    "search": "Buscar relatos",
+    "account": "Abrir tu cuenta",
+    "all": "Todos",
+    "results_one": "{{count}} relato",
+    "results_other": "{{count}} relatos",
+    "emptyTitle": "No se encontraron relatos",
+    "emptyDescription": "Prueba otra búsqueda o elige una categoría diferente.",
+    "reset": "Restablecer búsqueda y filtros",
+    "gallery": "Diario fotográfico",
+    "galleryHint": "Toca una foto para ampliarla. La tira avanza automáticamente cuando las animaciones están activadas.",
+    "photoLoading": "Cargando foto",
+    "photoUnavailable": "Foto no disponible",
+    "retryPhoto": "Volver a cargar la foto",
+    "open": "Explorar relatos",
+    "refreshError": "No se pudieron actualizar las fotos. Desliza hacia abajo para intentarlo de nuevo.",
+    "pauseGallery": "Pausar la tira de fotos",
+    "stories": {
+      "forest": {
+        "title": "Paseos por el bosque",
+        "description": "Sigue la sombra de los árboles. Observa la luz suave, escucha las hojas y date tiempo para bajar el ritmo."
+      },
+      "coast": {
+        "title": "Junto al mar",
+        "description": "Un horizonte abierto y un poco de brisa marina pueden cambiar el día. Recorre el sendero costero y contempla la calma del agua."
+      },
+      "space": {
+        "title": "Interiores tranquilos",
+        "description": "Luz natural, un rincón despejado y un asiento cómodo. Un espacio cuidado hace más agradables los momentos cotidianos."
+      },
+      "mountain": {
+        "title": "Senderos de montaña",
+        "description": "El camino sube, la vista se abre y el ruido se desvanece. Busca un sendero suave y disfruta de la montaña paso a paso."
+      },
+      "lake": {
+        "title": "Mañanas junto al lago",
+        "description": "Detente junto al lago y sigue sus reflejos. Un remanso de agua ofrece un lugar sencillo para recuperar el equilibrio."
+      },
+      "studio": {
+        "title": "Espacios de trabajo",
+        "description": "Un escritorio familiar y unos pocos objetos útiles pueden dar paso a algo nuevo. Descubre un estudio pensado para los pequeños rituales diarios."
+      }
+    }
+  },
+  "charts": {
+    "showValues": "Mostrar valores dentro de los gráficos",
+    "open": "Apertura",
+    "close": "Cierre",
+    "low": "Mínimo",
+    "high": "Máximo",
+    "positive": "Al alza",
+    "negative": "A la baja",
+    "neutral": "Sin cambios",
+    "title": "Galería de gráficos",
+    "intro": "Explora 15 variantes de gráficos. Cambia los datos de ejemplo y el estilo para comparar los resultados.",
+    "sampleData": "Datos de ejemplo",
+    "customize": "Personalizar gráficos",
+    "dataControls": "Variables de datos",
+    "styleControls": "Apariencia",
+    "seriesControls": "Series y disposición",
+    "pointCount": "Muestras",
+    "baseline": "Nivel base",
+    "variation": "Variación",
+    "regenerate": "Generar nuevos datos",
+    "reset": "Restablecer todo",
+    "palette": "Paleta de colores",
+    "palettes": {
+      "theme": "Tema",
+      "ocean": "Océano",
+      "sunset": "Atardecer"
+    },
+    "curve": "Curva de línea",
+    "curves": {
+      "linear": "Recta",
+      "natural": "Suave",
+      "stepAfter": "Escalonada"
+    },
+    "strokeWidth": "Grosor del trazo",
+    "opacity": "Opacidad del relleno",
+    "barWidth": "Ancho de las barras",
+    "rounded": "Barras redondeadas",
+    "innerRadius": "Hueco del anillo",
+    "showGrid": "Mostrar cuadrícula",
+    "showAxes": "Mostrar ejes",
+    "showPoints": "Mostrar puntos",
+    "animated": "Animar cambios",
+    "animationsHint": "Las animaciones respetan tu preferencia de movimiento y se pausan cuando esta pantalla está inactiva.",
+    "pointCountValue": "{{count}} muestras",
+    "percent": "{{value}} %",
+    "points": "{{value}} pt",
+    "series": {
+      "primary": "Principal",
+      "secondary": "Secundaria",
+      "tertiary": "Terciaria"
+    },
+    "summary": "Último {{latest}} · Mín. {{min}} · Máx. {{max}}",
+    "accessibility": "{{chart}}. {{count}} muestras. Último valor {{latest}}. Mínimo {{min}}. Máximo {{max}}.",
+    "dataPreview": "Ver valores de las muestras",
+    "sample": "Muestra",
+    "value": "Valor",
+    "secondaryValue": "Secundaria",
+    "tertiaryValue": "Terciaria",
+    "empty": "No hay muestras para el gráfico",
+    "kinds": {
+      "line": "Línea",
+      "multi-line": "Líneas múltiples",
+      "area": "Área",
+      "stacked-area": "Áreas apiladas",
+      "range-area": "Área de rango",
+      "bar": "Barras",
+      "grouped-bar": "Barras agrupadas",
+      "stacked-bar": "Barras apiladas",
+      "horizontal-bar": "Barras horizontales",
+      "horizontal-grouped-bar": "Barras horizontales agrupadas",
+      "horizontal-stacked-bar": "Barras horizontales apiladas",
+      "scatter": "Dispersión",
+      "candlestick": "Velas",
+      "pie": "Sectores",
+      "donut": "Anillo"
+    },
+    "descriptions": {
+      "line": "Sigue los cambios entre las muestras.",
+      "multi-line": "Compara tres series en la misma escala.",
+      "area": "Rellena el espacio bajo una serie.",
+      "stacked-area": "Observa cómo tres series contribuyen a un total.",
+      "range-area": "Muestra la banda entre los valores mínimo y máximo de cada muestra.",
+      "bar": "Compara los valores de cada muestra.",
+      "grouped-bar": "Compara series una junto a otra.",
+      "stacked-bar": "Compara los totales y su composición.",
+      "horizontal-bar": "Lee los valores en una escala horizontal.",
+      "horizontal-grouped-bar": "Compara tres series en grupos horizontales.",
+      "horizontal-stacked-bar": "Muestra totales horizontales divididos por series.",
+      "scatter": "Compara observaciones individuales.",
+      "candlestick": "Examina los valores de apertura, máximo, mínimo y cierre.",
+      "pie": "Compara la proporción de cada muestra en el total.",
+      "donut": "Compara proporciones con un centro ajustable."
     }
   }
 }

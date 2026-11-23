@@ -866,6 +866,7 @@
       "flows": "外观控件、身份验证布局、启动屏和验证码，支持常见应用流程。"
     },
     "descriptions": {
+      "charts": "通过交互式数据和样式控件探索各种图表。",
       "button": "按钮用于触发操作。比较 Google 账户按钮、语义颜色、视觉样式和尺寸。",
       "checkbox": "复选框用于选中或取消独立选项。切换此示例以体验两种状态。",
       "chip": "标签片以紧凑方式呈现选项和操作。试用筛选、单选、可移除标签和建议。",
@@ -908,7 +909,8 @@
       "register": "使用 Google 或电子邮箱和密码表单注册的页面。",
       "launch-screen": "启动屏在应用准备就绪前展示品牌。点按以预览品牌退出动画。",
       "otp-bottom-sheet": "验证面板用于输入六位验证码。打开后输入 123456 以试用本地验证。",
-      "verification-code-face": "验证码输入搭配动画角色。输入 123456 显示成功，输入其他验证码显示错误。"
+      "verification-code-face": "验证码输入搭配动画角色。输入 123456 显示成功，输入其他验证码显示错误。",
+      "explore": "搜索和筛选故事，打开图文详情底部面板，并放大照片栏中的图片。"
     },
     "sheets": {
       "basic": "基础面板",
@@ -1163,6 +1165,7 @@
     "pullToRefresh": "下拉以刷新操作计数。",
     "notFound": "找不到此组件。",
     "names": {
+      "charts": "图表",
       "button": "按钮",
       "checkbox": "复选框",
       "chip": "标签片",
@@ -1205,7 +1208,149 @@
       "register": "注册",
       "launch-screen": "启动屏",
       "otp-bottom-sheet": "验证面板",
-      "verification-code-face": "验证码表情"
+      "verification-code-face": "验证码表情",
+      "explore": "探索故事"
+    }
+  },
+  "explore": {
+    "title": "探索",
+    "eyebrow": "发现片刻美好",
+    "headline": "寻找下一处宁静。",
+    "description": "六篇短文，带你走进自然、水岸与用心布置的空间。",
+    "search": "搜索故事",
+    "account": "打开你的账户",
+    "all": "全部",
+    "results": "{{count}} 篇故事",
+    "emptyTitle": "未找到故事",
+    "emptyDescription": "试试其他关键词，或选择不同分类。",
+    "reset": "重置搜索和筛选",
+    "gallery": "影像日记",
+    "galleryHint": "轻点照片即可放大。启用动画时，照片栏会自动滚动。",
+    "photoLoading": "正在加载照片",
+    "photoUnavailable": "照片暂不可用",
+    "retryPhoto": "重新加载照片",
+    "open": "探索故事",
+    "refreshError": "无法刷新照片。请下拉重试。",
+    "pauseGallery": "暂停照片栏",
+    "stories": {
+      "forest": {
+        "title": "林间漫步",
+        "description": "沿着树荫前行，留意柔和的光，听一听叶子的声音，给自己一点放慢脚步的时间。"
+      },
+      "coast": {
+        "title": "在海边",
+        "description": "开阔的地平线和一缕海风，能让一天变得不同。沿海岸小径走走，看水面渐渐平静。"
+      },
+      "space": {
+        "title": "静谧室内",
+        "description": "自然光、整洁的一角和舒适的座椅。用心布置的空间，让日常片刻更从容。"
+      },
+      "mountain": {
+        "title": "山间小径",
+        "description": "山路渐高，视野渐开，喧嚣渐远。找一条舒缓的小径，一步一步感受山间风景。"
+      },
+      "lake": {
+        "title": "湖畔清晨",
+        "description": "在湖边停一停，看看水中倒影。一片宁静的水面，就是重新出发的好地方。"
+      },
+      "studio": {
+        "title": "工作空间",
+        "description": "一张熟悉的书桌和几件实用物品，就能为新想法留出位置。走进一间围绕日常小习惯布置的工作室。"
+      }
+    }
+  },
+  "charts": {
+    "showValues": "在图表中显示数值",
+    "open": "开盘",
+    "close": "收盘",
+    "low": "最低",
+    "high": "最高",
+    "positive": "上涨",
+    "negative": "下跌",
+    "neutral": "持平",
+    "title": "图表库",
+    "intro": "探索 15 种图表。更改示例数据和样式，比较呈现效果。",
+    "sampleData": "示例数据",
+    "customize": "自定义图表",
+    "dataControls": "数据变量",
+    "styleControls": "外观",
+    "seriesControls": "系列与布局",
+    "pointCount": "样本数",
+    "baseline": "基准值",
+    "variation": "变化幅度",
+    "regenerate": "生成新数据",
+    "reset": "全部重置",
+    "palette": "配色方案",
+    "palettes": {
+      "theme": "主题",
+      "ocean": "海洋",
+      "sunset": "日落"
+    },
+    "curve": "曲线类型",
+    "curves": {
+      "linear": "直线",
+      "natural": "平滑",
+      "stepAfter": "阶梯"
+    },
+    "strokeWidth": "线宽",
+    "opacity": "填充不透明度",
+    "barWidth": "柱宽",
+    "rounded": "圆角柱",
+    "innerRadius": "圆环内孔",
+    "showGrid": "显示网格",
+    "showAxes": "显示坐标轴",
+    "showPoints": "显示数据点",
+    "animated": "启用变化动画",
+    "animationsHint": "动画遵循你的动态效果偏好，并在此屏幕处于非活动状态时暂停。",
+    "pointCountValue": "{{count}} 个样本",
+    "percent": "{{value}}%",
+    "points": "{{value}} 点",
+    "series": {
+      "primary": "主系列",
+      "secondary": "次系列",
+      "tertiary": "第三系列"
+    },
+    "summary": "最新 {{latest}} · 最低 {{min}} · 最高 {{max}}",
+    "accessibility": "{{chart}}。{{count}} 个样本。最新值 {{latest}}。最小值 {{min}}。最大值 {{max}}。",
+    "dataPreview": "查看样本值",
+    "sample": "样本",
+    "value": "数值",
+    "secondaryValue": "次系列",
+    "tertiaryValue": "第三系列",
+    "empty": "暂无图表样本",
+    "kinds": {
+      "line": "折线图",
+      "multi-line": "多折线图",
+      "area": "面积图",
+      "stacked-area": "堆叠面积图",
+      "range-area": "区间面积图",
+      "bar": "柱状图",
+      "grouped-bar": "分组柱状图",
+      "stacked-bar": "堆叠柱状图",
+      "horizontal-bar": "水平条形图",
+      "horizontal-grouped-bar": "水平分组条形图",
+      "horizontal-stacked-bar": "水平堆叠条形图",
+      "scatter": "散点图",
+      "candlestick": "蜡烛图",
+      "pie": "饼图",
+      "donut": "圆环图"
+    },
+    "descriptions": {
+      "line": "查看各样本之间的变化。",
+      "multi-line": "在同一刻度上比较三个系列。",
+      "area": "填充系列曲线下方的区域。",
+      "stacked-area": "查看三个系列对总量的贡献。",
+      "range-area": "显示每个样本的最低值与最高值之间的区间。",
+      "bar": "比较各个样本的数值。",
+      "grouped-bar": "并排比较各系列。",
+      "stacked-bar": "比较总量及其组成。",
+      "horizontal-bar": "沿水平刻度读取样本值。",
+      "horizontal-grouped-bar": "按水平分组比较三个系列。",
+      "horizontal-stacked-bar": "显示按系列划分的水平总量。",
+      "scatter": "比较各个观测值。",
+      "candlestick": "查看开盘价、最高价、最低价和收盘价。",
+      "pie": "比较各样本占整体的比例。",
+      "donut": "通过可调整的中心区域比较各部分占比。"
     }
   }
 }

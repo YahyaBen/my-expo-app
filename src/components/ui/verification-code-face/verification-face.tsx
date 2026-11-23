@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Canvas, Circle, Group, Path, Skia } from '@shopify/react-native-skia';
+import { Canvas, Circle, Group, Path, Skia } from 'react-native-skia';
 import Animated, {
   Easing,
   ReduceMotion,

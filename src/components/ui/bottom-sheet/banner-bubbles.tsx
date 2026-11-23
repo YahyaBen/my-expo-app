@@ -1,6 +1,6 @@
 import { useActiveMotionTime } from '@/hooks/use-active-motion-time';
 import { useThemeColors } from '@/hooks/use-theme';
-import { Canvas, Path, usePathValue } from '@shopify/react-native-skia';
+import { Canvas, Path, usePathValue } from 'react-native-skia';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { useHostColorScheme } from '../host/universal-host';

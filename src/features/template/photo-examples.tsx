@@ -206,6 +206,7 @@ export function PhotoExamples({
                 items={items}
                 width={Math.max(1, width - spacing.lg * 2)}
                 closeLabel={t('common.close')}
+                showLabels={false}
                 dismissHint={t('showcase.homeGridDismiss')}
                 testID="component-ios-home-grid"
               />

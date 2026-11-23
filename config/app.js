@@ -18,7 +18,7 @@ module.exports = {
     scheme: 'expomobiletemplate',
 
     // Store-visible version. Increase for incompatible native changes (OTA policy).
-    version: '1.0.8',
+    version: '1.0.10',
 
     // Default, optional light and optional red home-screen icons.
     icon: './assets/AppIcon-Dark.icon/Assets/icon.png',
@@ -39,7 +39,7 @@ module.exports = {
     android: {
       // Production ID; Firebase JSON must match the final package including suffix.
       package: 'com.hyrkul.mobiletemplate',
-      versionCode: 16, // Android build number; increase before another Play upload.
+      versionCode: 18, // Android build number; increase before another Play upload.
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-foreground-dark.png',
         backgroundColor: '#ffffff',

@@ -1,7 +1,7 @@
 import { useAppearanceSettings, type AppearanceTransitionStyle } from '@/context/theme.context';
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { Canvas, Group, Image, Skia, type SkImage } from '@shopify/react-native-skia';
+import { Canvas, Group, Image, Skia, type SkImage } from 'react-native-skia';
 import {
   createContext,
   useCallback,

@@ -875,6 +875,7 @@
       "flows": "외관 설정, 인증 레이아웃, 시작 화면, 코드 확인으로 일반적인 앱 흐름을 구성합니다."
     },
     "descriptions": {
+      "charts": "데이터와 스타일을 직접 조절하며 다양한 차트 유형을 살펴보세요.",
       "button": "버튼은 작업을 실행합니다. Google 계정 버튼, 의미 색상, 스타일과 크기를 비교하세요.",
       "checkbox": "체크박스는 독립 선택을 켜고 끕니다. 두 상태를 시험하세요.",
       "chip": "칩은 작은 선택과 작업을 제공합니다. 필터, 단일 선택, 삭제 태그와 제안을 사용하세요.",
@@ -917,7 +918,8 @@
       "register": "Google 또는 이메일과 비밀번호 양식으로 가입하는 페이지입니다.",
       "launch-screen": "시작 화면은 앱 준비 중 브랜드를 보여 줍니다. 눌러 종료 애니메이션을 보세요.",
       "otp-bottom-sheet": "인증 시트는 6자리 코드를 입력받습니다. 열고 123456으로 로컬 인증을 시험하세요.",
-      "verification-code-face": "코드 입력은 6자리와 캐릭터를 결합합니다. 123456은 성공, 다른 코드는 오류를 표시합니다."
+      "verification-code-face": "코드 입력은 6자리와 캐릭터를 결합합니다. 123456은 성공, 다른 코드는 오류를 표시합니다.",
+      "explore": "이야기를 검색하고 필터링하며 이미지 상세 시트를 열고 사진 띠의 이미지를 확대해 보세요."
     },
     "sheets": {
       "basic": "기본 시트",
@@ -1176,6 +1178,7 @@
     "pullToRefresh": "아래로 당겨 작업 횟수를 갱신하세요.",
     "notFound": "이 컴포넌트를 찾지 못했습니다.",
     "names": {
+      "charts": "차트",
       "button": "버튼",
       "checkbox": "체크박스",
       "chip": "칩",
@@ -1218,7 +1221,149 @@
       "register": "회원가입",
       "launch-screen": "시작 화면",
       "otp-bottom-sheet": "인증 시트",
-      "verification-code-face": "인증 코드 캐릭터"
+      "verification-code-face": "인증 코드 캐릭터",
+      "explore": "이야기 둘러보기"
+    }
+  },
+  "explore": {
+    "title": "둘러보기",
+    "eyebrow": "새로운 발견의 순간",
+    "headline": "다음 휴식의 장소를 찾아보세요.",
+    "description": "자연, 물가, 정성껏 꾸민 공간에 관한 여섯 편의 짧은 이야기입니다.",
+    "search": "이야기 검색",
+    "account": "내 계정 열기",
+    "all": "전체",
+    "results": "이야기 {{count}}편",
+    "emptyTitle": "이야기를 찾을 수 없어요",
+    "emptyDescription": "다른 검색어를 입력하거나 다른 카테고리를 선택해 보세요.",
+    "reset": "검색과 필터 초기화",
+    "gallery": "사진 일기",
+    "galleryHint": "사진을 누르면 크게 볼 수 있어요. 동작 효과가 켜져 있으면 사진 띠가 자동으로 이동해요.",
+    "photoLoading": "사진 불러오는 중",
+    "photoUnavailable": "사진을 볼 수 없어요",
+    "retryPhoto": "사진 다시 불러오기",
+    "open": "이야기 둘러보기",
+    "refreshError": "사진을 새로 고치지 못했어요. 아래로 당겨 다시 시도해 주세요.",
+    "pauseGallery": "사진 띠 일시 정지",
+    "stories": {
+      "forest": {
+        "title": "숲길 산책",
+        "description": "나무 그늘을 따라 걸어보세요. 부드러운 빛을 보고 나뭇잎 소리를 들으며 잠시 걸음을 늦춰보세요."
+      },
+      "coast": {
+        "title": "바닷가에서",
+        "description": "탁 트인 수평선과 바닷바람이 하루를 새롭게 만들어줄 수 있어요. 해안길을 걸으며 잔잔해지는 물결을 바라보세요."
+      },
+      "space": {
+        "title": "고요한 실내",
+        "description": "자연광, 정돈된 한쪽 공간, 편안한 의자. 세심하게 꾸민 공간은 일상에 여유를 더해줘요."
+      },
+      "mountain": {
+        "title": "산길",
+        "description": "길이 높아지고 시야가 넓어지면 소음도 멀어져요. 완만한 오솔길을 찾아 한 걸음씩 산을 즐겨보세요."
+      },
+      "lake": {
+        "title": "호숫가의 아침",
+        "description": "호숫가에 멈춰 수면에 비친 모습을 바라보세요. 고요한 물가에서 가볍게 마음을 가다듬어보세요."
+      },
+      "studio": {
+        "title": "일하는 공간",
+        "description": "손때 묻은 책상과 몇 가지 도구만으로도 새로움을 위한 자리를 만들 수 있어요. 소소한 일상을 중심으로 꾸민 작업실을 둘러보세요."
+      }
+    }
+  },
+  "charts": {
+    "showValues": "차트 안에 값 표시",
+    "open": "시가",
+    "close": "종가",
+    "low": "저가",
+    "high": "고가",
+    "positive": "상승",
+    "negative": "하락",
+    "neutral": "변동 없음",
+    "title": "차트 갤러리",
+    "intro": "15가지 차트를 살펴보세요. 예제 데이터와 스타일을 변경하며 결과를 비교할 수 있습니다.",
+    "sampleData": "예제 데이터",
+    "customize": "차트 맞춤 설정",
+    "dataControls": "데이터 변수",
+    "styleControls": "모양",
+    "seriesControls": "계열 및 배치",
+    "pointCount": "표본 수",
+    "baseline": "기준값",
+    "variation": "변동 폭",
+    "regenerate": "새 데이터 생성",
+    "reset": "모두 초기화",
+    "palette": "색상 팔레트",
+    "palettes": {
+      "theme": "테마",
+      "ocean": "바다",
+      "sunset": "노을"
+    },
+    "curve": "선 모양",
+    "curves": {
+      "linear": "직선",
+      "natural": "부드러운 곡선",
+      "stepAfter": "계단형"
+    },
+    "strokeWidth": "선 두께",
+    "opacity": "채우기 불투명도",
+    "barWidth": "막대 너비",
+    "rounded": "둥근 막대",
+    "innerRadius": "도넛 중앙 구멍",
+    "showGrid": "격자 표시",
+    "showAxes": "축 표시",
+    "showPoints": "데이터 점 표시",
+    "animated": "변경 애니메이션",
+    "animationsHint": "애니메이션은 동작 설정을 따르며 이 화면이 비활성화되면 일시 정지합니다.",
+    "pointCountValue": "표본 {{count}}개",
+    "percent": "{{value}}%",
+    "points": "{{value}}pt",
+    "series": {
+      "primary": "주 계열",
+      "secondary": "보조 계열",
+      "tertiary": "세 번째 계열"
+    },
+    "summary": "최근 {{latest}} · 최저 {{min}} · 최고 {{max}}",
+    "accessibility": "{{chart}}. 표본 {{count}}개. 최근 값 {{latest}}. 최솟값 {{min}}. 최댓값 {{max}}.",
+    "dataPreview": "표본 값 보기",
+    "sample": "표본",
+    "value": "값",
+    "secondaryValue": "보조 계열",
+    "tertiaryValue": "세 번째 계열",
+    "empty": "차트 표본이 없습니다",
+    "kinds": {
+      "line": "선",
+      "multi-line": "다중 선",
+      "area": "영역",
+      "stacked-area": "누적 영역",
+      "range-area": "범위 영역",
+      "bar": "막대",
+      "grouped-bar": "그룹 막대",
+      "stacked-bar": "누적 막대",
+      "horizontal-bar": "가로 막대",
+      "horizontal-grouped-bar": "가로 그룹 막대",
+      "horizontal-stacked-bar": "가로 누적 막대",
+      "scatter": "산점도",
+      "candlestick": "캔들스틱",
+      "pie": "원형",
+      "donut": "도넛"
+    },
+    "descriptions": {
+      "line": "표본 간의 변화를 살펴보세요.",
+      "multi-line": "같은 척도로 세 계열을 비교하세요.",
+      "area": "계열 아래 영역을 채워 표시합니다.",
+      "stacked-area": "세 계열이 합계에 기여하는 정도를 살펴보세요.",
+      "range-area": "각 표본의 최솟값과 최댓값 사이 범위를 표시합니다.",
+      "bar": "각 표본의 값을 비교하세요.",
+      "grouped-bar": "계열을 나란히 비교하세요.",
+      "stacked-bar": "합계와 구성 비율을 비교하세요.",
+      "horizontal-bar": "가로 척도로 표본 값을 읽어 보세요.",
+      "horizontal-grouped-bar": "세 계열을 가로 그룹으로 비교하세요.",
+      "horizontal-stacked-bar": "계열별로 나눈 가로 합계를 표시합니다.",
+      "scatter": "개별 관측값을 비교하세요.",
+      "candlestick": "시가, 고가, 저가, 종가를 확인하세요.",
+      "pie": "전체에서 각 표본이 차지하는 비율을 비교하세요.",
+      "donut": "중앙 구멍을 조절하며 비율을 비교하세요."
     }
   }
 }

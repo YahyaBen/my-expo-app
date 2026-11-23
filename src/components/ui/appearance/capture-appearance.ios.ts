@@ -1,4 +1,4 @@
-import { makeImageFromView } from '@shopify/react-native-skia';
+import { makeImageFromView } from 'react-native-skia';
 import type { RefObject } from 'react';
 import { findNodeHandle, type ViewInstance } from 'react-native';
 

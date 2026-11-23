@@ -2,14 +2,7 @@ import { useLayoutDirection } from '@/context/layout-direction.context';
 import { useActiveMotionTime } from '@/hooks/use-active-motion-time';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useThemeColors } from '@/hooks/use-theme';
-import {
-  Canvas,
-  Group,
-  Path,
-  Skia,
-  interpolatePaths,
-  type Transforms3d,
-} from '@shopify/react-native-skia';
+import { Canvas, Group, Path, Skia, interpolatePaths, type Transforms3d } from 'react-native-skia';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useDerivedValue, useSharedValue, type SharedValue } from 'react-native-reanimated';

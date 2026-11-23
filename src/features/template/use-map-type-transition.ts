@@ -1,6 +1,6 @@
 import { useMotionEnabled } from '@/hooks/use-motion-enabled';
 import type { SnapshotRevealFrame } from '@components/ui';
-import { Skia, type SkImage } from '@shopify/react-native-skia';
+import { Skia, type SkImage } from 'react-native-skia';
 import { useIsFocused } from 'expo-router';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import type { LayoutChangeEvent } from 'react-native';

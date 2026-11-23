@@ -6,7 +6,7 @@ import {
   useAppearanceTransitionOrigin,
   type TabNavigationItemId,
 } from '@components/ui';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { Activity, useCallback, useRef, useState, type ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Keyboard, View } from 'react-native';
@@ -37,6 +37,7 @@ type ContentTabId = Exclude<TabNavigationItemId, 'home' | 'more'>;
 /** Native template shell and its local component-navigation menu. */
 export default function TemplateScreen() {
   const { t } = useTranslation();
+  const { tab: requestedTab } = useLocalSearchParams<{ tab?: string }>();
   const brand = getAppBrand();
   const insets = useSafeAreaInsets();
   const appearanceOrigin = useAppearanceTransitionOrigin();
@@ -68,21 +69,38 @@ export default function TemplateScreen() {
     router.push({ pathname: '/components/category/[id]', params: { id } });
   }
 
-  function selectTab(id: TabNavigationItemId) {
-    if (menuOpen) {
-      closeMenu();
-      return;
-    }
-    if (id === activeId) return;
-    Keyboard.dismiss();
-    setTab((current) => ({
-      activeId: id,
-      // Keep the hidden page's content and native scroll tree unchanged.
-      contentId: id === 'more' || id === 'home' ? current.contentId : id,
-      homeOpened: current.homeOpened || id === 'home',
-      settingsOpened: current.settingsOpened || id === 'more',
-    }));
-  }
+  const selectTab = useCallback(
+    (id: TabNavigationItemId) => {
+      if (menuOpen) {
+        closeMenu();
+        return;
+      }
+      if (id === activeId) return;
+      Keyboard.dismiss();
+      setTab((current) => ({
+        activeId: id,
+        // Keep the hidden page's content and native scroll tree unchanged.
+        contentId: id === 'more' || id === 'home' ? current.contentId : id,
+        homeOpened: current.homeOpened || id === 'home',
+        settingsOpened: current.settingsOpened || id === 'more',
+      }));
+    },
+    [activeId, closeMenu, menuOpen],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (
+        requestedTab === 'home' ||
+        requestedTab === 'search' ||
+        requestedTab === 'recipes' ||
+        requestedTab === 'more'
+      ) {
+        selectTab(requestedTab);
+        router.setParams({ tab: undefined });
+      }
+    }, [requestedTab, selectTab]),
+  );
 
   const titles = {
     home: brand.name,

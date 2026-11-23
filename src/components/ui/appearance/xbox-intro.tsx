@@ -1,12 +1,4 @@
-import {
-  Fill,
-  Group,
-  Image,
-  Path,
-  Skia,
-  usePathValue,
-  type SkImage,
-} from '@shopify/react-native-skia';
+import { Fill, Group, Image, Path, Skia, usePathValue, type SkImage } from 'react-native-skia';
 import { useDerivedValue, type SharedValue } from 'react-native-reanimated';
 import { appendXboxEntrance, getXboxFrame, type createXboxArtwork } from './xbox-artwork';
 

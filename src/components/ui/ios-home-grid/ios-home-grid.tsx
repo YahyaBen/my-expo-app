@@ -43,6 +43,7 @@ export type IosHomeGridProps = {
   columns?: number;
   gap?: number;
   borderRadius?: number;
+  showLabels?: boolean;
   dismissHint?: string;
   onSelect?: (item: PhotoItem, index: number) => void;
   /** Runs once when Close, drag dismissal or an accessibility dismissal is accepted. */
@@ -63,6 +64,7 @@ type GridProps = IosHomeGridProps & {
   columns: number;
   gap: number;
   borderRadius: number;
+  showLabels: boolean;
   testID: string;
 };
 
@@ -71,6 +73,7 @@ export function IosHomeGrid({
   columns = 4,
   gap = spacing.sm,
   borderRadius = radii.card,
+  showLabels = true,
   testID = 'ios-home-grid',
   ...props
 }: Readonly<IosHomeGridProps>) {
@@ -96,6 +99,7 @@ export function IosHomeGrid({
     columnCount,
     safeGap,
     safeRadius,
+    showLabels,
     items.map((item) => [item.id, item.label]),
   ]);
 
@@ -106,6 +110,7 @@ export function IosHomeGrid({
       columns={columnCount}
       gap={safeGap}
       borderRadius={safeRadius}
+      showLabels={showLabels}
       testID={testID}
     />
   );
@@ -118,6 +123,7 @@ function PhotoGrid({
   columns,
   gap,
   borderRadius,
+  showLabels,
   closeLabel,
   dismissHint,
   onSelect,
@@ -184,6 +190,7 @@ function PhotoGrid({
                   index={rowIndex * columns + columnIndex}
                   size={tileSize}
                   borderRadius={borderRadius}
+                  showLabels={showLabels}
                   disabled={selection !== null}
                   onOpen={open}
                   testID={`${testID}-photo-${item.id}`}
@@ -271,6 +278,7 @@ function PhotoTile({
   index,
   size,
   borderRadius,
+  showLabels,
   disabled,
   onOpen,
   testID,
@@ -279,6 +287,7 @@ function PhotoTile({
   index: number;
   size: number;
   borderRadius: number;
+  showLabels: boolean;
   disabled: boolean;
   onOpen: (index: number, rect: Rect, imageSize?: LoadedImageSize) => void;
   testID: string;
@@ -295,6 +304,7 @@ function PhotoTile({
           contentPadding={0}
           fullWidth
           borderRadius={borderRadius}
+          accessibilityLabel={item.label}
           disabled={disabled}
           testID={testID}
           onPress={() =>
@@ -306,7 +316,9 @@ function PhotoTile({
         >
           <Column spacing={spacing.xs} alignment="center">
             <Column style={{ width: size, height: size }} />
-            <UniversalTextContent variant="caption">{item.label}</UniversalTextContent>
+            {showLabels ? (
+              <UniversalTextContent variant="caption">{item.label}</UniversalTextContent>
+            ) : null}
           </Column>
         </Button>
         {/* A sibling overlay keeps the native button's entire photo area tappable. */}

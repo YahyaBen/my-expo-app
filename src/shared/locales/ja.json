@@ -875,6 +875,7 @@
       "flows": "外観設定、認証レイアウト、起動画面、コード確認で一般的なフローを作れます。"
     },
     "descriptions": {
+      "charts": "データとスタイルを操作しながら、さまざまなグラフを確認できます。",
       "button": "ボタンは操作を実行します。Google用のボタン、意味色、スタイル、サイズを比較できます。",
       "checkbox": "チェックボックスは独立した項目を選択・解除します。両方を試せます。",
       "chip": "チップは小さな選択や操作を示します。フィルター、単一選択、削除できるタグ、提案を試せます。",
@@ -917,7 +918,8 @@
       "register": "Google またはメールアドレスとパスワードのフォームで登録するページです。",
       "launch-screen": "起動画面は準備中にアプリを紹介します。タップしてブランドの退出アニメーションを見られます。",
       "otp-bottom-sheet": "確認シートは6桁を受け付けます。開いて123456を入力するとローカルで試せます。",
-      "verification-code-face": "6桁の入力とキャラクターが連動します。123456で成功、他のコードでエラーになります。"
+      "verification-code-face": "6桁の入力とキャラクターが連動します。123456で成功、他のコードでエラーになります。",
+      "explore": "物語を検索・絞り込み、画像付きの詳細シートを開き、写真の列から画像を拡大できます。"
     },
     "sheets": {
       "basic": "基本のシート",
@@ -1176,6 +1178,7 @@
     "pullToRefresh": "下に引いて操作回数を更新してください。",
     "notFound": "このコンポーネントが見つかりません。",
     "names": {
+      "charts": "グラフ",
       "button": "ボタン",
       "checkbox": "チェックボックス",
       "chip": "チップ",
@@ -1218,7 +1221,149 @@
       "register": "新規登録",
       "launch-screen": "起動画面",
       "otp-bottom-sheet": "確認シート",
-      "verification-code-face": "確認コードのキャラクター"
+      "verification-code-face": "確認コードのキャラクター",
+      "explore": "物語を見つける"
+    }
+  },
+  "explore": {
+    "title": "見つける",
+    "eyebrow": "小さな発見のひととき",
+    "headline": "次の静かな寄り道を見つけよう。",
+    "description": "自然、水辺、心地よい空間をめぐる六つの短い物語。",
+    "search": "物語を検索",
+    "account": "アカウントを開く",
+    "all": "すべて",
+    "results": "{{count}} 件の物語",
+    "emptyTitle": "物語が見つかりません",
+    "emptyDescription": "別の言葉で検索するか、カテゴリーを変えてみてください。",
+    "reset": "検索と絞り込みをリセット",
+    "gallery": "写真日記",
+    "galleryHint": "写真をタップすると拡大します。動きが有効な場合、写真の列は自動でスクロールします。",
+    "photoLoading": "写真を読み込み中",
+    "photoUnavailable": "写真を表示できません",
+    "retryPhoto": "写真を再読み込み",
+    "open": "物語を見つける",
+    "refreshError": "写真を更新できませんでした。下に引いてもう一度お試しください。",
+    "pauseGallery": "写真のスクロールを一時停止",
+    "stories": {
+      "forest": {
+        "title": "森の散歩",
+        "description": "木陰に沿って歩いてみましょう。やわらかな光に気づき、葉の音に耳を澄ませ、歩みをゆるめる時間を。"
+      },
+      "coast": {
+        "title": "海辺で",
+        "description": "開けた水平線と潮風が、一日を変えてくれることもあります。海沿いの道を歩き、水面が穏やかになるのを眺めてみましょう。"
+      },
+      "space": {
+        "title": "静かな室内",
+        "description": "自然の光、すっきりした一角、座り心地のよい椅子。丁寧に整えた空間が、いつもの時間を少し心地よくします。"
+      },
+      "mountain": {
+        "title": "山の小道",
+        "description": "道を上ると視界が開け、雑音が遠ざかります。なだらかな小道を選び、一歩ずつ山を楽しみましょう。"
+      },
+      "lake": {
+        "title": "湖畔の朝",
+        "description": "湖のほとりで立ち止まり、水に映る景色を追ってみましょう。穏やかな水辺は、気持ちを整える素朴な場所です。"
+      },
+      "studio": {
+        "title": "ワークスペース",
+        "description": "使い慣れた机といくつかの道具があれば、新しいことのための余白が生まれます。日々の小さな習慣に寄り添うアトリエを訪ねてみましょう。"
+      }
+    }
+  },
+  "charts": {
+    "showValues": "グラフ内に値を表示",
+    "open": "始値",
+    "close": "終値",
+    "low": "安値",
+    "high": "高値",
+    "positive": "上昇",
+    "negative": "下落",
+    "neutral": "変化なし",
+    "title": "グラフギャラリー",
+    "intro": "15種類のグラフを確認できます。サンプルデータとスタイルを変更して、結果を比較しましょう。",
+    "sampleData": "サンプルデータ",
+    "customize": "グラフをカスタマイズ",
+    "dataControls": "データの変数",
+    "styleControls": "外観",
+    "seriesControls": "系列とレイアウト",
+    "pointCount": "サンプル数",
+    "baseline": "基準値",
+    "variation": "変動幅",
+    "regenerate": "新しいデータを生成",
+    "reset": "すべてリセット",
+    "palette": "カラーパレット",
+    "palettes": {
+      "theme": "テーマ",
+      "ocean": "海",
+      "sunset": "夕焼け"
+    },
+    "curve": "線の形状",
+    "curves": {
+      "linear": "直線",
+      "natural": "滑らか",
+      "stepAfter": "階段状"
+    },
+    "strokeWidth": "線の太さ",
+    "opacity": "塗りの不透明度",
+    "barWidth": "棒の幅",
+    "rounded": "角丸の棒",
+    "innerRadius": "ドーナツの穴",
+    "showGrid": "グリッドを表示",
+    "showAxes": "軸を表示",
+    "showPoints": "データ点を表示",
+    "animated": "変更をアニメーション表示",
+    "animationsHint": "アニメーションは動きの設定に従い、この画面が非アクティブになると一時停止します。",
+    "pointCountValue": "{{count}}件のサンプル",
+    "percent": "{{value}}%",
+    "points": "{{value}} pt",
+    "series": {
+      "primary": "第1系列",
+      "secondary": "第2系列",
+      "tertiary": "第3系列"
+    },
+    "summary": "最新 {{latest}} · 最小 {{min}} · 最大 {{max}}",
+    "accessibility": "{{chart}}。サンプル数{{count}}件。最新値{{latest}}。最小値{{min}}。最大値{{max}}。",
+    "dataPreview": "サンプルの値を表示",
+    "sample": "サンプル",
+    "value": "値",
+    "secondaryValue": "第2系列",
+    "tertiaryValue": "第3系列",
+    "empty": "グラフのサンプルがありません",
+    "kinds": {
+      "line": "折れ線",
+      "multi-line": "複数の折れ線",
+      "area": "面",
+      "stacked-area": "積み上げ面",
+      "range-area": "範囲面",
+      "bar": "棒",
+      "grouped-bar": "集合棒",
+      "stacked-bar": "積み上げ棒",
+      "horizontal-bar": "横棒",
+      "horizontal-grouped-bar": "集合横棒",
+      "horizontal-stacked-bar": "積み上げ横棒",
+      "scatter": "散布図",
+      "candlestick": "ローソク足",
+      "pie": "円",
+      "donut": "ドーナツ"
+    },
+    "descriptions": {
+      "line": "サンプル間の変化を確認できます。",
+      "multi-line": "同じ尺度で3つの系列を比較できます。",
+      "area": "系列の下の領域を塗りつぶして表示します。",
+      "stacked-area": "3つの系列が合計に占める割合を確認できます。",
+      "range-area": "各サンプルの最小値から最大値までの帯を表示します。",
+      "bar": "個々のサンプル値を比較できます。",
+      "grouped-bar": "系列を並べて比較できます。",
+      "stacked-bar": "合計とその内訳を比較できます。",
+      "horizontal-bar": "横方向の尺度でサンプル値を確認できます。",
+      "horizontal-grouped-bar": "3つの系列を横向きのグループで比較できます。",
+      "horizontal-stacked-bar": "系列別に分けた合計を横方向に表示します。",
+      "scatter": "個々の観測値を比較できます。",
+      "candlestick": "始値、高値、安値、終値を確認できます。",
+      "pie": "全体に対する各サンプルの割合を比較できます。",
+      "donut": "中央の穴を調整しながら割合を比較できます。"
     }
   }
 }

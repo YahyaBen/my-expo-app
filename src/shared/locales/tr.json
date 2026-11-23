@@ -875,6 +875,7 @@
       "flows": "Görünüm, kimlik doğrulama, açılış ve kod doğrulama yaygın uygulama akışlarını destekler."
     },
     "descriptions": {
+      "charts": "Etkileşimli veri ve stil denetimleriyle grafik türlerini keşfedin.",
       "button": "Düğmeler işlem başlatır. Google hesabı düğmelerini, anlam renklerini, stilleri ve boyutları karşılaştırın.",
       "checkbox": "Onay kutusu bağımsız bir seçimi açar veya kapatır. İki durumu da deneyin.",
       "chip": "Çipler küçük seçimler ve işlemler sunar. Filtre, tek seçim, silinebilir etiket ve önerileri deneyin.",
@@ -917,7 +918,8 @@
       "register": "Google veya e-posta ve şifre formuyla kayıt olma sayfası.",
       "launch-screen": "Açılış ekranı uygulama hazırlanırken markayı tanıtır. Çıkış animasyonunu önizlemek için dokunun.",
       "otp-bottom-sheet": "Doğrulama paneli altı haneli kod toplar. Yerel deneme için açıp 123456 girin.",
-      "verification-code-face": "Kod girişi altı haneyi hareketli karakterle birleştirir. Başarı için 123456, hata için başka kod girin."
+      "verification-code-face": "Kod girişi altı haneyi hareketli karakterle birleştirir. Başarı için 123456, hata için başka kod girin.",
+      "explore": "Hikâyeleri ara ve filtrele, görselli ayrıntı panellerini aç ve fotoğraf şeridindeki kareleri büyüt."
     },
     "sheets": {
       "basic": "Temel panel",
@@ -1176,6 +1178,7 @@
     "pullToRefresh": "İşlem sayısını güncellemek için aşağı çekin.",
     "notFound": "Bu bileşen bulunamadı.",
     "names": {
+      "charts": "Grafikler",
       "button": "Düğme",
       "checkbox": "Onay kutusu",
       "chip": "Çip",
@@ -1218,7 +1221,149 @@
       "register": "Kayıt ol",
       "launch-screen": "Açılış ekranı",
       "otp-bottom-sheet": "Doğrulama paneli",
-      "verification-code-face": "Doğrulama kodu yüzü"
+      "verification-code-face": "Doğrulama kodu yüzü",
+      "explore": "Hikâyeleri keşfet"
+    }
+  },
+  "explore": {
+    "title": "Keşfet",
+    "eyebrow": "BİR KEŞİF ANI",
+    "headline": "Bir sonraki huzurlu molanı bul.",
+    "description": "Doğa, su kıyıları ve özenle düzenlenmiş mekânlar hakkında altı kısa hikâye.",
+    "search": "Hikâye ara",
+    "account": "Hesabını aç",
+    "all": "Tümü",
+    "results": "{{count}} hikâye",
+    "emptyTitle": "Hikâye bulunamadı",
+    "emptyDescription": "Başka bir arama yap veya farklı bir kategori seç.",
+    "reset": "Aramayı ve filtreleri sıfırla",
+    "gallery": "Fotoğraf günlüğü",
+    "galleryHint": "Fotoğrafı büyütmek için dokun. Hareket açıkken fotoğraf şeridi otomatik ilerler.",
+    "photoLoading": "Fotoğraf yükleniyor",
+    "photoUnavailable": "Fotoğraf kullanılamıyor",
+    "retryPhoto": "Fotoğrafı yeniden yükle",
+    "open": "Hikâyeleri keşfet",
+    "refreshError": "Fotoğraflar yenilenemedi. Yeniden denemek için aşağı çek.",
+    "pauseGallery": "Fotoğraf şeridini duraklat",
+    "stories": {
+      "forest": {
+        "title": "Orman yürüyüşleri",
+        "description": "Ağaçların gölgesini takip et. Yumuşak ışığı fark et, yaprakları dinle ve yavaşlamak için kendine zaman tanı."
+      },
+      "coast": {
+        "title": "Deniz kıyısında",
+        "description": "Açık bir ufuk ve biraz deniz havası gününü değiştirebilir. Kıyı yolunda yürü ve suyun durulmasını izle."
+      },
+      "space": {
+        "title": "Sakin iç mekânlar",
+        "description": "Doğal ışık, düzenli bir köşe ve rahat bir koltuk. Özenli bir mekân günlük anlara biraz daha ferahlık katar."
+      },
+      "mountain": {
+        "title": "Dağ patikaları",
+        "description": "Yol yükselir, manzara açılır ve gürültü azalır. Kolay bir patika bul ve dağın tadını adım adım çıkar."
+      },
+      "lake": {
+        "title": "Göl kıyısında sabahlar",
+        "description": "Göl kenarında dur ve yansımaları izle. Sakin bir su kıyısı, yenilenmek için sade bir alan sunar."
+      },
+      "studio": {
+        "title": "Çalışma alanları",
+        "description": "Sevdiğin bir masa ve birkaç kullanışlı eşya yeni bir şeye yer açabilir. Basit günlük alışkanlıklara göre tasarlanmış bir atölyeyi keşfet."
+      }
+    }
+  },
+  "charts": {
+    "showValues": "Grafiklerin içinde değerleri göster",
+    "open": "Açılış",
+    "close": "Kapanış",
+    "low": "En düşük",
+    "high": "En yüksek",
+    "positive": "Yükseliş",
+    "negative": "Düşüş",
+    "neutral": "Değişmedi",
+    "title": "Grafik galerisi",
+    "intro": "15 grafik çeşidini keşfedin. Sonuçları karşılaştırmak için örnek verileri ve stili değiştirin.",
+    "sampleData": "Örnek veriler",
+    "customize": "Grafikleri özelleştir",
+    "dataControls": "Veri değişkenleri",
+    "styleControls": "Görünüm",
+    "seriesControls": "Seriler ve düzen",
+    "pointCount": "Örnekler",
+    "baseline": "Temel düzey",
+    "variation": "Değişkenlik",
+    "regenerate": "Yeni veri oluştur",
+    "reset": "Tümünü sıfırla",
+    "palette": "Renk paleti",
+    "palettes": {
+      "theme": "Tema",
+      "ocean": "Okyanus",
+      "sunset": "Gün batımı"
+    },
+    "curve": "Çizgi eğrisi",
+    "curves": {
+      "linear": "Düz",
+      "natural": "Yumuşak",
+      "stepAfter": "Basamaklı"
+    },
+    "strokeWidth": "Çizgi kalınlığı",
+    "opacity": "Dolgu opaklığı",
+    "barWidth": "Çubuk genişliği",
+    "rounded": "Yuvarlatılmış çubuklar",
+    "innerRadius": "Halka boşluğu",
+    "showGrid": "Izgarayı göster",
+    "showAxes": "Eksenleri göster",
+    "showPoints": "Noktaları göster",
+    "animated": "Değişiklikleri canlandır",
+    "animationsHint": "Animasyonlar hareket tercihinize uyar ve bu ekran etkin olmadığında duraklatılır.",
+    "pointCountValue": "{{count}} örnek",
+    "percent": "%{{value}}",
+    "points": "{{value}} pt",
+    "series": {
+      "primary": "Birincil",
+      "secondary": "İkincil",
+      "tertiary": "Üçüncül"
+    },
+    "summary": "Son {{latest}} · En düşük {{min}} · En yüksek {{max}}",
+    "accessibility": "{{chart}}. {{count}} örnek. Son değer {{latest}}. En düşük {{min}}. En yüksek {{max}}.",
+    "dataPreview": "Örnek değerleri görüntüle",
+    "sample": "Örnek",
+    "value": "Değer",
+    "secondaryValue": "İkincil",
+    "tertiaryValue": "Üçüncül",
+    "empty": "Grafik verisi yok",
+    "kinds": {
+      "line": "Çizgi",
+      "multi-line": "Çoklu çizgi",
+      "area": "Alan",
+      "stacked-area": "Yığılmış alan",
+      "range-area": "Aralık alanı",
+      "bar": "Çubuk",
+      "grouped-bar": "Gruplandırılmış çubuklar",
+      "stacked-bar": "Yığılmış çubuklar",
+      "horizontal-bar": "Yatay çubuklar",
+      "horizontal-grouped-bar": "Yatay gruplandırılmış çubuklar",
+      "horizontal-stacked-bar": "Yatay yığılmış çubuklar",
+      "scatter": "Dağılım",
+      "candlestick": "Mum",
+      "pie": "Pasta",
+      "donut": "Halka"
+    },
+    "descriptions": {
+      "line": "Örnekler arasındaki değişimleri izleyin.",
+      "multi-line": "Üç seriyi aynı ölçekte karşılaştırın.",
+      "area": "Bir serinin altındaki alanı doldurun.",
+      "stacked-area": "Üç serinin toplama katkısını görün.",
+      "range-area": "Her örneğin en düşük ve en yüksek değeri arasındaki bandı gösterin.",
+      "bar": "Her örneğin değerini karşılaştırın.",
+      "grouped-bar": "Serileri yan yana karşılaştırın.",
+      "stacked-bar": "Toplamları ve bileşimlerini karşılaştırın.",
+      "horizontal-bar": "Örnek değerlerini yatay bir ölçekte okuyun.",
+      "horizontal-grouped-bar": "Üç seriyi yatay gruplar halinde karşılaştırın.",
+      "horizontal-stacked-bar": "Yatay toplamları serilere bölünmüş olarak gösterin.",
+      "scatter": "Tek tek gözlemleri karşılaştırın.",
+      "candlestick": "Açılış, en yüksek, en düşük ve kapanış değerlerini inceleyin.",
+      "pie": "Her örneği bütünün bir parçası olarak karşılaştırın.",
+      "donut": "Payları ayarlanabilir bir merkezle karşılaştırın."
     }
   }
 }

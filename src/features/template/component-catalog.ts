@@ -28,7 +28,7 @@ export const componentCategories = [
   {
     id: 'data',
     icon: { ios: 'list.bullet', android: 'list' },
-    components: ['list', 'list-item', 'table', 'collapsible', 'refreshable-scroll-view'],
+    components: ['charts', 'list', 'list-item', 'table', 'collapsible', 'refreshable-scroll-view'],
   },
   {
     id: 'media',
@@ -55,6 +55,7 @@ export const componentCategories = [
     id: 'flows',
     icon: { ios: 'app', android: 'apps' },
     components: [
+      'explore',
       'appearance',
       'auth',
       'login',
@@ -87,6 +88,7 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   icon: { ios: 'star', android: 'star' },
   list: { ios: 'list.bullet', android: 'list' },
   table: { ios: 'tablecells', android: 'table_chart' },
+  charts: { ios: 'chart.xyaxis.line', android: 'show_chart' },
   'circular-carousel': { ios: 'photo.circle', android: 'photo' },
   'google-map': { ios: 'map', android: 'map' },
   alert: { ios: 'exclamationmark.circle', android: 'error_outline' },
@@ -95,6 +97,7 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   auth: { ios: 'lock', android: 'lock' },
   login: { ios: 'person.crop.circle', android: 'login' },
   register: { ios: 'person.badge.plus', android: 'person_add' },
+  explore: { ios: 'safari', android: 'explore' },
 };
 
 export const componentCatalog = componentCategories.flatMap(({ id: category, components }) =>
@@ -105,8 +108,10 @@ export function isComponentId(value: string | undefined): value is ComponentId {
   return componentIds.some((id) => id === value);
 }
 
-/** Authentication pages share a scoped layout; ordinary examples use the dynamic route. */
+/** Dedicated flows use their own routes; ordinary examples use the dynamic route. */
 export function componentHref(id: ComponentId): Href {
+  if (id === 'charts') return '/charts';
+  if (id === 'explore') return '/explore';
   if (id === 'login') return '/components/login';
   if (id === 'register') return '/components/register';
   return { pathname: '/components/[id]', params: { id } };

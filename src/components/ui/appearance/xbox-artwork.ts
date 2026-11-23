@@ -1,4 +1,4 @@
-import { Skia, type SkPathBuilder } from '@shopify/react-native-skia';
+import { Skia, type SkPathBuilder } from 'react-native-skia';
 
 // Solid 24-unit SVG Repo logo supplied by the user; each source path keeps its own origin.
 const solidData = [

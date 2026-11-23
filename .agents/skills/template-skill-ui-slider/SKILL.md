@@ -10,7 +10,10 @@ Source: [slider.tsx](../../../src/components/ui/slider/slider.tsx).
 
 - Required: numeric `value`, `onValueChange(next: number)`.
 - Optional: `min` (0), `max` (1), `step`, `disabled`, `testID`,
-  native `modifiers`.
+  native `modifiers`, translated `accessibilityLabel` and formatted `accessibilityValue`.
+- Supply the accessible name on the Slider itself. iOS applies native label/value
+  modifiers; Android combines them in its content description while preserving the
+  native adjustable range and actions.
 - Supply finite values, `min < max` and an in-range value. Omit step for a
   continuous range; a discrete range needs positive aligned steps/endpoints.
 - Give the native parent/control real width. Show translated description/value

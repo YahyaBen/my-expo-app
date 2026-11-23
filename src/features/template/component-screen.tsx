@@ -71,7 +71,8 @@ const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
 export default function ComponentScreen({ id }: Readonly<{ id?: string }>) {
   const { t } = useTranslation();
-  if (id === 'login' || id === 'register') return <Redirect href={componentHref(id)} />;
+  if (id === 'login' || id === 'register' || id === 'explore' || id === 'charts')
+    return <Redirect href={componentHref(id)} />;
   if (!isComponentId(id)) {
     return (
       <PageScreen title={t('template.components')}>
@@ -467,6 +468,8 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
               max={100}
               onValueChange={setValue}
               testID="component-progress-slider"
+              accessibilityLabel={title}
+              accessibilityValue={t('charts.percent', { value })}
             />
           </>
         );
