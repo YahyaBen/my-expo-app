@@ -44,7 +44,7 @@ export const componentCategories = [
   {
     id: 'navigation',
     icon: { ios: 'arrow.triangle.branch', android: 'alt_route' },
-    components: ['floating-action', 'navigation', 'popover', 'bottom-sheet'],
+    components: ['floating-action', 'navigation', 'dropdown-menu', 'popover', 'bottom-sheet'],
   },
   {
     id: 'feedback',
@@ -87,6 +87,7 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   'text-input': { ios: 'pencil', android: 'edit' },
   icon: { ios: 'star', android: 'star' },
   list: { ios: 'list.bullet', android: 'list' },
+  'dropdown-menu': { ios: 'list.bullet.rectangle', android: 'menu' },
   table: { ios: 'tablecells', android: 'table_chart' },
   charts: { ios: 'chart.xyaxis.line', android: 'show_chart' },
   'circular-carousel': { ios: 'photo.circle', android: 'photo' },

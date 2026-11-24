@@ -894,9 +894,10 @@
       "stacked-carousel": "堆叠轮播以重叠卡片呈现照片。滑动浏览示例图片以探索卡片堆叠。",
       "story-list": "故事列表横向展示照片卡片。滑动浏览这组示例照片。",
       "ios-home-grid": "照片网格以紧凑方式展示图片概览。点按照片以展开，再关闭展开视图。",
-      "google-map": "探索原生 Google 地图。平移、缩放、点按示例标记，并比较标准与卫星视图。",
+      "google-map": "在 Google 地图中打开卡萨布兰卡。",
       "floating-action": "悬浮操作让关键任务触手可及。点按此示例以更新计数。",
       "navigation": "标签栏用于切换主要页面，并保留中央操作入口。试用标签和凸起按钮。",
+      "dropdown-menu": "打开菜单可选择操作或展开邀请选项。",
       "popover": "弹出框在触发控件旁显示相关内容。打开此示例，再关闭以返回页面。",
       "bottom-sheet": "底部面板在当前页面上方显示重点内容。试用横幅、自定义标题操作、横向标签和滚动。",
       "alert": "提醒用于突出重要信息。点按按钮以显示一条信息提醒。",
@@ -976,11 +977,24 @@
       "import": "导入项目",
       "learnMore": "了解更多"
     },
+    "overlays": {
+      "open": "打开",
+      "profile": "个人资料",
+      "billing": "账单",
+      "keyboardShortcuts": "键盘快捷键",
+      "team": "团队",
+      "inviteUsers": "邀请用户",
+      "message": "消息",
+      "more": "更多…",
+      "newTeam": "新建团队",
+      "support": "支持"
+    },
     "badges": {
       "default": "徽章",
       "secondary": "次要",
       "destructive": "危险",
-      "outline": "轮廓"
+      "outline": "轮廓",
+      "verified": "已验证"
     },
     "forms": {
       "examples": "表单示例",
@@ -1196,6 +1210,7 @@
       "google-map": "Google 地图",
       "floating-action": "悬浮操作",
       "navigation": "导航栏",
+      "dropdown-menu": "下拉菜单",
       "popover": "弹出框",
       "bottom-sheet": "底部面板",
       "alert": "提醒",

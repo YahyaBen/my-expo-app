@@ -898,9 +898,10 @@
       "stacked-carousel": "Un carrousel empilé présente des photos en cartes superposées. Balayez les images pour explorer la pile.",
       "story-list": "Une liste de stories présente des cartes photo à l’horizontale. Balayez cette collection d’exemple.",
       "ios-home-grid": "Une grille photo offre un aperçu compact des images. Touchez une photo pour l’agrandir, puis fermez la vue agrandie.",
-      "google-map": "Explorez une carte Google native. Déplacez et zoomez la carte, touchez le repère et comparez les vues standard et satellite.",
+      "google-map": "Ouvrez Casablanca dans Google Maps.",
       "floating-action": "Une action flottante garde une tâche essentielle à portée de main. Touchez cet exemple pour incrémenter le compteur.",
       "navigation": "Une barre d’onglets change de destination et garde une action centrale accessible. Essayez les onglets et le bouton surélevé.",
+      "dropdown-menu": "Ouvrez le menu pour choisir une action ou afficher les options d’invitation.",
       "popover": "Une fenêtre contextuelle affiche du contenu près de son déclencheur. Ouvrez cet exemple, puis fermez-le pour revenir à la page.",
       "bottom-sheet": "Les panneaux présentent du contenu ciblé au-dessus de l’écran actuel. Essayez une bannière, des actions d’en-tête, des puces horizontales et le défilement.",
       "alert": "Une alerte attire l’attention sur un message important. Touchez le bouton pour afficher une alerte d’information.",
@@ -980,11 +981,24 @@
       "import": "Importer un projet",
       "learnMore": "En savoir plus"
     },
+    "overlays": {
+      "open": "Ouvrir",
+      "profile": "Profil",
+      "billing": "Facturation",
+      "keyboardShortcuts": "Raccourcis clavier",
+      "team": "Équipe",
+      "inviteUsers": "Inviter des utilisateurs",
+      "message": "Message",
+      "more": "Plus…",
+      "newTeam": "Nouvelle équipe",
+      "support": "Assistance"
+    },
     "badges": {
       "default": "Badge",
       "secondary": "Secondaire",
       "destructive": "Destructif",
-      "outline": "Contour"
+      "outline": "Contour",
+      "verified": "Vérifié"
     },
     "forms": {
       "examples": "Exemples de formulaires",
@@ -1200,6 +1214,7 @@
       "google-map": "Google Maps",
       "floating-action": "Action flottante",
       "navigation": "Barre de navigation",
+      "dropdown-menu": "Menu déroulant",
       "popover": "Fenêtre contextuelle",
       "bottom-sheet": "Panneau inférieur",
       "alert": "Alerte",

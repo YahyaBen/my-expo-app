@@ -896,9 +896,10 @@
       "stacked-carousel": "A stacked carousel presents photos as overlapping cards. Swipe through the sample images to explore the stack.",
       "story-list": "A story list presents a horizontal collection of photo cards. Swipe through this sample collection.",
       "ios-home-grid": "A photo grid offers a compact overview of images. Tap a photo to expand it, then dismiss the expanded view.",
-      "google-map": "Explore a native Google map. Pan, zoom, tap the sample marker and compare standard and satellite views.",
+      "google-map": "Open Casablanca in Google Maps.",
       "floating-action": "A floating action keeps a key task easy to reach. Tap this example to update the counter.",
       "navigation": "A tab bar switches between main destinations and keeps a central action available. Try the tabs and raised button.",
+      "dropdown-menu": "Open the menu to choose an action or expand the invitation options.",
       "popover": "A popover shows related content beside its trigger. Open this example, then close it to return to the page.",
       "bottom-sheet": "Bottom sheets show focused content above the current screen. Try a banner, custom header actions, horizontal chips and scrolling.",
       "alert": "An alert draws attention to an important message. Tap the button to display an informational alert.",
@@ -978,11 +979,24 @@
       "import": "Import Project",
       "learnMore": "Learn More"
     },
+    "overlays": {
+      "open": "Open",
+      "profile": "Profile",
+      "billing": "Billing",
+      "keyboardShortcuts": "Keyboard shortcuts",
+      "team": "Team",
+      "inviteUsers": "Invite users",
+      "message": "Message",
+      "more": "More…",
+      "newTeam": "New team",
+      "support": "Support"
+    },
     "badges": {
       "default": "Badge",
       "secondary": "Secondary",
       "destructive": "Destructive",
-      "outline": "Outline"
+      "outline": "Outline",
+      "verified": "Verified"
     },
     "forms": {
       "examples": "Form examples",
@@ -1198,6 +1212,7 @@
       "google-map": "Google Maps",
       "floating-action": "Floating action",
       "navigation": "Navigation bar",
+      "dropdown-menu": "Dropdown menu",
       "popover": "Popover",
       "bottom-sheet": "Bottom sheet",
       "alert": "Alert",

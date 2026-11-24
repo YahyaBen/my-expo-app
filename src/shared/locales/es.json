@@ -894,9 +894,10 @@
       "stacked-carousel": "Un carrusel apilado presenta fotos como tarjetas superpuestas. Desliza por las imágenes de ejemplo para explorar la pila.",
       "story-list": "Una lista de historias presenta una colección horizontal de tarjetas con fotos. Desliza por esta colección de ejemplo.",
       "ios-home-grid": "Una cuadrícula de fotos ofrece una vista general compacta de las imágenes. Toca una foto para ampliarla y cierra la vista ampliada.",
-      "google-map": "Explora un mapa nativo de Google. Desplaza, amplía, toca el marcador de ejemplo y compara las vistas estándar y de satélite.",
+      "google-map": "Abre Casablanca en Google Maps.",
       "floating-action": "Una acción flotante mantiene una tarea importante al alcance. Toca este ejemplo para actualizar el contador.",
       "navigation": "Una barra de pestañas cambia entre los destinos principales y mantiene disponible una acción central. Prueba las pestañas y el botón elevado.",
+      "dropdown-menu": "Abre el menú para elegir una acción o desplegar las opciones de invitación.",
       "popover": "Una ventana emergente muestra contenido relacionado junto a su activador. Abre este ejemplo y ciérralo para volver a la página.",
       "bottom-sheet": "Los paneles inferiores muestran contenido concreto sobre la pantalla actual. Prueba un banner, acciones de encabezado, chips horizontales y desplazamiento.",
       "alert": "Una alerta destaca un mensaje importante. Toca el botón para mostrar una alerta informativa.",
@@ -976,11 +977,24 @@
       "import": "Importar proyecto",
       "learnMore": "Saber más"
     },
+    "overlays": {
+      "open": "Abrir",
+      "profile": "Perfil",
+      "billing": "Facturación",
+      "keyboardShortcuts": "Atajos de teclado",
+      "team": "Equipo",
+      "inviteUsers": "Invitar usuarios",
+      "message": "Mensaje",
+      "more": "Más…",
+      "newTeam": "Nuevo equipo",
+      "support": "Soporte"
+    },
     "badges": {
       "default": "Insignia",
       "secondary": "Secundario",
       "destructive": "Destructivo",
-      "outline": "Contorno"
+      "outline": "Contorno",
+      "verified": "Verificado"
     },
     "forms": {
       "examples": "Ejemplos de formularios",
@@ -1196,6 +1210,7 @@
       "google-map": "Google Maps",
       "floating-action": "Acción flotante",
       "navigation": "Barra de navegación",
+      "dropdown-menu": "Menú desplegable",
       "popover": "Ventana emergente",
       "bottom-sheet": "Panel inferior",
       "alert": "Alerta",

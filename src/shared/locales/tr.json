@@ -903,9 +903,10 @@
       "stacked-carousel": "Yığılmış galeri fotoğrafları üst üste kartlarla sunar. Örnekler arasında kaydırın.",
       "story-list": "Hikâye listesi fotoğraf kartlarını yatay gösterir. Örnek koleksiyonu kaydırın.",
       "ios-home-grid": "Fotoğraf ızgarası görüntülere toplu bakış sağlar. Büyütmek için dokunun, sonra kapatın.",
-      "google-map": "Yerel Google haritasını kaydırın, yakınlaştırın, örnek işarete dokunun ve standart/uydu görünümünü karşılaştırın.",
+      "google-map": "Kazablanka’yı Google Haritalar’da açın.",
       "floating-action": "Kayan işlem önemli görevi erişilebilir tutar. Sayacı değiştirmek için dokunun.",
       "navigation": "Sekme çubuğu ana hedefleri değiştirir ve merkez işlemi erişilebilir tutar. Sekmeleri ve yükseltilmiş düğmeyi deneyin.",
+      "dropdown-menu": "Bir işlem seçmek veya davet seçeneklerini görmek için menüyü açın.",
       "popover": "Açılır pencere tetikleyicinin yanında ilgili içeriği gösterir. Açın ve sayfaya dönmek için kapatın.",
       "bottom-sheet": "Alt paneller geçerli ekranın üzerinde odaklanmış içerik gösterir. Bannerı, özel başlık işlemlerini, yatay çipleri ve kaydırmayı deneyin.",
       "alert": "Uyarı önemli mesaja dikkat çeker. Bilgi uyarısı için düğmeye dokunun.",
@@ -985,11 +986,24 @@
       "import": "Proje içe aktar",
       "learnMore": "Daha fazla bilgi"
     },
+    "overlays": {
+      "open": "Aç",
+      "profile": "Profil",
+      "billing": "Faturalandırma",
+      "keyboardShortcuts": "Klavye kısayolları",
+      "team": "Ekip",
+      "inviteUsers": "Kullanıcı davet et",
+      "message": "Mesaj",
+      "more": "Daha fazla…",
+      "newTeam": "Yeni ekip",
+      "support": "Destek"
+    },
     "badges": {
       "default": "Rozet",
       "secondary": "İkincil",
       "destructive": "Yıkıcı",
-      "outline": "Çerçeveli"
+      "outline": "Çerçeveli",
+      "verified": "Doğrulanmış"
     },
     "forms": {
       "examples": "Form örnekleri",
@@ -1209,6 +1223,7 @@
       "google-map": "Google Haritalar",
       "floating-action": "Kayan işlem",
       "navigation": "Gezinme çubuğu",
+      "dropdown-menu": "Açılır menü",
       "popover": "Açılır pencere",
       "bottom-sheet": "Alt panel",
       "alert": "Uyarı",

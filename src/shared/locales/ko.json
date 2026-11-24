@@ -903,9 +903,10 @@
       "stacked-carousel": "스택 캐러셀은 겹친 카드로 사진을 보여 줍니다. 밀어서 살펴보세요.",
       "story-list": "스토리 목록은 사진 카드를 가로로 보여 줍니다. 밀어서 보세요.",
       "ios-home-grid": "사진 그리드는 모음을 한눈에 보여 줍니다. 사진을 눌러 확대하고 닫아 보세요.",
-      "google-map": "네이티브 Google 지도를 이동·확대하고 표식을 누르세요. 일반·위성 뷰를 비교할 수 있습니다.",
+      "google-map": "Google 지도에서 카사블랑카를 엽니다.",
       "floating-action": "플로팅 작업은 중요한 기능을 쉽게 실행하게 합니다. 눌러 카운터를 갱신하세요.",
       "navigation": "탭 막대는 주요 화면을 전환하고 중앙 작업을 유지합니다. 탭과 돌출 버튼을 눌러 보세요.",
+      "dropdown-menu": "메뉴를 열어 작업을 선택하거나 초대 옵션을 펼칠 수 있습니다.",
       "popover": "팝오버는 실행 버튼 옆에 관련 내용을 표시합니다. 열고 닫아 페이지로 돌아가세요.",
       "bottom-sheet": "하단 시트는 현재 화면 위에 관련 콘텐츠를 표시합니다. 배너, 맞춤 헤더 동작, 가로 칩과 스크롤을 사용해 보세요.",
       "alert": "알림은 중요한 메시지를 강조합니다. 버튼을 눌러 안내를 확인하세요.",
@@ -985,11 +986,24 @@
       "import": "프로젝트 가져오기",
       "learnMore": "더 알아보기"
     },
+    "overlays": {
+      "open": "열기",
+      "profile": "프로필",
+      "billing": "결제",
+      "keyboardShortcuts": "키보드 단축키",
+      "team": "팀",
+      "inviteUsers": "사용자 초대",
+      "message": "메시지",
+      "more": "더 보기…",
+      "newTeam": "새 팀",
+      "support": "지원"
+    },
     "badges": {
       "default": "배지",
       "secondary": "보조",
       "destructive": "위험",
-      "outline": "외곽선"
+      "outline": "외곽선",
+      "verified": "인증됨"
     },
     "forms": {
       "examples": "폼 예제",
@@ -1209,6 +1223,7 @@
       "google-map": "Google 지도",
       "floating-action": "플로팅 작업",
       "navigation": "내비게이션 막대",
+      "dropdown-menu": "드롭다운 메뉴",
       "popover": "팝오버",
       "bottom-sheet": "하단 시트",
       "alert": "알림",

@@ -80,7 +80,8 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "./config/with-android-permissions"
+      "./config/with-android-permissions",
+      "./config/with-optional-android-features"
     ],
     "experiments": {
       "typedRoutes": true

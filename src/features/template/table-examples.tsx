@@ -2,10 +2,10 @@ import {
   Badge,
   ButtonContent,
   Column,
+  DropdownMenu,
   EmptyState,
   Icon,
   PageSection,
-  Popover,
   Row,
   Table,
   TextInput,
@@ -25,6 +25,8 @@ import {
   type ExamplePayment,
   type PaymentStatus,
 } from './table-payments';
+
+const paymentStatuses = ['success', 'processing', 'failed'] as const;
 
 export function TableExamples({
   contentWidth,
@@ -124,11 +126,12 @@ export function TableExamples({
     if (readOnly || payment.status === status) return;
     setPayments((current) =>
       current.map((row) =>
-        row.id === payment.id ? { ...row, status, history: [...row.history, status] } : row,
+        row.id === payment.id && row.status !== status
+          ? { ...row, status, history: [...row.history, status] }
+          : row,
       ),
     );
     setFeedback({ email: payment.email, status });
-    setPopoverId(null);
   }
 
   function openDetails(payment: ExamplePayment) {
@@ -214,14 +217,56 @@ export function TableExamples({
         actionsWidth={80}
         testID="component-table"
         renderActions={(payment) => (
-          <Popover
-            isPresented={popoverId === payment.id}
+          <DropdownMenu
+            isPresented={!readOnly && popoverId === payment.id}
             onIsPresentedChange={(open) =>
               setPopoverId((current) =>
                 open ? payment.id : current === payment.id ? null : current,
               )
             }
             testID={'component-table-popover-' + payment.id}
+            width={Math.min(280, contentWidth)}
+            sections={[
+              {
+                id: 'payment',
+                label: payment.email,
+                items: [
+                  {
+                    id: 'details',
+                    label: t('componentCatalog.tables.detailsFor', { id: payment.id }),
+                    testID: 'component-table-details-' + payment.id,
+                  },
+                ],
+              },
+              {
+                id: 'status',
+                items: paymentStatuses.map((status) => ({
+                  id: status,
+                  label: t('componentCatalog.tables.actions.' + status),
+                  disabled: payment.status === status,
+                  testID: 'component-table-' + status + '-' + payment.id,
+                })),
+              },
+              {
+                id: 'dismiss',
+                items: [
+                  {
+                    id: 'close',
+                    label: t('common.close'),
+                    testID: 'component-table-close-' + payment.id,
+                  },
+                ],
+              },
+            ]}
+            onSelect={(id) => {
+              if (readOnly) return;
+              if (id === 'details') {
+                openDetails(payment);
+                return;
+              }
+              const status = paymentStatuses.find((status) => status === id);
+              if (status) updateStatus(payment, status);
+            }}
             trigger={
               <ButtonContent
                 variant="tertiary"
@@ -238,39 +283,7 @@ export function TableExamples({
                 <Icon name={Icon.select({ ios: 'ellipsis', android: 'more_horiz' })} size={18} />
               </ButtonContent>
             }
-          >
-            <Column
-              spacing={spacing.md}
-              style={{ width: Math.min(280, contentWidth), padding: spacing.lg }}
-            >
-              <Text variant="label">{payment.email}</Text>
-              <ButtonContent
-                variant="tertiary"
-                label={t('componentCatalog.tables.detailsFor', { id: payment.id })}
-                fullWidth
-                onPress={() => openDetails(payment)}
-                testID={'component-table-details-' + payment.id}
-              />
-              {(['success', 'processing', 'failed'] as const).map((status) => (
-                <ButtonContent
-                  key={status}
-                  variant="tertiary"
-                  label={t('componentCatalog.tables.actions.' + status)}
-                  disabled={payment.status === status}
-                  fullWidth
-                  onPress={() => updateStatus(payment, status)}
-                  testID={'component-table-' + status + '-' + payment.id}
-                />
-              ))}
-              <ButtonContent
-                variant="tertiary"
-                label={t('common.close')}
-                fullWidth
-                onPress={() => setPopoverId(null)}
-                testID={'component-table-close-' + payment.id}
-              />
-            </Column>
-          </Popover>
+          />
         )}
       />
       <PageSection style={{ paddingVertical: 0 }}>

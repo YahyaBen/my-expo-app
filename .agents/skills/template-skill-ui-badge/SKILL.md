@@ -9,12 +9,16 @@ Import `Badge`, `BadgeProps` and `BadgeVariant` from `@components/ui` inside an
 existing Host. Source: [badge/](../../../src/components/ui/badge/).
 
 - Supply a string `label`; `variant` defaults to `default`. Supported treatments
-  are default, secondary, destructive and outline.
+  are default, secondary, destructive, outline and verified. Pass a formatted
+  count such as `20+` as the label for a counter.
+- Pass `icon` with an iOS SF Symbol and an Android Material Symbol to add a
+  decorative leading icon to any variant. It overrides the default verified icon.
 - Badges are readable status text without press, selection or disabled behavior.
   The native text exposes the label and optional `testID`.
 - Colors follow the owning Host. Default uses an inverse neutral surface;
-  secondary uses surfaceVariant/text, destructive uses errorContainer/onErrorContainer,
-  and outline has a transparent fill with a native capsule border.
+  secondary uses surfaceVariant/text, destructive uses error/onError, and outline
+  has a transparent fill with a native capsule border. Verified uses info/onInfo
+  and a platform verification symbol by default.
 - Preserve intrinsic width and text scaling. Avoid fixed dimensions or truncation
   for essential status text. iOS uses a capsule background/stroke; Android uses a
   nonclickable Material Surface with a pill shape.

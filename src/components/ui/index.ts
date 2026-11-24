@@ -60,6 +60,7 @@ export * from './page/page-section';
 export type { PhotoItem } from './photo/photo-item';
 export * from './picker/picker';
 export * from './popover/popover';
+export * from './popover/dropdown-menu';
 export * from './refreshable-scroll-view/refreshable-scroll-view';
 export * from './refreshable-scroll-view/refreshable-scroll-view.types';
 export * from './segmented-control/segmented-control';

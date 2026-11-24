@@ -26,7 +26,6 @@ import {
   PageScreen,
   PageSection,
   Picker,
-  Popover,
   ProgressIndicator,
   RNHostView,
   Row,
@@ -62,6 +61,7 @@ import {
   type ComponentId,
 } from './component-catalog';
 import { FormExamples } from './form-examples';
+import { DropdownMenuExample, PopoverExample } from './overlay-examples';
 import type { PhotoLayout } from './photo-examples';
 import { SliderExamples } from './slider-examples';
 import { TableExamples } from './table-examples';
@@ -208,27 +208,47 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
             testID="component-checkbox"
           />
         );
-      case 'badge':
+      case 'badge': {
+        const BadgeGroup = width >= 320 * Math.max(1, window.fontScale) ? Row : Column;
         return (
-          <Column spacing={12}>
-            <Badge label={t('componentCatalog.badges.default')} testID="component-badge-default" />
-            <Badge
-              label={t('componentCatalog.badges.secondary')}
-              variant="secondary"
-              testID="component-badge-secondary"
-            />
-            <Badge
-              label={t('componentCatalog.badges.destructive')}
-              variant="destructive"
-              testID="component-badge-destructive"
-            />
-            <Badge
-              label={t('componentCatalog.badges.outline')}
-              variant="outline"
-              testID="component-badge-outline"
-            />
+          <Column alignment="center" spacing={8}>
+            <BadgeGroup alignment="center" spacing={8}>
+              <Badge
+                label={t('componentCatalog.badges.default')}
+                testID="component-badge-default"
+              />
+              <Badge
+                label={t('componentCatalog.badges.secondary')}
+                variant="secondary"
+                icon={{ ios: 'star', android: 'star' }}
+                testID="component-badge-secondary"
+              />
+            </BadgeGroup>
+            <BadgeGroup alignment="center" spacing={8}>
+              <Badge
+                label={t('componentCatalog.badges.destructive')}
+                variant="destructive"
+                testID="component-badge-destructive"
+              />
+              <Badge
+                label={t('componentCatalog.badges.outline')}
+                variant="outline"
+                testID="component-badge-outline"
+              />
+            </BadgeGroup>
+            <BadgeGroup alignment="center" spacing={8}>
+              <Badge
+                label={t('componentCatalog.badges.verified')}
+                variant="verified"
+                testID="component-badge-verified"
+              />
+              <Badge label="8" testID="component-badge-count" />
+              <Badge label="99" variant="destructive" testID="component-badge-count-destructive" />
+              <Badge label="20+" variant="outline" testID="component-badge-count-outline" />
+            </BadgeGroup>
           </Column>
         );
+      }
       case 'switch':
         return (
           <Switch
@@ -392,34 +412,10 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
             {result}
           </>
         );
+      case 'dropdown-menu':
+        return <DropdownMenuExample />;
       case 'popover':
-        return (
-          <Popover
-            isPresented={open}
-            onIsPresentedChange={setOpen}
-            testID="component-popover"
-            trigger={
-              <ButtonContent
-                variant="primary"
-                label={actionLabel}
-                onPress={() => setOpen(true)}
-                testID="component-popover-trigger"
-              />
-            }
-          >
-            <Column
-              spacing={spacing.md}
-              style={{ padding: spacing.lg, width: Math.min(240, width) }}
-            >
-              <Text>{title}</Text>
-              <ButtonContent
-                variant="secondary"
-                label={t('common.close')}
-                onPress={() => setOpen(false)}
-              />
-            </Column>
-          </Popover>
-        );
+        return <PopoverExample width={width} />;
       case 'bottom-sheet':
         return <BottomSheetExamples />;
       case 'alert':
@@ -550,7 +546,13 @@ function ComponentExample({ id, title }: Readonly<{ id: ComponentId; title: stri
         description={t(`componentCatalog.descriptions.${id}`)}
         onRefresh={id === 'refreshable-scroll-view' ? async () => countAction() : undefined}
       >
-        <PageSection inset={!fullWidth} testID={`component-page-${id}`}>
+        <PageSection
+          alignment={
+            id === 'badge' || id === 'dropdown-menu' || id === 'popover' ? 'center' : 'start'
+          }
+          inset={!fullWidth}
+          testID={`component-page-${id}`}
+        >
           {content()}
         </PageSection>
       </PageScreen>
