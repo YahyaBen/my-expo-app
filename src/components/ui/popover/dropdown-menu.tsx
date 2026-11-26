@@ -49,6 +49,13 @@ export function DropdownMenu({
     1,
     Math.min(width, windowWidth - insets.left - insets.right - spacing.xxl),
   );
+  const [presentation, setPresentation] = useState({
+    isPresented,
+    opens: isPresented ? 1 : 0,
+  });
+  if (presentation.isPresented !== isPresented) {
+    setPresentation({ isPresented, opens: presentation.opens + (isPresented ? 1 : 0) });
+  }
 
   return (
     <Popover
@@ -59,8 +66,11 @@ export function DropdownMenu({
       width={panelWidth}
       testID={testID}
     >
-      {isPresented ? (
+      {/* Let native dismissal finish with the same content and layout. */}
+      {presentation.opens > 0 ? (
         <DropdownMenuContent
+          key={presentation.opens}
+          isPresented={isPresented}
           sections={sections}
           onSelect={(id) => {
             onIsPresentedChange(false);
@@ -74,10 +84,11 @@ export function DropdownMenu({
 }
 
 function DropdownMenuContent({
+  isPresented,
   sections,
   onSelect,
   testID,
-}: Readonly<Pick<DropdownMenuProps, 'sections' | 'onSelect' | 'testID'>>) {
+}: Readonly<Pick<DropdownMenuProps, 'isPresented' | 'sections' | 'onSelect' | 'testID'>>) {
   const scheme = useHostColorScheme();
   const colors = useThemeColors(scheme);
   const [expandedId, setExpandedId] = useState<string>();
@@ -101,7 +112,7 @@ function DropdownMenuContent({
         accessibilityLabel={item.label}
         testID={actionTestID(item)}
         onPress={() => {
-          if (selectionRequested.current || item.disabled) return;
+          if (!isPresented || selectionRequested.current || item.disabled) return;
           selectionRequested.current = true;
           onSelect(item.id);
         }}
@@ -156,7 +167,7 @@ function DropdownMenuContent({
                   labelStyle={{ color: colors.text }}
                   isOpen={expandedId === item.id}
                   onOpenChange={(open) => {
-                    if (selectionRequested.current) return;
+                    if (!isPresented || selectionRequested.current) return;
                     setExpandedId((current) =>
                       open ? item.id : current === item.id ? undefined : current,
                     );

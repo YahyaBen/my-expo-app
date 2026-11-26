@@ -19,9 +19,7 @@ import {
   nativeFillWidth,
   pageFormModifiers,
   PageScreen,
-  PageSection,
   Row,
-  ScrollView,
   Switch,
   UniversalTextContent as Text,
   ThemeControl,
@@ -418,45 +416,48 @@ function SettingsPage({
           <BottomSheet
             isPresented={languageOpen}
             onDismiss={() => setLanguageOpen(false)}
-            heightFraction={0.9}
+            scrollable
+            scrollTestID="app-settings-language-scroll"
             testID="app-settings-language-sheet"
           >
-            <ScrollView modifiers={nativeFillSize} testID="app-settings-language-scroll">
-              <PageSection>
-                <Text variant="title" testID="app-settings-language-title">
-                  {t('common.language')}
-                </Text>
-                <FieldGroup.Section>
-                  {SUPPORTED_LANGUAGES.map((value) => (
-                    <ListItem.FieldRow
-                      key={value}
-                      testID={`app-settings-language-${value}`}
-                      onPress={
-                        changeLanguage &&
-                        (() => {
-                          changeLanguage(value);
-                          setLanguageOpen(false);
-                        })
-                      }
-                      trailing={
-                        language === value ? (
-                          <Icon
-                            name={Icon.select({
-                              ios: 'checkmark',
-                              android: 'check',
-                            })}
-                            size={20}
-                            color={colors.tint}
-                          />
-                        ) : undefined
-                      }
-                    >
-                      <Text>{languageLabel(value)}</Text>
-                    </ListItem.FieldRow>
-                  ))}
-                </FieldGroup.Section>
-              </PageSection>
-            </ScrollView>
+            <Column
+              spacing={spacing.lg}
+              modifiers={nativeFillWidth}
+              style={{ paddingBottom: spacing.lg }}
+            >
+              <Text variant="title" testID="app-settings-language-title">
+                {t('common.language')}
+              </Text>
+              <FieldGroup.Section>
+                {SUPPORTED_LANGUAGES.map((value) => (
+                  <ListItem.FieldRow
+                    key={value}
+                    testID={`app-settings-language-${value}`}
+                    onPress={
+                      changeLanguage &&
+                      (() => {
+                        changeLanguage(value);
+                        setLanguageOpen(false);
+                      })
+                    }
+                    trailing={
+                      language === value ? (
+                        <Icon
+                          name={Icon.select({
+                            ios: 'checkmark',
+                            android: 'check',
+                          })}
+                          size={20}
+                          color={colors.tint}
+                        />
+                      ) : undefined
+                    }
+                  >
+                    <Text>{languageLabel(value)}</Text>
+                  </ListItem.FieldRow>
+                ))}
+              </FieldGroup.Section>
+            </Column>
           </BottomSheet>
         </Column>
       </Column>

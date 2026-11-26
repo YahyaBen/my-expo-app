@@ -23,6 +23,8 @@ export type BottomSheetProps = BottomSheetBaseProps & {
   actions?: ReactNode;
   /** Rendered after the body; scrolls with the other content. */
   footer?: ReactNode;
-  /** Scroll the whole composition. Supply a bounded contentHeight viewport. */
+  /** Scroll the whole composition. Without a height, fit the content up to the available height. */
   scrollable?: boolean;
+  /** Override the scroll viewport test ID. Defaults to the sheet test ID plus "-scroll". */
+  scrollTestID?: string;
 };

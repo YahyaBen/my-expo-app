@@ -1,4 +1,4 @@
-import { BottomSheet, Column } from '@expo/ui';
+import { BottomSheet, Column, ScrollView } from '@expo/ui';
 import { ModalBottomSheet, type ModalBottomSheetRef } from '@expo/ui/jetpack-compose';
 import { fillMaxHeight, padding, testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
 import { useEffect, useRef, useState } from 'react';
@@ -9,9 +9,10 @@ export function NativeBottomSheet({
   dismissible,
   heightFraction,
   edgeToEdge,
+  fitScrollContent,
   ...props
 }: Readonly<NativeBottomSheetProps>) {
-  if (dismissible && heightFraction === undefined)
+  if (dismissible && heightFraction === undefined && !fitScrollContent)
     return <BottomSheet {...props} contentPadding={edgeToEdge ? 0 : undefined} />;
   return (
     <ControlledBottomSheet
@@ -19,6 +20,7 @@ export function NativeBottomSheet({
       dismissible={dismissible}
       heightFraction={heightFraction}
       edgeToEdge={edgeToEdge}
+      fitScrollContent={fitScrollContent}
     />
   );
 }
@@ -33,6 +35,7 @@ function ControlledBottomSheet({
   dismissible,
   heightFraction,
   edgeToEdge,
+  fitScrollContent,
 }: Readonly<NativeBottomSheetProps>) {
   const sheetRef = useRef<ModalBottomSheetRef>(null);
   const [mounted, setMounted] = useState(isPresented);
@@ -59,7 +62,9 @@ function ControlledBottomSheet({
       contentColor={contentColor}
       sheetGesturesEnabled={dismissible}
       showDragHandle={dismissible}
-      skipPartiallyExpanded={!dismissible || heightFraction !== undefined}
+      skipPartiallyExpanded={
+        !dismissible || heightFraction !== undefined || fitScrollContent !== undefined
+      }
       properties={{
         shouldDismissOnBackPress: dismissible,
         shouldDismissOnClickOutside: dismissible,
@@ -74,7 +79,13 @@ function ControlledBottomSheet({
           ...(testID ? [nativeTestID(testID)] : []),
         ]}
       >
-        {children}
+        {fitScrollContent ? (
+          <ScrollView modifiers={nativeFillWidth} testID={fitScrollContent.testID}>
+            {children}
+          </ScrollView>
+        ) : (
+          children
+        )}
       </Column>
     </ModalBottomSheet>
   );

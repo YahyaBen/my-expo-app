@@ -10,9 +10,9 @@ Source: [popover/](../../../src/components/ui/popover/).
 
 - Supply isPresented, onIsPresentedChange, a native trigger control and native
   children. The trigger's action sets the caller's presentation state to true.
-- Both overlays use the same theme surface, border and corner radius. iOS uses
-  SwiftUI Popover with compact adaptation and the system arrow. Android uses an
-  anchored Compose popup with a Material Surface.
+- Both overlays share a rounded, bordered theme surface. iOS uses SwiftUI Popover
+  with compact adaptation and the system arrow. Android uses Compose DropdownMenu
+  with native scrolling and dismissal and styles its content with a Material Surface.
 - Native outside dismissal reports false. Android Back also dismisses. Keep
   controlled state in sync; a close action in the content sets it to false.
 - Trigger disabled state and accessible name belong to the supplied control.

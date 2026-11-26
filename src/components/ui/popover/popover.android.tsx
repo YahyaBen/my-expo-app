@@ -1,11 +1,5 @@
-import { Column, ScrollView } from '@expo/ui';
-import {
-  Box,
-  DropdownMenuPopup,
-  Shape,
-  Surface,
-  useMaterialColors,
-} from '@expo/ui/jetpack-compose';
+import { Column } from '@expo/ui';
+import { DropdownMenu, Shape, Surface, useMaterialColors } from '@expo/ui/jetpack-compose';
 import { testID as nativeTestID } from '@expo/ui/jetpack-compose/modifiers';
 import { radii } from '@/constants/layout';
 import { useThemeColors } from '@/hooks/use-theme';
@@ -22,36 +16,33 @@ export function Popover({
   trigger,
   children,
   width,
-  scrollable,
   testID,
   isPresented,
   onIsPresentedChange,
 }: Readonly<PopoverProps>) {
   const colors = useThemeColors(useHostColorScheme());
-  const materialColors = useMaterialColors();
-  const Content = scrollable ? ScrollView : Column;
-
+  const { outlineVariant } = useMaterialColors();
   return (
-    <Box modifiers={testID ? [nativeTestID(testID)] : undefined}>
-      {trigger}
-      <DropdownMenuPopup
-        expanded={isPresented}
-        onDismissRequest={() => onIsPresentedChange(false)}
-        properties={{ focusable: true, dismissOnBackPress: true, dismissOnClickOutside: true }}
-      >
-        {children != null && (
-          <Surface
-            color={colors.surfaceRaised}
-            shape={panelShape}
-            border={{ color: colors.border ?? materialColors.outlineVariant, width: 1 }}
-            shadowElevation={3}
-          >
-            <Content style={{ width }} testID={testID ? `${testID}-content` : undefined}>
-              {children}
-            </Content>
-          </Surface>
-        )}
-      </DropdownMenuPopup>
-    </Box>
+    <DropdownMenu
+      expanded={isPresented}
+      onDismissRequest={() => onIsPresentedChange(false)}
+      properties={{ focusable: true, dismissOnBackPress: true, dismissOnClickOutside: true }}
+      modifiers={testID ? [nativeTestID(testID)] : undefined}
+      color="transparent"
+      shadowElevation={0}
+    >
+      <DropdownMenu.Trigger>{trigger}</DropdownMenu.Trigger>
+      <DropdownMenu.Items>
+        <Surface
+          color={colors.surfaceRaised}
+          shape={panelShape}
+          border={{ color: colors.border ?? outlineVariant, width: 1 }}
+        >
+          <Column style={{ width }} testID={testID ? `${testID}-content` : undefined}>
+            {children}
+          </Column>
+        </Surface>
+      </DropdownMenu.Items>
+    </DropdownMenu>
   );
 }

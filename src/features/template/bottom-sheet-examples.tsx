@@ -288,7 +288,6 @@ export function BottomSheetExamples() {
         isPresented={active === 'improvements'}
         onDismiss={() => close('improvements')}
         dismissible={false}
-        contentHeight={height}
         scrollable
         testID="component-bottom-sheet-improvements"
         banner={

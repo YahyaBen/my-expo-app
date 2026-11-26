@@ -23,7 +23,10 @@ export function BottomSheet(props: Readonly<BottomSheetProps>) {
     actions,
     footer,
     scrollable = false,
+    scrollTestID = testID ? `${testID}-scroll` : undefined,
   } = props;
+  const fitScrollContent =
+    scrollable && contentHeight === undefined && heightFraction === undefined;
   const hasBanner = banner != null && banner !== false;
   const bannerLayout =
     hasBanner && heightFraction !== undefined && contentHeight === undefined && !scrollable
@@ -62,16 +65,17 @@ export function BottomSheet(props: Readonly<BottomSheetProps>) {
       onDismiss={onDismiss}
       dismissible={dismissible}
       heightFraction={heightFraction}
+      fitScrollContent={fitScrollContent ? { testID: scrollTestID } : undefined}
       edgeToEdge={hasBanner}
       testID={testID}
       containerColor={colors.surface}
       contentColor={colors.text}
     >
-      {scrollable ? (
+      {scrollable && !fitScrollContent ? (
         <ScrollView
           modifiers={nativeFillWidth}
           style={contentHeight === undefined ? undefined : { height: contentHeight }}
-          testID={testID ? `${testID}-scroll` : undefined}
+          testID={scrollTestID}
         >
           {content}
         </ScrollView>

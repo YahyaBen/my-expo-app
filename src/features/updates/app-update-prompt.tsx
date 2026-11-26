@@ -6,10 +6,7 @@ import {
   ButtonContent,
   Column,
   Icon,
-  nativeFillSize,
   nativeFillWidth,
-  PageSection,
-  ScrollView,
   UniversalTextContent as Text,
   UniversalHost,
 } from '@components/ui';
@@ -62,7 +59,8 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
       <BottomSheet
         isPresented={visible}
         dismissible={false}
-        heightFraction={0.85}
+        scrollable
+        scrollTestID="app-update-scroll"
         onDismiss={() => {}}
         testID="app-update-prompt"
         banner={
@@ -71,59 +69,53 @@ export function AppUpdatePrompt({ ready }: Readonly<{ ready: boolean }>) {
           </BottomSheetBanner>
         }
       >
-        <Column spacing={0} modifiers={nativeFillSize} testID="app-update-content">
-          <ScrollView modifiers={nativeFillSize} testID="app-update-scroll">
-            <Column spacing={0} modifiers={nativeFillWidth}>
-              <PageSection inset={false}>
-                <Text variant="title" testID="app-update-title">
-                  {t(isStore ? 'updates.newVersion' : 'updates.improvementsReady')}
-                </Text>
-                <Text tone="muted" testID="app-update-description">
-                  {t('updates.description', { appName })}
-                </Text>
-                <Text tone="muted" testID="app-update-message">
-                  {t(
-                    isStore
-                      ? 'updates.storeHint'
-                      : downloaded
-                        ? 'updates.restartHint'
-                        : 'updates.downloadHint',
-                  )}
-                </Text>
-                {updates.actionError ? (
-                  <Text tone="error" testID="app-update-error">
-                    {t(`updates.errors.${updates.actionError}`)}
-                  </Text>
-                ) : null}
-              </PageSection>
-              <PageSection inset={false}>
-                <ButtonContent
-                  variant="primary"
-                  label={t(`updates.${label}`)}
-                  fullWidth
-                  disabled={pending !== null}
-                  onPress={() =>
-                    void (isStore
-                      ? updates.openStore()
-                      : downloaded
-                        ? updates.restartApp()
-                        : updates.downloadUpdate())
-                  }
-                  testID="app-update-apply"
-                />
-                <Column alignment="center" spacing={spacing.xs} modifiers={nativeFillWidth}>
-                  <Text variant="label" tone="muted" testID="app-update-app-name">
-                    {appName}
-                  </Text>
-                  <Text variant="caption" tone="muted" testID="app-update-app-version">
-                    {t('common.appVersion', {
-                      version: nativeApplicationVersion ?? t('updates.unknown'),
-                    })}
-                  </Text>
-                </Column>
-              </PageSection>
-            </Column>
-          </ScrollView>
+        <Column spacing={spacing.lg} modifiers={nativeFillWidth} testID="app-update-content">
+          <Column spacing={spacing.sm} modifiers={nativeFillWidth}>
+            <Text variant="title" testID="app-update-title">
+              {t(isStore ? 'updates.newVersion' : 'updates.improvementsReady')}
+            </Text>
+            <Text tone="muted" testID="app-update-description">
+              {t('updates.description', { appName })}
+            </Text>
+            <Text tone="muted" testID="app-update-message">
+              {t(
+                isStore
+                  ? 'updates.storeHint'
+                  : downloaded
+                    ? 'updates.restartHint'
+                    : 'updates.downloadHint',
+              )}
+            </Text>
+            {updates.actionError ? (
+              <Text tone="error" testID="app-update-error">
+                {t(`updates.errors.${updates.actionError}`)}
+              </Text>
+            ) : null}
+          </Column>
+          <ButtonContent
+            variant="primary"
+            label={t(`updates.${label}`)}
+            fullWidth
+            disabled={pending !== null}
+            onPress={() =>
+              void (isStore
+                ? updates.openStore()
+                : downloaded
+                  ? updates.restartApp()
+                  : updates.downloadUpdate())
+            }
+            testID="app-update-apply"
+          />
+          <Column alignment="center" spacing={spacing.xs} modifiers={nativeFillWidth}>
+            <Text variant="label" tone="muted" testID="app-update-app-name">
+              {appName}
+            </Text>
+            <Text variant="caption" tone="muted" testID="app-update-app-version">
+              {t('common.appVersion', {
+                version: nativeApplicationVersion ?? t('updates.unknown'),
+              })}
+            </Text>
+          </Column>
         </Column>
       </BottomSheet>
     </UniversalHost>
