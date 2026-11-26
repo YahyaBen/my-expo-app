@@ -7,8 +7,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AccessibilityInfo, useWindowDimensions } from 'react-native';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
-import { ButtonContent } from '../button/button';
+import { ButtonContent, type ButtonContentProps } from '../button/button';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { Icon } from '../icon/icon';
 import { LoadingContent } from '../loading/loading-state';
 import { nativeFillWidth } from '../native/native-fill-width';
 import { UniversalTextContent } from '../text/universal-text';
@@ -25,6 +26,8 @@ export interface OtpBottomSheetProps {
   onResend?: () => void | Promise<void>;
   resendCooldownSeconds?: number;
   hint?: string;
+  /** Customize the Close control. The sheet owns its dismissal handler. */
+  closeButtonProps?: Partial<Omit<ButtonContentProps, 'onPress'>>;
   colorScheme?: 'light' | 'dark';
   testID?: string;
 }
@@ -51,6 +54,7 @@ function OtpForm({
   onResend,
   resendCooldownSeconds = 30,
   hint,
+  closeButtonProps,
   testID = 'otp-sheet',
 }: Readonly<OtpBottomSheetProps>) {
   const { t } = useTranslation();
@@ -99,6 +103,9 @@ function OtpForm({
   const busy = status === 'verifying' || status === 'resending';
   const complete = code.length === OTP_LENGTH;
   const success = status === 'success';
+  const verifyDisabled = !success && (!complete || busy);
+  const verifyLabel = t(success ? 'otp.done' : 'otp.verify');
+  const closeLabel = closeButtonProps?.label;
   const error =
     status === 'invalid' || status === 'verifyFailed' || status === 'resendFailed' ? status : null;
   function changeCode(next: string) {
@@ -169,11 +176,19 @@ function OtpForm({
         <Row modifiers={nativeFillWidth} alignment="center">
           <Spacer flexible />
           <ButtonContent
-            variant="link"
-            label={t('common.close')}
-            onPress={dismiss}
+            variant="tertiary"
+            size="sm"
+            circular={closeLabel === undefined}
+            accessibilityLabel={closeLabel ?? t('common.close')}
             testID={`${testID}-close`}
-          />
+            {...closeButtonProps}
+            onPress={dismiss}
+          >
+            {closeButtonProps?.children ??
+              (closeLabel === undefined ? (
+                <Icon name={{ ios: 'xmark', android: 'close' }} />
+              ) : null)}
+          </ButtonContent>
         </Row>
         <VerificationFace
           progress={code.length / OTP_LENGTH}
@@ -246,12 +261,14 @@ function OtpForm({
           contentPadding={spacing.md}
           borderRadius={radii.control}
           testID={`${testID}-verify`}
-          label={t(success ? 'otp.done' : 'otp.verify')}
-          disabled={!success && (!complete || busy)}
+          label={verifyLabel}
+          disabled={verifyDisabled}
           onPress={success ? dismiss : () => void verify()}
         >
           {busy ? (
             <LoadingContent label={t(status === 'resending' ? 'otp.resending' : 'otp.verifying')} />
+          ) : verifyDisabled ? (
+            <UniversalTextContent>{verifyLabel}</UniversalTextContent>
           ) : undefined}
         </ButtonContent>
         {!success && onResend && (
@@ -315,13 +332,17 @@ function OtpResendButton({
     return () => clearInterval(timer);
   }, [deadline, visible]);
 
+  const disabled = !isPresented || remaining > 0 || busy;
+  const label = remaining > 0 ? t('otp.resendIn', { seconds: remaining }) : t('otp.resend');
   return (
     <ButtonContent
       variant="link"
       testID={testID}
-      label={remaining > 0 ? t('otp.resendIn', { seconds: remaining }) : t('otp.resend')}
-      disabled={!isPresented || remaining > 0 || busy}
+      label={label}
+      disabled={disabled}
       onPress={onPress}
-    />
+    >
+      {disabled ? <UniversalTextContent tone="muted">{label}</UniversalTextContent> : undefined}
+    </ButtonContent>
   );
 }

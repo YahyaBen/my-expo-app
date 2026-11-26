@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "应用导览",
+    "step": "第 {{current}} 步，共 {{total}} 步",
+    "skip": "跳过",
+    "next": "继续",
+    "start": "开始使用",
+    "discover": {
+      "title": "找到你的起点",
+      "description": "探索可用于下一个 iOS 或 Android 应用的原生界面和设计模式。"
+    },
+    "appearance": {
+      "title": "打造你的专属风格",
+      "description": "在设置中试用不同的主题，切换浅色和深色模式，并选择显示语言。"
+    },
+    "components": {
+      "title": "开始构建应用",
+      "description": "在「组件」中浏览按钮、表单、列表等可交互示例。"
+    }
+  },
   "discover": {
     "title": "发现",
     "eyebrow": "原生应用模板",
@@ -910,8 +929,7 @@
       "register": "使用 Google 或电子邮箱和密码表单注册的页面。",
       "launch-screen": "启动屏在应用准备就绪前展示品牌。点按以预览品牌退出动画。",
       "otp-bottom-sheet": "验证面板用于输入六位验证码。打开后输入 123456 以试用本地验证。",
-      "verification-code-face": "验证码输入搭配动画角色。输入 123456 显示成功，输入其他验证码显示错误。",
-      "explore": "搜索和筛选故事，打开图文详情底部面板，并放大照片栏中的图片。"
+      "verification-code-face": "验证码输入搭配动画角色。输入 123456 显示成功，输入其他验证码显示错误。"
     },
     "sheets": {
       "basic": "基础面板",
@@ -1223,55 +1241,7 @@
       "register": "注册",
       "launch-screen": "启动屏",
       "otp-bottom-sheet": "验证面板",
-      "verification-code-face": "验证码表情",
-      "explore": "探索故事"
-    }
-  },
-  "explore": {
-    "title": "探索",
-    "eyebrow": "发现片刻美好",
-    "headline": "寻找下一处宁静。",
-    "description": "六篇短文，带你走进自然、水岸与用心布置的空间。",
-    "search": "搜索故事",
-    "account": "打开你的账户",
-    "all": "全部",
-    "results": "{{count}} 篇故事",
-    "emptyTitle": "未找到故事",
-    "emptyDescription": "试试其他关键词，或选择不同分类。",
-    "reset": "重置搜索和筛选",
-    "gallery": "影像日记",
-    "galleryHint": "轻点照片即可放大。启用动画时，照片栏会自动滚动。",
-    "photoLoading": "正在加载照片",
-    "photoUnavailable": "照片暂不可用",
-    "retryPhoto": "重新加载照片",
-    "open": "探索故事",
-    "refreshError": "无法刷新照片。请下拉重试。",
-    "pauseGallery": "暂停照片栏",
-    "stories": {
-      "forest": {
-        "title": "林间漫步",
-        "description": "沿着树荫前行，留意柔和的光，听一听叶子的声音，给自己一点放慢脚步的时间。"
-      },
-      "coast": {
-        "title": "在海边",
-        "description": "开阔的地平线和一缕海风，能让一天变得不同。沿海岸小径走走，看水面渐渐平静。"
-      },
-      "space": {
-        "title": "静谧室内",
-        "description": "自然光、整洁的一角和舒适的座椅。用心布置的空间，让日常片刻更从容。"
-      },
-      "mountain": {
-        "title": "山间小径",
-        "description": "山路渐高，视野渐开，喧嚣渐远。找一条舒缓的小径，一步一步感受山间风景。"
-      },
-      "lake": {
-        "title": "湖畔清晨",
-        "description": "在湖边停一停，看看水中倒影。一片宁静的水面，就是重新出发的好地方。"
-      },
-      "studio": {
-        "title": "工作空间",
-        "description": "一张熟悉的书桌和几件实用物品，就能为新想法留出位置。走进一间围绕日常小习惯布置的工作室。"
-      }
+      "verification-code-face": "验证码表情"
     }
   },
   "charts": {

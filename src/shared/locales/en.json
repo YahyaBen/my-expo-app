@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "App tour",
+    "step": "Step {{current}} of {{total}}",
+    "skip": "Skip",
+    "next": "Continue",
+    "start": "Get started",
+    "discover": {
+      "title": "Find your starting point",
+      "description": "Explore native screens and patterns you can use in your next iOS or Android app."
+    },
+    "appearance": {
+      "title": "Make it yours",
+      "description": "Try different themes, switch between light and dark, and choose your language in Settings."
+    },
+    "components": {
+      "title": "Start building",
+      "description": "Browse working examples of buttons, forms, lists, and more in Components."
+    }
+  },
   "discover": {
     "title": "Discover",
     "eyebrow": "A NATIVE APP TEMPLATE",
@@ -912,8 +931,7 @@
       "register": "A registration page with Google and an email/password form.",
       "launch-screen": "A launch screen introduces the app while it becomes ready. Tap to preview the branded exit animation.",
       "otp-bottom-sheet": "A verification sheet collects a six-digit code. Open it and enter 123456 to try local verification.",
-      "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error.",
-      "explore": "Search and filter stories, open image detail sheets and explore an expanding photo strip."
+      "verification-code-face": "Code entry pairs six digits with an animated character. Enter 123456 for success or another code for an error."
     },
     "sheets": {
       "basic": "Basic sheet",
@@ -1225,56 +1243,7 @@
       "register": "Register",
       "launch-screen": "Launch screen",
       "otp-bottom-sheet": "Verification sheet",
-      "verification-code-face": "Verification code face",
-      "explore": "Explore stories"
-    }
-  },
-  "explore": {
-    "title": "Explore",
-    "eyebrow": "A MOMENT OF DISCOVERY",
-    "headline": "Find your next quiet escape.",
-    "description": "Six short stories about nature, waterside places and thoughtful spaces.",
-    "search": "Search stories",
-    "account": "Open your account",
-    "all": "All",
-    "results_one": "{{count}} story",
-    "results_other": "{{count}} stories",
-    "emptyTitle": "No stories found",
-    "emptyDescription": "Try another search or choose a different category.",
-    "reset": "Reset search and filters",
-    "gallery": "Photo journal",
-    "galleryHint": "Tap a photo to expand it. The strip advances automatically when motion is enabled.",
-    "photoLoading": "Loading photo",
-    "photoUnavailable": "Photo unavailable",
-    "retryPhoto": "Retry photo",
-    "open": "Explore stories",
-    "refreshError": "Photos could not be refreshed. Pull down to try again.",
-    "pauseGallery": "Pause photo strip",
-    "stories": {
-      "forest": {
-        "title": "Forest walks",
-        "description": "Follow the shade beneath the trees. Notice the soft light, listen to the leaves and leave room for a slower pace."
-      },
-      "coast": {
-        "title": "By the sea",
-        "description": "An open horizon and a little sea air can change the shape of a day. Take the coastal path and watch the water settle."
-      },
-      "space": {
-        "title": "Quiet interiors",
-        "description": "Natural light, a clear corner and a comfortable seat. A thoughtful space gives everyday moments a little more ease."
-      },
-      "mountain": {
-        "title": "Mountain trails",
-        "description": "The path climbs, the view opens and the noise fades. Find a gentle trail and enjoy the mountain one step at a time."
-      },
-      "lake": {
-        "title": "Lakeside mornings",
-        "description": "Pause beside the lake and follow the reflections. A quiet stretch of water offers a simple place to reset."
-      },
-      "studio": {
-        "title": "Working spaces",
-        "description": "A well-loved desk and a few useful objects can make space for something new. Explore a studio built around simple daily rituals."
-      }
+      "verification-code-face": "Verification code face"
     }
   },
   "charts": {

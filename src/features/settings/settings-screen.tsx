@@ -316,7 +316,6 @@ function SettingsPage({
                   {t('settings.location.openSettings')}
                 </Text>
               </ListItem.FieldRow>
-              {!updates ? tabFooter : null}
             </FieldGroup.Section>
             {updates ? (
               <FieldGroup.Section
@@ -407,9 +406,20 @@ function SettingsPage({
                     </Text>
                   </ListItem.FieldRow>
                 ) : null}
-                {tabFooter}
               </FieldGroup.Section>
             ) : null}
+            <FieldGroup.Section>
+              <ListItem.FieldRow
+                onPress={() =>
+                  router.navigate({ pathname: '/onboarding', params: { replay: '1' } })
+                }
+                trailing={chevron}
+                testID="app-settings-onboarding"
+              >
+                <Text>{t('onboarding.tour')}</Text>
+              </ListItem.FieldRow>
+              {tabFooter}
+            </FieldGroup.Section>
           </FieldGroup>
         </Column>
         <Column spacing={0} testID="app-settings-language-presentation">

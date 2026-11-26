@@ -1,8 +1,9 @@
 import { useThemeColors } from '@/hooks/use-theme';
 import { Column, RNHostView, Spacer } from '@expo/ui';
-import type { ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { UniversalHost, useHostColorScheme } from '../host/universal-host';
+import { IconColorContext } from '../icon/icon-color-context';
 import { nativeFillSize, nativeFillWidth } from '../native/native-fill-width';
 
 export type BottomSheetBannerProps = {
@@ -21,14 +22,23 @@ export function BottomSheetBanner({
   testID = 'bottom-sheet-banner',
 }: Readonly<BottomSheetBannerProps>) {
   const colors = useThemeColors(useHostColorScheme());
+  const inheritedIconColor = useContext(IconColorContext);
   return (
     <Column modifiers={nativeFillWidth} style={{ height: bannerHeight }}>
       <RNHostView>
-        <View testID={testID} style={[styles.scene, { backgroundColor: colors.surfaceVariant }]}>
+        <View
+          testID={testID}
+          style={[
+            styles.scene,
+            { backgroundColor: colors.bannerBackground ?? colors.surfaceVariant },
+          ]}
+        >
           <UniversalHost matchContents={false} ignoreSafeArea="all" style={StyleSheet.absoluteFill}>
             <Column alignment="center" modifiers={nativeFillSize}>
               <Spacer />
-              {children}
+              <IconColorContext.Provider value={colors.bannerAccent ?? inheritedIconColor}>
+                {children}
+              </IconColorContext.Provider>
               <Spacer />
             </Column>
           </UniversalHost>

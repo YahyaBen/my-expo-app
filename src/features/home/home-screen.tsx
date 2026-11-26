@@ -20,7 +20,7 @@ import {
 } from '@components/ui';
 import catAnimation from '@assets/animations/cat.json';
 import { Image } from 'expo-image';
-import { router, useFocusEffect } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -88,13 +88,6 @@ export default function HomeScreen({
   return (
     <PageScreen tab title={title} onScrollGeometryChange={onScrollGeometryChange}>
       <PageSection testID="template-wireframe" spacing={spacing.xl}>
-        <ButtonContent
-          variant="secondary"
-          fullWidth
-          label={t('explore.open')}
-          onPress={() => router.push('/explore')}
-          testID="home-open-explore"
-        />
         <DateTimeBanner />
         <TesterThanks width={contentWidth} />
         <Column spacing={spacing.sm} modifiers={nativeFillWidth}>

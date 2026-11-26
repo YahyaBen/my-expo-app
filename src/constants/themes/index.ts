@@ -1,8 +1,10 @@
+import { bloomTheme } from './bloom';
 import { nativeDesign } from './design';
 import { systemTheme } from './system';
 import { uxTheme } from './ux';
 
 export const themes = {
+  bloom: { label: 'Bloom', colors: bloomTheme, design: nativeDesign },
   ux: { label: 'UX Template', colors: uxTheme, design: nativeDesign },
   system: { label: 'System', colors: systemTheme, design: nativeDesign },
 };

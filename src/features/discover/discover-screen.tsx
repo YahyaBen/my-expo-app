@@ -14,7 +14,6 @@ import {
   type PageScreenProps,
 } from '@components/ui';
 import { useTranslation } from 'react-i18next';
-import { router } from 'expo-router';
 import {
   componentCategories,
   componentIds,
@@ -53,14 +52,6 @@ export default function DiscoverScreen({
               {t('discover.description')}
             </UniversalTextContent>
           </Column>
-
-          <ButtonContent
-            variant="secondary"
-            fullWidth
-            label={t('explore.open')}
-            onPress={() => router.push('/explore')}
-            testID="discover-open-explore"
-          />
 
           <Column
             spacing={spacing.xl}

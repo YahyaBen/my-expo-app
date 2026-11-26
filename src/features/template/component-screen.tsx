@@ -71,7 +71,7 @@ const goBack = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
 export default function ComponentScreen({ id }: Readonly<{ id?: string }>) {
   const { t } = useTranslation();
-  if (id === 'login' || id === 'register' || id === 'explore' || id === 'charts')
+  if (id === 'login' || id === 'register' || id === 'charts')
     return <Redirect href={componentHref(id)} />;
   if (!isComponentId(id)) {
     return (

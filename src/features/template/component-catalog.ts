@@ -55,7 +55,6 @@ export const componentCategories = [
     id: 'flows',
     icon: { ios: 'app', android: 'apps' },
     components: [
-      'explore',
       'appearance',
       'auth',
       'login',
@@ -98,7 +97,6 @@ const icons: Partial<Record<ComponentId, IconName>> = {
   auth: { ios: 'lock', android: 'lock' },
   login: { ios: 'person.crop.circle', android: 'login' },
   register: { ios: 'person.badge.plus', android: 'person_add' },
-  explore: { ios: 'safari', android: 'explore' },
 };
 
 export const componentCatalog = componentCategories.flatMap(({ id: category, components }) =>
@@ -112,7 +110,6 @@ export function isComponentId(value: string | undefined): value is ComponentId {
 /** Dedicated flows use their own routes; ordinary examples use the dynamic route. */
 export function componentHref(id: ComponentId): Href {
   if (id === 'charts') return '/charts';
-  if (id === 'explore') return '/explore';
   if (id === 'login') return '/components/login';
   if (id === 'register') return '/components/register';
   return { pathname: '/components/[id]', params: { id } };

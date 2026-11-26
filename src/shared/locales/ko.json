@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "앱 둘러보기",
+    "step": "{{total}}단계 중 {{current}}단계",
+    "skip": "건너뛰기",
+    "next": "계속",
+    "start": "시작하기",
+    "discover": {
+      "title": "앱의 첫걸음을 내디뎌 보세요",
+      "description": "다음 iOS 또는 Android 앱에 활용할 수 있는 네이티브 화면과 디자인 패턴을 살펴보세요."
+    },
+    "appearance": {
+      "title": "취향에 맞게 꾸며 보세요",
+      "description": "설정에서 다양한 테마를 적용하고, 라이트 모드와 다크 모드를 전환하고, 표시 언어를 선택해 보세요."
+    },
+    "components": {
+      "title": "앱을 만들기 시작하세요",
+      "description": "컴포넌트에서 버튼, 양식, 목록 등 실제로 동작하는 예제를 살펴보세요."
+    }
+  },
   "discover": {
     "title": "발견",
     "eyebrow": "네이티브 앱 템플릿",
@@ -919,8 +938,7 @@
       "register": "Google 또는 이메일과 비밀번호 양식으로 가입하는 페이지입니다.",
       "launch-screen": "시작 화면은 앱 준비 중 브랜드를 보여 줍니다. 눌러 종료 애니메이션을 보세요.",
       "otp-bottom-sheet": "인증 시트는 6자리 코드를 입력받습니다. 열고 123456으로 로컬 인증을 시험하세요.",
-      "verification-code-face": "코드 입력은 6자리와 캐릭터를 결합합니다. 123456은 성공, 다른 코드는 오류를 표시합니다.",
-      "explore": "이야기를 검색하고 필터링하며 이미지 상세 시트를 열고 사진 띠의 이미지를 확대해 보세요."
+      "verification-code-face": "코드 입력은 6자리와 캐릭터를 결합합니다. 123456은 성공, 다른 코드는 오류를 표시합니다."
     },
     "sheets": {
       "basic": "기본 시트",
@@ -1236,55 +1254,7 @@
       "register": "회원가입",
       "launch-screen": "시작 화면",
       "otp-bottom-sheet": "인증 시트",
-      "verification-code-face": "인증 코드 캐릭터",
-      "explore": "이야기 둘러보기"
-    }
-  },
-  "explore": {
-    "title": "둘러보기",
-    "eyebrow": "새로운 발견의 순간",
-    "headline": "다음 휴식의 장소를 찾아보세요.",
-    "description": "자연, 물가, 정성껏 꾸민 공간에 관한 여섯 편의 짧은 이야기입니다.",
-    "search": "이야기 검색",
-    "account": "내 계정 열기",
-    "all": "전체",
-    "results": "이야기 {{count}}편",
-    "emptyTitle": "이야기를 찾을 수 없어요",
-    "emptyDescription": "다른 검색어를 입력하거나 다른 카테고리를 선택해 보세요.",
-    "reset": "검색과 필터 초기화",
-    "gallery": "사진 일기",
-    "galleryHint": "사진을 누르면 크게 볼 수 있어요. 동작 효과가 켜져 있으면 사진 띠가 자동으로 이동해요.",
-    "photoLoading": "사진 불러오는 중",
-    "photoUnavailable": "사진을 볼 수 없어요",
-    "retryPhoto": "사진 다시 불러오기",
-    "open": "이야기 둘러보기",
-    "refreshError": "사진을 새로 고치지 못했어요. 아래로 당겨 다시 시도해 주세요.",
-    "pauseGallery": "사진 띠 일시 정지",
-    "stories": {
-      "forest": {
-        "title": "숲길 산책",
-        "description": "나무 그늘을 따라 걸어보세요. 부드러운 빛을 보고 나뭇잎 소리를 들으며 잠시 걸음을 늦춰보세요."
-      },
-      "coast": {
-        "title": "바닷가에서",
-        "description": "탁 트인 수평선과 바닷바람이 하루를 새롭게 만들어줄 수 있어요. 해안길을 걸으며 잔잔해지는 물결을 바라보세요."
-      },
-      "space": {
-        "title": "고요한 실내",
-        "description": "자연광, 정돈된 한쪽 공간, 편안한 의자. 세심하게 꾸민 공간은 일상에 여유를 더해줘요."
-      },
-      "mountain": {
-        "title": "산길",
-        "description": "길이 높아지고 시야가 넓어지면 소음도 멀어져요. 완만한 오솔길을 찾아 한 걸음씩 산을 즐겨보세요."
-      },
-      "lake": {
-        "title": "호숫가의 아침",
-        "description": "호숫가에 멈춰 수면에 비친 모습을 바라보세요. 고요한 물가에서 가볍게 마음을 가다듬어보세요."
-      },
-      "studio": {
-        "title": "일하는 공간",
-        "description": "손때 묻은 책상과 몇 가지 도구만으로도 새로움을 위한 자리를 만들 수 있어요. 소소한 일상을 중심으로 꾸민 작업실을 둘러보세요."
-      }
+      "verification-code-face": "인증 코드 캐릭터"
     }
   },
   "charts": {

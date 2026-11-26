@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "Recorrido por la app",
+    "step": "Paso {{current}} de {{total}}",
+    "skip": "Saltar",
+    "next": "Continuar",
+    "start": "Empezar",
+    "discover": {
+      "title": "Encuentra tu punto de partida",
+      "description": "Explora pantallas nativas y patrones de diseño para tu próxima app de iOS o Android."
+    },
+    "appearance": {
+      "title": "Personaliza tu app",
+      "description": "Prueba distintos temas, cambia entre el modo claro y el oscuro y elige tu idioma en Ajustes."
+    },
+    "components": {
+      "title": "Empieza a crear",
+      "description": "Explora ejemplos funcionales de botones, formularios, listas y más en Componentes."
+    }
+  },
   "discover": {
     "title": "Descubrir",
     "eyebrow": "UNA PLANTILLA DE APP NATIVA",
@@ -910,8 +929,7 @@
       "register": "Una página de registro con Google o un formulario de correo electrónico y contraseña.",
       "launch-screen": "Una pantalla de inicio presenta la app mientras se prepara. Toca para ver la animación de salida de la marca.",
       "otp-bottom-sheet": "Un panel de verificación recoge un código de seis dígitos. Ábrelo e introduce 123456 para probar la verificación local.",
-      "verification-code-face": "La entrada de código combina seis dígitos con un personaje animado. Introduce 123456 para el éxito u otro código para un error.",
-      "explore": "Busca y filtra relatos, abre sus detalles ilustrados y amplía las fotos de la tira."
+      "verification-code-face": "La entrada de código combina seis dígitos con un personaje animado. Introduce 123456 para el éxito u otro código para un error."
     },
     "sheets": {
       "basic": "Panel básico",
@@ -1223,56 +1241,7 @@
       "register": "Registrarse",
       "launch-screen": "Pantalla de inicio",
       "otp-bottom-sheet": "Panel de verificación",
-      "verification-code-face": "Personaje del código de verificación",
-      "explore": "Explorar relatos"
-    }
-  },
-  "explore": {
-    "title": "Explorar",
-    "eyebrow": "UN MOMENTO PARA DESCUBRIR",
-    "headline": "Encuentra tu próxima escapada tranquila.",
-    "description": "Seis relatos breves sobre naturaleza, lugares junto al agua y espacios con encanto.",
-    "search": "Buscar relatos",
-    "account": "Abrir tu cuenta",
-    "all": "Todos",
-    "results_one": "{{count}} relato",
-    "results_other": "{{count}} relatos",
-    "emptyTitle": "No se encontraron relatos",
-    "emptyDescription": "Prueba otra búsqueda o elige una categoría diferente.",
-    "reset": "Restablecer búsqueda y filtros",
-    "gallery": "Diario fotográfico",
-    "galleryHint": "Toca una foto para ampliarla. La tira avanza automáticamente cuando las animaciones están activadas.",
-    "photoLoading": "Cargando foto",
-    "photoUnavailable": "Foto no disponible",
-    "retryPhoto": "Volver a cargar la foto",
-    "open": "Explorar relatos",
-    "refreshError": "No se pudieron actualizar las fotos. Desliza hacia abajo para intentarlo de nuevo.",
-    "pauseGallery": "Pausar la tira de fotos",
-    "stories": {
-      "forest": {
-        "title": "Paseos por el bosque",
-        "description": "Sigue la sombra de los árboles. Observa la luz suave, escucha las hojas y date tiempo para bajar el ritmo."
-      },
-      "coast": {
-        "title": "Junto al mar",
-        "description": "Un horizonte abierto y un poco de brisa marina pueden cambiar el día. Recorre el sendero costero y contempla la calma del agua."
-      },
-      "space": {
-        "title": "Interiores tranquilos",
-        "description": "Luz natural, un rincón despejado y un asiento cómodo. Un espacio cuidado hace más agradables los momentos cotidianos."
-      },
-      "mountain": {
-        "title": "Senderos de montaña",
-        "description": "El camino sube, la vista se abre y el ruido se desvanece. Busca un sendero suave y disfruta de la montaña paso a paso."
-      },
-      "lake": {
-        "title": "Mañanas junto al lago",
-        "description": "Detente junto al lago y sigue sus reflejos. Un remanso de agua ofrece un lugar sencillo para recuperar el equilibrio."
-      },
-      "studio": {
-        "title": "Espacios de trabajo",
-        "description": "Un escritorio familiar y unos pocos objetos útiles pueden dar paso a algo nuevo. Descubre un estudio pensado para los pequeños rituales diarios."
-      }
+      "verification-code-face": "Personaje del código de verificación"
     }
   },
   "charts": {

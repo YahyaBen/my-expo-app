@@ -17,7 +17,6 @@ Maintained guides are listed below. Component contracts belong to independent sk
 
 ## Implementation and appearance
 
-- [App flow examples and interaction notes](app-flows.md)
 - [API services](api-services.md)
 - [Authentication setup](auth-forms.md)
 - [Localization](localization.md)

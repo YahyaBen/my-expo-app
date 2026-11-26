@@ -39,7 +39,7 @@ export function DateTimeBanner() {
       style={{
         padding: spacing.xl,
         borderRadius: radii.card,
-        backgroundColor: colors.surfaceVariant,
+        backgroundColor: colors.bannerBackground ?? colors.surfaceVariant,
       }}
       testID="home-ramadan-banner"
     >
@@ -51,7 +51,11 @@ export function DateTimeBanner() {
       >
         {now.toLocaleDateString(language, { dateStyle: 'full' })}
       </UniversalTextContent>
-      <UniversalTextContent variant="heading" testID="home-time">
+      <UniversalTextContent
+        variant="heading"
+        textStyle={{ color: colors.bannerAccent ?? colors.text }}
+        testID="home-time"
+      >
         {now.toLocaleTimeString(language, {
           hour: '2-digit',
           minute: '2-digit',

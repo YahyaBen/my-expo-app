@@ -18,14 +18,14 @@ module.exports = {
     scheme: 'expomobiletemplate',
 
     // Store-visible version. Increase for incompatible native changes (OTA policy).
-    version: '1.0.10',
+    version: '1.0.11',
 
     // Default, optional light and optional red home-screen icons.
-    icon: './assets/AppIcon-Dark.icon/Assets/icon.png',
+    icon: './assets/AppIcon-Bloom.icon/Assets/icon.png',
     lightIcon: './assets/AppIcon-Light.icon/Assets/icon.png',
     redIcon: './assets/AppIcon-Red.icon/Assets/icon.png',
     presentation: {
-      palette: 'ux', // 'ux' or 'system'; saved user preferences take precedence.
+      palette: 'bloom', // 'bloom', 'ux' or 'system'; saved user preferences take precedence.
       launch: 'branded', // 'minimal' or 'branded'.
       headingFont: 'system', // Registered ID in config/brand-assets.json.
       launchArtwork: 'et', // Registered ID in config/brand-assets.json.
@@ -33,24 +33,24 @@ module.exports = {
     ios: {
       // Production ID; variant identitySuffix is appended automatically.
       bundleIdentifier: 'com.hyrkul.mobiletemplate',
-      buildNumber: '1', // iOS CFBundleVersion; increase before another store upload.
-      icon: './assets/AppIcon-Dark.icon',
+      buildNumber: '2', // iOS CFBundleVersion; increase before another store upload.
+      icon: './assets/AppIcon-Bloom.icon',
     },
     android: {
       // Production ID; Firebase JSON must match the final package including suffix.
       package: 'com.hyrkul.mobiletemplate',
-      versionCode: 18, // Android build number; increase before another Play upload.
+      versionCode: 19, // Android build number; increase before another Play upload.
       adaptiveIcon: {
-        foregroundImage: './assets/adaptive-foreground-dark.png',
-        backgroundColor: '#ffffff',
+        foregroundImage: './assets/adaptive-foreground-bloom.png',
+        backgroundColor: '#170F25',
       },
       lightIconForeground: './assets/adaptive-foreground-light.png',
       redIconForeground: './assets/adaptive-foreground-red.png',
     },
     splash: {
-      image: './assets/AppIcon-Dark.icon/Assets/icon.png',
-      backgroundColor: '#FFFFFF',
-      darkBackgroundColor: '#0A0A0A',
+      image: './assets/adaptive-foreground-bloom.png',
+      backgroundColor: '#F8F4FF',
+      darkBackgroundColor: '#170F25',
     },
     eas: {
       owner: 'hyrkul', // Expo account / organization; optional.

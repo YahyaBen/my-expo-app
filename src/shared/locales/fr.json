@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "Visite guidée",
+    "step": "Étape {{current}} sur {{total}}",
+    "skip": "Passer",
+    "next": "Continuer",
+    "start": "Commencer",
+    "discover": {
+      "title": "Trouvez votre point de départ",
+      "description": "Explorez des écrans natifs et des modèles de conception pour votre prochaine app iOS ou Android."
+    },
+    "appearance": {
+      "title": "Personnalisez votre app",
+      "description": "Essayez différents thèmes, passez du mode clair au mode sombre et choisissez votre langue dans les réglages."
+    },
+    "components": {
+      "title": "Commencez à créer",
+      "description": "Découvrez des exemples fonctionnels de boutons, de formulaires, de listes et plus encore dans Composants."
+    }
+  },
   "discover": {
     "title": "Découvrir",
     "eyebrow": "UN MODÈLE D’APPLICATION NATIVE",
@@ -914,8 +933,7 @@
       "register": "Une page d’inscription avec Google ou un formulaire email et mot de passe.",
       "launch-screen": "Un écran de lancement présente l’app pendant sa préparation. Touchez le bouton pour voir l’animation de sortie de la marque.",
       "otp-bottom-sheet": "Une feuille de vérification recueille un code à six chiffres. Ouvrez-la et saisissez 123456 pour essayer la vérification locale.",
-      "verification-code-face": "La saisie du code associe six chiffres à un personnage animé. Saisissez 123456 pour réussir ou un autre code pour afficher une erreur.",
-      "explore": "Recherchez et filtrez des récits, ouvrez leurs fiches illustrées et agrandissez les photos du carrousel."
+      "verification-code-face": "La saisie du code associe six chiffres à un personnage animé. Saisissez 123456 pour réussir ou un autre code pour afficher une erreur."
     },
     "sheets": {
       "basic": "Panneau simple",
@@ -1227,56 +1245,7 @@
       "register": "Inscription",
       "launch-screen": "Écran de lancement",
       "otp-bottom-sheet": "Panneau de vérification",
-      "verification-code-face": "Visage de vérification",
-      "explore": "Explorer les récits"
-    }
-  },
-  "explore": {
-    "title": "Explorer",
-    "eyebrow": "UN INSTANT DE DÉCOUVERTE",
-    "headline": "Trouvez votre prochaine échappée.",
-    "description": "Six courts récits autour de la nature, des bords de l’eau et des lieux inspirants.",
-    "search": "Rechercher des récits",
-    "account": "Ouvrir votre compte",
-    "all": "Tous",
-    "results_one": "{{count}} récit",
-    "results_other": "{{count}} récits",
-    "emptyTitle": "Aucun récit trouvé",
-    "emptyDescription": "Essayez une autre recherche ou une autre catégorie.",
-    "reset": "Réinitialiser la recherche et les filtres",
-    "gallery": "Journal photo",
-    "galleryHint": "Touchez une photo pour l’agrandir. Le défilement est automatique lorsque les animations sont activées.",
-    "photoLoading": "Chargement de la photo",
-    "photoUnavailable": "Photo indisponible",
-    "retryPhoto": "Réessayer la photo",
-    "open": "Explorer les récits",
-    "refreshError": "Impossible d’actualiser les photos. Tirez vers le bas pour réessayer.",
-    "pauseGallery": "Mettre le défilement des photos en pause",
-    "stories": {
-      "forest": {
-        "title": "Balades en forêt",
-        "description": "Suivez l’ombre des arbres. Observez la lumière douce, écoutez les feuilles et accordez-vous le temps de ralentir."
-      },
-      "coast": {
-        "title": "Au bord de la mer",
-        "description": "Un horizon dégagé et un peu d’air marin peuvent transformer une journée. Empruntez le sentier côtier et regardez l’eau s’apaiser."
-      },
-      "space": {
-        "title": "Intérieurs paisibles",
-        "description": "De la lumière naturelle, un coin dégagé et une assise confortable. Un lieu bien pensé rend le quotidien plus doux."
-      },
-      "mountain": {
-        "title": "Sentiers de montagne",
-        "description": "Le chemin monte, la vue s’ouvre et le bruit s’efface. Choisissez un sentier accessible et savourez la montagne pas à pas."
-      },
-      "lake": {
-        "title": "Matins au bord du lac",
-        "description": "Faites une pause au bord du lac et suivez les reflets. Une étendue d’eau tranquille offre un lieu simple pour se ressourcer."
-      },
-      "studio": {
-        "title": "Espaces de travail",
-        "description": "Un bureau familier et quelques objets utiles suffisent à accueillir de nouvelles idées. Découvrez un atelier pensé autour des petits rituels du quotidien."
-      }
+      "verification-code-face": "Visage de vérification"
     }
   },
   "charts": {

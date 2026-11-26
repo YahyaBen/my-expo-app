@@ -1,4 +1,23 @@
 {
+  "onboarding": {
+    "tour": "Uygulama turu",
+    "step": "{{current}}. adım / {{total}}",
+    "skip": "Atla",
+    "next": "Devam et",
+    "start": "Başla",
+    "discover": {
+      "title": "Başlangıç noktanı bul",
+      "description": "Bir sonraki iOS veya Android uygulamanda kullanabileceğin yerel ekranları ve tasarım kalıplarını keşfet."
+    },
+    "appearance": {
+      "title": "Uygulamayı kişiselleştir",
+      "description": "Ayarlar’dan farklı temalar dene, açık ve koyu mod arasında geçiş yap ve dilini seç."
+    },
+    "components": {
+      "title": "Uygulamanı oluşturmaya başla",
+      "description": "Bileşenler bölümünde düğmelerin, formların, listelerin ve daha fazlasının çalışan örneklerini incele."
+    }
+  },
   "discover": {
     "title": "Keşfet",
     "eyebrow": "YEREL UYGULAMA ŞABLONU",
@@ -919,8 +938,7 @@
       "register": "Google veya e-posta ve şifre formuyla kayıt olma sayfası.",
       "launch-screen": "Açılış ekranı uygulama hazırlanırken markayı tanıtır. Çıkış animasyonunu önizlemek için dokunun.",
       "otp-bottom-sheet": "Doğrulama paneli altı haneli kod toplar. Yerel deneme için açıp 123456 girin.",
-      "verification-code-face": "Kod girişi altı haneyi hareketli karakterle birleştirir. Başarı için 123456, hata için başka kod girin.",
-      "explore": "Hikâyeleri ara ve filtrele, görselli ayrıntı panellerini aç ve fotoğraf şeridindeki kareleri büyüt."
+      "verification-code-face": "Kod girişi altı haneyi hareketli karakterle birleştirir. Başarı için 123456, hata için başka kod girin."
     },
     "sheets": {
       "basic": "Temel panel",
@@ -1236,55 +1254,7 @@
       "register": "Kayıt ol",
       "launch-screen": "Açılış ekranı",
       "otp-bottom-sheet": "Doğrulama paneli",
-      "verification-code-face": "Doğrulama kodu yüzü",
-      "explore": "Hikâyeleri keşfet"
-    }
-  },
-  "explore": {
-    "title": "Keşfet",
-    "eyebrow": "BİR KEŞİF ANI",
-    "headline": "Bir sonraki huzurlu molanı bul.",
-    "description": "Doğa, su kıyıları ve özenle düzenlenmiş mekânlar hakkında altı kısa hikâye.",
-    "search": "Hikâye ara",
-    "account": "Hesabını aç",
-    "all": "Tümü",
-    "results": "{{count}} hikâye",
-    "emptyTitle": "Hikâye bulunamadı",
-    "emptyDescription": "Başka bir arama yap veya farklı bir kategori seç.",
-    "reset": "Aramayı ve filtreleri sıfırla",
-    "gallery": "Fotoğraf günlüğü",
-    "galleryHint": "Fotoğrafı büyütmek için dokun. Hareket açıkken fotoğraf şeridi otomatik ilerler.",
-    "photoLoading": "Fotoğraf yükleniyor",
-    "photoUnavailable": "Fotoğraf kullanılamıyor",
-    "retryPhoto": "Fotoğrafı yeniden yükle",
-    "open": "Hikâyeleri keşfet",
-    "refreshError": "Fotoğraflar yenilenemedi. Yeniden denemek için aşağı çek.",
-    "pauseGallery": "Fotoğraf şeridini duraklat",
-    "stories": {
-      "forest": {
-        "title": "Orman yürüyüşleri",
-        "description": "Ağaçların gölgesini takip et. Yumuşak ışığı fark et, yaprakları dinle ve yavaşlamak için kendine zaman tanı."
-      },
-      "coast": {
-        "title": "Deniz kıyısında",
-        "description": "Açık bir ufuk ve biraz deniz havası gününü değiştirebilir. Kıyı yolunda yürü ve suyun durulmasını izle."
-      },
-      "space": {
-        "title": "Sakin iç mekânlar",
-        "description": "Doğal ışık, düzenli bir köşe ve rahat bir koltuk. Özenli bir mekân günlük anlara biraz daha ferahlık katar."
-      },
-      "mountain": {
-        "title": "Dağ patikaları",
-        "description": "Yol yükselir, manzara açılır ve gürültü azalır. Kolay bir patika bul ve dağın tadını adım adım çıkar."
-      },
-      "lake": {
-        "title": "Göl kıyısında sabahlar",
-        "description": "Göl kenarında dur ve yansımaları izle. Sakin bir su kıyısı, yenilenmek için sade bir alan sunar."
-      },
-      "studio": {
-        "title": "Çalışma alanları",
-        "description": "Sevdiğin bir masa ve birkaç kullanışlı eşya yeni bir şeye yer açabilir. Basit günlük alışkanlıklara göre tasarlanmış bir atölyeyi keşfet."
-      }
+      "verification-code-face": "Doğrulama kodu yüzü"
     }
   },
   "charts": {

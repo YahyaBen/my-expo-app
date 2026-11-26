@@ -32,6 +32,10 @@ export interface SemanticColors {
   tableText: string;
   /** Foreground accent for primary text, links and native tint. */
   tint: string;
+  bannerBackground?: string;
+  bannerAccent?: string;
+  /** Near-white fill for the banner's difference blend. */
+  bannerMask?: string;
   selection: string;
   overlay: string;
   shadow: string;

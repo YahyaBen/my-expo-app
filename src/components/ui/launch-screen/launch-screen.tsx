@@ -92,7 +92,9 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   const offsetY = useSharedValue(0);
   const remainingHold = useRef(2_000);
   const [laidOut, setLaidOut] = useState(false);
+  const [artworkLaidOut, setArtworkLaidOut] = useState(false);
   const [holdComplete, setHoldComplete] = useState(false);
+  const ready = laidOut && (artworkLaidOut || artworkSize === 0);
   const completed = useRef(false);
   const finish = useCallback(() => {
     if (completed.current) return;
@@ -106,7 +108,11 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   }, [animate, launchArtwork.source]);
 
   useEffect(() => {
-    if (!laidOut || !active || holdComplete) return;
+    if (ready) onReady?.();
+  }, [onReady, ready]);
+
+  useEffect(() => {
+    if (!ready || !active || holdComplete) return;
 
     // Overlap the visible branded hold with page preparation; count foreground time only.
     const startedAt = performance.now();
@@ -118,7 +124,7 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
       clearTimeout(hold);
       remainingHold.current = Math.max(0, remainingHold.current - (performance.now() - startedAt));
     };
-  }, [laidOut, active, holdComplete]);
+  }, [ready, active, holdComplete]);
 
   useEffect(() => {
     if (!exiting || !active || !holdComplete) return;
@@ -151,9 +157,8 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
   return (
     <Animated.View
       testID="app-brand-screen"
-      onLayout={() => {
-        setLaidOut(true);
-        onReady?.();
+      onLayout={({ nativeEvent: { layout } }) => {
+        if (layout.width > 0 && layout.height > 0) setLaidOut(true);
       }}
       accessible
       accessibilityLabel={t('launch.loading', { brandName: brand.name })}
@@ -190,26 +195,36 @@ function BrandedLaunchScreen({ exiting, onReady, onExitComplete }: Readonly<Laun
             style={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 16 }}
           >
             <Spacer flexible />
-            <RNHostView matchContents>
-              {launchArtwork.type === 'lottie' ? (
-                <LottieView
-                  ref={artwork}
-                  source={launchArtwork.source}
-                  autoPlay={animate}
-                  loop={animate}
-                  style={{ width: artworkSize, height: artworkSize }}
-                  testID="app-brand-artwork"
-                />
-              ) : (
-                <Image
-                  source={launchArtwork.source}
-                  contentFit="contain"
-                  style={{ width: artworkSize, height: artworkSize }}
-                  testID="app-brand-artwork"
-                  accessible={false}
-                />
-              )}
-            </RNHostView>
+            <Column style={{ width: artworkSize, height: artworkSize }}>
+              <RNHostView>
+                <View
+                  collapsable={false}
+                  style={{ flex: 1 }}
+                  onLayout={({ nativeEvent: { layout } }) => {
+                    if (layout.width > 0 && layout.height > 0) setArtworkLaidOut(true);
+                  }}
+                >
+                  {launchArtwork.type === 'lottie' ? (
+                    <LottieView
+                      ref={artwork}
+                      source={launchArtwork.source}
+                      autoPlay={animate}
+                      loop={animate}
+                      style={{ flex: 1 }}
+                      testID="app-brand-artwork"
+                    />
+                  ) : (
+                    <Image
+                      source={launchArtwork.source}
+                      contentFit="contain"
+                      style={{ flex: 1 }}
+                      testID="app-brand-artwork"
+                      accessible={false}
+                    />
+                  )}
+                </View>
+              </RNHostView>
+            </Column>
             <UniversalTextContent
               colorScheme={scheme}
               textStyle={{ fontFamily: headingFont, fontSize: 28, fontWeight: '900' }}

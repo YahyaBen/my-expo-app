@@ -13,7 +13,7 @@ const fontSources: Record<HeadingFontId, FontSource | undefined> = {
 };
 const artworkSources: Record<LaunchArtworkId, { light: number; dark?: number }> = {
   et: { light: etLight, dark: etDark },
-  templateIcon: { light: require('@assets/AppIcon-Dark.icon/Assets/icon.png') },
+  templateIcon: { light: require('@assets/AppIcon-Bloom.icon/Assets/icon.png') },
 };
 
 /** Stable build-time selection; the root loads only the selected font map. */

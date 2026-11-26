@@ -1,6 +1,6 @@
 import { AlertHost, AppearanceTransition, LaunchScreen } from '@components/ui';
 import { useFonts } from 'expo-font';
-import { Stack, ThemeProvider, useRootNavigationState } from 'expo-router';
+import { Stack, ThemeProvider, useRootNavigationState, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -69,6 +69,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   const colorScheme = useColorScheme();
   const { colors } = useAppTheme(colorScheme);
   const active = useAppActive();
+  const [segment] = useSegments();
   const [showLaunchScreen, setShowLaunchScreen] = useState(true);
   const [initialLayoutReady, setInitialLayoutReady] = useState(false);
   const onInitialLayout = useCallback(() => setInitialLayoutReady(true), []);
@@ -78,6 +79,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
     appearanceReady && languageReady && motionReady && devicePreferencesReady;
   const resourcesReady = fontsReady && preferencesReady;
   const interactive = resourcesReady && initialLayoutReady && !showLaunchScreen;
+  const notificationPromptReady = interactive && active && segment !== 'onboarding';
 
   useEffect(() => {
     if (!interactive || Platform.OS !== 'android' || !brand.pushNotifications) return;
@@ -93,7 +95,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
   }, [interactive]);
 
   useEffect(() => {
-    if (!interactive || !active) return;
+    if (!notificationPromptReady) return;
     let disposed = false;
     void import('@/lib/device-permissions')
       .then(async ({ requestStartupNotificationPermission }) => {
@@ -113,7 +115,7 @@ function RootLayoutContent({ fontsReady }: Readonly<{ fontsReady: boolean }>) {
     return () => {
       disposed = true;
     };
-  }, [interactive, active]);
+  }, [notificationPromptReady]);
 
   useEffect(() => {
     if (appearanceReady)
@@ -193,9 +195,9 @@ function AppNavigator({ ready }: Readonly<{ ready: boolean }>) {
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="onboarding" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="template" />
-        <Stack.Screen name="explore" />
         <Stack.Screen name="charts" />
         <Stack.Screen name="components/[id]" />
         <Stack.Screen name="components/category/[id]" />

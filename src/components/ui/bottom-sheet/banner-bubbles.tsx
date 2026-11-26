@@ -22,6 +22,9 @@ const bubbles = [
 /** Circular masks invert the live banner beneath them without capturing its content. */
 export function BannerBubbles({ animate, testID }: Readonly<{ animate: boolean; testID: string }>) {
   const colors = useThemeColors(useHostColorScheme());
+  const maskColor = supportsBlending
+    ? (colors.bannerMask ?? '#FFFFFF')
+    : (colors.bannerAccent ?? colors.text);
   const time = useActiveMotionTime(animate);
   const size = useSharedValue({ width: 0, height: 0 });
   const mask = usePathValue((builder) => {
@@ -55,11 +58,7 @@ export function BannerBubbles({ animate, testID }: Readonly<{ animate: boolean; 
       style={styles.overlay}
     >
       <Canvas style={styles.fill} pointerEvents="none">
-        <Path
-          path={mask}
-          color={supportsBlending ? '#FFFFFF' : colors.text}
-          opacity={supportsBlending ? 1 : 0.06}
-        />
+        <Path path={mask} color={maskColor} opacity={supportsBlending ? 1 : 0.06} />
       </Canvas>
     </View>
   );

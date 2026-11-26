@@ -1,6 +1,6 @@
 {
   "name": "hyrkul-template",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "private": true,
   "main": "expo-router/entry",
   "engines": {

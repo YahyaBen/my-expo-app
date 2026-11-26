@@ -137,7 +137,7 @@ export function BottomSheetExamples() {
             <Icon
               name={{ ios: 'sparkles', android: 'auto_awesome' }}
               size={160}
-              color={colors.tint}
+              color={colors.bannerAccent ?? colors.tint}
             />
           </BottomSheetBanner>
         }
@@ -298,7 +298,7 @@ export function BottomSheetExamples() {
             <Icon
               name={{ ios: 'sparkles', android: 'auto_awesome' }}
               size={160}
-              color={colors.tint}
+              color={colors.bannerAccent ?? colors.tint}
             />
           </BottomSheetBanner>
         }

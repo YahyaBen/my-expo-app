@@ -1,7 +1,7 @@
 # App Settings and appearance
 
-The selected brand's `presentation.palette` seeds UX Template (`ux`, the
-template default) or System (`system`) in light and dark appearance. Settings
+The selected brand's `presentation.palette` seeds Bloom (`bloom`, the template
+default), UX Template (`ux`) or System (`system`) in light and dark appearance. Settings
 can override that default with a saved palette choice. System
 defines no app color overrides: Hosts leave their seed/tint unset, and native
 controls use SwiftUI or Material defaults. Explicit caller colors still apply.
@@ -40,9 +40,10 @@ shadcn's semantic roles:
 Dark borders and input borders retain upstream white transparency (10% and 15%,
 rounded to 8-bit alpha). The existing app-only roles for disabled text, pressed
 actions, feedback containers, success, warning and info remain extensions.
-Normal and supporting text use separate colors; faint text is reserved for
-unavailable content. Configured splash backgrounds match the page background
-in each appearance; changing the native splash requires a new app build.
+Normal and supporting text use separate colors. Faint text is reserved for
+unavailable content. The native splash uses the backgrounds in `config/app.js`.
+Bloom provides the default native splash and launcher icon. Changing either
+requires a new native build.
 
 `useAppTheme` also exposes `design` for component owners. UX uses the default
 mobile type ramp and native geometry. Native lists, toggles, pickers, padding
@@ -97,6 +98,7 @@ Theme values are edited directly in TypeScript:
 
 | Owner                                          | Responsibility                                            |
 | ---------------------------------------------- | --------------------------------------------------------- |
+| [bloom.ts](../src/constants/themes/bloom.ts)   | Violet and mint semantic palettes for light and dark      |
 | [ux.ts](../src/constants/themes/ux.ts)         | Primitive colors and semantic light/dark palettes         |
 | [system.ts](../src/constants/themes/system.ts) | Empty light/dark overrides for native defaults            |
 | [tokens.ts](../src/constants/themes/tokens.ts) | Typed color contract and derived navigation/control roles |
@@ -185,11 +187,15 @@ clock's wrap so the field has no visible reset. Motion pauses while the page is
 hidden or unfocused, in the background, and with Reduce Motion enabled. Android
 versions below 10 use a faint tint because native view blending is unavailable.
 
-Settings > Appearance > Theme offers UX Template and System through the shared
+Settings > Appearance > Theme offers Bloom, UX Template and System through the shared
 [theme control](../src/components/ui/appearance/theme-control.tsx). Selection
 applies to the whole app immediately and is saved for the next launch. The
 System palette uses native colors; the separate System appearance option follows
 the device's light/dark setting.
+
+Bloom supplies colors for the Home clock and bottom-sheet banners, including the
+animated circular masks and banner icons. Settings offers the Bloom launcher
+icon alongside Light and Red.
 
 The Text component page follows the app appearance. Isolated theme compositions
 must use their own provider and pass an explicit scheme when re-entering native

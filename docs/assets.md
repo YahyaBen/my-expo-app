@@ -24,11 +24,11 @@ appearance. The registry validates both files and imports them statically.
 A brand selects them with `presentation.launch: "branded"` and
 `presentation.launchArtwork: "et"`.
 
-The template image is an existing Expo placeholder. Replace it with client artwork
-before distribution. Native app/adaptive icons and the native splash are separate
-manifest fields; changing in-app artwork does not update those assets.
+The `templateIcon` launch artwork uses the Bloom launcher image. Native app and
+adaptive icons and the native splash have their own manifest fields.
 
-The App Icon picker offers Dark, Light and Red. `app` in `config/app.js` registers
+The App Icon picker offers Bloom, Light and Red. Bloom is the native default.
+`app` in `config/app.js` registers
 alternate artwork and padded Android foregrounds; `app.config.js` declares the
 Light and Red native resources through `expo-awesome-app-icon`. Red uses the same
 metallic design with a ruby/crimson palette in `assets/AppIcon-Red.icon/`.

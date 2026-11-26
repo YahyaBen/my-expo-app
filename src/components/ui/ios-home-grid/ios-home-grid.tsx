@@ -388,26 +388,27 @@ function ExpandedPhoto({ closeTestID, ...props }: ExpandedPhotoProps & { closeTe
       }}
     >
       {viewport ? <ExpandedPhotoArtwork {...props} viewport={viewport} /> : null}
-      <View
-        style={{
-          position: 'absolute',
-          top: insets.top + spacing.md,
-          right: insets.right + spacing.md,
-        }}
-      >
-        <Button
-          variant="primary"
-          circular
-          accessibilityLabel={props.closeLabel}
-          color={colors.surfaceVariant}
-          contentColor={colors.text}
-          onPress={props.onClose}
-          disabled={props.closing}
-          testID={closeTestID}
+      {!props.closing ? (
+        <View
+          style={{
+            position: 'absolute',
+            top: insets.top + spacing.md,
+            right: insets.right + spacing.md,
+          }}
         >
-          <Icon name={{ ios: 'xmark', android: 'close' }} size={22} />
-        </Button>
-      </View>
+          <Button
+            variant="primary"
+            circular
+            accessibilityLabel={props.closeLabel}
+            color={colors.surfaceVariant}
+            contentColor={colors.text}
+            onPress={props.onClose}
+            testID={closeTestID}
+          >
+            <Icon name={{ ios: 'xmark', android: 'close' }} size={22} />
+          </Button>
+        </View>
+      ) : null}
     </View>
   );
 }

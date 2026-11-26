@@ -13,13 +13,14 @@ import {
 } from '@components/ui';
 import { screenContentMaxWidth, spacing } from '@/constants/layout';
 
+// Keep the original carousel selector for the native default icon.
 const iconChoices = ['dark', 'light', 'red'] as const;
 type AppIconChoice = (typeof iconChoices)[number];
 type AppIconPhoto = PhotoItem & { id: AppIconChoice };
 
 const iconSources = {
   light: require('@assets/AppIcon-Light.icon/Assets/icon.png'),
-  dark: require('@assets/AppIcon-Dark.icon/Assets/icon.png'),
+  dark: require('@assets/AppIcon-Bloom.icon/Assets/icon.png'),
   red: require('@assets/AppIcon-Red.icon/Assets/icon.png'),
 };
 
@@ -67,10 +68,11 @@ export function AppIconPicker() {
 
   const installed = iconChoices.find((id) => id === iconState?.installed) ?? 'dark';
   const isCurrent = !isPending && draft === installed;
+  const labels = { dark: 'Bloom', light: t('appearance.light'), red: t('settings.appIconRed') };
   const items: AppIconPhoto[] = choices.map((id) => ({
     id,
     source: iconSources[id],
-    label: id === 'red' ? t('settings.appIconRed') : t(`appearance.${id}`),
+    label: labels[id],
   }));
 
   async function applyIcon() {
